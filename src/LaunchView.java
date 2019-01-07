@@ -28,17 +28,22 @@ public class LaunchView extends JFrame {
     this.add(loginPanel);
   }
 
+  public void setNameLabel (String headline) {
+    nameLabel.setText(headline);
+  }
+
   public String getTheName(){
     return nameField.getText();
   }
 
-  public String getTheAge(){
-    return Integer.parseInt(ageLabel.getText());
-  }
 
-  void addHostListener(ActionListener listenForHostButton){
-    startHost
-  }
+  //public String getTheAge(){
+  //  return Integer.parseInt(ageLabel.getText());
+  //}
+
+  //void addHostListener(ActionListener listenForHostButton){
+  //  startHost
+  //}
 
 
 

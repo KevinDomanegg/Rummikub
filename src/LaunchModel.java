@@ -1,4 +1,7 @@
 public class LaunchModel {
+
+
+  private String gameName = "Rummikub CurryGang";
   private String name;
   private int age;
 
@@ -16,5 +19,9 @@ public class LaunchModel {
 
   public void setAge(int age) {
     this.age = age;
+  }
+
+  public String getGameName() {
+    return gameName;
   }
 }
