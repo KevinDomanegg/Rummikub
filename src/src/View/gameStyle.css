@@ -1,3 +1,16 @@
+/* Pane sizes */
+#root {
+    -fx-pref-width: 800;
+    -fx-pref-height: 600;
+}
+
+/* #topGrid columnConstraints * {
+    -fx-min-width:  10;
+    -fx-pref-width: 100 ;
+}*/
+
+
+
 /* Temp */
 Rectangle {
     -fx-fill: white;
@@ -6,6 +19,12 @@ Rectangle {
 
 Text {
     -fx-font-family: Helvetica, Arial, SansSerif;
+}
+
+/* Stone in hand */
+GridPane VBox {
+    -fx-background-color: white;
+    -fx-border-color: black;
 }
 
 .root {
@@ -20,12 +39,6 @@ Text {
     -fx-fill: white;
 }
 
-/* Stone in hand */
-GridPane VBox {
-    -fx-background-color: white;
-    -fx-border-color: black;
-}
-
 #timer {
     -fx-font-size: 25;
 }
@@ -36,5 +49,9 @@ GridPane VBox {
 
 #opponentRight {
     -fx-rotate: 90;
+}
+
+#ownHand {
+    -fx-pref-width: 200;
 }
 
