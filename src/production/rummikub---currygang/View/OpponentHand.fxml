@@ -13,6 +13,6 @@
       <Text fx:id="opponentText" styleClass="text" layoutX="184.0"
             layoutY="39.0"
             strokeType="OUTSIDE" strokeWidth="0.0"
-            text="opponent name: stone count" textAlignment="CENTER" wrappingWidth="231.35040283203125" />
+            text="opponent name: stone count" textAlignment="CENTER" />
    </children>
 </StackPane>

@@ -14,7 +14,6 @@ Text {
 
 .hand {
     -fx-background-color: black;
-    -fx-alignment: center;
 }
 
 .hand .text {

@@ -8,6 +8,6 @@
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Text fx:id="number" strokeType="OUTSIDE" strokeWidth="0.0" text="5" />
+      <Text fx:id="number" text="5" />
    </children>
 </VBox>

@@ -13,7 +13,7 @@ public class GameController {
 
   @FXML Button drawButton;
   @FXML Text timer;
-  @FXML GridPane hand;
+  @FXML GridPane handGrid;
   @FXML StackPane opponentMid;
 
   String name = "Hannah";
@@ -26,8 +26,8 @@ public class GameController {
     // Server request: Get stone from bag
     Rectangle rectangle = new Rectangle(30,50);
     rectangle.setId("handStone" + handCount);
+    handGrid.add(rectangle, handCount,0);
     handCount++;
-    hand.add(rectangle, handCount,0);
   }
 
   public void nameChange() {
@@ -39,12 +39,18 @@ public class GameController {
   }
 
 
-  //TODO: Remove this Stone class
-  class Stone extends VBox {
-    Stone() {
-
+  /** Constructs columns and rows for target GridPane outside of FXML
+   *
+   * @param target GridPane where the grid shall be constructed
+   * @param columns amount of columns to be constructed
+   * @param rows amount of rows to be constructed
+   */
+  /*
+  void constructGrid(GridPane target, int columns, int rows) {
+    for(int i = 0; i < columns; i++) {
+      target.
     }
-
   }
+  */
 
 }
