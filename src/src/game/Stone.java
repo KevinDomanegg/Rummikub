@@ -25,4 +25,12 @@ class Stone {
   int getNumber() {
     return number;
   }
+
+
+  //Testmethods
+
+  @Override
+  public String toString() {
+    return "(Color: " + color + "," + "Number: " + " " + number +")";
+  }
 }
