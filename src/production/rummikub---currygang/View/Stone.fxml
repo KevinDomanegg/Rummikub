@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="30.0"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text fx:id="number" strokeType="OUTSIDE" strokeWidth="0.0" text="5" />
+   </children>
+</VBox>
