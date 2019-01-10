@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+
+<?import javafx.scene.layout.StackPane?>
+<StackPane maxHeight="30" maxWidth="200" prefHeight="69.0"
+               prefWidth="600.0"
+               xmlns="http://javafx.com/javafx"
+               xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
+   <children>
+      <Text fx:id="opponentText" styleClass="text" layoutX="184.0"
+            layoutY="39.0"
+            strokeType="OUTSIDE" strokeWidth="0.0"
+            text="opponent name: stone count" textAlignment="CENTER" wrappingWidth="231.35040283203125" />
+   </children>
+</StackPane>

@@ -1,0 +1,25 @@
+.root {
+    -fx-background-color: #095F94;
+}
+
+.hand {
+    -fx-background-color: black;
+    -fx-alignment: center;
+}
+
+.hand .text {
+    -fx-fill: white;
+}
+
+#timer {
+    -fx-font-size: 25;
+}
+
+#opponentLeft {
+    -fx-rotate: -90;
+}
+
+#opponentRight {
+    -fx-rotate: 90;
+}
+

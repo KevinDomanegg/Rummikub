@@ -1,14 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+<BorderPane prefHeight="600.0"
+            prefWidth="800.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="GameController"
-            prefHeight="400.0" prefWidth="600.0">
+            styleClass="root">
+    <top>
+        <GridPane BorderPane.alignment="CENTER">
+            <!-- 3x1 grid for timer, middle-opponent's hand and menu buttons -->
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <StackPane alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0">
+                    <children>
+                        <Text fx:id="timer" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer: 30" />
+                    </children>
+                </StackPane>
+                <fx:include source="OpponentHand.fxml" GridPane.columnIndex="1"/>
+                <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
+                    <children>
+                        <Button fx:id="quitButton" mnemonicParsing="false" text="Quit" />
+                    </children>
+                </StackPane>
+            </children>
+        </GridPane>
+    </top>
+    <center>
+        <GridPane fx:id="table" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <!-- Add columns via Java with tag=ColumnConstraints -->
+            </columnConstraints>
+            <rowConstraints>
+                <!-- Add row via Java with tag=RowConstraints -->
+            </rowConstraints>
+            <children>
+                <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
+            </children>
+        </GridPane>
+    </center>
+    <left>
+        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
+            <fx:include fx:id="opponentLeft" source="OpponentHand.fxml" />
+        </StackPane>
+    </left>
+    <right>
+        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
+            <fx:include fx:id="opponentRight" source="OpponentHand.fxml" />
+        </StackPane>
+    </right>
+    <bottom>
+        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                    <children>
+                        <Text fx:id="playerInfo" strokeType="OUTSIDE" strokeWidth="0.0" text="player: stone count" />
+                        <GridPane>
+                            <columnConstraints>
+                                <!-- Add columns via Java with tag=ColumnConstraints -->
+                            </columnConstraints>
+                            <rowConstraints>
+                                <!-- Add row via Java with tag=RowConstraints -->
+                            </rowConstraints>
+                        </GridPane>
+                    </children>
+                </VBox>
+                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Button fx:id="drawButton" mnemonicParsing="false" text="Draw stone" onMouseClicked="#drawStone"/>
+                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
+                    </children>
+                </HBox>
+            </children>
+        </StackPane>
+    </bottom>
+</BorderPane>
 
-</AnchorPane>
+
+    <!-- old code
+
+
+    <top>
+        <BorderPane prefHeight="65.0" prefWidth="200" BorderPane.alignment="CENTER">
+            <left>
+                <Text fx:id="timer" styleClass="text">Timer: 30</Text>
+            </left>
+            <center>
+                <fx:include source="OpponentHand.fxml" />
+            </center>
+            <right>
+                <Button fx:id="quitButton">Quit</Button>
+            </right>
+        </BorderPane>
+    </top>
+    <center>
+        <GridPane BorderPane.alignment="CENTER" style="-fx-border-color: black">
+            <columnConstraints>
+            </columnConstraints>
+            <rowConstraints>
+            </rowConstraints>
+         <children>
+         </children>
+        </GridPane>
+    </center>
+    <left>
+        <fx:include source="OpponentHand.fxml" fx:id="opponentLeft" />
+    </left>
+    <right>
+        <fx:include source="OpponentHand.fxml" fx:id="opponentRight" />
+    </right>
+    <bottom>
+        <BorderPane prefHeight="62.0" prefWidth="600.0"
+                    BorderPane.alignment="CENTER"
+                    style="-fx-border-color: black; -fx-stroke: 1px">
+            <center>
+                <StackPane styleClass="hand" maxHeight="70" maxWidth="200" prefHeight="69.0"
+                           prefWidth="600.0">
+                    <Text text="Player hand" styleClass="text"/>
+                </StackPane>
+            </center>
+            <right>
+            </right>
+        </BorderPane>
+    </bottom>
+</BorderPane>
+-->
