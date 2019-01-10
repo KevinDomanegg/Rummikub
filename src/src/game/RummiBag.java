@@ -16,6 +16,7 @@ public class RummiBag {
       for (Stone.Color dir : Stone.Color.values()) {
         if (dir != Stone.Color.JOKER){
           stones.add(new Stone(dir, i));
+          stones.add(new Stone(dir, i));
         }
       }
     }
@@ -29,6 +30,7 @@ public class RummiBag {
   public Stone removeStone(){
     int index = randomGenerator.nextInt(stones.size());
     Stone stone = stones.get(index);
+    stones.remove(index);
     return stone;
   }
 
@@ -38,5 +40,22 @@ public class RummiBag {
 
   public void addStones(ArrayList<Stone> givenStones){
     stones.addAll(givenStones);
+  }
+
+  //Tests
+
+  @Override
+  public String toString(){
+    int bagSize = stones.size();
+    String stoneString = "";
+    for (int i = 0; i < stones.size(); i++){
+      stoneString = stoneString + "(" + stones.get(i).getColor() + "," + stones.get(i).getNumber() + ")" +"\n";
+    }
+    return "There are: " + bagSize + " Stones in the bag" + "\n" +
+        "All the stones in the bag are: " + "\n" + stoneString;
+  }
+
+  public ArrayList<Stone> getStones(){
+    return stones;
   }
 }
