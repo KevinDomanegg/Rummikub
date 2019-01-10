@@ -22,4 +22,9 @@ class Coordinate {
   @Override public int hashCode() {
     return Objects.hash(col, row);
   }
+
+  @Override
+  public String toString(){
+    return "(Col: " + col + ",Row: " + row + ")";
+  }
 }
