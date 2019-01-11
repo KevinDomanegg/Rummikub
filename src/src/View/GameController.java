@@ -1,21 +1,24 @@
+package View;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class GameController {
-  int handCount = 0;
+    int handCount = 0;
 
   @FXML Button drawButton;
   @FXML Text timer;
-  @FXML GridPane handGrid;
-  @FXML Pane opponentMid;
+  @FXML GridPane hand;
+  @FXML StackPane opponentMid;
+  @FXML Label stoneLabel;
 
   String name = "Hannah";
 
@@ -25,10 +28,11 @@ public class GameController {
   @FXML
   public void drawStone() {
     // Server request: Get stone from bag
-    Rectangle rectangle = new Rectangle(30,50);
+    Stone stone = new Stone(30, 50, 13);
+    Rectangle rectangle = stone.createLabel();
     rectangle.setId("handStone" + handCount);
-    handGrid.add(rectangle, handCount,0);
     handCount++;
+    hand.add(rectangle, handCount,0);
   }
 
   public void nameChange() {
@@ -38,20 +42,4 @@ public class GameController {
       ((Text) opMidName).setText(name);
     }
   }
-
-
-  /** Constructs columns and rows for target GridPane outside of FXML
-   *
-   * @param target GridPane where the grid shall be constructed
-   * @param columns amount of columns to be constructed
-   * @param rows amount of rows to be constructed
-   */
-  /*
-  void constructGrid(GridPane target, int columns, int rows) {
-    for(int i = 0; i < columns; i++) {
-      target.
-    }
-  }
-  */
-
 }

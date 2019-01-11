@@ -34,7 +34,7 @@
                         <Text fx:id="timer" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer: 30" />
                     </children>
                 </StackPane>
-                <fx:include source="OpponentHand.fxml" GridPane.columnIndex="1"/>
+                <fx:include fx:id="opponentMid" source="OpponentHand.fxml" GridPane.columnIndex="1"/>
                 <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
                     <children>
                         <Button fx:id="quitButton" mnemonicParsing="false" text="Quit" />
@@ -72,73 +72,35 @@
                 <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                     <children>
                         <Text fx:id="playerInfo" strokeType="OUTSIDE" strokeWidth="0.0" text="player: stone count" />
-                        <GridPane>
+                        <GridPane fx:id="hand">
+                            <!-- Own hand -->
                             <columnConstraints>
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
+                                <ColumnConstraints />
                                 <!-- Add columns via Java with tag=ColumnConstraints -->
                             </columnConstraints>
                             <rowConstraints>
+                                <RowConstraints />
                                 <!-- Add row via Java with tag=RowConstraints -->
                             </rowConstraints>
+                            <children>
+                            </children>
                         </GridPane>
                     </children>
                 </VBox>
                 <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Button fx:id="drawButton" mnemonicParsing="false" text="Draw stone" onMouseClicked="#drawStone"/>
-                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
+                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" onMouseClicked="#nameChange"/>
                     </children>
                 </HBox>
             </children>
         </StackPane>
     </bottom>
 </BorderPane>
-
-
-    <!-- old code
-
-
-    <top>
-        <BorderPane prefHeight="65.0" prefWidth="200" BorderPane.alignment="CENTER">
-            <left>
-                <Text fx:id="timer" styleClass="text">Timer: 30</Text>
-            </left>
-            <center>
-                <fx:include source="OpponentHand.fxml" />
-            </center>
-            <right>
-                <Button fx:id="quitButton">Quit</Button>
-            </right>
-        </BorderPane>
-    </top>
-    <center>
-        <GridPane BorderPane.alignment="CENTER" style="-fx-border-color: black">
-            <columnConstraints>
-            </columnConstraints>
-            <rowConstraints>
-            </rowConstraints>
-         <children>
-         </children>
-        </GridPane>
-    </center>
-    <left>
-        <fx:include source="OpponentHand.fxml" fx:id="opponentLeft" />
-    </left>
-    <right>
-        <fx:include source="OpponentHand.fxml" fx:id="opponentRight" />
-    </right>
-    <bottom>
-        <BorderPane prefHeight="62.0" prefWidth="600.0"
-                    BorderPane.alignment="CENTER"
-                    style="-fx-border-color: black; -fx-stroke: 1px">
-            <center>
-                <StackPane styleClass="hand" maxHeight="70" maxWidth="200" prefHeight="69.0"
-                           prefWidth="600.0">
-                    <Text text="Player hand" styleClass="text"/>
-                </StackPane>
-            </center>
-            <right>
-            </right>
-        </BorderPane>
-    </bottom>
-</BorderPane>
--->
