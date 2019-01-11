@@ -10,5 +10,5 @@ public enum InfoID {
   HAND,
   MOVE,
   DRAW,
-
+  TIME;
 }
