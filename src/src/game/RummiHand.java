@@ -6,15 +6,10 @@ public class RummiHand {
   private Map<Coordinate, Stone> grid;
   private final int height = 2;
   private final int width = 20;
-  private final int age;
-  private final String name;
-  private final int handNumber;
+
 
   public RummiHand(int age, String name, int handNumber){
     grid = new HashMap<>();
-    this.name = name;
-    this.age = age;
-    this.handNumber = handNumber;
   }
 
   public void setStone(Coordinate coordinate, Stone stone){
@@ -40,20 +35,6 @@ public class RummiHand {
   public int getWidth() {
     return width;
   }
-
-  public int getAge() {
-    return age;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getHandNumber() {
-    return handNumber;
-  }
-
-
 
   //Testmethods
 

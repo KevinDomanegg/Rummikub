@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface Game {
+
   void countUpHand();
 
   void countDownHand();
