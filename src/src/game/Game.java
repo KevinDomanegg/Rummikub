@@ -5,33 +5,40 @@ import java.util.Map;
 
 public interface Game {
 
-  void start();
-
-  void moveStoneonTable(Coordinate currentCoord, Coordinate nextCoord);
+  void moveStoneOnTable(Coordinate currentCoord, Coordinate nextCoord);
 
   void moveStoneFromHand(Coordinate currentCoord, Coordinate nextCoord);
 
   void moveStoneOnHand(Coordinate currentCoord, Coordinate nextCoord);
 
-  void reset(int moves);
+  void drawStone();
+
+  void playerHasLeft();
 
   void undo();
 
+  void nextTurn();
+
+  boolean hasWinner();
+
   boolean isConsistent();
 
-  void drawStone();
+  Map<Coordinate, Stone> getTableStones();
 
-  void handDown();
-
-  boolean hasWinnder();
-
-  Map<Coordinate, Stone> getTable();
-
-  Map<Coordinate, Stone> getCurrentHand();
+  Map<Coordinate, Stone> getCurrentHandStones();
 
   List<Integer> getOtherHandSizes();
 
   int getBagSize();
+
+  int getCurrentHandNumber();
+
+
+
+
+
+
+
 
   // ? int getTime();
 }

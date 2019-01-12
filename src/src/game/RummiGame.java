@@ -4,13 +4,26 @@ package game;
 import java.util.List;
 import java.util.Map;
 
-public class RummiGame {
+public class RummiGame implements Game {
   private RummiHand[] hands;
   private RummiTable table;
   private RummiBag bag;
+  //CurrentHand only as int or as Object??
   private RummiHand currentHand;
+  private int currentHandNumber;
 
+  public RummiGame(int ages[]) {
+    table = new RummiTable();
+    hands = new RummiHand[ages.length];
+    setCurrentHand(ages);
+  }
 
+  @Override
+  public void moveStoneOnTable(Coordinate currentCoord, Coordinate nextCoord){
+
+  }
+
+  @Override
   public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
     Stone movedStone = currentHand.getStones().get(initialPosition);
 
@@ -18,6 +31,7 @@ public class RummiGame {
     currentHand.getStones().remove(initialPosition);
   }
 
+  @Override
   public void moveStoneOnHand(Coordinate initialPosition, Coordinate targetPosition){
     Stone movedStone = currentHand.getStones().get(initialPosition);
 
@@ -25,6 +39,7 @@ public class RummiGame {
     currentHand.getStones().remove(initialPosition);
   }
 
+  @Override
   public void drawStone(){
     Stone stoneFromBag = bag.getStones().get(0);
     Coordinate targetPosition = nextFreeCoordinate(currentHand);
@@ -46,44 +61,17 @@ public class RummiGame {
     return null;
   }
 
-
-  public RummiGame(int ages[]) {
-    table = new RummiTable();
-    hands = new RummiHand[ages.length];
-    setCurrentHand(ages);
-  }
-
   private void setCurrentHand(int[] ages) {
-    currentHand = 0;
+    currentHandNumber = 0;
     for (int i = 1; i < ages.length; i++) {
-      if (ages[i] < ages[currentHand]) {
-        currentHand = i;
+      if (ages[i] < ages[currentHandNumber]) {
+        currentHandNumber = i;
       }
     }
   }
 
   @Override
-  public void start() {
-
-  }
-
-  @Override
-  public void moveStoneonTable(Coordinate currentCoord, Coordinate nextCoord) {
-
-  }
-
-  @Override
-  public void moveStoneFromHand(Coordinate currentCoord, Coordinate nextCoord) {
-
-  }
-
-  @Override
-  public void moveStoneOnHand(Coordinate currentCoord, Coordinate nextCoord) {
-
-  }
-
-  @Override
-  public void reset(int moves) {
+  public void playerHasLeft() {
 
   }
 
@@ -93,32 +81,27 @@ public class RummiGame {
   }
 
   @Override
+  public void nextTurn() {
+
+  }
+
+  @Override
+  public boolean hasWinner() {
+    return false;
+  }
+
+  @Override
   public boolean isConsistent() {
     return false;
   }
 
   @Override
-  public void drawStone() {
-
-  }
-
-  @Override
-  public void handDown() {
-
-  }
-
-  @Override
-  public boolean hasWinnder() {
-    return false;
-  }
-
-  @Override
-  public Map<Coordinate, Stone> getTable() {
+  public Map<Coordinate, Stone> getTableStones() {
     return null;
   }
 
   @Override
-  public Map<Coordinate, Stone> getCurrentHand() {
+  public Map<Coordinate, Stone> getCurrentHandStones() {
     return null;
   }
 
@@ -129,6 +112,11 @@ public class RummiGame {
 
   @Override
   public int getBagSize() {
+    return 0;
+  }
+
+  @Override
+  public int getCurrentHandNumber(){
     return 0;
   }
 }
