@@ -1,12 +1,13 @@
 package game;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-class Coordinate {
+public class Coordinate implements Serializable{
   private int col;
   private int row;
 
-  Coordinate(int col, int row) {
+  public Coordinate(int col, int row) {
     this.col = col;
     this.row = row;
   }
