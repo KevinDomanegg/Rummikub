@@ -31,7 +31,7 @@ public class TestShell {
   }
 
   private static void testHand(){
-    RummiHand hand = new RummiHand(25, "Cedrik", 1);
+    RummiHand hand = new RummiHand();
     Stone stone = new Stone(Stone.Color.JOKER, 0);
     Stone stone2 = new Stone(Stone.Color.RED, 13);
     Coordinate coordinate = new Coordinate(0,0);
