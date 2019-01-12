@@ -1,78 +1,90 @@
 package game;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RummiGame implements Game {
-  private RummiHand[] hands;
-  private RummiTable table;
-  private RummiBag bag;
-  //CurrentHand only as int or as Object??
-  private RummiHand currentHand;
-  private int currentHandNumber;
+  private static final int MAX_PLAYERS = 4;
+  private static final int FIRST_STONES = 14;
 
-  public RummiGame(int ages[]) {
+  private RummiTable table;
+  private ArrayList<Player> players;
+  private RummiBag bag;
+  private int currentPlayerPosition;
+
+  public RummiGame() {
     table = new RummiTable();
-    hands = new RummiHand[ages.length];
-    setCurrentHand(ages);
+    players = new ArrayList<>(MAX_PLAYERS);
+    bag = new RummiBag();
+  }
+
+  private Player currentPlayer() {
+    return players.get(currentPlayerPosition);
+  }
+
+  private void nextTurn() {
+    currentPlayerPosition = (currentPlayerPosition + 1) % players.size();
+  }
+
+  @Override public void setPlayer(int age) {
+    players.add(new Player(age));
+  }
+
+  @Override public void start() {
+    handOutStones();
+    setStarter();
+  }
+
+  private void handOutStones() {
+    for (int i = 0; i < FIRST_STONES; i++) {
+      for (int j = 0; j < players.size(); j++) {
+        drawStone();
+      }
+    }
+  }
+
+  private void setStarter() {
+    currentPlayerPosition = 0;
+    for (int i = 1; i < players.size(); i++) {
+      Player player = players.get(i);
+      if (player.getAge() < currentPlayer().getAge()) {
+        currentPlayerPosition = i;
+      }
+    }
   }
 
   @Override
-  public void moveStoneOnTable(Coordinate currentCoord, Coordinate nextCoord){
-
+  public void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition){
+    table.setStone(targetPosition, table.getStones().remove(initialPosition));
   }
 
   @Override
   public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
-    Stone movedStone = currentHand.getStones().get(initialPosition);
+    table.setStone(targetPosition, currentPlayer().popStone(initialPosition));
 
-    table.setStone(targetPosition, movedStone);
-    currentHand.getStones().remove(initialPosition);
+//    Stone movedStone = players.get(players.get(currentPlayerPosition)).getStones().get(initialPosition);
+//
+//    table.setStone(targetPosition, movedStone);
+//    currentHand.getStones().remove(initialPosition);
   }
 
   @Override
-  public void moveStoneOnHand(Coordinate initialPosition, Coordinate targetPosition){
-    Stone movedStone = currentHand.getStones().get(initialPosition);
-
-    currentHand.setStone(targetPosition, movedStone);
-    currentHand.getStones().remove(initialPosition);
+  public void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition) {
+    players.get(playerPosition).moveStone(initialPosition, targetPosition);
   }
 
-  @Override
-  public void drawStone(){
-    Stone stoneFromBag = bag.getStones().get(0);
-    Coordinate targetPosition = nextFreeCoordinate(currentHand);
-
-    currentHand.setStone(targetPosition, stoneFromBag);
+  @Override public void drawStone(){
+    currentPlayer().pushStone(bag.removeStone());
+    nextTurn();
   }
 
-  private Coordinate nextFreeCoordinate(RummiHand hand){
-    int width = hand.getWidth();
-    int height = hand.getHeight();
 
-    for (int x = 0; x < width; x++){
-      for (int y = 0; y < height; y++){
-        if (hand.getStones().containsKey(new Coordinate(x,y)) == false){
-          return new Coordinate(x,y);
-        }
-      }
-    }
-    return null;
-  }
-
-  private void setCurrentHand(int[] ages) {
-    currentHandNumber = 0;
-    for (int i = 1; i < ages.length; i++) {
-      if (ages[i] < ages[currentHandNumber]) {
-        currentHandNumber = i;
-      }
-    }
-  }
-
-  @Override
-  public void playerHasLeft() {
-
+  @Override public void playerHasLeft(int playerPosition) {
+    bag.addStones(players.get(playerPosition).getStones().values());
+    nextTurn();
   }
 
   @Override
@@ -80,43 +92,36 @@ public class RummiGame implements Game {
 
   }
 
-  @Override
-  public void nextTurn() {
-
+  @Override public boolean hasWinner() {
+    return currentPlayer().getHandSize() == 0;
   }
 
-  @Override
-  public boolean hasWinner() {
-    return false;
+  @Override public boolean isConsistent() {
+    boolean isTableConsistent = table.isConsistent();
+    if (isTableConsistent) {
+      nextTurn();
+    }
+    return isTableConsistent;
   }
 
-  @Override
-  public boolean isConsistent() {
-    return false;
+  @Override public Map<Coordinate, Stone> getTableStones() {
+    return table.getStones();
   }
 
-  @Override
-  public Map<Coordinate, Stone> getTableStones() {
-    return null;
+  @Override public Map<Coordinate, Stone> getCurrentPlayerStones() {
+    return currentPlayer().getStones();
   }
 
-  @Override
-  public Map<Coordinate, Stone> getCurrentHandStones() {
-    return null;
+  @Override public int getBagSize() {
+    return bag.size();
   }
 
-  @Override
-  public List<Integer> getOtherHandSizes() {
-    return null;
+  @Override public List<Integer> getPlayerHandSizes() {
+    // need to be discussed, how does sever know in what sequence the player's hand sizes are stored
+    return players.stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
-  @Override
-  public int getBagSize() {
-    return 0;
-  }
-
-  @Override
-  public int getCurrentHandNumber(){
-    return 0;
+  @Override public int getCurrentPlayerPosition(){
+    return currentPlayerPosition;
   }
 }

@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 public class RummiBag {
@@ -11,7 +12,7 @@ public class RummiBag {
 
   //The bag is initially filled with 13 Numbers of each
   //color and two Jokers.
-  public RummiBag() {
+  RummiBag() {
     for (int i = 1; i <= STONESOFEACHCOLOR; i++) {
       for (Stone.Color dir : Stone.Color.values()) {
         if (dir != Stone.Color.JOKER){
@@ -27,35 +28,34 @@ public class RummiBag {
   }
 
   //Returns a random Stone.
-  public Stone removeStone(){
+  Stone removeStone(){
     int index = randomGenerator.nextInt(stones.size());
     Stone stone = stones.get(index);
     stones.remove(index);
     return stone;
   }
 
-  public int size() {
+  int size() {
     return stones.size();
   }
 
-  public void addStones(ArrayList<Stone> givenStones){
-    stones.addAll(givenStones);
+  void addStones(Collection<Stone> extraStones){
+    this.stones.addAll(extraStones);
   }
 
-  //Tests
-
+  // for test
   @Override
   public String toString(){
-    int bagSize = stones.size();
-    String stoneString = "";
-    for (int i = 0; i < stones.size(); i++){
-      stoneString = stoneString + "(" + stones.get(i).getColor() + "," + stones.get(i).getNumber() + ")" +"\n";
+    StringBuilder stringBuilder = new StringBuilder();
+    stringBuilder.append("bag size: ").append(size()).append('\n');
+    for (Stone stone : stones) {
+      stringBuilder.append('(').append(stone.getColor()).append(", ").append(stone.getNumber())
+          .append(")\n");
     }
-    return "There are: " + bagSize + " Stones in the bag" + "\n" +
-        "All the stones in the bag are: " + "\n" + stoneString;
+    return stringBuilder.toString();
   }
 
-  public ArrayList<Stone> getStones(){
+  ArrayList<Stone> getStones(){
     return stones;
   }
 }
