@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface Grid {
 
-  Map<Coordinate, Stone> getStnes();
+  Map<Coordinate, Stone> getStones();
 
   void setStone(Coordinate coordinate, Stone stone);
 
