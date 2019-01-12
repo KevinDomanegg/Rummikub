@@ -4,11 +4,48 @@ package game;
 import java.util.List;
 import java.util.Map;
 
-public class RummiGame implements Game {
-  private RummiTable table;
+public class RummiGame {
   private RummiHand[] hands;
-  private int currentHand;
-  // private Stack<MoveTrace>moveTraces;
+  private RummiTable table;
+  private RummiBag bag;
+  private RummiHand currentHand;
+
+
+  public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
+    Stone movedStone = currentHand.getStones().get(initialPosition);
+
+    table.setStone(targetPosition, movedStone);
+    currentHand.getStones().remove(initialPosition);
+  }
+
+  public void moveStoneOnHand(Coordinate initialPosition, Coordinate targetPosition){
+    Stone movedStone = currentHand.getStones().get(initialPosition);
+
+    currentHand.setStone(targetPosition, movedStone);
+    currentHand.getStones().remove(initialPosition);
+  }
+
+  public void drawStone(){
+    Stone stoneFromBag = bag.getStones().get(0);
+    Coordinate targetPosition = nextFreeCoordinate(currentHand);
+
+    currentHand.setStone(targetPosition, stoneFromBag);
+  }
+
+  private Coordinate nextFreeCoordinate(RummiHand hand){
+    int width = hand.getWidth();
+    int height = hand.getHeight();
+
+    for (int x = 0; x < width; x++){
+      for (int y = 0; y < height; y++){
+        if (hand.getStones().containsKey(new Coordinate(x,y)) == false){
+          return new Coordinate(x,y);
+        }
+      }
+    }
+    return null;
+  }
+
 
   public RummiGame(int ages[]) {
     table = new RummiTable();
