@@ -11,12 +11,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server extends Thread {
+public class RummiServer extends Thread {
 
 
   public static void main(String[] args) {
     ConcreteGame game = new ConcreteGame();
-    Server s = new Server(game);
+    RummiServer s = new RummiServer(game);
     game.setserver(s);
     s.start();
   }
@@ -31,7 +31,7 @@ public class Server extends Thread {
   private RequestHandler reqhandler;
   private Game game;
 
-  public Server(Game game){
+  public RummiServer(Game game){
     this.game = game;
     this.reqhandler = new RequestHandler(game);
   }
@@ -81,7 +81,7 @@ public class Server extends Thread {
     listeners[id].start();
     senders[id] = new ServerSender(clients[id], this, id);
     senders[id].start();
-    System.out.println("Server: connected to " + id);
+    System.out.println("RummiServer: connected to " + id);
   }
 
   /**
@@ -96,7 +96,7 @@ public class Server extends Thread {
     senders[id].disconnect();
     senders[id] = null;
     this.numOfClients--;
-    System.out.println("Server: disconnected from " + id);
+    System.out.println("RummiServer: disconnected from " + id);
     notifyAll();
   }
 
@@ -120,8 +120,9 @@ public class Server extends Thread {
 
   /**
    * Sends a GameInfo to the player that is currently playing.
+   *
    * @param info GameInfo getting sent to the player
-   * @param playerid id of the current player (0-3)
+   * @param playerid id of the current player (0-n)
    */
   public void sendToCurrentPlayer(GameInfo info, int playerid) {
     senders[playerid].send(info);

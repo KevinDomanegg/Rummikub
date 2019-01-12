@@ -7,7 +7,7 @@ import java.net.Socket;
 
 public class ServerSender extends Thread {
   private Socket clientOut;
-  private Server server;
+  private RummiServer server;
   private int id;
   private boolean send = false;
   private boolean connected = true;
@@ -20,7 +20,7 @@ public class ServerSender extends Thread {
     notifyAll();
   }
 
-  public ServerSender(Socket clientOut, Server ser, int id) {
+  public ServerSender(Socket clientOut, RummiServer ser, int id) {
     this.clientOut = clientOut;
     this.server = ser;
     this.id = id;

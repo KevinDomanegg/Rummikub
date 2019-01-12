@@ -7,13 +7,13 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 public class ServerListener extends Thread {
-  private Server server;
+  private RummiServer server;
   private Socket clientIn;
   private int id;
   private boolean connected = false;
   private Request request;
 
-  public ServerListener(Socket clientIn, Server request, int id) {
+  public ServerListener(Socket clientIn, RummiServer request, int id) {
     this.clientIn = clientIn;
     this.server = request;
     this.id = id;
@@ -47,8 +47,8 @@ public class ServerListener extends Thread {
         System.out.println("Listener: Received " + request.toString());
         server.applyRequest(request);
 
-//        for (int i = 0; i < Server.senders.length; i++) {
-//          ServerSender s = Server.senders[i];
+//        for (int i = 0; i < RummiServer.senders.length; i++) {
+//          ServerSender s = RummiServer.senders[i];
 //          if (s != null && s.getClient() != this.clientIn) {
 //            System.out.println("Listener: Sent message to Sender " + i);
 //            s.send(request);

@@ -2,7 +2,7 @@ package game;
 
 import communication.InfoID;
 import communication.Timer;
-import network.server.Server;
+import network.server.RummiServer;
 
 import java.util.List;
 import java.util.Map;
@@ -13,9 +13,9 @@ public class ConcreteGame implements Game{
    * Not intended for usage in the final version.
    */
 
-  private Server server;
+  private RummiServer server;
 
-  public void setserver (Server server) {
+  public void setserver (RummiServer server) {
     this.server = server;
   }
 

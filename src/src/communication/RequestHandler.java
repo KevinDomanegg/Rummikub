@@ -6,7 +6,7 @@ import game.Game;
 public class RequestHandler {
   /**
    * Class that can take Request-Objects and transform the into method-calls for a Game.
-   * Acts as a Link between Server and Game.
+   * Acts as a Link between RummiServer and Game.
    */
 
   private Game game;
