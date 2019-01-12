@@ -6,23 +6,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class RummiTable implements Grid{
+public class RummiTable implements Grid {
   private static final int WIDTH = 30;
   private static final int HEIGHT = 30;
   private static final int MIN_SET_SIZE = 3;
+  private static final int MAX_GROUP_SIZE = 4;
 
-  private Map<Coordinate, Stone> grid;
+  private Map<Coordinate, Stone> stones;
 
-  RummiTable() {
-    grid = new HashMap<>(WIDTH * HEIGHT);
+  public RummiTable() {
+    stones = new HashMap<>(WIDTH * HEIGHT);
   }
 
-  @Override public Map<Coordinate, Stone> getStnes() {
-    return grid;
+  @Override public Map<Coordinate, Stone> getStones() {
+    return stones;
   }
 
   @Override public void setStone(Coordinate coordinate, Stone stone) {
-    grid.put(coordinate, stone);
+    stones.put(coordinate, stone);
   }
 
   @Override public int getWidth() {
@@ -34,42 +35,43 @@ public class RummiTable implements Grid{
   }
 
   @Override public void clear() {
-    grid.clear();
+    stones.clear();
   }
 
   public boolean isConsistent() {
     // check the minimal Condition (:= a valid set has at least 3 stones)
-    if (grid.size() < MIN_SET_SIZE) {
+    if (stones.size() < MIN_SET_SIZE) {
       return false;
     }
-    // make a copy of the grid.keySet, in order to remove checked coordinate safely
-    HashSet<Coordinate> checkingList = new HashSet<>(grid.keySet());
+    // make a copy of the stones.keySet, in order to remove checked coordinate safely
+    HashSet<Coordinate> checkingList = new HashSet<>(stones.keySet());
     int col;
-    int setSize = 1;
+    int setSize = 0;
 
-     for (Coordinate coordinate : grid.keySet()) {
-       // check if all coordinates of stones in grid are confirmed
+     for (Coordinate coordinate : stones.keySet()) {
+       // check if all coordinates of stones in stones are confirmed (also the current coordinate)
       if (checkingList.isEmpty()) {
         return true;
       }
-      // check if the first(current) coordinate of the potential set is already confirmed
-      if (checkingList.remove(coordinate)) {
-        // column index for potentially second coordinate
-        col = coordinate.getCol() + 1;
-        // count the number of neighbors of the stone at the current coordinate in the same row
-        while (col < WIDTH && checkingList.remove(new Coordinate(col, coordinate.getRow()))) {
-          setSize++;
-          col++;
-        }
-        // check the minimal condition
-        if (setSize < MIN_SET_SIZE) {
+       // check if the first(current) coordinate of the potential set is already confirmed
+       if (checkingList.contains(coordinate)) {
+         col = coordinate.getCol();
+         // find the first stone for a potential set
+         while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
+           col--;
+         }
+         // the coordinate of the first stone in a potential set
+         coordinate = new Coordinate(col, coordinate.getRow());
+         // count the number of neighbors of the first stone of a potential set
+         while (col < WIDTH && checkingList.remove(new Coordinate(col, coordinate.getRow()))) {
+           setSize++;
+           col++;
+         }
+         // check the minimal condition and the consistency of the potential set
+         if (setSize < MIN_SET_SIZE || !isValidSet(setSize, coordinate)) {
           return false;
         }
-        // check the consistency of the potential set
-        if (!isValidSet(setSize, coordinate)) {
-          return false;
-        }
-        setSize = 1;
+        setSize = 0;
       }
     }
     return false;
@@ -84,14 +86,14 @@ public class RummiTable implements Grid{
    * @return true if only if a valid group-set or run-set is confirmed
    */
   private boolean isValidSet(int setSize, Coordinate coordinate) {
-    Stone stone = grid.get(coordinate);
+    Stone stone = stones.get(coordinate);
     // find a non-joker stone
     for (int i = 0; i < MIN_SET_SIZE; i++) {
       // leave the loop as soon as the stone is not a joker
-      if (!stone.getColor().equals(Color.JOKER)) {
+      if (stone.getColor() != Color.JOKER) {
         break;
       }
-      stone = grid.get(new Coordinate(coordinate.getCol() + i + 1, coordinate.getRow()));
+      stone = stones.get(new Coordinate(coordinate.getCol() + i + 1, coordinate.getRow()));
     }
     // check the consistency with the name and the color of the non-joker stone
     return isVaildGroup(setSize, coordinate, stone.getNumber())
@@ -99,6 +101,9 @@ public class RummiTable implements Grid{
   }
 
   private boolean isVaildGroup(int setSize, Coordinate coordinate, int expectedNumber) {
+    if (setSize > MAX_GROUP_SIZE) {
+      return false;
+    }
     Stone stone;
     int col = coordinate.getCol();
     int row = coordinate.getRow();
@@ -107,7 +112,7 @@ public class RummiTable implements Grid{
     HashSet<Color> checkedColors = new HashSet<>();
 
     for (int i = 0; i < setSize; i++) {
-      stone = grid.get(new Coordinate(col + i, row));
+      stone = stones.get(new Coordinate(col + i, row));
       color = stone.getColor();
       // check if it's a Joker or it has expectedNumber and its color is unique
       if (!(color == Color.JOKER || stone.getNumber() == expectedNumber && checkedColors.add(color))) {
@@ -126,16 +131,17 @@ public class RummiTable implements Grid{
     int number;
 
     for (int i = 0; i < setSize; i++) {
-      stone = grid.get(new Coordinate(col + i, row));
+      stone = stones.get(new Coordinate(col + i, row));
       color = stone.getColor();
       number = stone.getNumber();
       // check if it's a Joker or it has expectedColor
       if (!(color == Color.JOKER || color == expectedColor
-          // check if it's not the first to be checked and it has expectedNumber
-          && expectedNumber != 0 && number == expectedNumber)) {
+          // and it's the first to be checked or its number matches the expected (previous) number
+          && (expectedNumber == 0 || number == expectedNumber))) {
         return false;
       }
-      expectedNumber = number + 1;
+      // count up the expectedNumber accordingly
+      expectedNumber = (expectedNumber == 0) ? number + 1 : expectedNumber + 1;
     }
     return true;
   }
