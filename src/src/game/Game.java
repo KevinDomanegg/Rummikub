@@ -5,12 +5,6 @@ import java.util.Map;
 
 public interface Game {
 
-  void countUpHand();
-
-  void countDownHand();
-
-  void setStarter(int hand);
-
   void start();
 
   void moveStoneonTable(Coordinate currentCoord, Coordinate nextCoord);

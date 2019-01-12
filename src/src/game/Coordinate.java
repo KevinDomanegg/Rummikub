@@ -2,11 +2,11 @@ package game;
 
 import java.util.Objects;
 
-class Coordinate {
+public final class Coordinate {
   private int col;
   private int row;
 
-  Coordinate(int col, int row) {
+  public Coordinate(int col, int row) {
     this.col = col;
     this.row = row;
   }
@@ -28,19 +28,11 @@ class Coordinate {
     return "(Col: " + col + ",Row: " + row + ")";
   }
 
-  public int getCol() {
+  int getCol() {
     return col;
   }
 
-  public void setCol(int col) {
-    this.col = col;
-  }
-
-  public int getRow() {
+  int getRow() {
     return row;
-  }
-
-  public void setRow(int row) {
-    this.row = row;
   }
 }

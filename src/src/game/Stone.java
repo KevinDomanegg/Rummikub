@@ -1,28 +1,28 @@
 package game;
 
 
-class Stone {
-  enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
+public class Stone {
+  public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
 
   private Color color;
   private int number;
 
-  Stone(Color color, int number) {
+  public Stone(Color color, int number) {
     //  Stone(Color.JOKER, 0) <=> Stone()
     this.color = color;
     this.number = number;
   }
 
 
-  Stone() {
+  public Stone() {
     color = Color.JOKER;
   }
 
-  Color getColor() {
+  public Color getColor() {
     return color;
   }
 
-  int getNumber() {
+  public int getNumber() {
     return number;
   }
 
