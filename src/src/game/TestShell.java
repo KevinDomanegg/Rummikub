@@ -16,9 +16,9 @@ public class TestShell {
     RummiBag testBag = new RummiBag();
 
     //Test every Mehtod at least once.
-    System.out.println(bag.toString());
+    System.out.println(bag);
     bag.removeStone();
-    System.out.println(bag.toString());
+    System.out.println(bag);
     bag.addStones(testBag.getStones());
     System.out.println(bag.size());
 
@@ -27,7 +27,16 @@ public class TestShell {
   }
 
   private static void testHand(){
+    RummiHand hand = new RummiHand();
+    Stone stone = new Stone(Stone.Color.JOKER, 0);
+    Coordinate coordinate = new Coordinate(0,0);
 
+    hand.setStone(coordinate, stone);
+
+    System.out.println(hand);
+
+    hand = null;
+    stone = null;
   }
 
 
