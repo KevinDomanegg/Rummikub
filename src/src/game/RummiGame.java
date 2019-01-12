@@ -6,33 +6,43 @@ package game;
 public class RummiGame {
   private RummiHand[] hands;
   private RummiTable table;
+  private RummiBag bag;
   private RummiHand currentHand;
 
 
-  public RummiGame(int currentHands, int[] ageList){
-    //define starting player
-    //define Order which player comes after each other
-    //setOrder(ageList);
+  public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
+    Stone movedStone = currentHand.getStones().get(initialPosition);
 
-    //init hands
-    //give Stones to hands
-    //init table
+    table.setStone(targetPosition, movedStone);
+    currentHand.getStones().remove(initialPosition);
   }
 
-  //This method should define which player starts and who comes next
-  private void setOrder(int[] ageList){
+  public void moveStoneOnHand(Coordinate initialPosition, Coordinate targetPosition){
+    Stone movedStone = currentHand.getStones().get(initialPosition);
 
+    currentHand.setStone(targetPosition, movedStone);
+    currentHand.getStones().remove(initialPosition);
   }
 
-  private void giveStonesToHands(){
+  public void drawStone(){
+    Stone stoneFromBag = bag.getStones().get(0);
+    Coordinate targetPosition = nextFreeCoordinate(currentHand);
 
+    currentHand.setStone(targetPosition, stoneFromBag);
   }
 
-  public void moveStoneFromHand(Coordinate handStone, Coordinate tablePlace){
-    Stone stoneOnHand = currentHand.getStones().get(handStone);
+  private Coordinate nextFreeCoordinate(RummiHand hand){
+    int width = hand.getWidth();
+    int height = hand.getHeight();
 
-    table.setStone(tablePlace, stoneOnHand);
-    currentHand.getStones().remove(handStone);
+    for (int x = 0; x < width; x++){
+      for (int y = 0; y < height; y++){
+        if (hand.getStones().containsKey(new Coordinate(x,y)) == false){
+          return new Coordinate(x,y);
+        }
+      }
+    }
+    return null;
   }
 
 
