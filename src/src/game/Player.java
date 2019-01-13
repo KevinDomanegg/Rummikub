@@ -51,4 +51,17 @@ class Player {
   public int getHandSize() {
     return hand.size();
   }
+
+  // for test
+  @Override public String toString() {
+    return "Player(" + age + ")";
+  }
+
+  public int getHandWidth() {
+    return hand.getWidth();
+  }
+
+  public int getHandHeight() {
+    return hand.getHeight();
+  }
 }

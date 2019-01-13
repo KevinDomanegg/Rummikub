@@ -124,4 +124,20 @@ public class RummiGame implements Game {
   @Override public int getCurrentPlayerPosition(){
     return currentPlayerPosition;
   }
+
+  @Override public int getTableWidth() {
+    return table.getWidth();
+  }
+
+  @Override public int getTableHeight() {
+    return table.getHeight();
+  }
+
+  @Override public int getCurrentPlayerHandWidth() {
+    return currentPlayer().getHandWidth();
+  }
+
+  @Override public int getCurrentPlayerHandHeight() {
+    return currentPlayer().getHandHeight();
+  }
 }
