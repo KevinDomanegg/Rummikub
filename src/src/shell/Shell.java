@@ -4,7 +4,6 @@ import game.Coordinate;
 import game.Game;
 import game.RummiGame;
 import game.Stone;
-import game.Stone.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -85,9 +84,9 @@ public final class Shell {
       }
     },
     UNDO {
-      @Override
-      Game excecute(Game game, String[] tokens) {
-        return null;
+      @Override Game excecute(Game game, String[] tokens) {
+        game.undo();
+        return game;
       }
     },
     HELP {
@@ -193,6 +192,8 @@ public final class Shell {
         return Command.START;
       case "QUIT":
         return Command.QUIT;
+      case "UNDO":
+        return Command.UNDO;
       default:
         error(Command.NOT_VALID.toString());
         return Command.NOT_VALID;
