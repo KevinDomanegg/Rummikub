@@ -25,12 +25,12 @@ public class RequestHandler {
     switch (id){
       case HAND_MOVE:
         Concrete_Hand_Move hand_move = (Concrete_Hand_Move) request;
-        game.moveStoneOnHand(hand_move.getCurrentCoor(), hand_move.getNewCoor());
+        game.moveStoneOnHand(hand_move.getCurrentPlayerPosition(), hand_move.getCurrentCoor(), hand_move.getNewCoor());
         break;
 
       case TABLE_MOVE:
         ConcreteTableMove tableMove = (ConcreteTableMove) request;
-        game.moveStoneonTable(tableMove.getCurrentCoor(), tableMove.getNewCoor());
+        game.moveStoneOnTable(tableMove.getCurrentCoor(), tableMove.getNewCoor());
         break;
 
       case PUT_STONE:

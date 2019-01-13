@@ -21,6 +21,10 @@ public class Concrete_Hand_Move implements Request, Serializable {
     return RequestID.HAND_MOVE;
   }
 
+  public int getCurrentPlayerPosition() {
+    return 0;
+  }
+
   public Coordinate getCurrentCoor() {
     Random rand = new Random();
     return new game.Coordinate(rand.nextInt(), rand.nextInt());
