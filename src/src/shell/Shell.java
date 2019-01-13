@@ -74,7 +74,13 @@ public final class Shell {
     MOVE_ON_HAND {
       @Override
       Game excecute(Game game, String[] tokens) {
+        int x1 = Integer.parseUnsignedInt(tokens[1]);
+        int y1 = Integer.parseUnsignedInt(tokens[2]);
+        int x2 = Integer.parseUnsignedInt(tokens[3]);
+        int y2 = Integer.parseUnsignedInt(tokens[4]);
+        game.moveStoneOnHand(game.getCurrentPlayerPosition(), new Coordinate(x1, y1), new Coordinate(x2, y2));
         return game;
+
       }
     },
     PLAYER_LEFT {
@@ -194,6 +200,8 @@ public final class Shell {
         return Command.QUIT;
       case "UNDO":
         return Command.UNDO;
+      case "MOVE_ON_HAND":
+        return Command.MOVE_ON_HAND;
       default:
         error(Command.NOT_VALID.toString());
         return Command.NOT_VALID;
