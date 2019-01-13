@@ -4,7 +4,9 @@ package game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 import java.util.stream.Collectors;
+
 
 public class RummiGame implements Game {
   private static final int MAX_PLAYERS = 4;
@@ -13,6 +15,7 @@ public class RummiGame implements Game {
   private RummiTable table;
   private ArrayList<Player> players;
   private RummiBag bag;
+  private Stack<MoveTrace> trace;
   private int currentPlayerPosition;
 
   public RummiGame() {
@@ -59,21 +62,21 @@ public class RummiGame implements Game {
   @Override
   public void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition){
     table.setStone(targetPosition, table.getStones().remove(initialPosition));
+    trace.push(new MoveTrace("MOVESTONEONTABLE", initialPosition, targetPosition));
   }
 
   @Override
   public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
     table.setStone(targetPosition, currentPlayer().popStone(initialPosition));
-
-//    Stone movedStone = players.get(players.get(currentPlayerPosition)).getStones().get(initialPosition);
-//
-//    table.setStone(targetPosition, movedStone);
-//    currentHand.getStones().remove(initialPosition);
+    trace.push(new MoveTrace("MOVESTONEFROMHAND", initialPosition, targetPosition));
   }
 
   @Override
   public void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition) {
     players.get(playerPosition).moveStone(initialPosition, targetPosition);
+    if (playerPosition == currentPlayerPosition){
+      trace.push(new MoveTrace("MOVESTONEONHAND", initialPosition, targetPosition));
+    }
   }
 
   @Override public void drawStone(){
@@ -89,7 +92,30 @@ public class RummiGame implements Game {
 
   @Override
   public void undo() {
+    if (trace.empty()){
+      return;
+    }
 
+    MoveTrace lastCommand = trace.pop();
+    Coordinate initialPosition = lastCommand.getInitialPosition();
+    Coordinate targetPosition = lastCommand.getTargetPosition();
+    String command = lastCommand.getCommand();
+    int playerPosition = lastCommand.getPlayerPosition();
+
+    switch (command) {
+      case "MOVESTONEONTABLE":
+        table.setStone(initialPosition, table.getStones().remove(targetPosition));
+        break;
+      case "MOVESTONEFROMHAND":
+        table.setStone(initialPosition, currentPlayer().popStone(targetPosition));
+        break;
+      case "MOVESTONEONHAND":
+        players.get(playerPosition).moveStone(targetPosition, initialPosition);
+        break;
+      default:
+        //error Message: There are no moves to undo.
+        break;
+    }
   }
 
   @Override public boolean hasWinner() {
