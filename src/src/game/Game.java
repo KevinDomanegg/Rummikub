@@ -4,39 +4,44 @@ import java.util.List;
 import java.util.Map;
 
 public interface Game {
-  void countUpHand();
 
-  void countDownHand();
-
-  void setStarter(int hand);
+  void setPlayer(int age);
 
   void start();
 
-  void moveStoneonTable(Coordinate currentCoord, Coordinate nextCoord);
+  void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneFromHand(Coordinate currentCoord, Coordinate nextCoord);
+  void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneOnHand(Coordinate currentCoord, Coordinate nextCoord);
-
-  void reset(int moves);
-
-  void undo();
-
-  boolean isConsistent();
+  void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition);
 
   void drawStone();
 
-  void handDown();
+  void playerHasLeft(int playerPosition);
 
-  boolean hasWinnder();
+  void undo();
 
-  Map<Coordinate, Stone> getTable();
+  boolean hasWinner();
 
-  Map<Coordinate, Stone> getCurrentHand();
+  boolean isConsistent();
 
-  List<Integer> getOtherHandSizes();
+  Map<Coordinate, Stone> getTableStones();
+
+  Map<Coordinate, Stone> getCurrentPlayerStones();
+
+  List<Integer> getPlayerHandSizes();
 
   int getBagSize();
+
+  int getCurrentPlayerPosition();
+
+  int getTableWidth();
+
+  int getTableHeight();
+
+  int getCurrentPlayerHandWidth();
+
+  int getCurrentPlayerHandHeight();
 
   // ? int getTime();
 }

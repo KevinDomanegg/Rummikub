@@ -28,4 +28,12 @@ public class Coordinate implements Serializable{
   public String toString(){
     return "(Col: " + col + ",Row: " + row + ")";
   }
+
+  int getCol() {
+    return col;
+  }
+
+  int getRow() {
+    return row;
+  }
 }
