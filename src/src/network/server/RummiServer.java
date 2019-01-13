@@ -3,10 +3,6 @@ package network.server;
 import communication.GameInfo;
 import communication.Request;
 
-import communication.RequestHandler;
-import game.ConcreteGame;
-import game.Game;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -28,13 +24,21 @@ public class RummiServer extends Thread {
   private int numOfClients = 0;
   private boolean running = true;
   private RequestHandler reqhandler;
-  private Game game;
+  private GameBuilder gbuilder;
 
-  public RummiServer(){
-    this.game = new ConcreteGame(this);
-    this.reqhandler = new RequestHandler(game);
+  /**
+   * Constructor creating a new Server, including all other classes needed
+   * server-side to play the game.
+   */
+  public RummiServer() {
+    this.gbuilder = new GameBuilder(this);
+    this.reqhandler = new RequestHandler(gbuilder);
   }
 
+  /**
+   * Starts the server.
+   * Connects to all the clients and initializes Listeners and Senders.
+   */
   @Override
   public void run() {
     try {
@@ -71,8 +75,8 @@ public class RummiServer extends Thread {
    * Connects to a certain client.
    *
    * @param client that will be connected
-   * @param id of the client
-   *           position of the clients among the other clients
+   * @param id     of the client
+   *               position of the clients among the other clients
    */
   private void connectClient(Socket client, int id) {
     clients[id] = client;
@@ -101,17 +105,19 @@ public class RummiServer extends Thread {
 
   /**
    * Applies the request to the Game.
+   *
    * @param request to be applied
    */
-  void applyRequest(Request request) {
-    reqhandler.applyRequest(request);
+  void applyRequest(Request request, int socketID) {
+    reqhandler.applyRequest(request, socketID);
   }
 
   /**
    * Sends a GameInfo to all clients.
+   *
    * @param info GameInfo to be sent
    */
-  public void sendToAll(GameInfo info){
+  public void sendToAll(GameInfo info) {
     for (ServerSender sender : senders) {
       if (sender != null) {
         sender.send(info);
@@ -122,7 +128,7 @@ public class RummiServer extends Thread {
   /**
    * Sends a GameInfo to the player that is currently playing.
    *
-   * @param info GameInfo getting sent to the player
+   * @param info     GameInfo getting sent to the player
    * @param playerid id of the current player (0-n)
    */
   public void sendToCurrentPlayer(GameInfo info, int playerid) {

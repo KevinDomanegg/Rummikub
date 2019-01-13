@@ -54,7 +54,7 @@ public class ServerListener extends Thread {
         }
 
         System.out.println("Listener: Received " + request.toString());
-        server.applyRequest(request);
+        server.applyRequest(request, this.id);
 
       }
     } catch (IOException e) {
