@@ -1,33 +1,10 @@
-/* Pane sizes */
-#root {
-    -fx-pref-width: 800;
-    -fx-pref-height: 600;
-}
-
-/* #topGrid columnConstraints * {
-    -fx-min-width:  10;
-    -fx-pref-width: 100 ;
-}*/
-
-
-
-/* Temp */
-Rectangle {
-    -fx-fill: white;
-    -fx-stroke: black;
-}
-
 Text {
     -fx-font-family: Helvetica, Arial, SansSerif;
 }
 
-/* Stone in hand */
-GridPane VBox {
-    -fx-background-color: white;
-    -fx-border-color: black;
-}
-
-.root {
+#root {
+    -fx-pref-width: 1024;
+    -fx-pref-height: 768;
     -fx-background-color: #095F94;
 }
 
@@ -39,9 +16,14 @@ GridPane VBox {
     -fx-fill: white;
 }
 
+.stone {
+    -fx-background-color: white;
+}
+
 #timer {
     -fx-font-size: 25;
 }
+
 
 #opponentLeft {
     -fx-rotate: -90;
@@ -52,6 +34,25 @@ GridPane VBox {
 }
 
 #ownHand {
+    -fx-padding: 0 0 20 0;
+    -fx-background-color: black;
     -fx-pref-width: 200;
 }
 
+#playerInfo {
+    -fx-fill: white;
+}
+
+.cell {
+    -fx-border-color: white;
+    -fx-fill: none;
+}
+
+#tableContainer {
+    -fx-alignment: CENTER;
+}
+
+#bottomPane {
+    -fx-pref-height: 200; /*TODO: Schlauer lösen! */
+    -fx-padding: 50 0 0 0;
+}

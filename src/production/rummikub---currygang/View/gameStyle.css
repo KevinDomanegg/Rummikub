@@ -1,10 +1,38 @@
+/* Pane sizes */
+#root {
+    -fx-pref-width: 800;
+    -fx-pref-height: 600;
+}
+
+/* #topGrid columnConstraints * {
+    -fx-min-width:  10;
+    -fx-pref-width: 100 ;
+}*/
+
+
+
+/* Temp */
+Rectangle {
+    -fx-fill: white;
+    -fx-stroke: black;
+}
+
+Text {
+    -fx-font-family: Helvetica, Arial, SansSerif;
+}
+
+/* Stone in hand */
+GridPane VBox {
+    -fx-background-color: white;
+    -fx-border-color: black;
+}
+
 .root {
     -fx-background-color: #095F94;
 }
 
 .hand {
     -fx-background-color: black;
-    -fx-alignment: center;
 }
 
 .hand .text {
@@ -21,5 +49,9 @@
 
 #opponentRight {
     -fx-rotate: 90;
+}
+
+#ownHand {
+    -fx-pref-width: 200;
 }
 
