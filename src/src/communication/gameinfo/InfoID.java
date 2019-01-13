@@ -7,8 +7,7 @@ public enum InfoID {
    * Every implementation of GameInfo should have an InfoID associated with it.
    */
 
+  TABLE,
   HAND,
-  MOVE,
-  DRAWED,
-  TIME;
+  TIME
 }

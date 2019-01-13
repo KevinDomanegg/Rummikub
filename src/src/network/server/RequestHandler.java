@@ -56,9 +56,6 @@ public class RequestHandler {
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
         game.setPlayer(setPlayer.getAge());
         return;
-      case START:
-        game.start();
-        return;
       case GET_HAND:
       case GET_TABLE:
 
