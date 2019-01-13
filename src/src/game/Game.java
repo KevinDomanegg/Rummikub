@@ -35,12 +35,13 @@ public interface Game {
 
   int getCurrentPlayerPosition();
 
+  int getTableWidth();
 
+  int getTableHeight();
 
+  int getCurrentPlayerHandWidth();
 
-
-
-
+  int getCurrentPlayerHandHeight();
 
   // ? int getTime();
 }
