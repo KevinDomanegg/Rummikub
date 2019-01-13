@@ -14,9 +14,12 @@ public class RequestHandler {
    * Acts as a Link between RummiServer and Game.
    */
 
-  private Game game;
 
-  public RequestHandler(Game game) {
+  private Game game;
+  private Server server;
+
+  public RequestHandler(Server server, Game game) {
+    this.server = server;
     this.game = game;
   }
 
@@ -56,6 +59,9 @@ public class RequestHandler {
       case START:
         game.start();
         return;
+      case GET_HAND:
+      case GET_TABLE:
+
       default:
     }
   }
