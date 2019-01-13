@@ -22,6 +22,7 @@ public class RummiGame implements Game {
     table = new RummiTable();
     players = new ArrayList<>(MAX_PLAYERS);
     bag = new RummiBag();
+    trace = new Stack<>();
   }
 
   private Player currentPlayer() {
@@ -107,7 +108,8 @@ public class RummiGame implements Game {
         table.setStone(initialPosition, table.getStones().remove(targetPosition));
         break;
       case "MOVESTONEFROMHAND":
-        table.setStone(initialPosition, currentPlayer().popStone(targetPosition));
+        Stone stone = table.getStones().remove(targetPosition);
+        currentPlayer().getStones().put(initialPosition, stone);
         break;
       case "MOVESTONEONHAND":
         players.get(playerPosition).moveStone(targetPosition, initialPosition);
@@ -165,5 +167,9 @@ public class RummiGame implements Game {
 
   @Override public int getCurrentPlayerHandHeight() {
     return currentPlayer().getHandHeight();
+  }
+
+  public Stack<MoveTrace> getTrace() {
+    return trace;
   }
 }
