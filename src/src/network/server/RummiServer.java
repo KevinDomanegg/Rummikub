@@ -19,22 +19,22 @@ public class RummiServer extends Thread {
 
 
   private static final int MAX_CLIENTS = 4;
-  private static final int PORT = 3141;
+  private static final int PORT = 48410;
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
   private int numOfClients = 0;
   private boolean running = true;
-  private RequestHandler reqhandler;
-  private GameBuilder gbuilder;
+  private RequestHandler requestHandler;
+  private GameBuilder gameBuilder;
 
   /**
    * Constructor creating a new Server, including all other classes needed
    * server-side to play the game.
    */
   public RummiServer() {
-    this.gbuilder = new GameBuilder(this);
-    this.reqhandler = new RequestHandler(gbuilder);
+    this.gameBuilder = new GameBuilder(this);
+    this.requestHandler = new RequestHandler(gameBuilder);
   }
 
   /**
@@ -111,7 +111,7 @@ public class RummiServer extends Thread {
    * @param request to be applied
    */
   void applyRequest(Request request, int socketID) {
-    reqhandler.applyRequest(request, socketID);
+    requestHandler.applyRequest(request, socketID);
   }
 
   /**
