@@ -13,24 +13,42 @@ public class ServerSender extends Thread {
   private boolean connected = true;
   private GameInfo info = null;
 
+  /**
+   * Constructor setting the necessary instance variables.
+   *
+   * @param clientOut client the Sender sends to
+   * @param server corresponding to the Sender
+   * @param id fo the Sender, assigned by the server
+   */
+  ServerSender(Socket clientOut, RummiServer server, int id) {
+    this.clientOut = clientOut;
+    this.server = server;
+    this.id = id;
+  }
 
-  public synchronized void send(GameInfo info) {
+  /**
+   * Notifies the run()-Method to send the info.
+   *
+   * @param info to be sent
+   */
+  synchronized void send(GameInfo info) {
     this.info = info;
     send = true;
     notifyAll();
   }
 
-  public ServerSender(Socket clientOut, RummiServer ser, int id) {
-    this.clientOut = clientOut;
-    this.server = ser;
-    this.id = id;
-  }
-
-
+  /**
+   * Returns the socket the sender sends to.
+   *
+   * @return Socket the Sender sends to
+   */
   Socket getClient() {
     return clientOut;
   }
 
+  /**
+   * Waits for the send-method being invoked and then sends the GameInfo.
+   */
   @Override
   public void run() {
 
@@ -52,6 +70,9 @@ public class ServerSender extends Thread {
     }
   }
 
+  /**
+   * Disconnects from the client.
+   */
   void disconnect(){
     this.connected = false;
   }

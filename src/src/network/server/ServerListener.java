@@ -13,12 +13,22 @@ public class ServerListener extends Thread {
   private boolean connected = false;
   private Request request;
 
-  public ServerListener(Socket clientIn, RummiServer request, int id) {
+  /**
+   * Constructor setting the necessary instance variables.
+   *
+   * @param clientIn client the listener listens to
+   * @param server   the listener corresponds to
+   * @param id       of the listener, assigned by the server
+   */
+  ServerListener(Socket clientIn, RummiServer server, int id) {
     this.clientIn = clientIn;
-    this.server = request;
+    this.server = server;
     this.id = id;
   }
 
+  /**
+   * Listens for Requests from the specified client and applies them to the server.
+   */
   @Override
   public void run() {
 
@@ -43,17 +53,9 @@ public class ServerListener extends Thread {
           break;
         }
 
-        //request = (Game) o;
         System.out.println("Listener: Received " + request.toString());
         server.applyRequest(request);
 
-//        for (int i = 0; i < RummiServer.senders.length; i++) {
-//          ServerSender s = RummiServer.senders[i];
-//          if (s != null && s.getClient() != this.clientIn) {
-//            System.out.println("Listener: Sent message to Sender " + i);
-//            s.send(request);
-//          }
-//        }
       }
     } catch (IOException e) {
       this.connected = false;

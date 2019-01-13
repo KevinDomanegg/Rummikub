@@ -15,14 +15,13 @@ public class RummiServer extends Thread {
 
 
   public static void main(String[] args) {
-    ConcreteGame game = new ConcreteGame();
-    RummiServer s = new RummiServer(game);
-    game.setserver(s);
+    RummiServer s = new RummiServer();
     s.start();
   }
 
 
   private static final int MAX_CLIENTS = 4;
+  private static final int PORT = 3141;
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
@@ -31,15 +30,15 @@ public class RummiServer extends Thread {
   private RequestHandler reqhandler;
   private Game game;
 
-  public RummiServer(Game game){
-    this.game = game;
+  public RummiServer(){
+    this.game = new ConcreteGame(this);
     this.reqhandler = new RequestHandler(game);
   }
 
   @Override
   public void run() {
     try {
-      ServerSocket server = new ServerSocket(3141);
+      ServerSocket server = new ServerSocket(PORT);
 
       while (running) {
 
