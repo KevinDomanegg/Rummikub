@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class RummiTable implements Grid {
-  private static final int WIDTH = 30;
-  private static final int HEIGHT = 30;
+  private static final int WIDTH = 20;
+  private static final int HEIGHT = 5;
   private static final int MIN_SET_SIZE = 3;
   private static final int MAX_GROUP_SIZE = 4;
 

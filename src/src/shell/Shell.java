@@ -1,7 +1,8 @@
 package shell;
 
 import game.Coordinate;
-import game.RummiTable;
+import game.Game;
+import game.RummiGame;
 import game.Stone;
 import game.Stone.Color;
 import java.io.BufferedReader;
@@ -12,6 +13,108 @@ import java.util.Map;
 
 public final class Shell {
   private Shell() {}
+
+  enum Command {
+    NEW {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        game = new RummiGame();
+        return game;
+      }
+    },
+    PLAYER {
+      @Override Game excecute(Game game, String[] tokens) {
+        game.setPlayer(Integer.parseUnsignedInt(tokens[1]));
+        return game;
+      }
+    },
+    START {
+      @Override Game excecute(Game game, String[] tokens) {
+        game.start();
+        return game;
+      }
+    },
+    PRINT {
+      @Override Game excecute(Game game, String[] tokens) {
+        print(game);
+        return game;
+      }
+    },
+    CHECK {
+      @Override Game excecute(Game game, String[] tokens) {
+        System.out.println(game.isConsistent());
+        return game;
+      }
+    },
+    DRAW {
+      @Override Game excecute(Game game, String[] tokens) {
+        game.drawStone();
+        return game;
+      }
+    },
+    MOVE_ON_TABLE {
+      @Override Game excecute(Game game, String[] tokens) {
+        int x1 = Integer.parseUnsignedInt(tokens[1]);
+        int y1 = Integer.parseUnsignedInt(tokens[2]);
+        int x2 = Integer.parseUnsignedInt(tokens[3]);
+        int y2 = Integer.parseUnsignedInt(tokens[4]);
+        game.moveStoneOnTable(new Coordinate(x1, y1), new Coordinate(x2, y2));
+        return game;
+      }
+    },
+    MOVE_FROM_HAND {
+      @Override Game excecute(Game game, String[] tokens) {
+        int x1 = Integer.parseUnsignedInt(tokens[1]);
+        int y1 = Integer.parseUnsignedInt(tokens[2]);
+        int x2 = Integer.parseUnsignedInt(tokens[3]);
+        int y2 = Integer.parseUnsignedInt(tokens[4]);
+        game.moveStoneFromHand(new Coordinate(x1, y1), new Coordinate(x2, y2));
+        return game;
+      }
+    },
+    MOVE_ON_HAND {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        return game;
+      }
+    },
+    PLAYER_LEFT {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        return null;
+      }
+    },
+    UNDO {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        return null;
+      }
+    },
+    HELP {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        System.out.println(HELP);
+        return game;
+      }
+    },
+    QUIT {
+      @Override
+      Game excecute(Game game, String[] tokens) {
+        return null;
+      }
+    },
+    NO_COMMAND {
+      @Override Game excecute(Game game, String[] tokens) {
+        error("no command");
+        return game;
+      }
+    },
+    NOT_VALID;
+
+    Game excecute(Game game, String[] tokens) {
+      return game;
+    }
+  }
 
   private static final String ANSI_RESET = "\u001B[0m";
   private static final String BLACK = "\u001B[47m";
@@ -33,10 +136,9 @@ public final class Shell {
       + "  help:\n"
       + "    print help text";
 
+  private static final String MISSING_OR_TOO_MUCH_TOKENS_FOR = "missing or too much tokens";
+  
   private static final String PROMPT = "rummikub> ";
-  private static String[] tokens;
-  private static RummiTable table;
-
 
   public static void main(String[] args) throws IOException {
     BufferedReader reader = new BufferedReader(
@@ -47,7 +149,9 @@ public final class Shell {
 
   private static void start(BufferedReader reader) throws IOException {
     String input;
-    System.out.println(HELP);
+    Command command;
+    String[] tokens;
+    Game game = null;
 
     while (true) {
       System.out.print(PROMPT);
@@ -56,70 +160,77 @@ public final class Shell {
         break;
       }
       tokens = input.trim().split("\\s+");
-      if (tokens[0].equals("quit")) {
+      command = parseCommand(tokens);
+      if (command == Command.QUIT) {
         break;
       }
-      excecute(tokens);
+      game = command.excecute(game, tokens);
     }
 
   }
 
-  private static void excecute(String[] tokens) {
-    try {
-      switch (tokens[0]) {
-        case "new":
-          table = new RummiTable();
-          break;
-        case "stone":
-          setStone();
-          break;
-        case "print":
-          print();
-          break;
-        case "check":
-          System.out.println(table.isConsistent());
-          break;
-        case "help":
-          System.out.println(HELP);
-          break;
-        default:
-          System.out.println("error");
-          break;
-      }
-    } catch (Exception e) {
-      System.out.println(e.getMessage());
+  private static Command parseCommand(String[] tokens) {
+    switch (tokens[0].toUpperCase()) {
+      case "":
+        return Command.NO_COMMAND;
+      case "NEW":
+        return parseCommandNEW(tokens);
+      case "PLAYER":
+        return Command.PLAYER;
+      case "PRINT":
+        return Command.PRINT;
+      case "CHECK":
+        return Command.CHECK;
+      case "HELP":
+        return Command.HELP;
+      case "MOVE_FROM_HAND":
+        return Command.MOVE_FROM_HAND;
+      case "MOVE_ON_TABLE":
+        return Command.MOVE_ON_TABLE;
+      case "DRAW":
+        return Command.DRAW;
+      case "START":
+        return Command.START;
+      case "QUIT":
+        return Command.QUIT;
+      default:
+        error(Command.NOT_VALID.toString());
+        return Command.NOT_VALID;
     }
+    
   }
 
-  private static void setStone() {
-    table.setStone(new Coordinate(Integer.parseUnsignedInt(tokens[1]), Integer.parseUnsignedInt(tokens[2])), parseStone(tokens[3], tokens[4]));
+  private static Command parseCommandNEW(String[] tokens) {
+    if (tokens.length > 2) {
+      error(MISSING_OR_TOO_MUCH_TOKENS_FOR + Command.NEW);
+      return Command.NOT_VALID;
+    }
+    return Command.NEW;
   }
 
-  private static void clear() {
-    table.clear();
-  }
 
-  private static void print() {
-    StringBuilder builder = new StringBuilder();
-    Map<Coordinate, Stone> stones = table.getStones();
+  private static void print(Game game) {
+//    StringBuilder stringBuilder = printTable(new StringBuilder(), game.getTableStones()).append('\n');
+//    stringBuilder = printCurrentPlyer(stringBuilder, game.getCurrentPlayerStones());
+    StringBuilder stringBuilder = printGame(game.getTableWidth(), game.getTableHeight(),
+        new StringBuilder(), game.getTableStones()).append('\n');
+    System.out.print(printGame(game.getCurrentPlayerHandWidth(), game.getCurrentPlayerHandHeight(),
+        stringBuilder, game.getCurrentPlayerStones()));
+  }
+  private static StringBuilder printGame(int width, int height, StringBuilder stringBuilder, Map<Coordinate, Stone> stones) {
     Stone stone;
 
-    for (int j = 0; j < 5; j++) {
-      for (int i = 0; i < table.getWidth(); i++) {
+    for (int j = 0; j < height; j++) {
+      for (int i = 0; i < width; i++) {
         stone = stones.get(new Coordinate(i, j));
         // builder = stone-color + stone-number + ANSI_RESET
-        builder.append(parseColor(stone));
-        builder.append((stone == null) ? 0 : stone.getNumber())
+        stringBuilder.append(parseColor(stone));
+        stringBuilder.append((stone == null) ? 0 : Integer.toHexString(stone.getNumber()).toUpperCase())
             .append(ANSI_RESET);
       }
-      builder.append('\n'); // for every row of the gird
+      stringBuilder.append('\n'); // for every row of the gird
     }
-    System.out.print(builder.toString());
-  }
-
-  private static Stone parseStone(String color, String number) {
-    color = color.toUpperCase();
-    return (color.equals("JOKER")) ? new Stone() : new Stone(Color.valueOf(color), Integer.parseUnsignedInt(number));
+    return stringBuilder;
   }
 
   private static String parseColor(Stone stone) {
@@ -138,5 +249,9 @@ public final class Shell {
       default:
         return JOKER;
     }
+  }
+
+  private static void error(String message) {
+    System.out.println("Error! " + message);
   }
 }
