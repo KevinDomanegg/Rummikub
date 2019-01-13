@@ -1,6 +1,6 @@
 package network.server;
 
-import communication.GameInfo;
+import communication.gameinfo.GameInfo;
 
 public interface Server {
 

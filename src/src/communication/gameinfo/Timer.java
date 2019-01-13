@@ -1,4 +1,4 @@
-package communication;
+package communication.gameinfo;
 
 import java.io.Serializable;
 
@@ -12,6 +12,6 @@ public class Timer implements GameInfo, Serializable {
 
   @Override
   public InfoID getInfoID() {
-    return InfoID.DRAW;
+    return InfoID.TIME;
   }
 }

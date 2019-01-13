@@ -1,4 +1,4 @@
-package communication;
+package communication.gameinfo;
 
 public enum InfoID {
 
@@ -9,6 +9,6 @@ public enum InfoID {
 
   HAND,
   MOVE,
-  DRAW,
+  DRAWED,
   TIME;
 }

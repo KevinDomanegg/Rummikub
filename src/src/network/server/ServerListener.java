@@ -1,6 +1,6 @@
 package network.server;
 
-import communication.Request;
+import communication.request.Request;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

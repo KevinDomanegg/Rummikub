@@ -1,8 +1,10 @@
 package network.server;
 
-import communication.GameInfo;
-import communication.Request;
+import communication.gameinfo.GameInfo;
+import communication.request.Request;
 
+import game.Game;
+import game.RummiGame;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -26,15 +28,15 @@ public class RummiServer extends Thread {
   private int numOfClients = 0;
   private boolean running = true;
   private RequestHandler requestHandler;
-  private GameBuilder gameBuilder;
+  private Game game;
 
   /**
    * Constructor creating a new Server, including all other classes needed
    * server-side to play the game.
    */
   public RummiServer() {
-    this.gameBuilder = new GameBuilder(this);
-    this.requestHandler = new RequestHandler(gameBuilder);
+    game = new RummiGame();
+    requestHandler = new RequestHandler(game);
   }
 
   /**

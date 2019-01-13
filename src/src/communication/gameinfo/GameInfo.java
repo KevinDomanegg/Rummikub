@@ -1,4 +1,4 @@
-package communication;
+package communication.gameinfo;
 
 public interface GameInfo {
   /**

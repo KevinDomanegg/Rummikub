@@ -1,8 +1,12 @@
 package network.server;
 //Might be better to move this class to the game-package
-import communication.*;
+import communication.request.ConcreteHandMove;
+import communication.request.ConcretePutStone;
+import communication.request.ConcreteSetPlayer;
+import communication.request.ConcreteTableMove;
+import communication.request.Request;
+import communication.request.RequestID;
 import game.Game;
-import network.server.GameBuilder;
 
 public class RequestHandler {
   /**
@@ -11,11 +15,9 @@ public class RequestHandler {
    */
 
   private Game game;
-  private GameBuilder gbuilder;
 
-  public RequestHandler(GameBuilder gbuilder) {
-    this.gbuilder = gbuilder;
-    this.game = gbuilder.getGame();
+  public RequestHandler(Game game) {
+    this.game = game;
   }
 
 
@@ -24,30 +26,37 @@ public class RequestHandler {
 
     switch (id){
       case HAND_MOVE:
-        Concrete_Hand_Move hand_move = (Concrete_Hand_Move) request;
-        game.moveStoneOnHand(hand_move.getCurrentPlayerPosition(), hand_move.getCurrentCoor(), hand_move.getNewCoor());
-        break;
-
+        ConcreteHandMove handMove = (ConcreteHandMove) request;
+        game.moveStoneOnHand(playerID,
+            handMove.getInitialCoordinate(), handMove.getTargetCoordinate());
+        return;
       case TABLE_MOVE:
         ConcreteTableMove tableMove = (ConcreteTableMove) request;
-        game.moveStoneOnTable(tableMove.getCurrentCoor(), tableMove.getNewCoor());
-        break;
-
+        game.moveStoneOnTable(tableMove.getInitialCoordinate(), tableMove.getTargetCoordinate());
+        return;
       case PUT_STONE:
         ConcretePutStone putStone = (ConcretePutStone) request;
-        game.moveStoneFromHand(putStone.getCurrentCoor(), putStone.getNewCoor());
-        break;
-
+        game.moveStoneFromHand(putStone.getInitialCoordinate(), putStone.getTargetCoordinate());
+        return;
       case DRAW:
         game.drawStone();
-        break;
-
+        return;
       case CONFIRM_MOVE:
-
+        if (!game.isConsistent()) {
+          // send GameInfo that it was'nt good
+        }
+        return;
       case GIVE_UP:
-
+        game.playerHasLeft(playerID);
+        return;
+      case SET_PLAYER:
+        ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
+        game.setPlayer(setPlayer.getAge());
+        return;
+      case START:
+        game.start();
+        return;
       default:
-
     }
   }
 }
