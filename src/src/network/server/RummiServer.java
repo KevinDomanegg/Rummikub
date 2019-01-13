@@ -4,8 +4,10 @@ import communication.GameInfo;
 import communication.Request;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class RummiServer extends Thread {
 
@@ -133,6 +135,16 @@ public class RummiServer extends Thread {
    */
   public void sendToCurrentPlayer(GameInfo info, int playerid) {
     senders[playerid].send(info);
+  }
+
+  /**
+   * Returns the IP-address of the server.
+   *
+   * @return String representing the IP-address
+   * @throws UnknownHostException whenever the IP-address could not be determined
+   */
+  public String getIP() throws UnknownHostException{
+    return InetAddress.getLocalHost().getHostAddress();
   }
 
 }

@@ -7,17 +7,13 @@ import network.server.RummiServer;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Dummy-Class for testing the Network.
+ * Not intended for usage in the final version.
+ */
 public class ConcreteGame implements Game {
-  /**
-   * Dummy-Class for testing the Network.
-   * Not intended for usage in the final version.
-   */
 
   private RummiServer server;
-
-  public void setserver(RummiServer server) {
-    this.server = server;
-  }
 
   public ConcreteGame(RummiServer server) {
     this.server = server;
