@@ -1,5 +1,7 @@
 package network.server;
 //Might be better to move this class to the game-package
+import communication.gameinfo.HandInfo;
+import communication.gameinfo.TableInfo;
 import communication.request.ConcreteHandMove;
 import communication.request.ConcretePutStone;
 import communication.request.ConcreteSetPlayer;
@@ -46,19 +48,20 @@ public class RequestHandler {
         return;
       case CONFIRM_MOVE:
         if (!game.isConsistent()) {
-          // send GameInfo that it was'nt good
+          // server.sendToPlayer(playerID, new WrongMove());
         }
         return;
       case GIVE_UP:
         game.playerHasLeft(playerID);
         return;
       case SET_PLAYER:
-        ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-        game.setPlayer(setPlayer.getAge());
+        game.setPlayer(((ConcreteSetPlayer) request).getAge());
         return;
       case GET_HAND:
+        server.sendToPlayer(playerID, new HandInfo(game.getCurrentPlayerHandWidth(),
+            game.getCurrentPlayerHandHeight(), game.getCurrentPlayerStones()));
       case GET_TABLE:
-
+        server.sendToPlayer(playerID, new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
       default:
     }
   }

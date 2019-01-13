@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class TableInfo extends GridInfo implements GameInfo, Serializable {
 
-  TableInfo(int width, int height, Map<Coordinate, Stone> stones) {
+  public TableInfo(int width, int height, Map<Coordinate, Stone> stones) {
     super(width, height, stones);
   }
 

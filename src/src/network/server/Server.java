@@ -13,8 +13,8 @@ public interface Server {
   /**
    * Sends a GameInfo to the player that is currently playing.
    *
+   * @param playerId id of the current player (0-n)
    * @param info GameInfo getting sent to the player
-   * @param playerid id of the current player (0-n)
    */
-  public void sendToCurrentPlayer(GameInfo info, int playerid);
+  public void sendToPlayer(int playerId, GameInfo info);
 }

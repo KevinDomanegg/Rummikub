@@ -9,5 +9,5 @@ public enum InfoID {
 
   TABLE,
   HAND,
-  TIME
+  TIME,
 }

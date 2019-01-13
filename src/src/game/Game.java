@@ -13,7 +13,7 @@ public interface Game {
 
   void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition);
+  void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
 
   void drawStone();
 
@@ -33,7 +33,7 @@ public interface Game {
 
   int getBagSize();
 
-  int getCurrentPlayerPosition();
+  int getCurrentPlayerID();
 
   int getTableWidth();
 

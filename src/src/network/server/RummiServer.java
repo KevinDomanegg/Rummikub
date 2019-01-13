@@ -11,7 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class RummiServer extends Thread {
+public class RummiServer extends Thread implements Server {
 
 
   public static void main(String[] args) {
@@ -36,7 +36,7 @@ public class RummiServer extends Thread {
    */
   public RummiServer() {
     game = new RummiGame();
-    requestHandler = new RequestHandler(game);
+    requestHandler = new RequestHandler(this, game);
   }
 
   /**
@@ -132,11 +132,11 @@ public class RummiServer extends Thread {
   /**
    * Sends a GameInfo to the player that is currently playing.
    *
+   * @param playerId id of the Player (0 - n)
    * @param info     GameInfo getting sent to the player
-   * @param playerid id of the current player (0-n)
    */
-  public void sendToCurrentPlayer(GameInfo info, int playerid) {
-    senders[playerid].send(info);
+  public void sendToPlayer(int playerId, GameInfo info) {
+    senders[playerId].send(info);
   }
 
   /**
