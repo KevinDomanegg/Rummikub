@@ -83,7 +83,7 @@ public class TestShell {
     System.out.println(game.getCurrentPlayerStones());
     System.out.println(game.getTableStones());
     System.out.println(game.getTrace());
-    game.moveStoneOnHand(game.getCurrentPlayerPosition(), new Coordinate(0, 0), new Coordinate(9, 0));
+    game.moveStoneOnHand(game.getCurrentPlayerID(), new Coordinate(0, 0), new Coordinate(9, 0));
     System.out.println(game.getCurrentPlayerStones());
     game.undo();
     System.out.println(game.getCurrentPlayerStones());

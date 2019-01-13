@@ -29,6 +29,9 @@ public class RummiServer extends Thread implements Server {
   private boolean running = true;
   private RequestHandler requestHandler;
   private Game game;
+  // for test
+  private int numberOfPlayers;
+  private boolean HasGameStarted;
 
   /**
    * Constructor creating a new Server, including all other classes needed
@@ -37,6 +40,13 @@ public class RummiServer extends Thread implements Server {
   public RummiServer() {
     game = new RummiGame();
     requestHandler = new RequestHandler(this, game);
+    this.numberOfPlayers = 0;
+  }
+
+  public RummiServer(int numberOfPlayers) {
+    game = new RummiGame();
+    requestHandler = new RequestHandler(this, game);
+    this.numberOfPlayers = numberOfPlayers;
   }
 
   /**
@@ -60,13 +70,24 @@ public class RummiServer extends Thread implements Server {
           }
         }
 
+
         Socket client = server.accept();
-        for (int i = 0; i < MAX_CLIENTS; i++) {
+        for (int i = 0; i < numberOfPlayers; i++) {
           if (clients[i] == null) {
             connectClient(client, i);
+            if (i + 1 == numberOfPlayers) {
+              HasGameStarted = true;
+            }
             break;
           }
         }
+        if (HasGameStarted) {
+          game.start();
+          System.out.println("Game just started");
+          HasGameStarted = false;
+        }
+
+
 
       }
 
@@ -132,12 +153,13 @@ public class RummiServer extends Thread implements Server {
   /**
    * Sends a GameInfo to the player that is currently playing.
    *
-   * @param playerId id of the Player (0 - n)
+   * @param playerID id of the current player (0-n)
    * @param info     GameInfo getting sent to the player
    */
-  public void sendToPlayer(int playerId, GameInfo info) {
-    senders[playerId].send(info);
+  @Override public void sendToPlayer(int playerID, GameInfo info) {
+    senders[playerID].send(info);
   }
+
 
   /**
    * Returns the IP-address of the server.
