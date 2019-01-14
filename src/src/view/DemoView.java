@@ -1,9 +1,7 @@
 package view;
 
-import communication.gameinfo.GridInfo;
-import communication.gameinfo.HandInfo;
 import communication.gameinfo.StoneInfo;
-import communication.gameinfo.TableInfo;
+import network.client.RummiClient;
 
 public class DemoView {
   private static final String ANSI_RESET = "\u001B[0m";
@@ -40,6 +38,14 @@ public class DemoView {
   public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
     hand[targetCol][targetRow] = hand[initCol][initRow];
     hand[initCol][initRow] = null;
+  }
+
+  public void printYourTurn(String name) {
+    System.out.println(name + ": it is your turn.");
+  }
+
+  public void printBagSize(int size) {
+    System.out.println("Bag size: " + size);
   }
 
   public void printGame() {

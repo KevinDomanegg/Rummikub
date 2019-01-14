@@ -126,10 +126,9 @@ public class RummiServer extends Thread implements Server {
    */
   public void sendToAll(GameInfo info) {
     for (ServerSender sender : senders) {
-      if (sender == null) {
-        return;
+      if (sender != null) {
+        sender.send(info);
       }
-      sender.send(info);
     }
   }
 

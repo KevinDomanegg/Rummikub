@@ -9,13 +9,17 @@ import view.DemoView;
 public class Controller {
 
   private RummiClient client;
-  DemoView view;
+  private DemoView view;
+  private boolean isMyTurn;
+  private boolean hasGameStarted;
+  private boolean isHost;
 
   public Controller(DemoView view) {
     this.view = view;
   }
 
   public void host(String name, int age) {
+    isHost = true;
     new RummiServer().start();
     join(name, age, "localhost");
   }
@@ -31,6 +35,11 @@ public class Controller {
     view.printGame();
   }
 
+  public void yourTurn() {
+    isMyTurn = true;
+    view.printYourTurn(client.getName());
+  }
+
   void setTable(StoneInfo[][] table) {
     view.setTable(table);
   }
@@ -39,14 +48,22 @@ public class Controller {
     view.setPlayerHand(hand);
   }
 
+  public void printBagSize(int size) {
+    view.printBagSize(size);
+  }
+
   public void moveStoneOnTable(int initCol, int initRow, int targetCol, int targetRow) {
-    view.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
-    client.qeueRequest(new ConcreteTableMove(initCol, initRow, targetCol, targetRow));
+    if (isMyTurn) {
+      view.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
+      client.qeueRequest(new ConcreteTableMove(initCol, initRow, targetCol, targetRow));
+    }
   }
 
   public void moveStoneFromHand(int initCol, int initRow, int targetCol, int targetRow) {
-    view.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
-    client.qeueRequest(new ConcretePutStone(initCol, initRow, targetCol, targetRow));
+    if (isMyTurn) {
+      view.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
+      client.qeueRequest(new ConcretePutStone(initCol, initRow, targetCol, targetRow));
+    }
   }
 
   public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
@@ -59,7 +76,9 @@ public class Controller {
   }
 
   public void startGame() {
-    client.qeueRequest(new Start());
+    if (isHost && !hasGameStarted) {
+      client.qeueRequest(new Start());
+      hasGameStarted = true;
+    }
   }
-
 }

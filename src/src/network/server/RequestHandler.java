@@ -1,10 +1,17 @@
 package network.server;
 //Might be better to move this class to the game-package
+import communication.gameinfo.BagInfo;
 import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandInfo;
 import communication.gameinfo.StoneInfo;
 import communication.gameinfo.TableInfo;
-import communication.request.*;
+import communication.gameinfo.YourTurn;
+import communication.request.ConcreteHandMove;
+import communication.request.ConcretePutStone;
+import communication.request.ConcreteSetPlayer;
+import communication.request.ConcreteTableMove;
+import communication.request.Request;
+import communication.request.RequestID;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -45,11 +52,17 @@ public class RequestHandler {
     switch (id){
       case START:
         game.start();
+        // first, send all players the same table
         server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+        // then send all players their player hands
         for (int i = 0; i < game.getNumberOfPlayers(); i++) {
           server.sendToPlayer(i, new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(i),
               game.getPlayerHandHeight(i), game.getPlayerStones(i))));
         }
+        // send bag size
+        server.sendToAll(new BagInfo(game.getBagSize()));
+        // send your turn info
+        server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
         return;
       case HAND_MOVE:
         ConcreteHandMove handMove = (ConcreteHandMove) request;
@@ -72,7 +85,7 @@ public class RequestHandler {
         return;
       case CONFIRM_MOVE:
         if (!game.isConsistent()) {
-           //server.sendToPlayer(playerID, new WrongMove());
+          // server.sendToPlayer(playerID, new WrongMove());
         } else {
           server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
         }
@@ -87,7 +100,6 @@ public class RequestHandler {
         server.sendToPlayer(playerID,
             new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
             game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
-        return;
       case GET_TABLE:
         server.sendToPlayer(playerID, new TableInfo(
             parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
