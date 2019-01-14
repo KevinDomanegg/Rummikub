@@ -12,6 +12,10 @@ Text {
     -fx-background-color: black;
 }
 
+.opponent {
+    -fx-alignment: CENTER;
+}
+
 .hand .text {
     -fx-fill: white;
 }
@@ -24,13 +28,19 @@ Text {
     -fx-font-size: 25;
 }
 
+#top {
+    -fx-padding: 20;
+}
+
 
 #opponentLeft {
     -fx-rotate: -90;
+    -fx-padding: 0 -70;
 }
 
 #opponentRight {
     -fx-rotate: 90;
+    -fx-padding: 0 -70;
 }
 
 #ownHand {

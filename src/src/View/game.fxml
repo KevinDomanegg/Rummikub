@@ -18,7 +18,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="View.GameController">
     <top>
-        <StackPane>
+        <StackPane fx:id="top">
             <children>
                 <StackPane alignment="CENTER_LEFT">
                     <!-- timer -->
@@ -63,15 +63,15 @@
 
     <left>
         <!-- opponentLeft's hand -->
-        <StackPane>
-            <fx:include fx:id="opponentLeft" source="OpponentHand.fxml" />
+        <StackPane fx:id="opponentLeft">
+            <fx:include source="OpponentHand.fxml" />
         </StackPane>
     </left>
 
     <right>
         <!-- opponentRight's hand -->
-        <StackPane>
-            <fx:include fx:id="opponentRight"  source="OpponentHand.fxml" />
+        <StackPane fx:id="opponentRight">
+            <fx:include  source="OpponentHand.fxml" />
         </StackPane>
     </right>
 
@@ -105,7 +105,7 @@
                     <!-- drawStone buttons etc. -->
                     <children>
                         <Button fx:id="drawButton" mnemonicParsing="false" text="Draw stone" onMouseClicked="#drawStone"/>
-                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" onMouseClicked="#nameChange"/>
+                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
                     </children>
                 </HBox>
             </children>
