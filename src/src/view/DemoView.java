@@ -68,6 +68,13 @@ public class DemoView {
     return stringBuilder;
   }
 
+  public void printNotYourTurn() {
+    System.out.println("IT IS NOT YOUR TURN!");
+  }
+
+  public void printNotHost() {
+    System.out.println("ONLY HOST CAN START THE GAME!");
+  }
 
   private static String parseColor(StoneInfo stoneInfo) {
     if (stoneInfo == null) {

@@ -10,5 +10,6 @@ public enum InfoID {
   TABLE,
   HAND,
   YOUR_TURN,
-  BAG
+  BAG,
+  WRONG_MOVE
 }

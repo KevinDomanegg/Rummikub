@@ -23,10 +23,11 @@ public class ClientListener extends Thread {
   public void run() {
     try {
       ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
+      Object game_info;
       while (true) {
         try {
           System.out.println("Client listener is waiting for a message...");
-          Object game_info = recieveMessage.readObject();
+          game_info = recieveMessage.readObject();
           GameInfo recieveFromServer = (GameInfo) game_info;
           System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED
           this.myClient.applyGameInfoHandler(recieveFromServer);

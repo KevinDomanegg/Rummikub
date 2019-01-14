@@ -67,11 +67,6 @@ public final class Shell {
         return controller;
       }
     },
-    DRAW {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        return controller;
-      }
-    },
     MOVE_ON_TABLE {
       @Override Controller execute(Controller controller, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
@@ -223,8 +218,6 @@ public final class Shell {
       return Command.CHECK;
       case "HELP":
       return Command.HELP;
-      case "DRAW":
-      return Command.DRAW;
       case "QUIT":
       return Command.QUIT;
       case "UNDO":

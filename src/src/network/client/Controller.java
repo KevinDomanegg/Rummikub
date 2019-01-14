@@ -1,7 +1,6 @@
 package network.client;
 
 import communication.gameinfo.StoneInfo;
-import communication.gameinfo.TableInfo;
 import communication.request.*;
 import network.server.RummiServer;
 import view.DemoView;
@@ -35,9 +34,9 @@ public class Controller {
     view.printGame();
   }
 
-  public void yourTurn() {
+  void yourTurn() {
     isMyTurn = true;
-    view.printYourTurn(client.getName());
+    view.printYourTurn(client.getUserName());
   }
 
   void setTable(StoneInfo[][] table) {
@@ -48,7 +47,7 @@ public class Controller {
     view.setPlayerHand(hand);
   }
 
-  public void printBagSize(int size) {
+  void printBagSize(int size) {
     view.printBagSize(size);
   }
 
@@ -56,6 +55,8 @@ public class Controller {
     if (isMyTurn) {
       view.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
       client.qeueRequest(new ConcreteTableMove(initCol, initRow, targetCol, targetRow));
+    } else {
+      view.printNotYourTurn();
     }
   }
 
@@ -63,6 +64,8 @@ public class Controller {
     if (isMyTurn) {
       view.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
       client.qeueRequest(new ConcretePutStone(initCol, initRow, targetCol, targetRow));
+    } else {
+      view.printNotYourTurn();
     }
   }
 
@@ -79,6 +82,16 @@ public class Controller {
     if (isHost && !hasGameStarted) {
       client.qeueRequest(new Start());
       hasGameStarted = true;
+    } else {
+      view.printNotHost();
     }
   }
+
+  /*public void draw() {
+    if (isMyTurn) {
+      client.qeueRequest(new DrawRequest());
+    } else {
+      view.printNotYourTurn();
+    }
+  }*/
 }

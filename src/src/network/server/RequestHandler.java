@@ -1,17 +1,12 @@
 package network.server;
 //Might be better to move this class to the game-package
 import communication.gameinfo.BagInfo;
-import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandInfo;
 import communication.gameinfo.StoneInfo;
 import communication.gameinfo.TableInfo;
+import communication.gameinfo.WrongMove;
 import communication.gameinfo.YourTurn;
-import communication.request.ConcreteHandMove;
-import communication.request.ConcretePutStone;
-import communication.request.ConcreteSetPlayer;
-import communication.request.ConcreteTableMove;
-import communication.request.Request;
-import communication.request.RequestID;
+import communication.request.*;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -54,13 +49,16 @@ public class RequestHandler {
         game.start();
         // first, send all players the same table
         server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+        sleep();
         // then send all players their player hands
         for (int i = 0; i < game.getNumberOfPlayers(); i++) {
           server.sendToPlayer(i, new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(i),
               game.getPlayerHandHeight(i), game.getPlayerStones(i))));
         }
+        sleep();
         // send bag size
         server.sendToAll(new BagInfo(game.getBagSize()));
+        sleep();
         // send your turn info
         server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
         return;
@@ -80,12 +78,9 @@ public class RequestHandler {
         game.moveStoneFromHand(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
             new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
         return;
-      case DRAW:
-        game.drawStone();
-        return;
       case CONFIRM_MOVE:
         if (!game.isConsistent()) {
-          // server.sendToPlayer(playerID, new WrongMove());
+          server.sendToPlayer(playerID, new WrongMove());
         } else {
           server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
         }
@@ -100,10 +95,19 @@ public class RequestHandler {
         server.sendToPlayer(playerID,
             new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
             game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
+        return;
       case GET_TABLE:
         server.sendToPlayer(playerID, new TableInfo(
             parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
       default:
+    }
+  }
+
+  private void sleep() {
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
   }
 }
