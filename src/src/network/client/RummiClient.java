@@ -39,9 +39,12 @@ public class RummiClient extends Thread {
     this.age = age;
     this.serverIPAddress = serverIPAddress;
     connected = true;
-    gameInfoHandler = new GameInfoHandler(this);
     request = new ConcreteSetPlayer(age);
     readyToSend = true;
+  }
+
+  void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
+    this.gameInfoHandler = gameInfoHandler;
   }
 
   @Override
@@ -80,48 +83,49 @@ public class RummiClient extends Thread {
       e.printStackTrace();
     }
   }
+//  public synchronized
 
-  public synchronized Map<Coordinate, Stone> applyGameInfoHandler(GameInfo gameinfo) {
-    return (gameInfoHandler.applyGameInfo(gameinfo));
+  void applyGameInfoHandler(GameInfo gameinfo) {
+    gameInfoHandler.applyGameInfo(gameinfo);
   }
 
-  public synchronized GameInfo getTableInfo() {
-    if (forwardToController == null) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-
-      }
-    }
-    GameInfo gameinfo = forwardToController;
-    forwardToController = null;
-    return gameinfo;
-  }
-
+//  public synchronized GameInfo getTableInfo() {
+//    if (forwardToController == null) {
+//      try {
+//        wait();
+//      } catch (InterruptedException e) {
+//
+//      }
+//    }
+//    GameInfo gameinfo = forwardToController;
+//    forwardToController = null;
+//    return gameinfo;
+//  }
   //The Controller gives to RummiClient a package
   // to send to Server
-  public synchronized void setSendToServer(Request request) {
+
+  public synchronized void qeueRequest(Request request) {
     this.request = request;
     this.readyToSend = true;
     notifyAll();
   }
-
   //The Client Listener recieves "gameInfo" from Server
   // so it notifies the RummiClient to forward this message to Controller
-  synchronized void setForwardToController(GameInfo gameInfo) {
-    if (forwardToController != null) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
-    this.forwardToController = gameInfo;
-    notifyAll();
-  }
 
+//  synchronized void setForwardToController(GameInfo gameInfo) {
+//    if (forwardToController != null) {
+//      try {
+//        wait();
+//      } catch (InterruptedException e) {
+//        e.printStackTrace();
+//      }
+//    }
+//    this.forwardToController = gameInfo;
+//    notifyAll();
+//  }
 
   // access from Controller to get the recieved package (GameInfo)
+
   public synchronized GameInfo getGameInfo() {
     GameInfo send = forwardToController;
     this.forwardToController = null;
@@ -142,7 +146,5 @@ public class RummiClient extends Thread {
     }*/
 
   }
-
-
 
 } // END OF RummiClient Class

@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class ConcreteHandMove extends AbstractMove implements Request, Serializable {
 
-  public ConcreteHandMove(int playerPosition, Coordinate initialCoordinate, Coordinate targetCoordinate) {
+  public ConcreteHandMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
     super(initialCoordinate, targetCoordinate);
   }
 

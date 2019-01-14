@@ -26,9 +26,9 @@ public class ClientListener extends Thread {
       while (true) {
         try {
           Object game_info = recieveMessage.readObject();
-              GameInfo recieveFromServer = (GameInfo) game_info;
-              System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED
-              this.myClient.setForwardToController(recieveFromServer);
+          GameInfo recieveFromServer = (GameInfo) game_info;
+          System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED
+          this.myClient.applyGameInfoHandler(recieveFromServer);
         } catch (ClassNotFoundException e) {}
       }
     } catch (IOException e) {}

@@ -1,24 +1,15 @@
 package shell;
 
-import communication.gameinfo.GameInfo;
-import communication.gameinfo.HandInfo;
-import communication.gameinfo.TableInfo;
-import communication.request.GetHand;
-import communication.request.GetTable;
-import communication.request.Request;
 import game.Coordinate;
-import game.Game;
-import game.RummiGame;
 import game.Stone;
-import network.client.RummiClient;
-import network.server.RummiServer;
+import network.client.Controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
+import view.DemoView;
 
 public final class Shell {
   private Shell() {}
@@ -26,115 +17,99 @@ public final class Shell {
 
   enum Command {
     HOST {
-      @Override RummiClient excecute(RummiClient client, String[] tokens) {
-          new RummiServer(Integer.parseUnsignedInt(tokens[3])).start();
-          client = new RummiClient(tokens[1], Integer.parseUnsignedInt(tokens[2]), "localhost");
-          client.start();
-          return client;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]), Integer.parseUnsignedInt(tokens[3]));
+        return controller;
       }
     },
     JOIN {
-      @Override RummiClient excecute(RummiClient client, String[] tokens) {
-        client = new RummiClient(tokens[1], Integer.parseUnsignedInt(tokens[2]), tokens[3]);
-        client.start();
-        return client;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.join(tokens[1], Integer.parseUnsignedInt(tokens[2]), tokens[3]);
+        return controller;
       }
     },
     PRINT {
-      @Override RummiClient excecute(RummiClient client, String[] tokens) {
-        GameInfo gameinfo_table;
-        GameInfo gameinfo_hand;
-        client.setSendToServer(new GetTable());
-        gameinfo_table = client.getTableInfo();
-        client.setSendToServer(new GetHand());
-        gameinfo_hand = client.getTableInfo();
-        Map<Coordinate, Stone> handstones = client.applyGameInfoHandler(gameinfo_hand);
-        Map<Coordinate, Stone> tablestones = client.applyGameInfoHandler(gameinfo_table);
-        print(((TableInfo) (gameinfo_table)).getWidth(), ((TableInfo) (client.getTableInfo())).getHeight(),tablestones,
-            ((HandInfo) (gameinfo_hand)).getWidth(), ((HandInfo) (gameinfo_hand)).getHeight(), handstones);
-        return client;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.printGame();
+        return controller;
       }
     },
-    /*
     CHECK {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
-        System.out.println(game.isConsistent());
-        return game;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        return controller;
       }
     },
     DRAW {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
-        game.drawStone();
-        return game;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        return controller;
       }
     },
     MOVE_ON_TABLE {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
+      @Override Controller execute(Controller controller, String[] tokens) {
         int x1 = Integer.parseUnsignedInt(tokens[1]);
         int y1 = Integer.parseUnsignedInt(tokens[2]);
         int x2 = Integer.parseUnsignedInt(tokens[3]);
         int y2 = Integer.parseUnsignedInt(tokens[4]);
-        game.moveStoneOnTable(new Coordinate(x1, y1), new Coordinate(x2, y2));
-        return game;
+        controller.moveStoneOnTable(x1, y1, x2, y2);
+        return controller;
       }
     },
     MOVE_FROM_HAND {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
+      @Override Controller execute(Controller controller, String[] tokens) {
         int x1 = Integer.parseUnsignedInt(tokens[1]);
         int y1 = Integer.parseUnsignedInt(tokens[2]);
         int x2 = Integer.parseUnsignedInt(tokens[3]);
         int y2 = Integer.parseUnsignedInt(tokens[4]);
-        game.moveStoneFromHand(new Coordinate(x1, y1), new Coordinate(x2, y2));
-        return game;
+        controller.moveStoneFromHand(x1, y1, x2, y2);
+        return controller;
       }
     },
     MOVE_ON_HAND {
       @Override
-      RummiClient excecute(RummiClient game, String[] tokens) {
+      Controller execute(Controller controller, String[] tokens) {
         int x1 = Integer.parseUnsignedInt(tokens[1]);
         int y1 = Integer.parseUnsignedInt(tokens[2]);
         int x2 = Integer.parseUnsignedInt(tokens[3]);
         int y2 = Integer.parseUnsignedInt(tokens[4]);
-        game.moveStoneOnHand(game.getCurrentPlayerPosition(), new Coordinate(x1, y1), new Coordinate(x2, y2));
-        return game;
+        controller.moveStoneOnHand(x1, y1, x2, y2);
+        return controller;
 
       }
     },
     PLAYER_LEFT {
       @Override
-      RummiClient excecute(RummiClient game, String[] tokens) {
-        return null;
+      Controller execute(Controller controller, String[] tokens) {
+        return controller;
       }
     },
     UNDO {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
-        game.undo();
-        return game;
+      @Override Controller execute(Controller controller, String[] tokens) {
+        return controller;
       }
     },
     HELP {
       @Override
-      RummiClient excecute(RummiClient game, String[] tokens) {
+      Controller execute(Controller controller, String[] tokens) {
         System.out.println(HELP);
-        return game;
+        return controller;
       }
     },
     QUIT {
       @Override
-      RummiClient excecute(RummiClient game, String[] tokens) {
-        return null;
+      Controller execute(Controller controller, String[] tokens) {
+        return controller;
       }
-    },*/
+    },
     NO_COMMAND {
-      @Override RummiClient excecute(RummiClient game, String[] tokens) {
+      @Override Controller execute(Controller controller, String[] tokens) {
         error("no command");
-        return game;
+        return controller;
       }
     },
     NOT_VALID;
 
-    RummiClient excecute(RummiClient client, String[] tokens) {
-      return client;
+    Controller execute(Controller controller, String[] tokens) {
+      return controller;
     }
   }
 
@@ -173,7 +148,7 @@ public final class Shell {
     String input;
     Command command;
     String[] tokens;
-    RummiClient client = null;
+    Controller controller = new Controller(new DemoView());
 
     while (true) {
       System.out.print(PROMPT);
@@ -183,11 +158,11 @@ public final class Shell {
       }
       tokens = input.trim().split("\\s+");
       command = parseCommand(tokens);
-      /*if (command == Command.QUIT) {
+      if (command == Command.QUIT) {
         break;
-      }*/
+      }
       try {
-        client = command.excecute(client, tokens);
+        controller = command.execute(controller, tokens);
       } catch (Exception e ) {
         error(e.getMessage());
       }
@@ -207,26 +182,24 @@ public final class Shell {
         //return parseCommandNEW(tokens);
       //case "PLAYER":
         //return Command.PLAYER;
-      case "PRINT":
-        return Command.PRINT;
-      /*case "CHECK":
-        return Command.CHECK;
-      case "HELP":
-        return Command.HELP;
       case "MOVE_FROM_HAND":
         return Command.MOVE_FROM_HAND;
       case "MOVE_ON_TABLE":
         return Command.MOVE_ON_TABLE;
-      case "DRAW":
-        return Command.DRAW;
-      case "START":
-        return Command.START;
-      case "QUIT":
-        return Command.QUIT;
-      case "UNDO":
-        return Command.UNDO;
       case "MOVE_ON_HAND":
-        return Command.MOVE_ON_HAND;*/
+        return Command.MOVE_ON_HAND;
+      case "PRINT":
+      return Command.PRINT;
+      case "CHECK":
+      return Command.CHECK;
+      case "HELP":
+      return Command.HELP;
+      case "DRAW":
+      return Command.DRAW;
+      case "QUIT":
+      return Command.QUIT;
+      case "UNDO":
+      return Command.UNDO;
       default:
         error(Command.NOT_VALID.toString());
         return Command.NOT_VALID;

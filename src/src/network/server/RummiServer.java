@@ -1,6 +1,8 @@
 package network.server;
 
 import communication.gameinfo.GameInfo;
+import communication.gameinfo.HandInfo;
+import communication.gameinfo.TableInfo;
 import communication.request.Request;
 
 import game.Game;
@@ -57,11 +59,11 @@ public class RummiServer extends Thread implements Server {
   public void run() {
     try {
       ServerSocket server = new ServerSocket(PORT);
-
+      Socket client;
       while (running) {
 
         synchronized (this) {
-          if (numOfClients >= MAX_CLIENTS) {
+          if (numOfClients >= numberOfPlayers) {
             try {
               wait();
             } catch (InterruptedException e) {
@@ -70,20 +72,21 @@ public class RummiServer extends Thread implements Server {
           }
         }
 
-
-        Socket client = server.accept();
         for (int i = 0; i < numberOfPlayers; i++) {
+          client = server.accept();
           if (clients[i] == null) {
             connectClient(client, i);
             if (i + 1 == numberOfPlayers) {
               HasGameStarted = true;
             }
-            break;
           }
         }
+
         if (HasGameStarted) {
           game.start();
+          sendToAll(new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
           System.out.println("Game just started");
+
           HasGameStarted = false;
         }
 
@@ -144,9 +147,10 @@ public class RummiServer extends Thread implements Server {
    */
   public void sendToAll(GameInfo info) {
     for (ServerSender sender : senders) {
-      if (sender != null) {
-        sender.send(info);
+      if (sender == null) {
+        return;
       }
+      sender.send(info);
     }
   }
 

@@ -11,19 +11,25 @@ import java.util.Map;
 
 public class GameInfoHandler {
 
-  private RummiClient client;
+//  private RummiClient client;
+  private Controller controller;
 
-  public GameInfoHandler(RummiClient client) {
-    this.client = client;
+  public GameInfoHandler(Controller controller) {
+    this.controller = controller;
+//    this.client = client;
   }
 
-  public Map<Coordinate, Stone> applyGameInfo(GameInfo gameinfo) {
+  public void applyGameInfo(GameInfo gameinfo) {
     switch (gameinfo.getInfoID()) {
       case HAND:
-        return ((HandInfo) gameinfo).getStones();
+        HandInfo handInfo = (HandInfo) gameinfo;
+        controller.setPlayerHand(handInfo.getWidth(), handInfo.getHeight(), handInfo.getStones());
+        return;
       case TABLE:
-        return ((TableInfo) gameinfo).getStones();
-      default: return null;
+        TableInfo tableInfo = (TableInfo) gameinfo;
+        controller.setTable(tableInfo.getWidth(), tableInfo.getHeight(), tableInfo.getStones());
+        return;
+      default:
     }
   }
 
