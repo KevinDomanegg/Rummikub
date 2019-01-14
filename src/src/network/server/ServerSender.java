@@ -54,9 +54,9 @@ public class ServerSender extends Thread {
 
     synchronized (this) {
       try {
+        ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
         while (connected) {
           if (send) {
-            ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
             out.writeObject(this.info);
             out.flush();
           }

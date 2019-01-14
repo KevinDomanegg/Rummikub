@@ -1,8 +1,6 @@
 package communication.request;
 
-import java.io.Serializable;
-
-public class ConcreteSetPlayer implements Request, Serializable {
+public class ConcreteSetPlayer implements Request {
   private int age;
 
   public ConcreteSetPlayer(int age) {

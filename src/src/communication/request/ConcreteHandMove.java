@@ -2,10 +2,7 @@ package communication.request;
 
 import game.Coordinate;
 
-import java.io.Serializable;
-
-
-public class ConcreteHandMove extends AbstractMove implements Request, Serializable {
+public class ConcreteHandMove extends AbstractMove implements Request {
 
   public ConcreteHandMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
     super(initialCoordinate, targetCoordinate);

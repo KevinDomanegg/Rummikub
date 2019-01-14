@@ -2,9 +2,7 @@ package communication.request;
 
 import game.Coordinate;
 
-import java.io.Serializable;
-
-public class ConcreteTableMove extends AbstractMove implements Request, Serializable {
+public class ConcreteTableMove extends AbstractMove implements Request {
 
   public ConcreteTableMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
     super(initialCoordinate, targetCoordinate);

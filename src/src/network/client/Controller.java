@@ -2,18 +2,14 @@ package network.client;
 
 import communication.gameinfo.GameInfo;
 
-import communication.gameinfo.GridInfo;
 import communication.request.ConcreteHandMove;
 import communication.request.ConcretePutStone;
 import communication.request.ConcreteTableMove;
-import communication.request.GetHand;
-import communication.request.GetTable;
 import game.Coordinate;
 import game.Stone;
 import java.util.Map;
 import java.util.Scanner;
 import network.server.RummiServer;
-import network.server.Server;
 import view.DemoView;
 
 public class Controller {
@@ -42,10 +38,6 @@ public class Controller {
 
   public void printGame() {
     view.printGame();
-  }
-
-  public void printPlayerHand() {
-    client.qeueRequest(new GetHand());
   }
 
   void setTable(int width, int height, Map<Coordinate, Stone> stones) {

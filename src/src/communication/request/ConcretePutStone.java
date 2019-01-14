@@ -2,12 +2,10 @@ package communication.request;
 
 import game.Coordinate;
 
-import java.io.Serializable;
-
 /**
  * represents the move from a player
  */
-public class ConcretePutStone extends AbstractMove implements Request, Serializable {
+public class ConcretePutStone extends AbstractMove implements Request {
 
   public ConcretePutStone(Coordinate initialCoordinate, Coordinate targetCoordinate) {
     super(initialCoordinate, targetCoordinate);

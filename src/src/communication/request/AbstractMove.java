@@ -1,8 +1,9 @@
 package communication.request;
 
 import game.Coordinate;
+import java.io.Serializable;
 
-abstract class AbstractMove {
+abstract class AbstractMove implements Serializable {
   private Coordinate initialCoordinate;
   private Coordinate targetCoordinate;
 

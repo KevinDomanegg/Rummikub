@@ -2,9 +2,10 @@ package communication.gameinfo;
 
 import game.Coordinate;
 import game.Stone;
+import java.io.Serializable;
 import java.util.Map;
 
-abstract class GridInfo {
+abstract class GridInfo implements Serializable {
   private Map<Coordinate, Stone> stones;
   private int width;
   private int height;
