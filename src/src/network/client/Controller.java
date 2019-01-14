@@ -1,12 +1,8 @@
 package network.client;
 
 import communication.gameinfo.StoneInfo;
-import communication.request.ConcreteHandMove;
-import communication.request.ConcretePutStone;
-import communication.request.ConcreteTableMove;
-import communication.request.GetHand;
-import communication.request.GetTable;
-import communication.request.Start;
+import communication.gameinfo.TableInfo;
+import communication.request.*;
 import network.server.RummiServer;
 import view.DemoView;
 
@@ -56,6 +52,10 @@ public class Controller {
   public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
     view.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
     client.qeueRequest(new ConcreteHandMove(initCol, initRow, targetCol, targetRow));
+  }
+
+  public void sendCheck() {
+    client.qeueRequest(new ConfrimMoveRequest());
   }
 
   public void startGame() {

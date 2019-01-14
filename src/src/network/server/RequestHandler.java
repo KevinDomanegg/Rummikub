@@ -4,12 +4,7 @@ import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandInfo;
 import communication.gameinfo.StoneInfo;
 import communication.gameinfo.TableInfo;
-import communication.request.ConcreteHandMove;
-import communication.request.ConcretePutStone;
-import communication.request.ConcreteSetPlayer;
-import communication.request.ConcreteTableMove;
-import communication.request.Request;
-import communication.request.RequestID;
+import communication.request.*;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -77,7 +72,7 @@ public class RequestHandler {
         return;
       case CONFIRM_MOVE:
         if (!game.isConsistent()) {
-          // server.sendToPlayer(playerID, new WrongMove());
+           //server.sendToPlayer(playerID, new WrongMove());
         } else {
           server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
         }
@@ -92,6 +87,7 @@ public class RequestHandler {
         server.sendToPlayer(playerID,
             new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
             game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
+        return;
       case GET_TABLE:
         server.sendToPlayer(playerID, new TableInfo(
             parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));

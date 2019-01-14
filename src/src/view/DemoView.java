@@ -46,6 +46,7 @@ public class DemoView {
     StringBuilder stringBuilder = print(new StringBuilder(), table).append('\n');
     System.out.print(print(stringBuilder, hand));
   }
+
   private StringBuilder print(StringBuilder stringBuilder, StoneInfo[][] grid) {
     StoneInfo stoneInfo;
     int height = grid[0].length;
@@ -60,6 +61,7 @@ public class DemoView {
     }
     return stringBuilder;
   }
+
 
   private static String parseColor(StoneInfo stoneInfo) {
     if (stoneInfo == null) {

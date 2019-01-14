@@ -56,6 +56,7 @@ public final class Shell {
     },
     CHECK {
       @Override Controller execute(Controller controller, String[] tokens) {
+        controller.sendCheck();
         return controller;
       }
     },
