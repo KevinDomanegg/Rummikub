@@ -169,6 +169,10 @@ public class RummiGame implements Game {
     return players.get(playerID).getHandHeight();
   }
 
+  @Override public int getNumberOfPlayers() {
+    return players.size();
+  }
+
   public Stack<MoveTrace> getTrace() {
     return trace;
   }

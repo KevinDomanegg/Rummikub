@@ -187,8 +187,8 @@ public final class Shell {
         return Command.NO_COMMAND;
       //case "NEW":
         //return parseCommandNEW(tokens);
-      //case "PLAYER":
-        //return Command.PLAYER;
+      case "START":
+        return Command.START;
       case "MOVE_FROM_HAND":
         return Command.MOVE_FROM_HAND;
       case "MOVE_ON_TABLE":

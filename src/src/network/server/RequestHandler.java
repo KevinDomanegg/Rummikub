@@ -32,6 +32,11 @@ public class RequestHandler {
     switch (id){
       case START:
         game.start();
+        server.sendToAll(new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
+        for (int i = 0; i < game.getNumberOfPlayers(); i++) {
+          server.sendToPlayer(i, new HandInfo(game.getPlayerHandWidth(i),
+              game.getPlayerHandHeight(i), game.getPlayerStones(i)));
+        }
         return;
       case HAND_MOVE:
         ConcreteHandMove handMove = (ConcreteHandMove) request;

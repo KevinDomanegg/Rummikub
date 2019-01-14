@@ -43,5 +43,7 @@ public interface Game {
 
   int getPlayerHandHeight(int playerID);
 
+  int getNumberOfPlayers();
+
   // ? int getTime();
 }
