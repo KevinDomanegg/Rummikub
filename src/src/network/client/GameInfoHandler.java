@@ -22,12 +22,10 @@ public class GameInfoHandler {
   public void applyGameInfo(GameInfo gameinfo) {
     switch (gameinfo.getInfoID()) {
       case HAND:
-        HandInfo handInfo = (HandInfo) gameinfo;
-        controller.setPlayerHand(handInfo.getWidth(), handInfo.getHeight(), handInfo.getStones());
+        controller.setPlayerHand(((HandInfo) gameinfo).getGrid());
         return;
       case TABLE:
-        TableInfo tableInfo = (TableInfo) gameinfo;
-        controller.setTable(tableInfo.getWidth(), tableInfo.getHeight(), tableInfo.getStones());
+        controller.setTable(((TableInfo) gameinfo).getGrid());
         return;
       default:
     }

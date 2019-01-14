@@ -66,32 +66,32 @@ public final class Shell {
     },
     MOVE_ON_TABLE {
       @Override Controller execute(Controller controller, String[] tokens) {
-        int x1 = Integer.parseUnsignedInt(tokens[1]);
-        int y1 = Integer.parseUnsignedInt(tokens[2]);
-        int x2 = Integer.parseUnsignedInt(tokens[3]);
-        int y2 = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneOnTable(x1, y1, x2, y2);
+        int initCol = Integer.parseUnsignedInt(tokens[1]);
+        int initRow = Integer.parseUnsignedInt(tokens[2]);
+        int targetCol = Integer.parseUnsignedInt(tokens[3]);
+        int targetRow = Integer.parseUnsignedInt(tokens[4]);
+        controller.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
         return controller;
       }
     },
     MOVE_FROM_HAND {
       @Override Controller execute(Controller controller, String[] tokens) {
-        int x1 = Integer.parseUnsignedInt(tokens[1]);
-        int y1 = Integer.parseUnsignedInt(tokens[2]);
-        int x2 = Integer.parseUnsignedInt(tokens[3]);
-        int y2 = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneFromHand(x1, y1, x2, y2);
+        int initCol = Integer.parseUnsignedInt(tokens[1]);
+        int initRow = Integer.parseUnsignedInt(tokens[2]);
+        int targetCol = Integer.parseUnsignedInt(tokens[3]);
+        int targetRow = Integer.parseUnsignedInt(tokens[4]);
+        controller.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
         return controller;
       }
     },
     MOVE_ON_HAND {
       @Override
       Controller execute(Controller controller, String[] tokens) {
-        int x1 = Integer.parseUnsignedInt(tokens[1]);
-        int y1 = Integer.parseUnsignedInt(tokens[2]);
-        int x2 = Integer.parseUnsignedInt(tokens[3]);
-        int y2 = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneOnHand(x1, y1, x2, y2);
+        int initCol = Integer.parseUnsignedInt(tokens[1]);
+        int initRow = Integer.parseUnsignedInt(tokens[2]);
+        int targetCol = Integer.parseUnsignedInt(tokens[3]);
+        int targetRow = Integer.parseUnsignedInt(tokens[4]);
+        controller.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
         return controller;
 
       }

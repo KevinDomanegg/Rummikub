@@ -2,6 +2,9 @@ package communication.request;
 
 import java.io.Serializable;
 
+/**
+ * request to set a new player with given age.
+ */
 public class ConcreteSetPlayer implements Request, Serializable {
   private int age;
 

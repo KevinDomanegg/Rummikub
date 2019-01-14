@@ -1,22 +1,33 @@
 package communication.request;
 
-import game.Coordinate;
 import java.io.Serializable;
 
+/**
+ * represents all movement in game.
+ */
 abstract class AbstractMove implements Serializable {
-  private Coordinate initialCoordinate;
-  private Coordinate targetCoordinate;
+  private int initCol;
+  private int initRow;
+  private int targetCol;
+  private int targetRow;
 
-  public AbstractMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
-    this.initialCoordinate = initialCoordinate;
-    this.targetCoordinate = targetCoordinate;
+  public AbstractMove(int initCol, int initRow, int targetCol, int targetRow) {
+    this.initCol = initCol;
+    this.initRow = initRow;
+    this.targetCol = targetCol;
+    this.targetRow = targetRow;
   }
 
-  public Coordinate getInitialCoordinate() {
-    return initialCoordinate;
+  public int getInitCol() {
+    return initCol;
   }
-
-  public Coordinate getTargetCoordinate() {
-    return targetCoordinate;
+  public int getInitRow() {
+    return initRow;
+  }
+  public int getTargetCol() {
+    return targetCol;
+  }
+  public int getTargetRow() {
+    return targetRow;
   }
 }

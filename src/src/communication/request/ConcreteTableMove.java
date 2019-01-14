@@ -1,11 +1,12 @@
 package communication.request;
 
-import game.Coordinate;
-
+/**
+ * stone movement only on table.
+ */
 public class ConcreteTableMove extends AbstractMove implements Request {
 
-  public ConcreteTableMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
-    super(initialCoordinate, targetCoordinate);
+  public ConcreteTableMove(int initCol, int initRow, int targetCol, int targetRow) {
+    super(initCol, initRow, targetCol, targetRow);
   }
 
   /**

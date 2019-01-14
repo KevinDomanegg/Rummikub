@@ -1,13 +1,12 @@
 package communication.request;
 
-import game.Coordinate;
-
+/**
+ * stone movement only on player hand.
+ */
 public class ConcreteHandMove extends AbstractMove implements Request {
-
-  public ConcreteHandMove(Coordinate initialCoordinate, Coordinate targetCoordinate) {
-    super(initialCoordinate, targetCoordinate);
+  public ConcreteHandMove(int initCol, int initRow, int targetCol, int targetRow) {
+    super(initCol, initRow, targetCol, targetRow);
   }
-
 
   /**
    * @return RequestID to identify the concrete implementation of the interface.
