@@ -5,6 +5,8 @@ import communication.gameinfo.GameInfo;
 import communication.request.ConcreteHandMove;
 import communication.request.ConcretePutStone;
 import communication.request.ConcreteTableMove;
+import communication.request.GetHand;
+import communication.request.GetTable;
 import communication.request.Start;
 import game.Coordinate;
 import game.Stone;
@@ -26,18 +28,21 @@ public class Controller {
     //this.client.setSendToServer((Request) new Timer(InfoID.DRAW));
   }
 
-  public void host(String name, int age, int numberOfPlayers) {
-    new RummiServer(numberOfPlayers).start();
+  public void host(String name, int age) {
+    new RummiServer().start();
     join(name, age, "localhost");
   }
 
-  public void join(String nane, int age, String serverIP) {
-    client = new RummiClient(nane, age, serverIP);
+  public void join(String name, int age, String serverIP) {
+    client = new RummiClient(name, age, serverIP);
     client.setGameInfoHandler(new GameInfoHandler(this));
     client.start();
+    System.out.println("Client:" + name + " started");
   }
 
   public void printGame() {
+    client.qeueRequest(new GetTable());
+    client.qeueRequest(new GetHand());
     view.printGame();
   }
 

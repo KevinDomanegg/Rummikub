@@ -17,8 +17,8 @@ public class RummiServer extends Thread implements Server {
 
 
   public static void main(String[] args) {
-    RummiServer s = new RummiServer();
-    s.start();
+//    RummiServer s = new RummiServer();
+//    s.start();
   }
 
 
@@ -27,14 +27,10 @@ public class RummiServer extends Thread implements Server {
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
-  private int numOfClients = 0;
+  private int numOfClients;
   private boolean running = true;
   private RequestHandler requestHandler;
   private Game game;
-  // for test
-  private int numberOfPlayers;
-  private boolean HasGameStarted;
-  private int countNumbOfPlayers;
 
   /**
    * Constructor creating a new Server, including all other classes needed
@@ -43,14 +39,6 @@ public class RummiServer extends Thread implements Server {
   public RummiServer() {
     game = new RummiGame();
     requestHandler = new RequestHandler(this, game);
-    this.numberOfPlayers = 0;
-  }
-
-  public RummiServer(int numberOfPlayers) {
-    game = new RummiGame();
-    requestHandler = new RequestHandler(this, game);
-    this.numberOfPlayers = numberOfPlayers;
-    this.countNumbOfPlayers = 0;
   }
 
   /**
@@ -63,33 +51,28 @@ public class RummiServer extends Thread implements Server {
       ServerSocket server = new ServerSocket(PORT);
       Socket client;
       while (running) {
-
         synchronized (this) {
-          if (numOfClients >= numberOfPlayers) {
+
+          if (numOfClients >= MAX_CLIENTS) {
             try {
               wait();
             } catch (InterruptedException e) {
               running = false;
             }
           }
-        }
-
-        for (int i = 0; i < numberOfPlayers; i++) {
+          // find next free position of clients
           client = server.accept();
-
-          if (clients[i] == null) {
-            connectClient(client, i);
-            if (i + 1 == numberOfPlayers) {
-              HasGameStarted = true;
+          for (int i = 0; i < MAX_CLIENTS; i++) {
+            if (clients[i] == null) {
+              connectClient(client, i);
+              numOfClients++;
+              break;
             }
           }
+          // for test
+          System.out.println("number of clients: " + numOfClients);
         }
-        countNumbOfPlayers++;
-
-
-
       }
-
     } catch (IOException e) {
       this.running = false;
     }

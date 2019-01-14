@@ -31,7 +31,7 @@ public final class Shell {
   enum Command {
     HOST {
       @Override Controller execute(Controller controller, String[] tokens) {
-        controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]), Integer.parseUnsignedInt(tokens[3]));
+        controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
         return controller;
       }
     },
