@@ -9,7 +9,7 @@ Text {
 }
 
 .hand {
-    -fx-background-color: black;
+    -fx-background-color: red;
 }
 
 .opponent {
@@ -65,4 +65,8 @@ Text {
 #bottomPane {
     -fx-pref-height: 200; /*TODO: Schlauer lösen! */
     -fx-padding: 50 0 0 0;
+}
+
+.rot {
+    -fx-fill: red;
 }

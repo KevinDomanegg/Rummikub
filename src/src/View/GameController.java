@@ -27,6 +27,7 @@ public class GameController {
   @FXML GridPane table;
   @FXML GridPane handGrid;
   @FXML Pane opponentMid;
+  @FXML Text stupidTest;
 
   String name = "Player";
 
@@ -37,13 +38,25 @@ public class GameController {
   public void initialize() {
     constructGrid(table, 24, 8);
     constructGrid(handGrid, 20, 2);
+    setupDrag(stupidTest);
   }
 
   @FXML
   public void drawStone() throws IOException {
     // Server request: Get stone from bag
-    VBox cell = FXMLLoader.load(getClass().getResource("Stone.fxml"));
-    handGrid.add(cell, handCount, 0);
+
+    /*
+    TODO: Set stone to desired value
+    FXMLLoader loader = new FXMLLoader();
+    VBox cell = loader.load(getClass().getResource("Stone.fxml"));
+    StoneController stoneController = loader.getController();
+    stoneController.setStone(3, "rot");
+    */
+
+    Text drawnStone = new Text("5");
+
+    handGrid.add(drawnStone, handCount, 0);
+    setupDrag(drawnStone);
     handCount++;
   }
 
@@ -52,7 +65,14 @@ public class GameController {
     for(int x = 0; x < columns; x++) {
       for(int y = 0; y < rows; y++) {
         StackPane cell = new StackPane();
-        //setupDragAndDrop(cell);
+
+        /*
+        Text test = new Text(x + ", " + y);
+        setupDragAndDrop(test);
+        cell.getChildren().add(test);
+        setupDragAndDrop(test);
+        */
+
         cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
         cell.setPrefHeight(768.0/rows);
         cell.getStyleClass().add("cell");
@@ -61,37 +81,34 @@ public class GameController {
     }
   }
 
-  /*
-  void setupDragAndDrop(StackPane cell) {
 
+  void setupDrag(Text test) {
     // Start drag here
-    cell.setOnDragDetected(event -> {
-      Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
+    test.setOnDragDetected(event -> {
+      Dragboard dragBoard = test.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
-      // TODO: Put stone to clipboard
-      if (!cell.getChildren().isEmpty()) {
-        content.put(DataFormat.FILES, cell.getChildren());
-        dragBoard.setContent(content);
-      }
+      content.putString(test.getText());
+      dragBoard.setContent(content);
       event.consume();
     });
+  }
 
+  void setupDrop(StackPane target) {
     // Accept drop here
-    cell.setOnDragOver(event -> {
+    target.setOnDragOver(event -> {
       event.acceptTransferModes(TransferMode.ANY);
       event.consume();
     });
 
     // Drop here
-    cell.setOnDragDropped(event -> {
+    target.setOnDragDropped(event -> {
       Dragboard dragboard = event.getDragboard();
       if (dragboard.hasFiles()) {
-        cell.getChildren().addAll(dragboard.getFiles());
+        target.getChildren().removeAll();
+        target.getChildren().add(new Text(dragboard.getString()));
       }
-      //TODO: Put dragboard content as node children
       event.consume();
     });
   }
-  */
 
 }

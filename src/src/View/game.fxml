@@ -108,6 +108,9 @@
                         <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
                     </children>
                 </HBox>
+                <StackPane alignment="CENTER_LEFT">
+                    <Text fx:id="stupidTest" text="ABC" />
+                </StackPane>
             </children>
         </StackPane>
     </bottom>

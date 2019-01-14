@@ -8,32 +8,47 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 
+
 public class Main extends Application {
+  //StartController startController;
+  WaitController waitController;
+  GameController gameController;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("game.fxml"));
-        primaryStage.setTitle("Rummikub");
-        //Scene scene = resolution(root);
-        Scene scene = new Scene(root, 1024, 768);
-        scene.getStylesheets().add("gameStyle.css");
-        primaryStage.setScene(scene);
-        //primaryStage.setFullScreen(true);
-        primaryStage.show();
-    }
+  public static void main(String[] args) {
+    launch(args);
+  }
 
+  //TODO: Catch exception
+  @Override
+  public void start(Stage primaryStage) throws Exception {
+    /*
+    TODO: Start -> (event) -> Wait -> (event) -> Game
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitView.fxml"));
+    Parent root = loader.load();
+    gameController = loader.getController();
+    */
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    Parent root = loader.load();
+    gameController = loader.getController();
 
-    /** Creates scene depending on the user device's resolution
-     *
-     * @param root parent root
-     * @return new scene with user's resolution
-     */
-    Scene resolution(Parent root) {
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        return new Scene(root, screen.width, screen.height);
-    }
+    primaryStage.setTitle("Rummikub");
+    //Scene scene = resolution(root);
+    Scene scene = new Scene(root, 1024, 768);
+    scene.getStylesheets().add("gameStyle.css");
+    primaryStage.setScene(scene);
+    //primaryStage.setFullScreen(true);
+    primaryStage.show();
+  }
+
+  /**
+   * Creates scene depending on the user device's resolution
+   *
+   * @param root parent root
+   * @return new scene with user's resolution
+   */
+  Scene resolution(Parent root) {
+    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+    return new Scene(root, screen.width, screen.height);
+  }
 }
