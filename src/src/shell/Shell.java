@@ -18,24 +18,30 @@ public final class Shell {
 
   private static final String HELP_TEXT_FOR_SHELL = "Welcome to Rummikub_DEMO Version, powered by CurryGang, \n" +
       "Here is a TEST *NON-GUI* Version of our program. \n" +
+      "PLEASE note that error messages are not reliable. Here is how you play our Demo:\n\n" +
+      "1. host a game by: host <name> <age>\n" +
+      "2. open another shell or with another computer join the game by: join <name> <age> <serverIP>" +
+      "3. host starts the game by: start\n" +
+      "4. print table and hand by: print\n" +
+      "rest you can see the followings...\n\n" +
       "Commands: \n" +
-      "HOST <username::String> <age::Integer> <number_of_clients_in_game::int>: With this command you host a game \n" +
-      "and wait for you opponent to connect so you can start the game. \n" +
-      "JOIN <username::String> <age::Integer> <IP_Address_from_Server::String>: You join a Server with already an opponent \n" +
-      "START: Send a request_to_start_game to the Server and the Server starts the Game \n" +
-      "PRINT: Prints the Table of the Game and your hand (with colors) \n" +
-      "MOVE_ON_TABLE <Initial_column::Integer> <Initial_row::Integer> <Target_column::Integer> <Target_row::Integer>  \n" +
-      "MOVE_FROM_HAND <Initial_column_in_hand::Integer> <Initial_row_in_hand::Integer> <Target_column_in_table::Integer> <Target_row_in_table::Integer> \n" +
-      "CHECK: Checks the consistent of the stones that you just puted on the table. \n" +
-      "HELP: Prints a message that helps you understand how the Shell of the program works. \n" +
-      "QUIT: Terminates the program.";
+      "   HOST <username::String> <age::Integer> <number_of_clients_in_game::int>: With this command you host a game \n" +
+      "   and wait for you opponent to connect so you can start the game. \n" +
+      "   JOIN <username::String> <age::Integer> <IP_Address_from_Server::String>: You join a Server with already an opponent \n" +
+      "   START: Send a request_to_start_game to the Server and the Server starts the Game \n" +
+      "   PRINT: Prints the Table of the Game and your hand (with colors) \n" +
+      "   MOVE_ON_TABLE <Initial_column::Integer> <Initial_row::Integer> <Target_column::Integer> <Target_row::Integer>  \n" +
+      "   MOVE_FROM_HAND <Initial_column_in_hand::Integer> <Initial_row_in_hand::Integer> <Target_column_in_table::Integer> <Target_row_in_table::Integer> \n" +
+      "   CHECK: Checks the consistent of the stones that you just puted on the table. \n" +
+      "   HELP: Prints a message that helps you understand how the Shell of the program works. \n" +
+      "   QUIT: Terminates the program.";
 
   enum Command {
     HOST {
       @Override Controller execute(Controller controller, String[] tokens) {
         controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
         try {
-          System.out.println(Inet4Address.getLocalHost().getHostAddress());
+          System.out.println("Server IP for join " +Inet4Address.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
           error(e.getMessage());
         }
@@ -155,15 +161,12 @@ public final class Shell {
       + "    check the consistency of the table and return the result\n"
       + "  help:\n"
       + "    print help text";
-
-  private static final String MISSING_OR_TOO_MUCH_TOKENS_FOR = "missing or too much tokens";
   
   private static final String PROMPT = "rummikub> ";
 
   public static void main(String[] args) throws IOException {
     BufferedReader reader = new BufferedReader(
         new InputStreamReader(System.in, StandardCharsets.UTF_8));
-    System.out.println("Welcome to Rummikub_DEMO Version, powered by CurryGang !");
     start(reader);
     reader.close();
   }
@@ -173,6 +176,7 @@ public final class Shell {
     Command command;
     String[] tokens;
     Controller controller = new Controller(new DemoView());
+    System.out.println(HELP_TEXT_FOR_SHELL);
 
     while (true) {
       System.out.print(PROMPT);
