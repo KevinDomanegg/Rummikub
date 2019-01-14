@@ -62,4 +62,8 @@ public class Controller {
     client.qeueRequest(new Start());
   }
 
+  public void disconnectClient() {
+    client.disconnect();
+  }
+
 }

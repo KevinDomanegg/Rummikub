@@ -71,11 +71,9 @@ public class RequestHandler {
         game.drawStone();
         return;
       case CONFIRM_MOVE:
-        if (!game.isConsistent()) {
-           //server.sendToPlayer(playerID, new WrongMove());
-        } else {
+        //if (game.isConsistent()) {
           server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
-        }
+        //}
         return;
       case GIVE_UP:
         game.playerHasLeft(playerID);

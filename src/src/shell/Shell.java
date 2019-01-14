@@ -181,6 +181,7 @@ public final class Shell {
       tokens = input.trim().split("\\s+");
       command = parseCommand(tokens);
       if (command == Command.QUIT) {
+        controller.disconnectClient();
         break;
       }
       try {

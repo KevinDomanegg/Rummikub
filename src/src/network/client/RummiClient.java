@@ -98,6 +98,13 @@ public class RummiClient extends Thread {
     return send;
   }
 
+  public synchronized void disconnect() {
+    this.connected = false;
+    readyToSend = true;
+    request = null;
+    notifyAll();
+  }
+
 
 
 }
