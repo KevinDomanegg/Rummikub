@@ -1,13 +1,10 @@
 package communication.gameinfo;
 
-import game.Coordinate;
-import game.Stone;
-import java.util.Map;
-
+/** game table model for view. */
 public class TableInfo extends GridInfo implements GameInfo {
 
-  public TableInfo(int width, int height, Map<Coordinate, Stone> stones) {
-    super(width, height, stones);
+  public TableInfo(StoneInfo[][] grid) {
+    super(grid);
   }
 
   @Override

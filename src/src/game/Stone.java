@@ -1,9 +1,6 @@
 package game;
 
-
-import java.io.Serializable;
-
-public class Stone implements Serializable {
+public class Stone {
   public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
 
   private Color color;

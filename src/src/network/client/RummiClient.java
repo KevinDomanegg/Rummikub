@@ -1,12 +1,8 @@
 package network.client;
 
-import java.util.Map;
-
 import communication.gameinfo.GameInfo;
 import communication.request.ConcreteSetPlayer;
 import communication.request.Request;
-import game.Coordinate;
-import game.Stone;
 
 import java.io.*;
 import java.net.Socket;
@@ -83,7 +79,6 @@ public class RummiClient extends Thread {
       e.printStackTrace();
     }
   }
-//  public synchronized
 
   void applyGameInfoHandler(GameInfo gameinfo) {
     gameInfoHandler.applyGameInfo(gameinfo);
@@ -103,17 +98,5 @@ public class RummiClient extends Thread {
   }
 
 
-  public static void main(String[] args) {
-    /*RummiClient client = new RummiClient("angelos", 21, "localhost");
-    client.start();
-    System.out.println("READY TO SEND");
-    Scanner sc = new Scanner(System.in);
-    String input;
-    while ((input = sc.nextLine()).equals("send")) {
-      Request send = new Concrete_Hand_Move();
-      client.setSendToServer(send);
-    }*/
 
-  }
-
-} // END OF RummiClient Class
+}

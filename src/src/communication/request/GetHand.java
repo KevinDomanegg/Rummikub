@@ -2,6 +2,9 @@ package communication.request;
 
 import java.io.Serializable;
 
+/**
+ * request for player hand to update.
+ */
 public class GetHand implements Request, Serializable {
 
   @Override

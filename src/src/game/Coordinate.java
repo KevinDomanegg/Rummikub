@@ -1,9 +1,9 @@
 package game;
 
-import java.io.Serializable;
 import java.util.Objects;
 
-public class Coordinate implements Serializable {
+/** coordinate for a stone on game table or player hand. */
+public class Coordinate {
   private int col;
   private int row;
 

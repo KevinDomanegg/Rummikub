@@ -8,6 +8,5 @@ public enum InfoID {
    */
 
   TABLE,
-  HAND,
-  TIME,
+  HAND
 }

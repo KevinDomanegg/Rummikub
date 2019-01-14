@@ -3,12 +3,11 @@ package communication.request;
 import game.Coordinate;
 
 /**
- * represents the move from a player
+ * represents the move from a player.
  */
 public class ConcretePutStone extends AbstractMove implements Request {
-
-  public ConcretePutStone(Coordinate initialCoordinate, Coordinate targetCoordinate) {
-    super(initialCoordinate, targetCoordinate);
+  public ConcretePutStone(int initCol, int initRow, int targetCol, int targetRow) {
+    super(initCol, initRow, targetCol, targetRow);
   }
 
   /**

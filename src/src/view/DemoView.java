@@ -1,11 +1,9 @@
 package view;
 
-import communication.gameinfo.GameInfo;
+import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandInfo;
+import communication.gameinfo.StoneInfo;
 import communication.gameinfo.TableInfo;
-import game.Coordinate;
-import game.Stone;
-import java.util.Map;
 
 public class DemoView {
   private static final String ANSI_RESET = "\u001B[0m";
@@ -16,44 +14,46 @@ public class DemoView {
   private static final String YELLOW = "\u001B[34;43m";
   private static final String JOKER = "\u001B[45m";
 
-  private Map<Coordinate, Stone> table;
-  private int tableWidth;
-  private int tableHeight;
-  TableInfo tableInfo;
-  HandInfo handInfo;
-  private Map<Coordinate, Stone> playerHand;
-  private int handWidth;
-  private int handHeight;
+  StoneInfo[][] table;
+  StoneInfo[][] hand;
 
   public DemoView() {
   }
 
-  public void setTable(int tableWidth, int tableHeight, Map<Coordinate, Stone> table) {
-    this.tableWidth = tableWidth;
-    this.tableHeight = tableHeight;
+  public void setTable(StoneInfo[][] table) {
     this.table = table;
   }
 
-  public void setPlayerHand(int handWidth, int handHeight, Map<Coordinate, Stone> playerHand) {
-    this.handWidth = handWidth;
-    this.handHeight = handHeight;
-    this.playerHand = playerHand;
+  public void setPlayerHand(StoneInfo[][] hand) {
+    this.hand = hand;
+  }
+  public void moveStoneOnTable(int initCol, int initRow, int targetCol, int targetRow) {
+    table[targetCol][targetRow] = table[initCol][initRow];
+    table[initCol][initRow] = null;
+  }
+
+  public void moveStoneFromHand(int initCol, int initRow, int targetCol, int targetRow) {
+    table[targetCol][targetRow] = hand[initCol][initRow];
+    hand[initCol][initRow] = null;
+  }
+
+  public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
+    hand[targetCol][targetRow] = hand[initCol][initRow];
+    hand[initCol][initRow] = null;
   }
 
   public void printGame() {
-    StringBuilder stringBuilder = print(new StringBuilder(),
-        tableWidth, tableHeight, table).append('\n');
-    System.out.print(print(stringBuilder, handWidth, handHeight, playerHand));
+    StringBuilder stringBuilder = print(new StringBuilder(), table).append('\n');
+    System.out.print(print(stringBuilder, hand));
   }
-  private StringBuilder print(StringBuilder stringBuilder, int width, int height, Map<Coordinate, Stone> stones) {
-    Stone stone;
-
+  private StringBuilder print(StringBuilder stringBuilder, StoneInfo[][] grid) {
+    StoneInfo stoneInfo;
+    int height = grid[0].length;
     for (int j = 0; j < height; j++) {
-      for (int i = 0; i < width; i++) {
-        stone = stones.get(new Coordinate(i, j));
-        // builder = stone-color + stone-number + ANSI_RESET
-        stringBuilder.append(parseColor(stone));
-        stringBuilder.append((stone == null) ? 0 : Integer.toHexString(stone.getNumber()).toUpperCase())
+      for (StoneInfo[] row : grid) {
+        stoneInfo = row[j];
+        stringBuilder.append(parseColor(stoneInfo))
+            .append((stoneInfo == null) ? 0 : Integer.toHexString(stoneInfo.getNumber()))
             .append(ANSI_RESET);
       }
       stringBuilder.append('\n'); // for every row of the gird
@@ -61,18 +61,18 @@ public class DemoView {
     return stringBuilder;
   }
 
-  private static String parseColor(Stone stone) {
-    if (stone == null) {
+  private static String parseColor(StoneInfo stoneInfo) {
+    if (stoneInfo == null) {
       return WHITE;
     }
-    switch (stone.getColor()) {
-      case BLACK:
+    switch (stoneInfo.getColor()) {
+      case "BACK":
         return BLACK;
-      case YELLOW:
+      case "YELLOW":
         return YELLOW;
-      case BLUE:
+      case "BLUE":
         return BLUE;
-      case RED:
+      case "RED":
         return RED;
       default:
         return JOKER;
