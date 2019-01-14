@@ -5,6 +5,7 @@ import communication.gameinfo.GameInfo;
 import communication.request.ConcreteHandMove;
 import communication.request.ConcretePutStone;
 import communication.request.ConcreteTableMove;
+import communication.request.Start;
 import game.Coordinate;
 import game.Stone;
 import java.util.Map;
@@ -58,6 +59,10 @@ public class Controller {
 
   public void moveStoneOnHand(int x1, int y1, int x2, int y2) {
     client.qeueRequest(new ConcreteHandMove(new Coordinate(x1, y1), new Coordinate(x2, y2)));
+  }
+
+  public void startGame() {
+    client.qeueRequest(new Start());
   }
 
   public static void main(String[] args) {

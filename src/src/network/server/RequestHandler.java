@@ -30,6 +30,9 @@ public class RequestHandler {
     RequestID id = request.getRequestID();
 
     switch (id){
+      case START:
+        game.start();
+        return;
       case HAND_MOVE:
         ConcreteHandMove handMove = (ConcreteHandMove) request;
         game.moveStoneOnHand(playerID,
@@ -49,6 +52,8 @@ public class RequestHandler {
       case CONFIRM_MOVE:
         if (!game.isConsistent()) {
           // server.sendToPlayer(playerID, new WrongMove());
+        } else {
+          server.sendToAll(new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
         }
         return;
       case GIVE_UP:
@@ -58,8 +63,8 @@ public class RequestHandler {
         game.setPlayer(((ConcreteSetPlayer) request).getAge());
         return;
       case GET_HAND:
-        server.sendToPlayer(playerID, new HandInfo(game.getCurrentPlayerHandWidth(),
-            game.getCurrentPlayerHandHeight(), game.getCurrentPlayerStones()));
+        server.sendToPlayer(playerID, new HandInfo(game.getPlayerHandWidth(playerID),
+            game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID)));
       case GET_TABLE:
         server.sendToPlayer(playerID, new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
       default:

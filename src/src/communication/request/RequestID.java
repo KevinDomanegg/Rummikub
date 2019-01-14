@@ -7,6 +7,7 @@ public enum RequestID {
    * Every implementation of Request should have an RequestID associated with it.
    */
   GET_PLAYERS_IDS,
+  START,
   GET_HAND,
   GET_TABLE,
   SET_PLAYER,

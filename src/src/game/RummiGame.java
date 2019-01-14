@@ -73,9 +73,9 @@ public class RummiGame implements Game {
   }
 
   @Override
-  public void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition) {
-    players.get(playerPosition).moveStone(initialPosition, targetPosition);
-    if (playerPosition == currentPlayerID){
+  public void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition) {
+    players.get(playerID).moveStone(initialPosition, targetPosition);
+    if (playerID == currentPlayerID){
       trace.push(new MoveTrace("MOVESTONEONHAND", initialPosition, targetPosition));
     }
   }
@@ -101,7 +101,7 @@ public class RummiGame implements Game {
     Coordinate initialPosition = lastCommand.getInitialPosition();
     Coordinate targetPosition = lastCommand.getTargetPosition();
     String command = lastCommand.getCommand();
-    int playerPosition = lastCommand.getPlayerPosition();
+    int playerID = lastCommand.getPlayerID();
 
     switch (command) {
       case "MOVESTONEONTABLE":
@@ -112,7 +112,7 @@ public class RummiGame implements Game {
         currentPlayer().getStones().put(initialPosition, stone);
         break;
       case "MOVESTONEONHAND":
-        players.get(playerPosition).moveStone(targetPosition, initialPosition);
+        players.get(playerID).moveStone(targetPosition, initialPosition);
         break;
       default:
         //error Message: There are no moves to undo.
@@ -136,8 +136,8 @@ public class RummiGame implements Game {
     return table.getStones();
   }
 
-  @Override public Map<Coordinate, Stone> getCurrentPlayerStones() {
-    return currentPlayer().getStones();
+  @Override public Map<Coordinate, Stone> getPlayerStones(int playerID) {
+    return players.get(playerID).getStones();
   }
 
   @Override public int getBagSize() {
@@ -161,12 +161,12 @@ public class RummiGame implements Game {
     return table.getHeight();
   }
 
-  @Override public int getCurrentPlayerHandWidth() {
-    return currentPlayer().getHandWidth();
+  @Override public int getPlayerHandWidth(int playerID) {
+    return players.get(playerID).getHandWidth();
   }
 
-  @Override public int getCurrentPlayerHandHeight() {
-    return currentPlayer().getHandHeight();
+  @Override public int getPlayerHandHeight(int playerID) {
+    return players.get(playerID).getHandHeight();
   }
 
   public Stack<MoveTrace> getTrace() {

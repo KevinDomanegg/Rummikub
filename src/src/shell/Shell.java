@@ -28,6 +28,13 @@ public final class Shell {
         return controller;
       }
     },
+    START {
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.startGame();
+        return controller;
+      }
+
+    },
     PRINT {
       @Override Controller execute(Controller controller, String[] tokens) {
         controller.printGame();

@@ -27,7 +27,7 @@ public interface Game {
 
   Map<Coordinate, Stone> getTableStones();
 
-  Map<Coordinate, Stone> getCurrentPlayerStones();
+  Map<Coordinate, Stone> getPlayerStones(int playerID);
 
   List<Integer> getPlayerHandSizes();
 
@@ -39,9 +39,9 @@ public interface Game {
 
   int getTableHeight();
 
-  int getCurrentPlayerHandWidth();
+  int getPlayerHandWidth(int playerID);
 
-  int getCurrentPlayerHandHeight();
+  int getPlayerHandHeight(int playerID);
 
   // ? int getTime();
 }
