@@ -1,7 +1,9 @@
 package network.server;
 //Might be better to move this class to the game-package
 import communication.gameinfo.HandInfo;
+import communication.gameinfo.InfoID;
 import communication.gameinfo.TableInfo;
+import communication.gameinfo.Timer;
 import communication.request.ConcreteHandMove;
 import communication.request.ConcretePutStone;
 import communication.request.ConcreteSetPlayer;
@@ -33,9 +35,17 @@ public class RequestHandler {
       case START:
         game.start();
         server.sendToAll(new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
+        System.out.println("SENT TABLE TO EVERYONE");
+        try {
+          Thread.sleep(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+
         for (int i = 0; i < game.getNumberOfPlayers(); i++) {
           server.sendToPlayer(i, new HandInfo(game.getPlayerHandWidth(i),
-              game.getPlayerHandHeight(i), game.getPlayerStones(i)));
+          game.getPlayerHandHeight(i), game.getPlayerStones(i)));
+          System.out.println("JUST SENT HAND TO PLAYER " + 1);
         }
         return;
       case HAND_MOVE:
@@ -69,7 +79,7 @@ public class RequestHandler {
         return;
       case GET_HAND:
         server.sendToPlayer(playerID, new HandInfo(game.getPlayerHandWidth(playerID),
-            game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID)));
+        game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID)));
       case GET_TABLE:
         server.sendToPlayer(playerID, new TableInfo(game.getTableWidth(), game.getTableHeight(), game.getTableStones()));
       default:

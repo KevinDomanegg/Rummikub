@@ -78,7 +78,7 @@ public class RummiClient extends Thread {
         server.close();
       }
     } catch (UnknownHostException e) {
-      e.printStackTrace(); // ????
+      connected = false;
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -87,6 +87,7 @@ public class RummiClient extends Thread {
 
   void applyGameInfoHandler(GameInfo gameinfo) {
     gameInfoHandler.applyGameInfo(gameinfo);
+
   }
 
 //  public synchronized GameInfo getTableInfo() {

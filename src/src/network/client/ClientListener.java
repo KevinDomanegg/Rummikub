@@ -25,6 +25,7 @@ public class ClientListener extends Thread {
       ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
       while (true) {
         try {
+          System.out.println("Client listener is waiting for a message...");
           Object game_info = recieveMessage.readObject();
           GameInfo recieveFromServer = (GameInfo) game_info;
           System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED

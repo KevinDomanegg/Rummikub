@@ -17,8 +17,8 @@ public class RummiServer extends Thread implements Server {
 
 
   public static void main(String[] args) {
-//    RummiServer s = new RummiServer();
-//    s.start();
+    RummiServer s = new RummiServer();
+    s.start();
   }
 
 
@@ -27,26 +27,30 @@ public class RummiServer extends Thread implements Server {
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
-  private int numOfClients;
+  private int numOfClients = 0;
   private boolean running = true;
   private RequestHandler requestHandler;
   private Game game;
-  private int maxPlayers;
+  // for test
+  private int numberOfPlayers;
+  private boolean HasGameStarted;
+  private int countNumbOfPlayers;
 
   /**
    * Constructor creating a new Server, including all other classes needed
    * server-side to play the game.
    */
-//  public RummiServer() {
-//    game = new RummiGame();
-//    requestHandler = new RequestHandler(this, game);
-//    this.numberOfPlayers = 0;
-//  }
-
-  public RummiServer(int maxPlayers) {
+  public RummiServer() {
     game = new RummiGame();
     requestHandler = new RequestHandler(this, game);
-    this.maxPlayers = maxPlayers;
+    this.numberOfPlayers = 0;
+  }
+
+  public RummiServer(int numberOfPlayers) {
+    game = new RummiGame();
+    requestHandler = new RequestHandler(this, game);
+    this.numberOfPlayers = numberOfPlayers;
+    this.countNumbOfPlayers = 0;
   }
 
   /**
@@ -61,34 +65,31 @@ public class RummiServer extends Thread implements Server {
       while (running) {
 
         synchronized (this) {
-          if (numOfClients == maxPlayers) {
-            try {
-              Thread.sleep(10000);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-            for (int i = 0; i < maxPlayers; i++) {
-              sendToPlayer(i, new HandInfo(game.getPlayerHandWidth(i), game.getPlayerHandHeight(i), game.getPlayerStones(i)));
-            }
-            System.out.println("Game just started");
+          if (numOfClients >= numberOfPlayers) {
             try {
               wait();
             } catch (InterruptedException e) {
               running = false;
             }
           }
-          // find next free position of clients
+        }
+
+        for (int i = 0; i < numberOfPlayers; i++) {
           client = server.accept();
-          for (int i = 0; i < maxPlayers; i++) {
-            if (clients[i] == null) {
-              connectClient(client, i);
-              numOfClients++;
-              break;
+
+          if (clients[i] == null) {
+            connectClient(client, i);
+            if (i + 1 == numberOfPlayers) {
+              HasGameStarted = true;
             }
           }
-          System.out.println("number of clients: " + numOfClients);
         }
+        countNumbOfPlayers++;
+
+
+
       }
+
     } catch (IOException e) {
       this.running = false;
     }

@@ -14,6 +14,19 @@ import view.DemoView;
 public final class Shell {
   private Shell() {}
 
+  private static final String HELP_TEXT_FOR_SHELL = "Welcome to Rummikub_DEMO Version, powered by CurryGang, \n" +
+      "Here is a TEST *NON-GUI* Version of our program. \n" +
+      "Commands: \n" +
+      "HOST <username::String> <age::Integer> <number_of_clients_in_game::int>: With this command you host a game \n" +
+      "and wait for you opponent to connect so you can start the game. \n" +
+      "JOIN <username::String> <age::Integer> <IP_Address_from_Server::String>: You join a Server with already an opponent \n" +
+      "START: Send a request_to_start_game to the Server and the Server starts the Game \n" +
+      "PRINT: Prints the Table of the Game and your hand (with colors) \n" +
+      "MOVE_ON_TABLE <Initial_column::Integer> <Initial_row::Integer> <Target_column::Integer> <Target_row::Integer>  \n" +
+      "MOVE_FROM_HAND <Initial_column_in_hand::Integer> <Initial_row_in_hand::Integer> <Target_column_in_table::Integer> <Target_row_in_table::Integer> \n" +
+      "CHECK: Checks the consistent of the stones that you just puted on the table. \n" +
+      "HELP: Prints a message that helps you understand how the Shell of the program works. \n" +
+      "QUIT: Terminates the program.";
 
   enum Command {
     HOST {
@@ -97,7 +110,7 @@ public final class Shell {
     HELP {
       @Override
       Controller execute(Controller controller, String[] tokens) {
-        System.out.println(HELP);
+        System.out.println(HELP_TEXT_FOR_SHELL);
         return controller;
       }
     },
@@ -147,6 +160,7 @@ public final class Shell {
   public static void main(String[] args) throws IOException {
     BufferedReader reader = new BufferedReader(
         new InputStreamReader(System.in, StandardCharsets.UTF_8));
+    System.out.println("Welcome to Rummikub_DEMO Version, powered by CurryGang !");
     start(reader);
     reader.close();
   }
