@@ -89,42 +89,11 @@ public class RummiClient extends Thread {
     gameInfoHandler.applyGameInfo(gameinfo);
   }
 
-//  public synchronized GameInfo getTableInfo() {
-//    if (forwardToController == null) {
-//      try {
-//        wait();
-//      } catch (InterruptedException e) {
-//
-//      }
-//    }
-//    GameInfo gameinfo = forwardToController;
-//    forwardToController = null;
-//    return gameinfo;
-//  }
-  //The Controller gives to RummiClient a package
-  // to send to Server
-
   public synchronized void qeueRequest(Request request) {
     this.request = request;
     this.readyToSend = true;
     notifyAll();
   }
-  //The Client Listener recieves "gameInfo" from Server
-  // so it notifies the RummiClient to forward this message to Controller
-
-//  synchronized void setForwardToController(GameInfo gameInfo) {
-//    if (forwardToController != null) {
-//      try {
-//        wait();
-//      } catch (InterruptedException e) {
-//        e.printStackTrace();
-//      }
-//    }
-//    this.forwardToController = gameInfo;
-//    notifyAll();
-//  }
-
-  // access from Controller to get the recieved package (GameInfo)
 
   public synchronized GameInfo getGameInfo() {
     GameInfo send = forwardToController;

@@ -1,5 +1,8 @@
 package view;
 
+import communication.gameinfo.GameInfo;
+import communication.gameinfo.HandInfo;
+import communication.gameinfo.TableInfo;
 import game.Coordinate;
 import game.Stone;
 import java.util.Map;
@@ -16,6 +19,8 @@ public class DemoView {
   private Map<Coordinate, Stone> table;
   private int tableWidth;
   private int tableHeight;
+  TableInfo tableInfo;
+  HandInfo handInfo;
   private Map<Coordinate, Stone> playerHand;
   private int handWidth;
   private int handHeight;

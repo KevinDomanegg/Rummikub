@@ -31,22 +31,14 @@ public class RummiServer extends Thread implements Server {
   private boolean running = true;
   private RequestHandler requestHandler;
   private Game game;
-  private int maxPlayers;
 
   /**
    * Constructor creating a new Server, including all other classes needed
    * server-side to play the game.
    */
-//  public RummiServer() {
-//    game = new RummiGame();
-//    requestHandler = new RequestHandler(this, game);
-//    this.numberOfPlayers = 0;
-//  }
-
-  public RummiServer(int maxPlayers) {
+  public RummiServer() {
     game = new RummiGame();
     requestHandler = new RequestHandler(this, game);
-    this.maxPlayers = maxPlayers;
   }
 
   /**
@@ -59,18 +51,9 @@ public class RummiServer extends Thread implements Server {
       ServerSocket server = new ServerSocket(PORT);
       Socket client;
       while (running) {
-
         synchronized (this) {
-          if (numOfClients == maxPlayers) {
-            try {
-              Thread.sleep(10000);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-            for (int i = 0; i < maxPlayers; i++) {
-              sendToPlayer(i, new HandInfo(game.getPlayerHandWidth(i), game.getPlayerHandHeight(i), game.getPlayerStones(i)));
-            }
-            System.out.println("Game just started");
+
+          if (numOfClients >= MAX_CLIENTS) {
             try {
               wait();
             } catch (InterruptedException e) {
@@ -79,13 +62,14 @@ public class RummiServer extends Thread implements Server {
           }
           // find next free position of clients
           client = server.accept();
-          for (int i = 0; i < maxPlayers; i++) {
+          for (int i = 0; i < MAX_CLIENTS; i++) {
             if (clients[i] == null) {
               connectClient(client, i);
               numOfClients++;
               break;
             }
           }
+          // for test
           System.out.println("number of clients: " + numOfClients);
         }
       }
