@@ -12,76 +12,72 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.layout.Pane?>
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="GameController">
+            fx:controller="View.GameController">
     <top>
-        <!-- timer, opponentMid's hand, menu buttons -->
-        <GridPane fx:id="topGrid" BorderPane.alignment="CENTER">
-            <!-- 3x1 grid for layout -->
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            </rowConstraints>
-
+        <StackPane>
             <children>
-                <StackPane alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="200.0">
-                    <!-- Timer, left aligned -->
+                <StackPane alignment="CENTER_LEFT">
+                    <!-- timer -->
                     <children>
-                        <Text fx:id="timer" strokeType="OUTSIDE" strokeWidth="0.0" text="Timer: 30" />
+                        <Text fx:id="timer" text="Timer: 30" />
                     </children>
                 </StackPane>
 
-                <!-- opponentMid's hand -->
-                <fx:include fx:id="opponentMid" source="OpponentHand.fxml" GridPane.columnIndex="1"/>
+                <StackPane alignment="CENTER">
+                    <!-- opponentMid's hand -->
+                    <children>
+                        <fx:include fx:id="opponentMid" source="OpponentHand.fxml"/>
+                    </children>
+                </StackPane>
 
-                <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
-                    <!-- menu buttons -->
+                <StackPane alignment="CENTER_RIGHT">
+                    <!-- Menu buttons -->
                     <children>
                         <Button fx:id="quitButton" mnemonicParsing="false" text="Quit" />
                     </children>
                 </StackPane>
             </children>
-        </GridPane>
+        </StackPane>
     </top>
 
     <center>
-        <!-- table grid -->
-        <GridPane fx:id="table" BorderPane.alignment="CENTER">
-            <columnConstraints>
-                <!-- Add columns via Java with tag=ColumnConstraints -->
-            </columnConstraints>
-            <rowConstraints>
-                <!-- Add row via Java with tag=RowConstraints -->
-            </rowConstraints>
-            <children>
-                <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
-            </children>
-        </GridPane>
+        <StackPane fx:id="tableContainer">
+            <!-- table grid -->
+            <GridPane fx:id="table">
+                <columnConstraints>
+                    <!-- Add columns via Java with tag=ColumnConstraints -->
+                </columnConstraints>
+                <rowConstraints>
+                    <!-- Add row via Java with tag=RowConstraints -->
+                </rowConstraints>
+                <children>
+                    <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
+                </children>
+            </GridPane>
+        </StackPane>
     </center>
 
     <left>
         <!-- opponentLeft's hand -->
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER_LEFT">
+        <StackPane>
             <fx:include fx:id="opponentLeft" source="OpponentHand.fxml" />
         </StackPane>
     </left>
 
     <right>
         <!-- opponentRight's hand -->
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
-            <fx:include fx:id="opponentRight" source="OpponentHand.fxml" />
+        <StackPane>
+            <fx:include fx:id="opponentRight"  source="OpponentHand.fxml" />
         </StackPane>
     </right>
 
     <bottom>
         <!-- ownHand, drawStone button etc. -->
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <StackPane fx:id="bottomPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
                 <VBox fx:id="ownHand" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" maxWidth="400">
                     <!-- hand of executing player -->
@@ -90,21 +86,16 @@
                         <GridPane fx:id="handGrid" styleClass="hand" alignment="CENTER_LEFT">
                             <!-- Own hand -->
                             <columnConstraints>
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
-                                <ColumnConstraints />
                                 <!-- Add columns via Java with tag=ColumnConstraints -->
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints />
                                 <!-- Add row via Java with tag=RowConstraints -->
                             </rowConstraints>
                             <children>
+                                <!-- Testing -->
+                                <!-- <fx:include fx:id="testStone" source="Stone.fxml" /> -->
+
+                                <!-- End of testing -->
                             </children>
                         </GridPane>
                     </children>
