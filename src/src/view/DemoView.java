@@ -1,9 +1,7 @@
 package view;
 
-import communication.gameinfo.GridInfo;
-import communication.gameinfo.HandInfo;
 import communication.gameinfo.StoneInfo;
-import communication.gameinfo.TableInfo;
+import network.client.RummiClient;
 
 public class DemoView {
   private static final String ANSI_RESET = "\u001B[0m";
@@ -42,6 +40,14 @@ public class DemoView {
     hand[initCol][initRow] = null;
   }
 
+  public void printYourTurn(String name) {
+    System.out.println(name + ": it is your turn.");
+  }
+
+  public void printBagSize(int size) {
+    System.out.println("Bag size: " + size);
+  }
+
   public void printGame() {
     StringBuilder stringBuilder = print(new StringBuilder(), table).append('\n');
     System.out.print(print(stringBuilder, hand));
@@ -62,6 +68,13 @@ public class DemoView {
     return stringBuilder;
   }
 
+  public void printNotYourTurn() {
+    System.out.println("IT IS NOT YOUR TURN!");
+  }
+
+  public void printNotHost() {
+    System.out.println("ONLY HOST CAN START THE GAME!");
+  }
 
   private static String parseColor(StoneInfo stoneInfo) {
     if (stoneInfo == null) {

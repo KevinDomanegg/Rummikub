@@ -106,5 +106,7 @@ public class RummiClient extends Thread {
   }
 
 
-
+  public String getUserName() {
+    return username;
+  }
 }

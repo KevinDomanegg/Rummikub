@@ -1,5 +1,6 @@
 package network.client;
 
+import communication.gameinfo.BagInfo;
 import communication.gameinfo.GameInfo;
 import communication.gameinfo.HandInfo;
 import communication.gameinfo.InfoID;
@@ -26,6 +27,12 @@ public class GameInfoHandler {
         return;
       case TABLE:
         controller.setTable(((TableInfo) gameinfo).getGrid());
+        return;
+      case YOUR_TURN:
+        controller.yourTurn();
+        return;
+      case BAG:
+        controller.printBagSize(((BagInfo) gameinfo).getSize());
         return;
       default:
     }

@@ -2,6 +2,8 @@ package shell;
 
 import game.Coordinate;
 import game.Stone;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import network.client.Controller;
 
 import java.io.BufferedReader;
@@ -32,6 +34,11 @@ public final class Shell {
     HOST {
       @Override Controller execute(Controller controller, String[] tokens) {
         controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
+        try {
+          System.out.println(Inet4Address.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+          error(e.getMessage());
+        }
         return controller;
       }
     },
@@ -57,11 +64,6 @@ public final class Shell {
     CHECK {
       @Override Controller execute(Controller controller, String[] tokens) {
         controller.sendCheck();
-        return controller;
-      }
-    },
-    DRAW {
-      @Override Controller execute(Controller controller, String[] tokens) {
         return controller;
       }
     },
@@ -217,8 +219,6 @@ public final class Shell {
       return Command.CHECK;
       case "HELP":
       return Command.HELP;
-      case "DRAW":
-      return Command.DRAW;
       case "QUIT":
       return Command.QUIT;
       case "UNDO":

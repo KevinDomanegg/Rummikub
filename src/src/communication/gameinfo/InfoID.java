@@ -8,5 +8,8 @@ public enum InfoID {
    */
 
   TABLE,
-  HAND
+  HAND,
+  YOUR_TURN,
+  BAG,
+  WRONG_MOVE
 }
