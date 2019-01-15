@@ -9,7 +9,11 @@ Text {
 }
 
 .hand {
-    -fx-background-color: black;
+    -fx-background-color: red;
+}
+
+.opponent {
+    -fx-alignment: CENTER;
 }
 
 .hand .text {
@@ -24,13 +28,19 @@ Text {
     -fx-font-size: 25;
 }
 
+#top {
+    -fx-padding: 20;
+}
+
 
 #opponentLeft {
     -fx-rotate: -90;
+    -fx-padding: 0 -70;
 }
 
 #opponentRight {
     -fx-rotate: 90;
+    -fx-padding: 0 -70;
 }
 
 #ownHand {
@@ -55,4 +65,8 @@ Text {
 #bottomPane {
     -fx-pref-height: 200; /*TODO: Schlauer lösen! */
     -fx-padding: 50 0 0 0;
+}
+
+.rot {
+    -fx-fill: red;
 }
