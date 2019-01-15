@@ -1,5 +1,4 @@
-package View;
-
+package src.view;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameController {
+  GameModel model = new GameModel();
   int handCount = 0;
 
   @FXML Button drawButton;
@@ -33,6 +33,10 @@ public class GameController {
 
   public GameController() {
   }
+
+  /*
+  model.getFirstPlayerName() for the names in opponentHand
+   */
 
   @FXML
   public void initialize() {
