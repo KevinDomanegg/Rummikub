@@ -5,13 +5,15 @@ import communication.gameinfo.GameInfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Stack;
 
 
 public class ClientListener extends Thread {
 
   //THE CLIENT THAT THE LISTENER LISTENS FOR..
-  Socket server;
-  RummiClient myClient;
+  private Socket server;
+  private RummiClient myClient;
+  private Stack<GameInfo> infos = new Stack<>();
 
   //CREATES A LISTENER FOR ONLY ONE CLIENT
   public ClientListener(Socket server, RummiClient myClient) {
@@ -23,17 +25,31 @@ public class ClientListener extends Thread {
   public void run() {
     try {
       ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
-      Object game_info;
       while (true) {
         try {
           System.out.println("Client listener is waiting for a message...");
-          game_info = recieveMessage.readObject();
-          GameInfo recieveFromServer = (GameInfo) game_info;
-          System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED
-          this.myClient.applyGameInfoHandler(recieveFromServer);
+          this.infos.push((GameInfo) recieveMessage.readObject());
+
+          while (recieveMessage.available() > 0) {
+            this.infos.push((GameInfo) recieveMessage.readObject());
+          }
+          applyInfos();
         } catch (ClassNotFoundException e) {}
       }
     } catch (IOException e) {}
+  }
+
+  /**
+   * Applies all saved GameInfo's to the GamrInfoHandler
+   */
+  private void applyInfos() {
+    GameInfo info;
+    while (!infos.empty()) {
+      info = infos.pop();
+      myClient.applyGameInfoHandler(infos.pop());
+      System.out.println("Client Listener applied this gameinfo " + info);
+    }
+
   }
 
 

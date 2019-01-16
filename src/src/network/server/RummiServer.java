@@ -133,9 +133,9 @@ public class RummiServer extends Thread implements Server {
   }
 
   /**
-   * Sends a GameInfo to the player that is currently playing.
+   * Sends a GameInfo to a player specied player.
    *
-   * @param playerID id of the current player (0-n)
+   * @param playerID id of the player (0-n)
    * @param info     GameInfo getting sent to the player
    */
   @Override public void sendToPlayer(int playerID, GameInfo info) {
