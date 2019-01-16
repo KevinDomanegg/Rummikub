@@ -65,13 +65,7 @@ public class GameController {
     for(int x = 0; x < columns; x++) {
       for(int y = 0; y < rows; y++) {
         StackPane cell = new StackPane();
-
-        /*
-        Text test = new Text(x + ", " + y);
-        setupDragAndDrop(test);
-        cell.getChildren().add(test);
-        setupDragAndDrop(test);
-        */
+        setupDrop(cell);
 
         cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
         cell.setPrefHeight(768.0/rows);
@@ -84,6 +78,7 @@ public class GameController {
 
   void setupDrag(Text test) {
     // Start drag here
+    /*
     test.setOnDragDetected(event -> {
       Dragboard dragBoard = test.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
@@ -91,9 +86,53 @@ public class GameController {
       dragBoard.setContent(content);
       event.consume();
     });
+    */
+
+    test.setOnDragDetected(event -> {
+      Dragboard db = test.startDragAndDrop(TransferMode.ANY);
+      ClipboardContent content = new ClipboardContent();
+      content.putString(test.getText());
+      db.setContent(content);
+      event.consume();
+    });
   }
 
   void setupDrop(StackPane target) {
+    // Accept drop here
+    target.setOnDragOver(event -> {
+      if (event.getGestureSource() != target && event.getDragboard().hasString()) {
+        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+      }
+      event.consume();
+    });
+
+    /*
+    // Drop here
+    target.setOnDragDropped(event -> {
+      Dragboard dragboard = event.getDragboard();
+      if (dragboard.hasFiles()) {
+        System.out.println(dragboard.toString());
+        //target.getChildren().removeAll();
+        Text content = new Text(dragboard.getString());
+        target.getChildren().add(content);
+      }
+      event.consume();
+    });
+    */
+
+    target.setOnDragOver(event -> {
+        if (event.getGestureSource() != target &&
+                event.getDragboard().hasString()) {
+          /* allow for both copying and moving, whatever user chooses */
+          event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+        }
+
+        event.consume();
+    });
+  }
+
+  // TODO: Remove test method
+  void setupDrop(Text target) {
     // Accept drop here
     target.setOnDragOver(event -> {
       event.acceptTransferModes(TransferMode.ANY);
@@ -104,8 +143,7 @@ public class GameController {
     target.setOnDragDropped(event -> {
       Dragboard dragboard = event.getDragboard();
       if (dragboard.hasFiles()) {
-        target.getChildren().removeAll();
-        target.getChildren().add(new Text(dragboard.getString()));
+        target.setText(dragboard.getString());
       }
       event.consume();
     });
