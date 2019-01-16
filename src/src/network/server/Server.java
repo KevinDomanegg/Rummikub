@@ -2,6 +2,8 @@ package network.server;
 
 import communication.gameinfo.GameInfo;
 
+import java.net.UnknownHostException;
+
 public interface Server {
 
   /**
@@ -17,4 +19,12 @@ public interface Server {
    * @param info GameInfo getting sent to the player
    */
   public void sendToPlayer(int playerId, GameInfo info);
+
+  /**
+   * Returns the IP-address of the server.
+   *
+   * @return String representing the IP-address
+   * @throws UnknownHostException whenever the IP-address could not be determined
+   */
+  public String getIP() throws UnknownHostException;
 }

@@ -149,6 +149,7 @@ public class RummiServer extends Thread implements Server {
    * @return String representing the IP-address
    * @throws UnknownHostException whenever the IP-address could not be determined
    */
+  @Override
   public String getIP() throws UnknownHostException{
     return InetAddress.getLocalHost().getHostAddress();
   }
