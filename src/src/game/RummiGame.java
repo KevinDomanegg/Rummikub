@@ -92,6 +92,13 @@ public class RummiGame implements Game {
   }
 
   @Override
+  public void reset(){
+    while (trace.empty() == false) {
+      undo();
+    }
+  }
+
+  @Override
   public void undo() {
     if (trace.empty()){
       return;
@@ -172,4 +179,6 @@ public class RummiGame implements Game {
   public Stack<MoveTrace> getTrace() {
     return trace;
   }
+
+
 }

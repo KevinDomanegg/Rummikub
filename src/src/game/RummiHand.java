@@ -4,8 +4,8 @@ import java.util.*;
 
 public class RummiHand implements Grid {
   private Map<Coordinate, Stone> grid;
-  private final int height = 2;
-  private final int width = 20;
+  private static final int HEIGHT = 2;
+  private static final int WIDTH = 20;
 
 
   public RummiHand(){
@@ -33,12 +33,12 @@ public class RummiHand implements Grid {
 
   @Override
   public int getHeight() {
-    return height;
+    return HEIGHT;
   }
 
   @Override
   public int getWidth() {
-    return width;
+    return WIDTH;
   }
 
   //Testmethods

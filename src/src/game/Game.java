@@ -19,6 +19,8 @@ public interface Game {
 
   void playerHasLeft(int playerPosition);
 
+  void reset();
+
   void undo();
 
   boolean hasWinner();
