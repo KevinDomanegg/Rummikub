@@ -1,4 +1,4 @@
-package communication;
+package communication.gameinfo;
 
 public enum InfoID {
 
@@ -7,8 +7,9 @@ public enum InfoID {
    * Every implementation of GameInfo should have an InfoID associated with it.
    */
 
+  TABLE,
   HAND,
-  MOVE,
-  DRAW,
-
+  YOUR_TURN,
+  BAG,
+  WRONG_MOVE
 }

@@ -2,42 +2,48 @@ package game;
 
 import java.util.*;
 
-public class RummiHand {
+public class RummiHand implements Grid {
   private Map<Coordinate, Stone> grid;
-  private final int height = 2;
-  private final int width = 20;
+  private static final int HEIGHT = 2;
+  private static final int WIDTH = 20;
+
 
   public RummiHand(){
     grid = new HashMap<>();
   }
 
+  @Override
   public void setStone(Coordinate coordinate, Stone stone){
     grid.put(coordinate, stone);
   }
 
+  @Override
   public Map<Coordinate,Stone> getStones(){
     return grid;
   }
 
+  @Override
   public void clear(){
     grid.clear();
-  }
-
-  public int getHeight() {
-    return height;
-  }
-
-  public int getWidth() {
-    return width;
   }
 
   public int size() {
     return grid.size();
   }
 
+  @Override
+  public int getHeight() {
+    return HEIGHT;
+  }
+
+  @Override
+  public int getWidth() {
+    return WIDTH;
+  }
 
   //Testmethods
 
+  @Override
   public String toString() {
     String stonesOnHand = "";
     int handSize = grid.size();

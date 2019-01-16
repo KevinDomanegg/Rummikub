@@ -2,11 +2,12 @@ package game;
 
 import java.util.Objects;
 
-class Coordinate {
+/** coordinate for a stone on game table or player hand. */
+public class Coordinate {
   private int col;
   private int row;
 
-  Coordinate(int col, int row) {
+  public Coordinate(int col, int row) {
     this.col = col;
     this.row = row;
   }
@@ -26,5 +27,13 @@ class Coordinate {
   @Override
   public String toString(){
     return "(Col: " + col + ",Row: " + row + ")";
+  }
+
+  int getCol() {
+    return col;
+  }
+
+  int getRow() {
+    return row;
   }
 }

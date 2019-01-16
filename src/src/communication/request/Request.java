@@ -1,4 +1,4 @@
-package communication;
+package communication.request;
 
 public interface Request {
   /**
