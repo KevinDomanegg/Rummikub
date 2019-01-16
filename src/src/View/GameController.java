@@ -1,4 +1,4 @@
-package src.view;
+package View;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +22,7 @@ public class GameController {
   GameModel model = new GameModel();
   int handCount = 0;
 
-  @FXML Button drawButton;
+  @FXML Button drawBut;
   @FXML Text timer;
   @FXML GridPane table;
   @FXML GridPane handGrid;

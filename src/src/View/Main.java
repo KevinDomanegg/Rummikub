@@ -13,6 +13,7 @@ public class Main extends Application {
   //StartController startController;
   WaitController waitController;
   GameController gameController;
+  StartController startController;
 
   public static void main(String[] args) {
     launch(args);
@@ -28,14 +29,14 @@ public class Main extends Application {
     gameController = loader.getController();
     */
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("start.fxml"));
     Parent root = loader.load();
-    gameController = loader.getController();
+    startController = loader.getController();
 
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-    scene.getStylesheets().add("gameStyle.css");
+   // scene.getStylesheets().add("gameStyle.css");
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();

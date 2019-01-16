@@ -4,7 +4,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox fx:controller="View.StoneController" styleClass="stone" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="30.0"
+<VBox fx:controller="View.GameController" styleClass="stone" alignment="TOP_CENTER" prefHeight="50.0" prefWidth="30.0"
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1">
    <children>
