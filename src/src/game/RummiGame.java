@@ -16,7 +16,7 @@ public class RummiGame implements Game {
   private ArrayList<Player> players;
   private RummiBag bag;
   private Stack<MoveTrace> trace;
-  private int currentPlayerPosition;
+  private int currentPlayerID;
 
   public RummiGame() {
     table = new RummiTable();
@@ -26,11 +26,11 @@ public class RummiGame implements Game {
   }
 
   private Player currentPlayer() {
-    return players.get(currentPlayerPosition);
+    return players.get(currentPlayerID);
   }
 
   private void nextTurn() {
-    currentPlayerPosition = (currentPlayerPosition + 1) % players.size();
+    currentPlayerID = (currentPlayerID + 1) % players.size();
   }
 
   @Override public void setPlayer(int age) {
@@ -51,11 +51,11 @@ public class RummiGame implements Game {
   }
 
   private void setStarter() {
-    currentPlayerPosition = 0;
+    currentPlayerID = 0;
     for (int i = 1; i < players.size(); i++) {
       Player player = players.get(i);
       if (player.getAge() < currentPlayer().getAge()) {
-        currentPlayerPosition = i;
+        currentPlayerID = i;
       }
     }
   }
@@ -73,9 +73,9 @@ public class RummiGame implements Game {
   }
 
   @Override
-  public void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition) {
-    players.get(playerPosition).moveStone(initialPosition, targetPosition);
-    if (playerPosition == currentPlayerPosition){
+  public void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition) {
+    players.get(playerID).moveStone(initialPosition, targetPosition);
+    if (playerID == currentPlayerID){
       trace.push(new MoveTrace("MOVESTONEONHAND", initialPosition, targetPosition));
     }
   }
@@ -86,8 +86,8 @@ public class RummiGame implements Game {
   }
 
 
-  @Override public void playerHasLeft(int playerPosition) {
-    bag.addStones(players.get(playerPosition).getStones().values());
+  @Override public void playerHasLeft(int playerID) {
+    bag.addStones(players.get(playerID).getStones().values());
     nextTurn();
   }
 
@@ -108,7 +108,7 @@ public class RummiGame implements Game {
     Coordinate initialPosition = lastCommand.getInitialPosition();
     Coordinate targetPosition = lastCommand.getTargetPosition();
     String command = lastCommand.getCommand();
-    int playerPosition = lastCommand.getPlayerPosition();
+    int playerID = lastCommand.getPlayerID();
 
     switch (command) {
       case "MOVESTONEONTABLE":
@@ -119,7 +119,7 @@ public class RummiGame implements Game {
         currentPlayer().getStones().put(initialPosition, stone);
         break;
       case "MOVESTONEONHAND":
-        players.get(playerPosition).moveStone(targetPosition, initialPosition);
+        players.get(playerID).moveStone(targetPosition, initialPosition);
         break;
       default:
         //error Message: There are no moves to undo.
@@ -143,8 +143,8 @@ public class RummiGame implements Game {
     return table.getStones();
   }
 
-  @Override public Map<Coordinate, Stone> getCurrentPlayerStones() {
-    return currentPlayer().getStones();
+  @Override public Map<Coordinate, Stone> getPlayerStones(int playerID) {
+    return players.get(playerID).getStones();
   }
 
   @Override public int getBagSize() {
@@ -156,8 +156,8 @@ public class RummiGame implements Game {
     return players.stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
-  @Override public int getCurrentPlayerPosition(){
-    return currentPlayerPosition;
+  @Override public int getCurrentPlayerID(){
+    return currentPlayerID;
   }
 
   @Override public int getTableWidth() {
@@ -168,12 +168,16 @@ public class RummiGame implements Game {
     return table.getHeight();
   }
 
-  @Override public int getCurrentPlayerHandWidth() {
-    return currentPlayer().getHandWidth();
+  @Override public int getPlayerHandWidth(int playerID) {
+    return players.get(playerID).getHandWidth();
   }
 
-  @Override public int getCurrentPlayerHandHeight() {
-    return currentPlayer().getHandHeight();
+  @Override public int getPlayerHandHeight(int playerID) {
+    return players.get(playerID).getHandHeight();
+  }
+
+  @Override public int getNumberOfPlayers() {
+    return players.size();
   }
 
   public Stack<MoveTrace> getTrace() {

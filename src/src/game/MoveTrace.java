@@ -2,15 +2,15 @@ package game;
 
 public class MoveTrace {
   private String command;
-  private int playerPosition;
+  private int playerID;
   private Coordinate initialPosition;
   private Coordinate targetPosition;
 
-  public MoveTrace(String command, int playerPosition, Coordinate initialPosition, Coordinate targetPosition) {
+  public MoveTrace(String command, int playerID, Coordinate initialPosition, Coordinate targetPosition) {
     this.command = command;
     this.initialPosition = initialPosition;
     this.targetPosition = targetPosition;
-    this.playerPosition = playerPosition;
+    this.playerID = playerID;
   }
 
   public MoveTrace(String command, Coordinate initialPosition, Coordinate targetPosition) {
@@ -44,12 +44,12 @@ public class MoveTrace {
     this.targetPosition = targetPosition;
   }
 
-  public int getPlayerPosition() {
-    return playerPosition;
+  public int getPlayerID() {
+    return playerID;
   }
 
-  public void setPlayerPosition(int playerPosition) {
-    this.playerPosition = playerPosition;
+  public void setPlayerPosition(int playerID) {
+    this.playerID = playerID;
   }
 
 

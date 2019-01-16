@@ -13,7 +13,7 @@ public interface Game {
 
   void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneOnHand(int playerPosition, Coordinate initialPosition, Coordinate targetPosition);
+  void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
 
   void drawStone();
 
@@ -29,21 +29,23 @@ public interface Game {
 
   Map<Coordinate, Stone> getTableStones();
 
-  Map<Coordinate, Stone> getCurrentPlayerStones();
+  Map<Coordinate, Stone> getPlayerStones(int playerID);
 
   List<Integer> getPlayerHandSizes();
 
   int getBagSize();
 
-  int getCurrentPlayerPosition();
+  int getCurrentPlayerID();
 
   int getTableWidth();
 
   int getTableHeight();
 
-  int getCurrentPlayerHandWidth();
+  int getPlayerHandWidth(int playerID);
 
-  int getCurrentPlayerHandHeight();
+  int getPlayerHandHeight(int playerID);
+
+  int getNumberOfPlayers();
 
   // ? int getTime();
 }

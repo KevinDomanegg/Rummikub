@@ -1,6 +1,5 @@
 package game;
 
-
 public class Stone {
   public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
 

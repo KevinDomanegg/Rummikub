@@ -2,7 +2,8 @@ package game;
 
 import java.util.Objects;
 
-public final class Coordinate {
+/** coordinate for a stone on game table or player hand. */
+public class Coordinate {
   private int col;
   private int row;
 
