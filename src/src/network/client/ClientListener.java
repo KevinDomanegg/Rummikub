@@ -5,35 +5,57 @@ import communication.gameinfo.GameInfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Stack;
 
 
-public class ClientListener extends Thread {
+class ClientListener extends Thread {
 
   //THE CLIENT THAT THE LISTENER LISTENS FOR..
-  Socket server;
-  RummiClient myClient;
+  private Socket server;
+  private RummiClient myClient;
+  private Stack<GameInfo> infos = new Stack<>();
+  private boolean connected;
 
   //CREATES A LISTENER FOR ONLY ONE CLIENT
-  public ClientListener(Socket server, RummiClient myClient) {
+  ClientListener(Socket server, RummiClient myClient) {
     this.server = server;
     this.myClient = myClient;
+    connected = true;
   }
 
   @Override
   public void run() {
     try {
       ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
-      Object game_info;
-      while (true) {
+      while (connected) {
         try {
           System.out.println("Client listener is waiting for a message...");
-          game_info = recieveMessage.readObject();
-          GameInfo recieveFromServer = (GameInfo) game_info;
-          System.out.println("Client Listener got this gameinfo " + recieveFromServer); // TO MAKE SURE THAT THE MESSAGE WAS RECEIVED
-          this.myClient.applyGameInfoHandler(recieveFromServer);
-        } catch (ClassNotFoundException e) {}
+          this.infos.push((GameInfo) recieveMessage.readObject());
+
+          while (recieveMessage.available() > 0) {
+            this.infos.push((GameInfo) recieveMessage.readObject());
+          }
+          applyInfos();
+        } catch (ClassNotFoundException e) {
+          connected = false;
+        }
       }
-    } catch (IOException e) {}
+    } catch (IOException e) {
+      connected = false;
+    }
+  }
+
+  /**
+   * Applies all saved GameInfo's to the GamrInfoHandler
+   */
+  private void applyInfos() {
+    GameInfo info;
+    while (!infos.empty()) {
+      info = infos.pop();
+      myClient.applyGameInfoHandler(info);
+      System.out.println("Client Listener applied this gameinfo " + info);
+    }
+
   }
 
 
