@@ -52,7 +52,7 @@ class ClientListener extends Thread {
     GameInfo info;
     while (!infos.empty()) {
       info = infos.pop();
-      myClient.applyGameInfoHandler(infos.pop());
+      myClient.applyGameInfoHandler(info);
       System.out.println("Client Listener applied this gameinfo " + info);
     }
 
