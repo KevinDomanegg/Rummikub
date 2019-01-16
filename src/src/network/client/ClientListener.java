@@ -8,24 +8,26 @@ import java.net.Socket;
 import java.util.Stack;
 
 
-public class ClientListener extends Thread {
+class ClientListener extends Thread {
 
   //THE CLIENT THAT THE LISTENER LISTENS FOR..
   private Socket server;
   private RummiClient myClient;
   private Stack<GameInfo> infos = new Stack<>();
+  private boolean connected;
 
   //CREATES A LISTENER FOR ONLY ONE CLIENT
-  public ClientListener(Socket server, RummiClient myClient) {
+  ClientListener(Socket server, RummiClient myClient) {
     this.server = server;
     this.myClient = myClient;
+    connected = true;
   }
 
   @Override
   public void run() {
     try {
       ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
-      while (true) {
+      while (connected) {
         try {
           System.out.println("Client listener is waiting for a message...");
           this.infos.push((GameInfo) recieveMessage.readObject());
@@ -34,9 +36,13 @@ public class ClientListener extends Thread {
             this.infos.push((GameInfo) recieveMessage.readObject());
           }
           applyInfos();
-        } catch (ClassNotFoundException e) {}
+        } catch (ClassNotFoundException e) {
+          connected = false;
+        }
       }
-    } catch (IOException e) {}
+    } catch (IOException e) {
+      connected = false;
+    }
   }
 
   /**
