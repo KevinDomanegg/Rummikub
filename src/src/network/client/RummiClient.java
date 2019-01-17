@@ -39,7 +39,7 @@ public class RummiClient extends Thread {
     readyToSend = true;
   }
 
-  void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
+  public void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
     this.gameInfoHandler = gameInfoHandler;
   }
 

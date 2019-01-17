@@ -15,7 +15,7 @@
         <Label fx:id="nameLabel" layoutX="164.0" layoutY="101.0" prefHeight="17.0" prefWidth="47.0" text="name" />
         <Label fx:id="ageLabel" layoutX="164.0" layoutY="154.0" text="age" />
         <Button fx:id="hostButton" layoutX="223.0" layoutY="200.0" mnemonicParsing="false" text="Host" onMouseClicked="#hostGame"/>
-        <Button fx:id="joinB" layoutX="223.0" layoutY="310.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="47.0" text="Join" />
+        <Button fx:id="joinB" layoutX="223.0" layoutY="310.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="47.0" text="Join" onMouseClicked="#joinGame" />
         <TextField fx:id="ipField" layoutX="223.0" layoutY="263.0" />
         <Label fx:id="ipLabel" layoutX="151.0" layoutY="268.0" prefHeight="17.0" prefWidth="71.0" text="IP-Server" />
     </children>

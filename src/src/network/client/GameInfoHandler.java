@@ -7,15 +7,16 @@ import communication.gameinfo.InfoID;
 import communication.gameinfo.TableInfo;
 import game.Coordinate;
 import game.Stone;
+import view.RummiController;
 
 import java.util.Map;
 
 public class GameInfoHandler {
 
 //  private RummiClient client;
-  private Controller controller;
+  private RummiController controller;
 
-  public GameInfoHandler(Controller controller) {
+  public GameInfoHandler(RummiController controller) {
     this.controller = controller;
 //    this.client = client;
   }
