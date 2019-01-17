@@ -9,13 +9,15 @@ import network.server.RummiServer;
 
 import java.util.Observer;
 
+/**
+ * Class acting as the controller before a game has been started.
+ * Connects the Start-view to the model.
+ */
 public class StartController {
 
   private ClientModel model;
   private RummiController rummiController;
   private RummiClient client;
-  private String username;
-  private Integer age;
 
   @FXML
   private TextField nameField;
@@ -28,6 +30,13 @@ public class StartController {
   @FXML
   private TextField ipField;
 
+  /**
+   * Constructor connecting controller, model and network.
+   *
+   * @param rummiController the "master-controller" of the application
+   * @param model storing all the relevant data
+   * @param client connection-point to the network
+   */
   StartController(RummiController rummiController, ClientModel model, RummiClient client) {
     this.rummiController = rummiController;
     this.model = model;
@@ -35,23 +44,22 @@ public class StartController {
   }
 
   @FXML
-  void joinGame() {
-
-    model.setName(nameField.getText());
-    model.setAge(Integer.parseInt(ageField.getText()));
-
-  }
-
-  @FXML
-  void hostGame() {
-    new RummiServer().start();
+  private void joinGame() {
     join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
   }
 
-  public void join(String name, int age, String serverIP) {
+  @FXML
+  private void hostGame() {
+    new RummiServer().start();
+    join(nameField.getText(), Integer.parseInt(ageField.getText()), "localhost");
+  }
+
+  private void join(String name, int age, String serverIP) {
     client = new RummiClient(name, age, serverIP);
     client.start();
     System.out.println("Client:" + name + " started");
+    model.setName(name);
+    model.setAge(age);
   }
 
 }
