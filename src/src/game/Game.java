@@ -2,6 +2,7 @@ package game;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public interface Game {
 
@@ -11,7 +12,7 @@ public interface Game {
 
   void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
+  void putStone(Coordinate initialPosition, Coordinate targetPosition);
 
   void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
 
@@ -46,6 +47,8 @@ public interface Game {
   int getPlayerHandHeight(int playerID);
 
   int getNumberOfPlayers();
+
+  List<Entry<Integer, Integer>> getFinalRank();
 
   // ? int getTime();
 }

@@ -11,5 +11,7 @@ public enum InfoID {
   HAND,
   YOUR_TURN,
   BAG,
-  WRONG_MOVE
+  WRONG_MOVE,
+  HAND_SIZES,
+  DRAW
 }
