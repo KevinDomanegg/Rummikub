@@ -35,10 +35,6 @@ public class GameController {
     public GameController() {
     }
 
-  /*
-  model.getFirstPlayerName() for the names in opponentHand
-   */
-
     @FXML
     public void initialize() {
         constructGrid(table, 24, 8);
