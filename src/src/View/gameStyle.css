@@ -20,10 +20,6 @@ Text {
     -fx-fill: white;
 }
 
-.stone {
-    -fx-background-color: white;
-}
-
 #timer {
     -fx-font-size: 25;
 }
@@ -56,10 +52,17 @@ Text {
 .cell {
     -fx-border-color: white;
     -fx-fill: none;
+    -fx-alignment: CENTER;
+    -fx-pref-height: 50;
+    -fx-pref-width: 30;
+}
+
+.dropHover {
+    -fx-border-color: green;
 }
 
 #tableContainer {
-    -fx-alignment: CENTER;
+
 }
 
 #bottomPane {

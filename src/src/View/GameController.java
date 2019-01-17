@@ -1,25 +1,16 @@
-package src.view;
-import javafx.collections.ObservableList;
+package View;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
-import java.io.File;
-import java.io.IOException;
-
 public class GameController {
-  GameModel model = new GameModel();
   int handCount = 0;
 
   @FXML Button drawButton;
@@ -27,7 +18,8 @@ public class GameController {
   @FXML GridPane table;
   @FXML GridPane handGrid;
   @FXML Pane opponentMid;
-  @FXML Text stupidTest;
+
+  private final DataFormat stoneFormat = new DataFormat("View.Stone");
 
   String name = "Player";
 
@@ -39,118 +31,113 @@ public class GameController {
    */
 
   @FXML
-  public void initialize() {
+  private void initialize() {
     constructGrid(table, 24, 8);
     constructGrid(handGrid, 20, 2);
-    setupDrag(stupidTest);
   }
 
   @FXML
-  public void drawStone() throws IOException {
-    // Server request: Get stone from bag
-
-    /*
-    TODO: Set stone to desired value
-    FXMLLoader loader = new FXMLLoader();
-    VBox cell = loader.load(getClass().getResource("Stone.fxml"));
-    StoneController stoneController = loader.getController();
-    stoneController.setStone(3, "rot");
-    */
-
-    Text drawnStone = new Text("5");
-
-    handGrid.add(drawnStone, handCount, 0);
-    setupDrag(drawnStone);
-    handCount++;
-  }
-
-  @FXML
-  void constructGrid(GridPane grid, int columns, int rows) {
+  private void constructGrid(GridPane grid, int columns, int rows) {
     for(int x = 0; x < columns; x++) {
       for(int y = 0; y < rows; y++) {
-        StackPane cell = new StackPane();
-        setupDrop(cell);
-
-        cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
-        cell.setPrefHeight(768.0/rows);
+        StackPane cell = constructCell();
         cell.getStyleClass().add("cell");
         grid.add(cell, x, y);
       }
     }
   }
 
+  StackPane constructCell() {
+    StackPane cell = new StackPane();
+    Text content = new Text("");
 
-  void setupDrag(Text test) {
-    // Start drag here
-    /*
-    test.setOnDragDetected(event -> {
-      Dragboard dragBoard = test.startDragAndDrop(TransferMode.ANY);
-      ClipboardContent content = new ClipboardContent();
-      content.putString(test.getText());
-      dragBoard.setContent(content);
+    setupDragAndDrop(cell, content);
+
+    cell.getChildren().add(content);
+    return cell;
+  }
+
+  void addStoneToCell(Pane cell, Stone stone) {
+    Text stoneText = new Text(Integer.toString(stone.getNumber()));
+    stoneText.getStyleClass().add(stone.getColor().toString());
+    cell.getChildren().add(stoneText);
+  }
+
+  void setupDragAndDrop(Pane cell, Text content) {
+    //Enable drag, copy content to clipboard
+    cell.setOnDragDetected(event -> {
+      if (!content.getText().isEmpty()) {
+        //Enable drag only when cell's content is not empty
+        Dragboard dragboard = cell.startDragAndDrop(TransferMode.MOVE);
+        ClipboardContent clipboardContent = new ClipboardContent();
+        String stoneNumber = content.getText();
+        clipboardContent.putString(stoneNumber);
+        dragboard.setContent(clipboardContent);
+      }
       event.consume();
+    });
+
+    //Remove source node's content when drag is done
+    cell.setOnDragDone(event -> {
+      if (event.getTransferMode() == TransferMode.MOVE) {
+        content.setText("");
+      }
+      event.consume();
+    });
+
+    //Enable drop at this cell
+    cell.setOnDragOver(event -> {
+      if (event.getGestureSource() != cell && event.getDragboard().hasString()) {
+        event.acceptTransferModes(TransferMode.MOVE);
+      }
+      event.consume();
+    });
+
+    /* TODO: Implement hover (nice to have)
+    cell.setOnDragEntered(event -> {
+      if (event.getGestureSource() != cell && event.getDragboard().hasString()) {
+        content.getStyleClass().add("dropHover");
+        System.out.println("Hover");
+      }
+      event.consume();
+    });
+
+    cell.setOnDragExited(event -> {
+      content.getStyleClass().remove("dropHover");
+      System.out.println("No hover");
     });
     */
 
-    test.setOnDragDetected(event -> {
-      Dragboard db = test.startDragAndDrop(TransferMode.ANY);
-      ClipboardContent content = new ClipboardContent();
-      content.putString(test.getText());
-      db.setContent(content);
-      event.consume();
-    });
-  }
-
-  void setupDrop(StackPane target) {
-    // Accept drop here
-    target.setOnDragOver(event -> {
-      if (event.getGestureSource() != target && event.getDragboard().hasString()) {
-        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-      }
-      event.consume();
-    });
-
-    /*
-    // Drop here
-    target.setOnDragDropped(event -> {
+    cell.setOnDragDropped(event -> {
       Dragboard dragboard = event.getDragboard();
-      if (dragboard.hasFiles()) {
-        System.out.println(dragboard.toString());
-        //target.getChildren().removeAll();
-        Text content = new Text(dragboard.getString());
-        target.getChildren().add(content);
+      boolean success = false;
+      if (dragboard.hasString()) {
+        content.setText(dragboard.getString());
+        success = true;
       }
-      event.consume();
-    });
-    */
-
-    target.setOnDragOver(event -> {
-        if (event.getGestureSource() != target &&
-                event.getDragboard().hasString()) {
-          /* allow for both copying and moving, whatever user chooses */
-          event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-        }
-
-        event.consume();
-    });
-  }
-
-  // TODO: Remove test method
-  void setupDrop(Text target) {
-    // Accept drop here
-    target.setOnDragOver(event -> {
-      event.acceptTransferModes(TransferMode.ANY);
-      event.consume();
-    });
-
-    // Drop here
-    target.setOnDragDropped(event -> {
-      Dragboard dragboard = event.getDragboard();
-      if (dragboard.hasFiles()) {
-        target.setText(dragboard.getString());
-      }
+      event.setDropCompleted(success);
       event.consume();
     });
   }
 
+  @FXML
+  public void drawStone() {
+    // Server request: Get stone from bag
+    Node cell = handGrid.getChildren().get(handCount);
+    int value = (int) (Math.random() * 10);
+    Text text = new Text(Integer.toString(value));
+    if (cell instanceof StackPane) {
+      setupDragAndDrop((StackPane) cell, text);
+      ((StackPane) cell).getChildren().add(text);
+    }
+    handCount++;
+  }
+
+  /*
+  void setStone(Pane cell, String content) {
+    Node textField = cell.getChildren().get(0); //TODO: Not safe!!!
+    if (Text) textField).setText(content);
+      //TODO: Set styleClass to set stone's color
+    }
+  }*/
 }

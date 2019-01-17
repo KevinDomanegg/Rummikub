@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class Main extends Application {
   //StartController startController;
-  WaitController waitController;
+  //WaitController waitController;
   GameController gameController;
 
   public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class Main extends Application {
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-    scene.getStylesheets().add("gameStyle.css");
+    scene.getStylesheets().add("View/gameStyle.css");
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
