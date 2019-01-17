@@ -123,18 +123,19 @@ public final class Shell {
         return controller;
       }
     },
-    QUIT {
-      @Override
-      Controller execute(Controller controller, String[] tokens) {
-        return controller;
-      }
-    },
     NO_COMMAND {
       @Override Controller execute(Controller controller, String[] tokens) {
         error("no command");
         return controller;
       }
     },
+    RESET {
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.reset();
+        return controller;
+      }
+    },
+    QUIT,
     NOT_VALID;
 
     Controller execute(Controller controller, String[] tokens) {

@@ -75,6 +75,12 @@ public class RequestHandler {
           server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
         //}
         return;
+      case RESET:
+        game.reset();
+        sendTableToPlayer(playerID);
+        sendHandToPlayer(playerID);
+        sendHandSizesToPlayer(playerID);
+        return;
       case GIVE_UP:
         game.playerHasLeft(playerID);
         return;
