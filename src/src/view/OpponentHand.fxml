@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+<StackPane maxHeight="30" maxWidth="200" prefHeight="69.0"
+           prefWidth="600.0"
+           xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
+    <children>
+        <HBox styleClass="opponent">
+            <children>
+                <Text fx:id="opponentName" styleClass="text"
+                      text="Name:" />
+                <Text fx:id="opponentStoneCount" styleClass="text" text="14x" />
+            </children>
+        </HBox>
+    </children>
+</StackPane>

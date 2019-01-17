@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Text?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<?import javafx.scene.layout.Pane?>
+<BorderPane fx:id="root"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="View.GameController">
+    <top>
+        <StackPane fx:id="top">
+            <children>
+                <StackPane alignment="CENTER_LEFT">
+                    <!-- timer -->
+                    <children>
+                        <Text fx:id="timer" text="Timer: 30" />
+                    </children>
+                </StackPane>
+
+                <StackPane alignment="CENTER">
+                    <!-- opponentMid's hand -->
+                    <children>
+                        <fx:include fx:id="opponentMid" source="OpponentHand.fxml"/>
+                    </children>
+                </StackPane>
+
+                <StackPane alignment="CENTER_RIGHT">
+                    <!-- Menu buttons -->
+                    <children>
+                        <Button fx:id="quitButton" mnemonicParsing="false" text="Quit" />
+                    </children>
+                </StackPane>
+            </children>
+        </StackPane>
+    </top>
+
+    <center>
+        <StackPane fx:id="tableContainer">
+            <!-- table grid -->
+            <GridPane fx:id="table">
+                <columnConstraints>
+                    <!-- Add columns via Java with tag=ColumnConstraints -->
+                </columnConstraints>
+                <rowConstraints>
+                    <!-- Add row via Java with tag=RowConstraints -->
+                </rowConstraints>
+                <children>
+                    <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
+                </children>
+            </GridPane>
+        </StackPane>
+    </center>
+
+    <left>
+        <!-- opponentLeft's hand -->
+        <StackPane fx:id="opponentLeft">
+            <fx:include source="OpponentHand.fxml" />
+        </StackPane>
+    </left>
+
+    <right>
+        <!-- opponentRight's hand -->
+        <StackPane fx:id="opponentRight">
+            <fx:include  source="OpponentHand.fxml" />
+        </StackPane>
+    </right>
+
+    <bottom>
+        <!-- ownHand, drawStone button etc. -->
+        <StackPane fx:id="bottomPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <VBox fx:id="ownHand" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" maxWidth="400">
+                    <!-- hand of executing player -->
+                    <children>
+                        <Text fx:id="playerInfo" strokeType="OUTSIDE" strokeWidth="0.0" text="player: stone count" />
+                        <GridPane fx:id="handGrid" styleClass="hand" alignment="CENTER_LEFT">
+                            <!-- Own hand -->
+                            <columnConstraints>
+                                <!-- Add columns via Java with tag=ColumnConstraints -->
+                            </columnConstraints>
+                            <rowConstraints>
+                                <!-- Add row via Java with tag=RowConstraints -->
+                            </rowConstraints>
+                            <children>
+                                <!-- Testing -->
+                                <!-- <fx:include fx:id="testStone" source="Stone.fxml" /> -->
+
+                                <!-- End of testing -->
+                            </children>
+                        </GridPane>
+                    </children>
+                </VBox>
+
+                <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                    <!-- drawStone buttons etc. -->
+                    <children>
+                        <Button fx:id="drawButton" mnemonicParsing="false" text="Draw stone" onMouseClicked="#drawStone"/>
+                        <Button fx:id="undoButton" mnemonicParsing="false" text="Undo" />
+                    </children>
+                </HBox>
+                <StackPane alignment="CENTER_LEFT">
+                    <Text fx:id="stupidTest" text="ABC" />
+                </StackPane>
+            </children>
+        </StackPane>
+    </bottom>
+</BorderPane>
