@@ -29,7 +29,7 @@ public class Main extends Application {
     gameController = loader.getController();
     */
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("start.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
         Parent root = loader.load();
         startController = loader.getController();
 

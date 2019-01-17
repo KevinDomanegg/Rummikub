@@ -8,7 +8,7 @@ import java.util.Observer;
 
 public class StartController {
 
-    private GameModel model;
+    private ClientModel model;
 
     @FXML private TextField nameField;
     @FXML private TextField ageField;

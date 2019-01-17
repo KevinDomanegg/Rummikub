@@ -16,7 +16,7 @@
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="View.GameController">
+            fx:controller="view.GameController">
     <top>
         <StackPane fx:id="top">
             <children>

@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameController {
-    GameModel model = new GameModel();
+    ClientModel model = new ClientModel();
     int handCount = 0;
 
     @FXML Button drawBut;
