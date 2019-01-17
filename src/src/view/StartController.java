@@ -11,42 +11,47 @@ import java.util.Observer;
 
 public class StartController {
 
-    private ClientModel model;
+  private ClientModel model;
+  private RummiController rummiController;
+  private RummiClient client;
+  private String username;
+  private Integer age;
 
-    @FXML private TextField nameField;
-    @FXML private TextField ageField;
-    @FXML private Button joinButton;
-    @FXML private Button hostButton;
-    @FXML private TextField ipField;
+  @FXML
+  private TextField nameField;
+  @FXML
+  private TextField ageField;
+  @FXML
+  private Button joinButton;
+  @FXML
+  private Button hostButton;
+  @FXML
+  private TextField ipField;
 
-    RummiClient client;
-    private GameInfoHandler gameInfoHandler;
-    private String username;
-    private Integer age;
+  StartController(RummiController rummiController, ClientModel model, RummiClient client) {
+    this.rummiController = rummiController;
+    this.model = model;
+    this.client = client;
+  }
 
-    @FXML
-    void joinGame() {
+  @FXML
+  void joinGame() {
 
-        model.setName(nameField.getText());
-        model.setAge(Integer.parseInt(ageField.getText()));
+    model.setName(nameField.getText());
+    model.setAge(Integer.parseInt(ageField.getText()));
 
-    }
+  }
 
-    @FXML
-    void hostGame() {
-        new RummiServer().start();
-        join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
-    }
+  @FXML
+  void hostGame() {
+    new RummiServer().start();
+    join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
+  }
 
-    public void join(String name, int age, String serverIP) {
-        client = new RummiClient(name, age, serverIP);
-        client.setGameInfoHandler(new GameInfoHandler(this));
-        client.start();
-        System.out.println("Client:" + name + " started");
-    }
-
-    void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
-        this.gameInfoHandler = gameInfoHandler;
-    }
+  public void join(String name, int age, String serverIP) {
+    client = new RummiClient(name, age, serverIP);
+    client.start();
+    System.out.println("Client:" + name + " started");
+  }
 
 }
