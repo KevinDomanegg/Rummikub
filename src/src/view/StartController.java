@@ -31,13 +31,13 @@ public class StartController {
   private TextField ipField;
 
   /**
-   * Constructor connecting controller, model and network.
+   * Connects controller, model and network.
    *
    * @param rummiController the "master-controller" of the application
    * @param model storing all the relevant data
    * @param client connection-point to the network
    */
-  StartController(RummiController rummiController, ClientModel model, RummiClient client) {
+  void initialize(RummiController rummiController, ClientModel model, RummiClient client) {
     this.rummiController = rummiController;
     this.model = model;
     this.client = client;
