@@ -1,39 +1,28 @@
 package View;
 
-public class GameModel {
+import java.util.Observable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-    private String firstPlayerName;
-    private String secondPlayerName;
-    private String thirdPlayerName;
-    private String [] [] playerHand; // The Array will be from Type StoneInfo
 
-    private void setFirstPlayerName(String name) {
-        firstPlayerName = name;
+public class GameModel extends Observable {
+
+    private String [] name;
+    private int [] age;
+    private int index;
+
+    public void setName(String name) {
+        if (index < 3){
+            this.name[index] = name;
+        }
+        index++;
     }
 
-    private void setSecondPlayerName(String name) {
-        secondPlayerName = name;
+    public void setAge(int age) {
+        if (index < 3) {
+            this.age[index] = age;
+        }
+        index++;
     }
-
-    private void setThirdPlayerName(String name) {
-        thirdPlayerName = name;
-    }
-
-    private String getFirstPlayerName() {
-        return firstPlayerName;
-    }
-
-    private String getSecondPlayerName() {
-        return secondPlayerName;
-    }
-
-    private String getThirdPlayerName() {
-        return thirdPlayerName;
-    }
-
-    private void setPlayerHand(String [] [] hand) {
-        playerHand = playerHand;
-    }
-
-
 }
