@@ -80,12 +80,12 @@ public class RummiGame implements Game {
     trace.push(new MoveTrace("MOVESTONEONTABLE", initialPosition, targetPosition));
   }
 
-  @Override public void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition){
+  @Override public void putStone(Coordinate initialPosition, Coordinate targetPosition){
     Stone movingStone = currentPlayer().popStone(initialPosition);
     // add up the firstMovePoints if the current player hasn't played their first move yet
-    if (!currentPlayer().hasPlayedFirstMove()) {
-      firstMovePoints += movingStone.getNumber();
-    }
+//    if (!currentPlayer().hasPlayedFirstMove()) {
+//      firstMovePoints += movingStone.getNumber();
+//    }
     table.setStone(targetPosition, movingStone);
     trace.push(new MoveTrace("MOVESTONEFROMHAND", initialPosition, targetPosition));
   }
@@ -158,12 +158,14 @@ public class RummiGame implements Game {
    * or the played table is not consistent
    */
   @Override public boolean isConsistent() {
-    if (!currentPlayer().hasPlayedFirstMove() && firstMovePoints < MIN_FIRST_MOVE_POINTS) {
-      firstMovePoints = 0;
-      reset();
-      return false;
-    }
+//    if (!currentPlayer().hasPlayedFirstMove() && firstMovePoints < MIN_FIRST_MOVE_POINTS) {
+//      firstMovePoints = 0;
+//      reset();
+//      return false;
+//    }
     if (table.isConsistent()) {
+      // clear the trace for the next turn
+      trace.clear();
       currentPlayer().hasPlayedFirstMove();
       nextTurn();
       return true;

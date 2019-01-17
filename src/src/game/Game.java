@@ -12,7 +12,7 @@ public interface Game {
 
   void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition);
 
-  void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
+  void putStone(Coordinate initialPosition, Coordinate targetPosition);
 
   void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
 
