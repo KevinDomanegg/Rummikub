@@ -1,16 +1,11 @@
 package shell;
 
-import game.Coordinate;
-import game.Stone;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import network.client.Controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import view.DemoView;
 
 public final class Shell {
@@ -31,7 +26,7 @@ public final class Shell {
       "   START: Send a request_to_start_game to the Server and the Server starts the Game \n" +
       "   PRINT: Prints the Table of the Game and your hand (with colors) \n" +
       "   MOVE_ON_TABLE <Initial_column::Integer> <Initial_row::Integer> <Target_column::Integer> <Target_row::Integer>  \n" +
-      "   MOVE_FROM_HAND <Initial_column_in_hand::Integer> <Initial_row_in_hand::Integer> <Target_column_in_table::Integer> <Target_row_in_table::Integer> \n" +
+      "   PUT_STONE <Initial_column_in_hand::Integer> <Initial_row_in_hand::Integer> <Target_column_in_table::Integer> <Target_row_in_table::Integer> \n" +
       "   CHECK: Checks the consistent of the stones that you just puted on the table. \n" +
       "   HELP: Prints a message that helps you understand how the Shell of the program works. \n" +
       "   QUIT: Terminates the program.";
@@ -40,11 +35,6 @@ public final class Shell {
     HOST {
       @Override Controller execute(Controller controller, String[] tokens) {
         controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
-        try {
-          System.out.println("Server IP for join " +Inet4Address.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
-          error(e.getMessage());
-        }
         return controller;
       }
     },
@@ -73,6 +63,12 @@ public final class Shell {
         return controller;
       }
     },
+    DRAW {
+      @Override Controller execute(Controller controller, String[] tokens) {
+        controller.draw();
+        return controller;
+      }
+    },
     MOVE_ON_TABLE {
       @Override Controller execute(Controller controller, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
@@ -83,7 +79,7 @@ public final class Shell {
         return controller;
       }
     },
-    MOVE_FROM_HAND {
+    PUT_STONE {
       @Override Controller execute(Controller controller, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
         int initRow = Integer.parseUnsignedInt(tokens[2]);
@@ -103,12 +99,6 @@ public final class Shell {
         controller.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
         return controller;
 
-      }
-    },
-    PLAYER_LEFT {
-      @Override
-      Controller execute(Controller controller, String[] tokens) {
-        return controller;
       }
     },
     UNDO {
@@ -142,26 +132,6 @@ public final class Shell {
       return controller;
     }
   }
-
-  private static final String ANSI_RESET = "\u001B[0m";
-  private static final String BLACK = "\u001B[47m";
-  private static final String WHITE = "\u001B[37;40m";
-  private static final String RED = "\u001B[41m";
-  private static final String BLUE = "\u001B[31;44m";
-  private static final String YELLOW = "\u001B[34;43m";
-  private static final String JOKER = "\u001B[45m";
-
-  private static final String HELP = "Commands: \n"
-      + "  new:\n"
-      + "    make a new table\n"
-      + "  print:\n"
-      + "    print the table\n"
-      + "  stone <col> <row> <color> <number>:\n"
-      + "    set a stone with <color> and <number> at (<col>, <row>)\n"
-      + "  check:\n"
-      + "    check the consistency of the table and return the result\n"
-      + "  help:\n"
-      + "    print help text";
   
   private static final String PROMPT = "rummikub> ";
 
@@ -202,18 +172,16 @@ public final class Shell {
 
   private static Command parseCommand(String[] tokens) {
     switch (tokens[0].toUpperCase()) {
-      case "HOST":
-        return Command.HOST;
-      case "JOIN":
-        return Command.JOIN;
       case "":
         return Command.NO_COMMAND;
-      //case "NEW":
-        //return parseCommandNEW(tokens);
+      case "HOST":
+      return Command.HOST;
+      case "JOIN":
+      return Command.JOIN;
       case "START":
         return Command.START;
-      case "MOVE_FROM_HAND":
-        return Command.MOVE_FROM_HAND;
+      case "PUT_STONE":
+        return Command.PUT_STONE;
       case "MOVE_ON_TABLE":
         return Command.MOVE_ON_TABLE;
       case "MOVE_ON_HAND":
@@ -228,61 +196,15 @@ public final class Shell {
       return Command.QUIT;
       case "UNDO":
       return Command.UNDO;
+      case "DRAW":
+        return Command.DRAW;
+      case "RESET":
+        return Command.RESET;
       default:
         error(Command.NOT_VALID.toString());
         return Command.NOT_VALID;
     }
     
-  }
-
-  /*private static Command parseCommandNEW(String[] tokens) {
-    if (tokens.length > 2) {
-      error(MISSING_OR_TOO_MUCH_TOKENS_FOR + Command.NEW);
-      return Command.NOT_VALID;
-    }
-    return Command.NEW;
-  }*/
-
-
-  private static void print(int tableWidth, int tableHeight, Map<Coordinate, Stone> tableStones,
-                            int handWidth, int handHeight, Map<Coordinate, Stone> handStones) {
-    StringBuilder stringBuilder = printGame(tableWidth, tableHeight,
-        new StringBuilder(), tableStones).append('\n');
-    System.out.print(printGame(handWidth, handHeight,
-        stringBuilder, handStones));
-  }
-  private static StringBuilder printGame(int width, int height, StringBuilder stringBuilder, Map<Coordinate, Stone> stones) {
-    Stone stone;
-
-    for (int j = 0; j < height; j++) {
-      for (int i = 0; i < width; i++) {
-        stone = stones.get(new Coordinate(i, j));
-        // builder = stone-color + stone-number + ANSI_RESET
-        stringBuilder.append(parseColor(stone));
-        stringBuilder.append((stone == null) ? 0 : Integer.toHexString(stone.getNumber()).toUpperCase())
-            .append(ANSI_RESET);
-      }
-      stringBuilder.append('\n'); // for every row of the gird
-    }
-    return stringBuilder;
-  }
-
-  private static String parseColor(Stone stone) {
-    if (stone == null) {
-      return WHITE;
-    }
-    switch (stone.getColor()) {
-      case BLACK:
-        return BLACK;
-      case YELLOW:
-        return YELLOW;
-      case BLUE:
-        return BLUE;
-      case RED:
-        return RED;
-      default:
-        return JOKER;
-    }
   }
 
   private static void error(String message) {
