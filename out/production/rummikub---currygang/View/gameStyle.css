@@ -1,0 +1,75 @@
+Text {
+    -fx-font-family: Helvetica, Arial, SansSerif;
+}
+
+#root {
+    -fx-pref-width: 1024;
+    -fx-pref-height: 768;
+    -fx-background-color: #095F94;
+}
+
+.hand {
+    -fx-background-color: red;
+}
+
+.opponent {
+    -fx-alignment: CENTER;
+}
+
+.hand .text {
+    -fx-fill: white;
+}
+
+#timer {
+    -fx-font-size: 25;
+}
+
+#top {
+    -fx-padding: 20;
+}
+
+
+#opponentLeft {
+    -fx-rotate: -90;
+    -fx-padding: 0 -70;
+}
+
+#opponentRight {
+    -fx-rotate: 90;
+    -fx-padding: 0 -70;
+}
+
+#ownHand {
+    -fx-padding: 0 0 20 0;
+    -fx-background-color: black;
+    -fx-pref-width: 200;
+}
+
+#playerInfo {
+    -fx-fill: white;
+}
+
+.cell {
+    -fx-border-color: white;
+    -fx-fill: none;
+    -fx-alignment: CENTER;
+    -fx-pref-height: 50;
+    -fx-pref-width: 30;
+}
+
+.dropHover {
+    -fx-border-color: green;
+}
+
+#tableContainer {
+
+}
+
+#bottomPane {
+    -fx-pref-height: 200; /*TODO: Schlauer lösen! */
+    -fx-padding: 50 0 0 0;
+}
+
+.rot {
+    -fx-fill: red;
+}
