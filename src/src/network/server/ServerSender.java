@@ -2,6 +2,7 @@ package network.server;
 
 import communication.gameinfo.GameInfo;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
@@ -12,6 +13,8 @@ public class ServerSender extends Thread {
   private boolean send = false;
   private boolean connected = true;
   private GameInfo info = null;
+
+  private ObjectOutputStream out;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -24,6 +27,11 @@ public class ServerSender extends Thread {
     this.clientOut = clientOut;
     this.server = server;
     this.id = id;
+    try {
+      this.out = new ObjectOutputStream(clientOut.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -32,9 +40,17 @@ public class ServerSender extends Thread {
    * @param info to be sent
    */
   synchronized void send(GameInfo info) {
-    this.info = info;
+    /*this.info = info;
     send = true;
-    notifyAll();
+    notifyAll();*/
+    try {
+      //out = new ObjectOutputStream(clientOut.getOutputStream());
+      out.writeObject(info);
+      out.flush();
+    } catch (IOException e) {
+      connected = false;
+      notifyAll();
+    }
   }
 
   /**
@@ -54,13 +70,15 @@ public class ServerSender extends Thread {
 
     synchronized (this) {
       try {
-        ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
+        //ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
         while (connected) {
-          if (send) {
+          // IF WE DO SO, THEN WE HAVE A RACING CONDITION PROBLEM WITH SEND AND INFO, WHEN WE TRY TO SEND
+          // A LOT OF DIFFERENT OBJECTS AT ONE TIME
+          /*if (send) {
             out.writeObject(this.info);
             out.flush();
-          }
-          this.send = false;
+          }*/
+          //this.send = false;
           wait();
         }
       } catch (Exception e) {
@@ -70,9 +88,9 @@ public class ServerSender extends Thread {
     }
   }
 
-  /**
-   * Disconnects from the client.
-   */
+    /**
+     * Disconnects from the client.
+     */
   void disconnect(){
     this.connected = false;
   }
