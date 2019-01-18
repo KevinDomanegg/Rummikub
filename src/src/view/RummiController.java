@@ -1,73 +1,97 @@
 package view;
 
-import game.Game;
-import javafx.application.Application;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import network.client.RummiClient;
+import communication.gameinfo.StoneInfo;
 
-import java.awt.*;
-import java.io.IOException;
+import java.util.List;
 
+public class RummiController implements Controller {
 
-public class RummiController extends Application {
-    //StartController startController;
-    private WaitController waitController;
-    private GameController gameController;
-    private StartController startController;
-    private Parent root;
-    private Stage window;
-    private FXMLLoader loader;
+  private StartController startController;
+  private GameController gameController;
+  private WaitController waitController;
+  /**
+   * Sets the names of all the players in the game.
+   *
+   * @param name list of names, ordered clockwise
+   *             The name of the recipient is on position 0
+   */
+  @Override
+  public void setPlayerNames(List<String> name) {
 
-    public static void main(String[] args) {
-        launch(args);
-    }
+  }
 
-    //TODO: Catch exception
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        window = primaryStage;
-        window.setTitle("Rummikub");
-        loader = new FXMLLoader(getClass().getResource("Start.fxml"));
-        root = loader.load();
-        startController = loader.getController();
-        window.setScene(new Scene(root, 1024, 768));
-        window.show();
-    }
+  /**
+   * Sets the number of Stones each player has in its hand.
+   *
+   * @param sizes list of sizes, ordered clockwise
+   *              The hand-size of the recipient is on position 0
+   */
+  @Override
+  public void setHandSizes(List<Integer> sizes) {
 
+  }
 
+  /**
+   * Updates the table of the game-model.
+   *
+   * @param table the new table
+   */
+  @Override
+  public void setTable(StoneInfo[][] table) {
 
-  /*      primaryStage.setTitle("Rummikub");
+  }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
-        Parent root = loader.load();
-        startController = loader.getController();
-        //Scene scene = resolution(root);
-        Scene startScene = new Scene(root, 1024, 768);
-        primaryStage.setScene(startScene);
-        primaryStage.show();*/
+  /**
+   * Updates the hand (including the stones) of the player.
+   *
+   * @param hand the new hand
+   */
+  @Override
+  public void setPlayerHand(StoneInfo[][] hand) {
 
-/*        loader = new FXMLLoader(getClass().getResource("Game.fxml"));
-        root = loader.load();
-        gameController = loader.getController();
-        Scene gameScene = new Scene(root, 1024, 768);
-        gameScene.getStylesheets().add("gameStyle.css");
+  }
 
-        loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
-        root = loader.load();
-        waitController = loader.getController();
-        Scene waitScene = new Scene(root, 1024, 768);*/
-    /**
-     * Creates scene depending on the user device's resolution
-     *
-     * @param root parent root
-     * @return new scene with user's resolution
-     */
-    Scene resolution(Parent root) {
-        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        return new Scene(root, screen.width, screen.height);
-    }
+  /**
+   * Notifies the controller that it his his turn.
+   */
+  @Override
+  public void yourTurn() {
+
+  }
+
+  /**
+   * Notifies the controller that the game has started.
+   */
+  @Override
+  public void gameHasStarted() {
+
+  }
+
+  /**
+   * Notifies the controller about the player that is currently playing.
+   *
+   * @param playerID
+   */
+  @Override
+  public void currentPlayer(int playerID) {
+
+  }
+
+  /**
+   * Notifies the controller that his last move was invalid.
+   */
+  @Override
+  public void invalidMove() {
+
+  }
+
+  /**
+   * Updates the number of Stones present in the drawing-bag.
+   *
+   * @param bagSize number of stones in the bag
+   */
+  @Override
+  public void setBagSize(int bagSize) {
+
+  }
 }
