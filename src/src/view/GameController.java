@@ -22,6 +22,7 @@ import java.io.IOException;
 public class GameController {
     ClientModel model = new ClientModel();
     int handCount = 0;
+    private NetworkController networkController;
 
     @FXML Button drawBut;
     @FXML Text timer;
@@ -33,6 +34,10 @@ public class GameController {
     String name = "Player";
 
     public GameController() {
+    }
+
+    void setNetworkController(NetworkController networkcontroller) {
+      this.networkController = networkcontroller;
     }
 
     @FXML

@@ -21,6 +21,10 @@ public class NetworkController implements Controller {
     this.waitController = waitController;
   }
 
+  void setGameController(GameController gameController) {
+    this.gameController = gameController;
+  }
+
   /**
    * Sets the names of all the players in the game.
    *
