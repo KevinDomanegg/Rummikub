@@ -15,6 +15,7 @@ public class ClientModel {
     private ClientPlayer[] opponents;
     private StoneInfo[][] hand;
     private StoneInfo[][] table;
+    private int BagSize;
     private String name;
     private int age;
     private ClientPlayer currentPlayer;
