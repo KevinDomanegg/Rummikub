@@ -5,6 +5,7 @@ import java.util.Map;
 class Player {
   private final int age;
   private RummiHand hand;
+  private boolean hasPlayedFirstMove;
 
   Player(int age) {
     this.age = age;
@@ -36,7 +37,7 @@ class Player {
     return null;
   }
 
-  public void moveStone(Coordinate initialPosition, Coordinate targetPosition) {
+  void moveStone(Coordinate initialPosition, Coordinate targetPosition) {
     hand.setStone(targetPosition, hand.getStones().remove(initialPosition));
 //    Stone movedStone = currentHand.getStones().get(initialPosition);
 //
@@ -44,11 +45,11 @@ class Player {
 //    currentHand.getStones().remove(initialPosition);
   }
 
-  public Stone popStone(Coordinate initialPosition) {
+  Stone popStone(Coordinate initialPosition) {
     return hand.getStones().remove(initialPosition);
   }
 
-  public int getHandSize() {
+  int getHandSize() {
     return hand.size();
   }
 
@@ -57,11 +58,24 @@ class Player {
     return "Player(" + age + ")";
   }
 
-  public int getHandWidth() {
+  int getHandWidth() {
     return hand.getWidth();
   }
 
-  public int getHandHeight() {
+  int getHandHeight() {
     return hand.getHeight();
   }
+
+  void playedFirstMove() {
+    hasPlayedFirstMove = true;
+  }
+
+  boolean hasPlayedFirstMove() {
+    return hasPlayedFirstMove;
+  }
+
+  int getPoints() {
+    return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
+  }
+
 }

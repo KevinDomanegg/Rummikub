@@ -1,16 +1,22 @@
 package network.server;
 //Might be better to move this class to the game-package
-import communication.gameinfo.GridInfo;
+import communication.gameinfo.BagInfo;
+import communication.gameinfo.DrawInfo;
 import communication.gameinfo.HandInfo;
+import communication.gameinfo.HandSizesInfo;
 import communication.gameinfo.StoneInfo;
 import communication.gameinfo.TableInfo;
+import communication.gameinfo.WrongMove;
+import communication.gameinfo.YourTurn;
 import communication.request.*;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
-public class RequestHandler {
+class RequestHandler {
   /**
    * Class that can take Request-Objects and transform the into method-calls for a Game.
    * Acts as a Link between RummiServer and Game.
@@ -20,7 +26,7 @@ public class RequestHandler {
   private Game game;
   private Server server;
 
-  public RequestHandler(Server server, Game game) {
+  RequestHandler(Server server, Game game) {
     this.server = server;
     this.game = game;
   }
@@ -30,8 +36,7 @@ public class RequestHandler {
     Stone stone;
     for (int i = 0; i < width; i++) {
       for (int j = 0; j < height; j++) {
-        stone = stones.get(new Coordinate(i, j));
-        if (stone != null) {
+        if ((stone = stones.get(new Coordinate(i, j))) != null) {
           grid[i][j] = new StoneInfo(stone.getColor().toString(), stone.getNumber());
         }
       }
@@ -39,17 +44,10 @@ public class RequestHandler {
     return grid;
   }
 
-  public void applyRequest(Request request, int playerID){
-    RequestID id = request.getRequestID();
-
-    switch (id){
+  void applyRequest(Request request, int playerID){
+    switch (request.getRequestID()){
       case START:
-        game.start();
-        server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
-        for (int i = 0; i < game.getNumberOfPlayers(); i++) {
-          server.sendToPlayer(i, new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(i),
-              game.getPlayerHandHeight(i), game.getPlayerStones(i))));
-        }
+        startGame();
         return;
       case HAND_MOVE:
         ConcreteHandMove handMove = (ConcreteHandMove) request;
@@ -64,32 +62,102 @@ public class RequestHandler {
         return;
       case PUT_STONE:
         ConcretePutStone putStone = (ConcretePutStone) request;
-        game.moveStoneFromHand(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
+        game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
             new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+        sendHandSizesToPlayer(playerID);
         return;
       case DRAW:
         game.drawStone();
+        // send the player new hand with a drawn stone
+        sendHandToPlayer(playerID);
+        // notify all players that a stone is drew
+        server.sendToAll(new DrawInfo());
+        sendHandSizesToAll();
+        notifyTurnToPlayer();
         return;
       case CONFIRM_MOVE:
-        //if (game.isConsistent()) {
-          server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
-        //}
+        if (game.isConsistent()) {
+          // send the changed table first
+          sendTableToALl();
+          // then notify the turn to the next player
+          notifyTurnToPlayer();
+        } else {
+          // send the original table to the current player
+          sendTableToPlayer(playerID);
+          // send the original hand to the current player
+          sendHandToPlayer(playerID);
+          // notify wrong move
+          server.sendToPlayer(playerID, new WrongMove());
+        }
+        sendHandSizesToAll();
+        return;
+      case RESET:
+        game.reset();
+        sendTableToPlayer(playerID);
+        sendHandToPlayer(playerID);
+        sendHandSizesToPlayer(playerID);
         return;
       case GIVE_UP:
         game.playerHasLeft(playerID);
+        sendBagSizeToAll();
+        sendHandSizesToAll();
         return;
       case SET_PLAYER:
         game.setPlayer(((ConcreteSetPlayer) request).getAge());
         return;
-      case GET_HAND:
-        server.sendToPlayer(playerID,
-            new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
-            game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
-        return;
-      case GET_TABLE:
-        server.sendToPlayer(playerID, new TableInfo(
-            parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
       default:
     }
+  }
+
+  private void sendTableToPlayer(int playerID) {
+    server.sendToPlayer(playerID, new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+  }
+
+  private void notifyTurnToPlayer() {
+    server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
+  }
+
+  private void startGame() {
+    game.start();
+    // send table first to all
+    sendTableToALl();
+    // send to each player their hand
+    for (int playerID = 0; playerID < game.getNumberOfPlayers(); playerID++) {
+      sendHandToPlayer(playerID);
+    }
+    // send bag size to all
+    sendBagSizeToAll();
+    // send to each player their hand sizes in a corresponding order
+    sendHandSizesToAll();
+    // notify the start player
+    server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
+  }
+
+  private void sendBagSizeToAll() {
+    server.sendToAll(new BagInfo(game.getBagSize()));
+  }
+
+  private void sendTableToALl() {
+    server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+  }
+
+  private void sendHandToPlayer(int playerID) {
+    server.sendToPlayer(playerID, new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
+        game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
+  }
+
+  private void sendHandSizesToAll() {
+    List<Integer> handSizes = game.getPlayerHandSizes();
+    server.sendToPlayer(0, new HandSizesInfo(handSizes));
+    for (int playerID = 1; playerID < game.getNumberOfPlayers(); playerID++) {
+      Collections.rotate(handSizes, -1);
+      server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
+    }
+  }
+
+  private void sendHandSizesToPlayer(int playerID) {
+    List<Integer> handSizes = game.getPlayerHandSizes();
+    Collections.rotate(handSizes, -playerID);
+    server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
   }
 }
