@@ -14,6 +14,7 @@ public class RummiClient extends Thread {
   private boolean connected;
   private Socket server;
   private String serverIPAddress;
+  private ObjectOutputStream outToServer;
 
 
   //Player ID
@@ -37,6 +38,12 @@ public class RummiClient extends Thread {
     connected = true;
     request = new ConcreteSetPlayer(age);
     readyToSend = true;
+    try {
+      this.server = new Socket(serverIPAddress, 48410);
+      this.outToServer = new ObjectOutputStream(server.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
@@ -45,39 +52,40 @@ public class RummiClient extends Thread {
 
   @Override
   public void run() {
-    try {
-      server = new Socket(serverIPAddress, 48410);
+      //server = new Socket(serverIPAddress, 48410);
       // Add a listener to this Client
       ClientListener listener = new ClientListener(server, this);
       listener.start();
       // Create the ObjectSender to the Server
-      ObjectOutputStream outToServer = new ObjectOutputStream(server.getOutputStream());
+      //ObjectOutputStream outToServer = new ObjectOutputStream(server.getOutputStream());
       synchronized (this) {
+        try {
         //As long as the Client is connected to the Server
         while (connected) {
           //Wait until you get the GREEN LIGHT
           // so you can send it to the Server
-          while (!readyToSend) { // readyToSend = true?? where??
+          /*while (!readyToSend) { // readyToSend = true?? where??
             try {
               wait();
             } catch (InterruptedException e) {
               connected = false;
             }
-          }
-          outToServer.writeObject(request);
-          outToServer.flush();
-          readyToSend = false;
-          request = null;
+          }*/
+          wait();
+          //outToServer.writeObject(request);
+          //outToServer.flush();
+          //readyToSend = false;
+          //request = null;
         }
         //NOT CONNECTED ANYMORE
         outToServer.close();
         server.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
-    } catch (UnknownHostException e) {
-      connected = false;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
   void applyGameInfoHandler(GameInfo gameinfo) {
@@ -86,9 +94,17 @@ public class RummiClient extends Thread {
   }
 
   public synchronized void qeueRequest(Request request) {
-    this.request = request;
+    /*this.request = request;
     this.readyToSend = true;
-    notifyAll();
+    notifyAll();*/
+    try {
+      //out = new ObjectOutputStream(clientOut.getOutputStream());
+      outToServer.writeObject(request);
+      outToServer.flush();
+    } catch (IOException e) {
+      connected = false;
+      notifyAll();
+    }
   }
 
   public synchronized GameInfo getGameInfo() {
