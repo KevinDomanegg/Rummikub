@@ -12,6 +12,7 @@ import java.io.IOException;
 public class WaitController {
 
   NetworkController networkController;
+  GameController gameController;
 
   @FXML
   private Button startGameButton;
@@ -22,7 +23,7 @@ public class WaitController {
   }
 
   void setNetworkController(NetworkController controller) {
-    this.networkController = networkController;
+    this.networkController = controller;
   }
 
   @FXML
@@ -30,6 +31,11 @@ public class WaitController {
     Stage stage = (Stage) startGameButton.getScene().getWindow();
     FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
     Parent root = loader.load();
+
+    gameController = loader.getController();
+    gameController.setNetworkController(networkController);
+    networkController.setGameController(gameController);
+
     Scene gameScene = new Scene(root, 1024, 768);
     gameScene.getStylesheets().add("gameStyle.css");
     stage.setScene(gameScene);
