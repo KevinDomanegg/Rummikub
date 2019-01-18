@@ -2,6 +2,7 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public interface Controller {
   /**
    * Notifies the controller that the game has started.
    */
-  void notifyGameStart();
+  void notifyGameStart() throws IOException;
 
   /**
    * Notifies the controller about the player that is currently playing.

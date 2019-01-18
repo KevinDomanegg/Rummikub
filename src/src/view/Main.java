@@ -22,9 +22,6 @@ public class Main extends Application {
     private Stage window;
     private FXMLLoader loader;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
     //TODO: Catch exception
     @Override

@@ -20,7 +20,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class GameController {
-    ClientModel model = new ClientModel();
     int handCount = 0;
     private NetworkController networkController;
 

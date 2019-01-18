@@ -18,16 +18,7 @@ import java.io.IOException;
  */
 public class StartController {
 
-    private ClientModel model;
-    private NetworkController networkController;
-    private WaitController waitController;
-    private RummiClient client;
-    private String username;
-    private Integer age;
-    private String serverIp;
 
-    @FXML
-    private Button joinButton;
 
     @FXML
     private TextField nameField;
@@ -35,12 +26,7 @@ public class StartController {
     private TextField ageField;
 
     @FXML
-    private Button hostButton;
-    @FXML
     private TextField ipField;
-
-    private Stage stage;
-
 
 
 /*  StartController(Main networkController, ClientModel model, RummiClient client) {
@@ -51,41 +37,19 @@ public class StartController {
 
     @FXML
     void joinGame() throws IOException {
-        join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
-        this.switchToWait();
+        switchToWait();
     }
 
     @FXML
     void hostGame() throws IOException {
         new RummiServer().start();
-        join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
-        this.switchToWait();
-    }
-
-    /**
-     * Constructor connecting controller, model and network.
-     * Connects controller, model and network.
-     *
-     * @param networkController the "master-controller" of the application
-     * @param model storing all the relevant data
-     * @param client connection-point to the network
-     */
-
-    void initialize(NetworkController networkController, ClientModel model, RummiClient client) {
-        this.networkController = networkController;
-        this.model = model;
-        this.client = client;
-    }
-
-    private void join(String name, int age, String serverIP) {
-        networkController = new NetworkController(name, age, serverIP);
-        System.out.println("Client:" + name + " started");
+        switchToWait();
     }
 
 
     @FXML
     private void switchToErrorView() throws IOException {
-        stage = (Stage) joinButton.getScene().getWindow();
+        Stage stage = (Stage) ipField.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Error.fxml"));
         Parent root = loader.load();
         Scene errorScene = new Scene(root, 600, 400);
@@ -95,12 +59,16 @@ public class StartController {
 
     @FXML
     private void switchToWait() throws IOException {
+        NetworkController networkController =
+                new NetworkController(nameField.getText(),
+                        Integer.parseUnsignedInt(ageField.getText()), ipField.getText());
+        System.out.println("Client:" + nameField.getText() + " started");
 
-        stage = (Stage) joinButton.getScene().getWindow();
+        Stage stage = (Stage) nameField.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
         Parent root = loader.load();
 
-        waitController = loader.getController();
+        WaitController waitController = loader.getController();
         waitController.setNetworkController(networkController);
         networkController.setWaitController(waitController);
 

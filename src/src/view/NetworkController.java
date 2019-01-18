@@ -3,6 +3,7 @@ package view;
 import communication.gameinfo.StoneInfo;
 import network.client.RummiClient;
 
+import java.io.IOException;
 import java.util.List;
 
 public class NetworkController implements Controller {
@@ -79,8 +80,8 @@ public class NetworkController implements Controller {
    * Notifies the controller that the game has started.
    */
   @Override
-  public void notifyGameStart() {
-
+  public void notifyGameStart() throws IOException {
+    waitController.switchToGameView();
   }
 
   /**
@@ -98,7 +99,6 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyInvalidMove() {
-
   }
 
   /**
@@ -109,5 +109,9 @@ public class NetworkController implements Controller {
   @Override
   public void setBagSize(int bagSize) {
 
+  }
+
+  void sendStartRequest() {
+    //client.qeueRequest(new Re...);
   }
 }
