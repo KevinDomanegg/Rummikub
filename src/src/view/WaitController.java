@@ -23,7 +23,7 @@ public class WaitController {
   }
 
   void setNetworkController(NetworkController controller) {
-    this.networkController = networkController;
+    this.networkController = controller;
   }
 
   @FXML
