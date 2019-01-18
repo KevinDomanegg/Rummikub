@@ -9,7 +9,7 @@ import communication.gameinfo.TableInfo;
 class GameInfoHandler {
 
 //  private RummiClient client;
-  private Controller controller;
+  private RummiController controller;
 
   GameInfoHandler(Controller controller) {
     this.controller = controller;
