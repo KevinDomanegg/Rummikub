@@ -1,14 +1,26 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import network.client.RummiClient;
 
 import java.util.List;
 
-public class RummiController implements Controller {
+public class NetworkController implements Controller {
 
   private StartController startController;
   private GameController gameController;
   private WaitController waitController;
+  private RummiClient client;
+
+  NetworkController(String name, int age, String serverIP) {
+    client = new RummiClient(name, age, serverIP);
+    client.start();
+  }
+
+  void setWaitController(WaitController waitController) {
+    this.waitController = waitController;
+  }
+
   /**
    * Sets the names of all the players in the game.
    *

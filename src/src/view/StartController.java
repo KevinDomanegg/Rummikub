@@ -6,14 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import network.client.GameInfoHandler;
 import network.client.RummiClient;
 import network.server.RummiServer;
 
 import java.io.IOException;
-import java.util.Observer;
 
 /**
  * Class acting as the controller before a game has been started.
@@ -22,7 +19,8 @@ import java.util.Observer;
 public class StartController {
 
     private ClientModel model;
-    private RummiController rummiController;
+    private NetworkController networkController;
+    private WaitController waitController;
     private RummiClient client;
     private String username;
     private Integer age;
@@ -45,8 +43,8 @@ public class StartController {
 
 
 
-/*  StartController(RummiController rummiController, ClientModel model, RummiClient client) {
-    this.rummiController = rummiController;
+/*  StartController(Main networkController, ClientModel model, RummiClient client) {
+    this.networkController = networkController;
     this.model = model;
     this.client = client;
   }*/
@@ -54,41 +52,34 @@ public class StartController {
     @FXML
     void joinGame() throws IOException {
         join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
-        this.switchToWaitView();
+        this.switchToWait();
     }
 
     @FXML
     void hostGame() throws IOException {
         new RummiServer().start();
         join(nameField.getText(), Integer.parseInt(ageField.getText()), ipField.getText());
-        this.switchToWaitView();
+        this.switchToWait();
     }
 
     /**
      * Constructor connecting controller, model and network.
      * Connects controller, model and network.
      *
-     * @param rummiController the "master-controller" of the application
+     * @param networkController the "master-controller" of the application
      * @param model storing all the relevant data
      * @param client connection-point to the network
      */
 
-    void initialize(RummiController rummiController, ClientModel model, RummiClient client) {
-        this.rummiController = rummiController;
+    void initialize(NetworkController networkController, ClientModel model, RummiClient client) {
+        this.networkController = networkController;
         this.model = model;
         this.client = client;
     }
 
     private void join(String name, int age, String serverIP) {
-        if (!ipField.getText().equals(serverIP)) {
-
-        }
-        client = new RummiClient(name, age, serverIP);
-        client.start();
+        networkController = new NetworkController(name, age, serverIP);
         System.out.println("Client:" + name + " started");
-        model = new ClientModel();
-        model.setName(name);
-        model.setAge(age);
     }
 
 
@@ -103,10 +94,16 @@ public class StartController {
     }
 
     @FXML
-    private void switchToWaitView() throws IOException {
+    private void switchToWait() throws IOException {
+
         stage = (Stage) joinButton.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
         Parent root = loader.load();
+
+        waitController = loader.getController();
+        waitController.setNetworkController(networkController);
+        networkController.setWaitController(waitController);
+
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
     }

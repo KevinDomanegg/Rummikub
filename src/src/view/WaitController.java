@@ -11,20 +11,27 @@ import java.io.IOException;
 
 public class WaitController {
 
-    @FXML private Button startGameButton;
+  NetworkController networkController;
 
-    @FXML
-    void startGame() throws IOException {
-        switchToGameView();
-    }
+  @FXML
+  private Button startGameButton;
 
-    @FXML
-    private void switchToGameView() throws IOException {
-        Stage stage = (Stage) startGameButton.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
-        Parent root = loader.load();
-        Scene gameScene = new Scene(root, 1024, 768);
-        gameScene.getStylesheets().add("gameStyle.css");
-        stage.setScene(gameScene);
-    }
+  @FXML
+  void startGame() throws IOException {
+    switchToGameView();
+  }
+
+  void setNetworkController(NetworkController controller) {
+    this.networkController = networkController;
+  }
+
+  @FXML
+  private void switchToGameView() throws IOException {
+    Stage stage = (Stage) startGameButton.getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
+    Parent root = loader.load();
+    Scene gameScene = new Scene(root, 1024, 768);
+    gameScene.getStylesheets().add("gameStyle.css");
+    stage.setScene(gameScene);
+  }
 }
