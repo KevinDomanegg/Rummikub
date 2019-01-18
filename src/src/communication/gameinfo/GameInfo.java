@@ -6,12 +6,12 @@ public interface GameInfo {
    * Used to communicate such chances from the server to the clients.
    * Implementations of this interface should be specific to a specific type of change,
    * e.g. movement of a stone
-   * Each implementation must have a unique InfoID.
+   * Each implementation must have a unique GameInfoID.
    */
 
   /**
-   * @return InfoID to identify the concrete implementation of the interface.
+   * @return GameInfoID to identify the concrete implementation of the interface.
    */
-  public InfoID getInfoID();
+  public GameInfoID getGameInfoID();
 
 }

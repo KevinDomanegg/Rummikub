@@ -67,7 +67,7 @@ public class NetworkController implements Controller {
    * Notifies the controller that it his his turn.
    */
   @Override
-  public void yourTurn() {
+  public void notifyTurn() {
 
   }
 
@@ -75,7 +75,7 @@ public class NetworkController implements Controller {
    * Notifies the controller that the game has started.
    */
   @Override
-  public void gameHasStarted() {
+  public void notifyGameStart() {
 
   }
 
@@ -85,7 +85,7 @@ public class NetworkController implements Controller {
    * @param playerID
    */
   @Override
-  public void currentPlayer(int playerID) {
+  public void notifyCurrentPlayer(int playerID) {
 
   }
 
@@ -93,7 +93,7 @@ public class NetworkController implements Controller {
    * Notifies the controller that his last move was invalid.
    */
   @Override
-  public void invalidMove() {
+  public void notifyInvalidMove() {
 
   }
 

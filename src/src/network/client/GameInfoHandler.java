@@ -1,44 +1,51 @@
 package network.client;
 
 import communication.gameinfo.BagInfo;
+import communication.gameinfo.CurrentPlayerInfo;
 import communication.gameinfo.GameInfo;
-import communication.gameinfo.HandInfo;
+import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandSizesInfo;
-import communication.gameinfo.TableInfo;
+import communication.gameinfo.PlayerNamesInfo;
+import view.NetworkController;
 
 class GameInfoHandler {
 
-//  private RummiClient client;
-  private RummiController controller;
+  private NetworkController controller;
 
-  GameInfoHandler(Controller controller) {
+  GameInfoHandler(NetworkController controller) {
     this.controller = controller;
 //    this.client = client;
   }
 
-  void applyGameInfo(GameInfo gameinfo) {
-    switch (gameinfo.getInfoID()) {
+  void applyGameInfo(Object gameInfo) {
+    switch (((GameInfo)gameInfo).getGameInfoID()) {
+      // case CURRENT_PLAYER:
       case HAND:
-        controller.setPlayerHand(((HandInfo) gameinfo).getGrid());
+        controller.setPlayerHand(((GridInfo) gameInfo).getGrid());
         return;
       case TABLE:
-        controller.setTable(((TableInfo) gameinfo).getGrid());
+        controller.setTable(((GridInfo) gameInfo).getGrid());
         return;
-      case WRONG_MOVE:
-        controller.printWrongMove();
+      case INVALID_MOVE:
+        controller.notifyInvalidMove();
         return;
       case BAG:
-        controller.setBagSize(((BagInfo) gameinfo).getSize());
+        controller.setBagSize(((BagInfo) gameInfo).getSize());
         return;
       case YOUR_TURN:
         controller.notifyTurn();
         return;
       case HAND_SIZES:
-        controller.setHandSizes(((HandSizesInfo) gameinfo).getHandSizes());
+        controller.setHandSizes(((HandSizesInfo) gameInfo).getHandSizes());
         return;
-      case DRAW:
-        controller.countDownBagSize();
+      case PLAYER_NAMES:
+        controller.setPlayerNames(((PlayerNamesInfo) gameInfo).getNames());
         return;
+      case CURRENT_PLAYER:
+        controller.notifyCurrentPlayer(((CurrentPlayerInfo) gameInfo).getPlayerID());
+        return;
+      case GAME_START:
+        controller.notifyGameStart();
       default:
     }
   }

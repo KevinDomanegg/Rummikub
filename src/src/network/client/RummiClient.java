@@ -28,6 +28,7 @@ public class RummiClient extends Thread {
   private GameInfo forwardToController;
   private Request request;
   private boolean readyToSend;
+  private GameInfoHandler_Shell gameInfoHandler_shell;
 
 
   //CREATE A NEW CLIENT WITH USERNAME, AGE AND IP ADDRESS OF THE SERVER("localhost" or ip)
@@ -48,6 +49,10 @@ public class RummiClient extends Thread {
 
   public void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
     this.gameInfoHandler = gameInfoHandler;
+  }
+  
+  public void setGameInfoHandler_Shell(GameInfoHandler_Shell gameInfoHandler) {
+    this.gameInfoHandler_shell = gameInfoHandler;
   }
 
   @Override
@@ -88,9 +93,8 @@ public class RummiClient extends Thread {
       }
   }
 
-  void applyGameInfoHandler(GameInfo gameinfo) {
+  void applyGameInfoHandler(Object gameinfo) {
     gameInfoHandler.applyGameInfo(gameinfo);
-
   }
 
   public synchronized void qeueRequest(Request request) {

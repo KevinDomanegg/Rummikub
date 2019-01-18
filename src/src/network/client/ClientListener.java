@@ -28,8 +28,7 @@ class ClientListener extends Thread {
 
       while (connected) {
         try {
-          GameInfo gameinfo = (GameInfo) recieveMessage.readObject();
-          myClient.applyGameInfoHandler(gameinfo);
+          myClient.applyGameInfoHandler(recieveMessage.readObject());
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
         } catch (IOException e) {

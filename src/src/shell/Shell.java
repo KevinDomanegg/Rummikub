@@ -1,6 +1,6 @@
 package shell;
 
-import network.client.Controller;
+import network.client.ShellController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -33,103 +33,114 @@ public final class Shell {
 
   enum Command {
     HOST {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.host(tokens[1], Integer.parseUnsignedInt(tokens[2]));
+        return shellController;
       }
     },
     JOIN {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.join(tokens[1], Integer.parseUnsignedInt(tokens[2]), tokens[3]);
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.join(tokens[1], Integer.parseUnsignedInt(tokens[2]), tokens[3]);
+        return shellController;
       }
     },
     START {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.startGame();
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.startGame();
+        return shellController;
       }
 
     },
     PRINT {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.printGame();
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.printGame();
+        return shellController;
       }
     },
     CHECK {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.sendCheck();
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.sendCheck();
+        return shellController;
       }
     },
     DRAW {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.draw();
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.draw();
+        return shellController;
       }
     },
     MOVE_ON_TABLE {
-      @Override Controller execute(Controller controller, String[] tokens) {
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
         int initRow = Integer.parseUnsignedInt(tokens[2]);
         int targetCol = Integer.parseUnsignedInt(tokens[3]);
         int targetRow = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
-        return controller;
+        shellController.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
+        return shellController;
       }
     },
     PUT_STONE {
-      @Override Controller execute(Controller controller, String[] tokens) {
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
         int initRow = Integer.parseUnsignedInt(tokens[2]);
         int targetCol = Integer.parseUnsignedInt(tokens[3]);
         int targetRow = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
-        return controller;
+        shellController.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
+        return shellController;
       }
     },
     MOVE_ON_HAND {
       @Override
-      Controller execute(Controller controller, String[] tokens) {
+      ShellController execute(ShellController shellController, String[] tokens) {
         int initCol = Integer.parseUnsignedInt(tokens[1]);
         int initRow = Integer.parseUnsignedInt(tokens[2]);
         int targetCol = Integer.parseUnsignedInt(tokens[3]);
         int targetRow = Integer.parseUnsignedInt(tokens[4]);
-        controller.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
-        return controller;
+        shellController.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
+        return shellController;
 
       }
     },
     UNDO {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        return shellController;
       }
     },
     HELP {
       @Override
-      Controller execute(Controller controller, String[] tokens) {
+      ShellController execute(ShellController shellController, String[] tokens) {
         System.out.println(HELP_TEXT_FOR_SHELL);
-        return controller;
+        return shellController;
       }
     },
     NO_COMMAND {
-      @Override Controller execute(Controller controller, String[] tokens) {
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
         error("no command");
-        return controller;
+        return shellController;
       }
     },
     RESET {
-      @Override Controller execute(Controller controller, String[] tokens) {
-        controller.reset();
-        return controller;
+      @Override
+      ShellController execute(ShellController shellController, String[] tokens) {
+        shellController.reset();
+        return shellController;
       }
     },
     QUIT,
     NOT_VALID;
 
-    Controller execute(Controller controller, String[] tokens) {
-      return controller;
+    ShellController execute(ShellController shellController, String[] tokens) {
+      return shellController;
     }
   }
   
@@ -146,7 +157,7 @@ public final class Shell {
     String input;
     Command command;
     String[] tokens;
-    Controller controller = new Controller(new DemoView());
+    ShellController shellController = new ShellController(new DemoView());
     System.out.println(HELP_TEXT_FOR_SHELL);
 
     while (true) {
@@ -158,11 +169,11 @@ public final class Shell {
       tokens = input.trim().split("\\s+");
       command = parseCommand(tokens);
       if (command == Command.QUIT) {
-        controller.disconnectClient();
+        shellController.disconnectClient();
         break;
       }
       try {
-        controller = command.execute(controller, tokens);
+        shellController = command.execute(shellController, tokens);
       } catch (Exception e ) {
         error(e.getMessage());
       }

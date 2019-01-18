@@ -1,8 +1,6 @@
 package network.server;
 
 import communication.gameinfo.GameInfo;
-import communication.gameinfo.HandInfo;
-import communication.gameinfo.TableInfo;
 import communication.request.Request;
 
 import game.Game;

@@ -10,8 +10,8 @@ public class HandSizesInfo implements GameInfo, Serializable {
     this.otherHandSizes = otherHandSizes;
   }
 
-  @Override public InfoID getInfoID() {
-    return InfoID.HAND_SIZES;
+  @Override public GameInfoID getGameInfoID() {
+    return GameInfoID.HAND_SIZES;
   }
 
   public List<Integer> getHandSizes() {

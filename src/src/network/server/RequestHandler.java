@@ -2,12 +2,11 @@ package network.server;
 //Might be better to move this class to the game-package
 import communication.gameinfo.BagInfo;
 import communication.gameinfo.DrawInfo;
-import communication.gameinfo.HandInfo;
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandSizesInfo;
+import communication.gameinfo.SimpleGameInfo;
 import communication.gameinfo.StoneInfo;
-import communication.gameinfo.TableInfo;
-import communication.gameinfo.WrongMove;
-import communication.gameinfo.YourTurn;
 import communication.request.*;
 import game.Coordinate;
 import game.Game;
@@ -87,7 +86,7 @@ class RequestHandler {
           // send the original hand to the current player
           sendHandToPlayer(playerID);
           // notify wrong move
-          server.sendToPlayer(playerID, new WrongMove());
+          server.sendToPlayer(playerID, new SimpleGameInfo(GameInfoID.INVALID_MOVE));
         }
         sendHandSizesToAll();
         return;
@@ -110,11 +109,11 @@ class RequestHandler {
   }
 
   private void sendTableToPlayer(int playerID) {
-    server.sendToPlayer(playerID, new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+    server.sendToPlayer(playerID, new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 
   private void notifyTurnToPlayer() {
-    server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
+    server.sendToPlayer(game.getCurrentPlayerID(), new SimpleGameInfo(GameInfoID.YOUR_TURN));
   }
 
   private void startGame() {
@@ -130,7 +129,7 @@ class RequestHandler {
     // send to each player their hand sizes in a corresponding order
     sendHandSizesToAll();
     // notify the start player
-    server.sendToPlayer(game.getCurrentPlayerID(), new YourTurn());
+    notifyTurnToPlayer();
   }
 
   private void sendBagSizeToAll() {
@@ -138,11 +137,11 @@ class RequestHandler {
   }
 
   private void sendTableToALl() {
-    server.sendToAll(new TableInfo(parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
+    server.sendToAll(new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 
   private void sendHandToPlayer(int playerID) {
-    server.sendToPlayer(playerID, new HandInfo(parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
+    server.sendToPlayer(playerID, new GridInfo(GameInfoID.HAND, parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
         game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
   }
 

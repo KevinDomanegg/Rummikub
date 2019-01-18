@@ -93,5 +93,6 @@ public class ServerSender extends Thread {
      */
   void disconnect(){
     this.connected = false;
+    // notifyAll()?
   }
 }

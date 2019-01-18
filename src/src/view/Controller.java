@@ -5,7 +5,7 @@ import communication.gameinfo.StoneInfo;
 import java.util.List;
 
 /**
- * Interface for a Controller connecting the network to the client-model and view.
+ * Interface for a ShellController connecting the network to the client-model and view.
  */
 public interface Controller {
 
@@ -38,22 +38,22 @@ public interface Controller {
   /**
    * Notifies the controller that it his his turn.
    */
-  void yourTurn();
+  void notifyTurn();
 
   /**
    * Notifies the controller that the game has started.
    */
-  void gameHasStarted();
+  void notifyGameStart();
 
   /**
    * Notifies the controller about the player that is currently playing.
    */
-  void currentPlayer(int playerID);
+  void notifyCurrentPlayer(int playerID);
 
   /**
    * Notifies the controller that his last move was invalid.
    */
-  void invalidMove();
+  void notifyInvalidMove();
 
   /**
    * Updates the number of Stones present in the drawing-bag.

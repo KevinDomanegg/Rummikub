@@ -8,7 +8,7 @@ import java.util.List;
 import network.server.RummiServer;
 import view.DemoView;
 
-public class Controller {
+public class ShellController {
 
   private RummiClient client;
   private DemoView view;
@@ -16,7 +16,7 @@ public class Controller {
   private boolean isYourTurn;
   private boolean isGameStarted;
 
-  public Controller(DemoView view) {
+  public ShellController(DemoView view) {
     this.view = view;
   }
 
@@ -33,7 +33,7 @@ public class Controller {
 
   public void join(String name, int age, String serverIP) {
     client = new RummiClient(name, age, serverIP);
-    client.setGameInfoHandler(new GameInfoHandler(this));
+    client.setGameInfoHandler_Shell(new GameInfoHandler_Shell(this));
     client.start();
     System.out.println("Client:" + name + " started");
   }

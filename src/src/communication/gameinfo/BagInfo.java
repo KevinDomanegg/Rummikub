@@ -10,8 +10,8 @@ public class BagInfo implements GameInfo, Serializable {
   }
 
   @Override
-  public InfoID getInfoID() {
-    return InfoID.BAG;
+  public GameInfoID getGameInfoID() {
+    return GameInfoID.BAG;
   }
 
   public int getSize() {
