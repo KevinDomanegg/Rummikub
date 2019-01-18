@@ -34,7 +34,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> name) {
-
+    gameController.setPlayerNames(name);
   }
 
   /**
@@ -45,7 +45,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setHandSizes(List<Integer> sizes) {
-
+    gameController.setHandSizes(sizes);
   }
 
   /**
@@ -55,8 +55,9 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setTable(StoneInfo[][] table) {
-
+    gameController.setTable(table);
   }
+
 
   /**
    * Updates the hand (including the stones) of the player.
@@ -65,7 +66,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerHand(StoneInfo[][] hand) {
-
+    gameController.setPlayerHand(hand);
   }
 
   /**
@@ -73,15 +74,15 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyTurn() {
-
+    gameController.notifyTurn();
   }
 
   /**
    * Notifies the controller that the game has started.
    */
   @Override
-  public void notifyGameStart() throws IOException {
-    waitController.switchToGameView();
+  public void notifyGameStart() {
+   gameController.notifyGameStart();
   }
 
   /**
@@ -91,7 +92,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
-
+    gameController.notifyCurrentPlayer(playerID);
   }
 
   /**
@@ -99,6 +100,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyInvalidMove() {
+    gameController.notifyInvalidMove();
   }
 
   /**
@@ -108,6 +110,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
+    gameController.setBagSize(bagSize);
 
   }
 

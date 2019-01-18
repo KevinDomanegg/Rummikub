@@ -2,6 +2,8 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 
+import java.util.List;
+
 public class ClientModel {
 
     //These constants should - in a later stage - be declared globally
@@ -15,11 +17,14 @@ public class ClientModel {
     private ClientPlayer[] opponents;
     private StoneInfo[][] hand;
     private StoneInfo[][] table;
+    List<Integer> handSizes;
+    List<String> playersNames;
     private int BagSize;
     private String name;
     private int age;
     private ClientPlayer currentPlayer;
     private boolean myTurn;
+    private boolean game_has_started;
 
 
     public ClientModel(){
@@ -45,12 +50,32 @@ public class ClientModel {
         this.table = newTable;
     }
 
+    public void notifyInvalidMove() {
+        // GIVE AN ERROR OR SOMETHING
+    }
+
+    public void setBagSize(int bagSize) {
+        this.BagSize = bagSize;
+    }
+
+
+    public void setHandSizes(List<Integer> sizes) {
+        this.handSizes = sizes;
+    }
+    public void setPlayerNames(List<String> names) {
+        this.playersNames = names;
+    }
+
     public void setCurrentPlayer(int opponentID) {
         this.currentPlayer = opponents[opponentID];
     }
 
     public void setMyTurn(boolean myTurn) {
         this.myTurn = myTurn;
+    }
+
+    public void notifyGameStart() {
+        this.game_has_started = true;
     }
 
     public void setOpponents(ClientPlayer[] opponents) {

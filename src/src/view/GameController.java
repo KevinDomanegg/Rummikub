@@ -1,5 +1,6 @@
 package view;
 
+import communication.gameinfo.StoneInfo;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,10 +19,12 @@ import javafx.scene.text.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class GameController {
     int handCount = 0;
     private NetworkController networkController;
+    private ClientModel model;
 
     @FXML Button drawBut;
     @FXML Text timer;
@@ -32,9 +35,6 @@ public class GameController {
 
     String name = "Player";
 
-    public GameController() {
-    }
-
     void setNetworkController(NetworkController networkcontroller) {
       this.networkController = networkcontroller;
     }
@@ -44,6 +44,7 @@ public class GameController {
         constructGrid(table, 24, 8);
         constructGrid(handGrid, 20, 2);
         setupDrag(stupidTest);
+        model = new ClientModel();
     }
 
     @FXML
@@ -152,6 +153,42 @@ public class GameController {
             }
             event.consume();
         });
+    }
+
+    public void setTable(StoneInfo[][] table) {
+        model.setTable(table);
+    }
+
+    public void setPlayerHand(StoneInfo[][] hand) {
+        model.setHand(hand);
+    }
+
+    public void notifyInvalidMove() {
+        model.notifyInvalidMove();
+    }
+
+    public void setBagSize(int bagSize) {
+        model.setBagSize(bagSize);
+    }
+
+    public void notifyTurn() {
+        model.setMyTurn(true);
+    }
+
+    public void setHandSizes(List<Integer> sizes) {
+        model.setHandSizes(sizes);
+    }
+
+    public void setPlayerNames(List<String> names) {
+        model.setPlayerNames(names);
+    }
+
+    public void notifyCurrentPlayer(int playerID) {
+        model.setCurrentPlayer(playerID);
+    }
+
+    public void notifyGameStart() {
+        model.notifyGameStart();
     }
 
 }
