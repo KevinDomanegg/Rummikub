@@ -13,10 +13,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <?import javafx.scene.layout.Pane?>
+
+
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="view.GameController">
+            fx:controller="view.GameController"
+            stylesheets="gameStyle.css">
     <top>
         <StackPane fx:id="top">
             <children>

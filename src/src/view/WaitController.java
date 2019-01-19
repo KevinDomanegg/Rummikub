@@ -20,6 +20,7 @@ public class WaitController {
   @FXML
   private void startGame() throws IOException {
     networkController.sendStartRequest();
+    switchToGameView();
   }
 
   void setNetworkController(NetworkController controller) {
@@ -38,7 +39,7 @@ public class WaitController {
     networkController.setGameController(gameController);
 
     Scene gameScene = new Scene(root, 1024, 768);
-    gameScene.getStylesheets().add("gameStyle.css");
+    gameScene.getStylesheets().add("View/gameStyle.css");
     stage.setScene(gameScene);
   }
 
