@@ -1,14 +1,11 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import communication.request.SimpleRequest;
 
 import java.util.List;
 
 public class ClientModel {
-
-    //These constants should - in a later stage - be declared globally
-    //to guarantee consistency between client and server.
-    //Therefore no getters are provided.
 
   private StoneInfo[][] table;
   private StoneInfo[][] hand;
@@ -35,16 +32,32 @@ public class ClientModel {
     this.BagSize = bagSize;
   }
 
+  int getBagSize() {
+    return getBagSize();
+  }
+
   void setHandSizes(List<Integer> sizes) {
     this.handSizes = sizes;
+  }
+
+  List<Integer> getHandSizes() {
+    return handSizes;
   }
 
   void setPlayerNames(List<String> names) {
     this.playersNames = names;
   }
 
+  List<String> getPlayersNames() {
+    return playersNames;
+  }
+
   void setCurrentPlayer(int playerID) {
     currentPlayerID = playerID;
+  }
+
+  int getCurrentPlayerID() {
+    return currentPlayerID;
   }
 
   void notifyTurn() {
