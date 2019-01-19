@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <VBox xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="View.WaitController">
+            fx:controller="view.WaitController">
     <StackPane alignment="CENTER">
         <Text text="Rummikub" />
     </StackPane>

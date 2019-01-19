@@ -10,13 +10,13 @@
            prefWidth="600.0"
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
-    <children>
-        <HBox styleClass="opponent">
-            <children>
-                <Text fx:id="opponentName" styleClass="text"
-                      text="Name:" />
-                <Text fx:id="opponentStoneCount" styleClass="text" text="14x" />
-            </children>
-        </HBox>
-    </children>
+   <children>
+      <HBox styleClass="opponent">
+         <children>
+            <Text fx:id="opponentName" styleClass="text"
+                  text="Name:" />
+            <Text fx:id="opponentStoneCount" styleClass="text" text="14x" />
+         </children>
+      </HBox>
+   </children>
 </StackPane>

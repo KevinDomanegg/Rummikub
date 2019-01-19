@@ -17,7 +17,7 @@ public class WaitController {
   private Button startGameButton;
 
   @FXML
-  private void startGame() {
+  private void startGame() throws IOException {
     networkController.sendStartRequest();
     switchToGameView();
   }

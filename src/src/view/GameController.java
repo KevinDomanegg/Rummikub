@@ -95,13 +95,13 @@ public class GameController {
     });
     */
 
-    test.setOnDragDetected(event -> {
+/*    test.setOnDragDetected(event -> {
       Dragboard db = test.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
       content.putString(test.getText());
       db.setContent(content);
       event.consume();
-    });
+    });*/
   }
 
   void setupDrop(StackPane target) {
