@@ -1,7 +1,6 @@
 package network.server;
 //Might be better to move this class to the game-package
 import communication.gameinfo.BagInfo;
-import communication.gameinfo.DrawInfo;
 import communication.gameinfo.GameInfoID;
 import communication.gameinfo.GridInfo;
 import communication.gameinfo.HandSizesInfo;
@@ -49,18 +48,18 @@ class RequestHandler {
         startGame();
         return;
       case HAND_MOVE:
-        ConcreteHandMove handMove = (ConcreteHandMove) request;
+        ConcreteMove handMove = (ConcreteMove) request;
         game.moveStoneOnHand(playerID,
             new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
             new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
         return;
       case TABLE_MOVE:
-        ConcreteTableMove tableMove = (ConcreteTableMove) request;
+        ConcreteMove tableMove = (ConcreteMove) request;
         game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
             new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
         return;
       case PUT_STONE:
-        ConcretePutStone putStone = (ConcretePutStone) request;
+        ConcreteMove putStone = (ConcreteMove) request;
         game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
             new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
         sendHandSizesToPlayer(playerID);
@@ -70,7 +69,7 @@ class RequestHandler {
         // send the player new hand with a drawn stone
         sendHandToPlayer(playerID);
         // notify all players that a stone is drew
-        server.sendToAll(new DrawInfo());
+        server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
         sendHandSizesToAll();
         notifyTurnToPlayer();
         return;

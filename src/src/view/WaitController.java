@@ -12,13 +12,12 @@ import java.io.IOException;
 public class WaitController {
 
   private NetworkController networkController;
-  private GameController gameController;
 
   @FXML
   private Button startGameButton;
 
   @FXML
-  private void startGame() throws IOException {
+  private void startGame() {
     networkController.sendStartRequest();
     switchToGameView();
   }
@@ -33,7 +32,7 @@ public class WaitController {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
     Parent root = loader.load();
 
-    gameController = loader.getController();
+    GameController gameController = loader.getController();
 
     gameController.setNetworkController(networkController);
     networkController.setGameController(gameController);

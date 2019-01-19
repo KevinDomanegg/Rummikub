@@ -97,7 +97,7 @@ public class RummiClient extends Thread {
     gameInfoHandler.applyGameInfo(gameinfo);
   }
 
-  public synchronized void qeueRequest(Request request) {
+  public synchronized void sendRequest(Request request) {
     /*this.request = request;
     this.readyToSend = true;
     notifyAll();*/

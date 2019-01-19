@@ -5,8 +5,8 @@ import java.io.Serializable;
 /**
  * Info that does not store any but InfoId.
  */
-public class SimpleGameInfo implements GameInfo, Serializable {
-  private GameInfoID gameInfoID;
+public final class SimpleGameInfo implements GameInfo, Serializable {
+  private final GameInfoID gameInfoID;
 
   public SimpleGameInfo(GameInfoID gameInfoID) {
     this.gameInfoID = gameInfoID;

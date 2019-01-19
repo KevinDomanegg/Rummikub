@@ -12,6 +12,6 @@ public interface GameInfo {
   /**
    * @return GameInfoID to identify the concrete implementation of the interface.
    */
-  public GameInfoID getGameInfoID();
+  GameInfoID getGameInfoID();
 
 }

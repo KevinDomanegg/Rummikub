@@ -5,13 +5,15 @@ import java.io.Serializable;
 /**
  * represents all movement in game.
  */
-abstract class AbstractMove implements Serializable {
-  private int initCol;
-  private int initRow;
-  private int targetCol;
-  private int targetRow;
+public final class ConcreteMove implements Request, Serializable {
+  private final RequestID id;
+  private final int initCol;
+  private final int initRow;
+  private final int targetCol;
+  private final int targetRow;
 
-  public AbstractMove(int initCol, int initRow, int targetCol, int targetRow) {
+  public ConcreteMove(RequestID id, int initCol, int initRow, int targetCol, int targetRow) {
+    this.id = id;
     this.initCol = initCol;
     this.initRow = initRow;
     this.targetCol = targetCol;
@@ -29,5 +31,9 @@ abstract class AbstractMove implements Serializable {
   }
   public int getTargetRow() {
     return targetRow;
+  }
+
+  @Override public RequestID getRequestID() {
+    return id;
   }
 }

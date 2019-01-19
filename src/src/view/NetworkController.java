@@ -1,9 +1,10 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import communication.request.RequestID;
+import communication.request.SimpleRequest;
 import network.client.RummiClient;
 
-import java.io.IOException;
 import java.util.List;
 
 public class NetworkController implements Controller {
@@ -29,12 +30,12 @@ public class NetworkController implements Controller {
   /**
    * Sets the names of all the players in the game.
    *
-   * @param name list of names, ordered clockwise
+   * @param names list of names, ordered clockwise
    *             The name of the recipient is on position 0
    */
   @Override
-  public void setPlayerNames(List<String> name) {
-    gameController.setPlayerNames(name);
+  public void setPlayerNames(List<String> names) {
+    gameController.setPlayerNames(names);
   }
 
   /**
@@ -88,7 +89,7 @@ public class NetworkController implements Controller {
   /**
    * Notifies the controller about the player that is currently playing.
    *
-   * @param playerID
+   * @param playerID te player-ID who has the turn to play in the perspective of this
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
@@ -115,6 +116,11 @@ public class NetworkController implements Controller {
   }
 
   void sendStartRequest() {
-    //client.qeueRequest(new Re...);
+    client.sendRequest(new SimpleRequest(RequestID.START));
+    // requestbuid.sfje
+  }
+
+  void sendDrawRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.DRAW));
   }
 }

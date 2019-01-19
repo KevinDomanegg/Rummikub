@@ -45,7 +45,8 @@ public class ShellController {
   public void moveStoneOnTable(int initCol, int initRow, int targetCol, int targetRow) {
     if (isYourTurn) {
       view.moveStoneOnTable(initCol, initRow, targetCol, targetRow);
-      client.qeueRequest(new ConcreteTableMove(initCol, initRow, targetCol, targetRow));
+      client.sendRequest(
+          new ConcreteMove(RequestID.TABLE_MOVE, initCol, initRow, targetCol, targetRow));
     } else {
       view.printNotYourTurn();
     }
@@ -54,7 +55,8 @@ public class ShellController {
   public void moveStoneFromHand(int initCol, int initRow, int targetCol, int targetRow) {
     if (isYourTurn) {
       view.moveStoneFromHand(initCol, initRow, targetCol, targetRow);
-      client.qeueRequest(new ConcretePutStone(initCol, initRow, targetCol, targetRow));
+      client.sendRequest(
+          new ConcreteMove(RequestID.PUT_STONE, initCol, initRow, targetCol, targetRow));
     } else {
       view.printNotYourTurn();
     }
@@ -62,13 +64,14 @@ public class ShellController {
 
   public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
     view.moveStoneOnHand(initCol, initRow, targetCol, targetRow);
-    client.qeueRequest(new ConcreteHandMove(initCol, initRow, targetCol, targetRow));
+    client.sendRequest(
+        new ConcreteMove(RequestID.HAND_MOVE, initCol, initRow, targetCol, targetRow));
   }
 
   public void sendCheck() {
     if (isYourTurn) {
       isYourTurn = false;
-      client.qeueRequest(new ConfrimMoveRequest());
+      client.sendRequest(new SimpleRequest(RequestID.CONFIRM_MOVE));
     } else {
       view.printNotYourTurn();
     }
@@ -79,7 +82,7 @@ public class ShellController {
       if (isGameStarted) {
         view.printGameAlreadyStarted();
       } else {
-        client.qeueRequest(new Start());
+        client.sendRequest(new SimpleRequest(RequestID.START));
         isGameStarted = true;
       }
     } else {
@@ -114,7 +117,7 @@ public class ShellController {
 
   public void draw() {
     if (isYourTurn) {
-      client.qeueRequest(new DrawRequest());
+      client.sendRequest(new SimpleRequest(RequestID.DRAW));
       isYourTurn = false;
     } else {
       view.printNotYourTurn();
@@ -131,6 +134,6 @@ public class ShellController {
   }
 
   public void reset() {
-    client.qeueRequest(new ResetRequest());
+    client.sendRequest(new SimpleRequest(RequestID.RESET));
   }
 }

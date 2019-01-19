@@ -2,8 +2,11 @@ package communication.gameinfo;
 
 import java.io.Serializable;
 
-public class BagInfo implements GameInfo, Serializable {
-  private int size;
+/**
+ * game info that stores the current size of the RummiBag.
+ */
+public final class BagInfo implements GameInfo, Serializable {
+  private final int size;
 
   public BagInfo(int size) {
     this.size = size;

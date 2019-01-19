@@ -22,34 +22,35 @@ import java.io.IOException;
 import java.util.List;
 
 public class GameController {
-    int handCount = 0;
-    private NetworkController networkController;
-    private ClientModel model;
+  int handCount = 0;
+  private NetworkController networkController;
+  private ClientModel model;
 
-    @FXML Button drawBut;
-    @FXML Text timer;
-    @FXML GridPane table;
-    @FXML GridPane handGrid;
-    @FXML Pane opponentMid;
-    @FXML Text stupidTest;
+  @FXML Text timer;
+  @FXML GridPane table;
+  @FXML GridPane handGrid;
+  @FXML Pane opponentMid;
+  @FXML Text stupidTest;
 
-    String name = "Player";
+  String name = "Player";
 
-    void setNetworkController(NetworkController networkcontroller) {
-      this.networkController = networkcontroller;
-    }
+  void setNetworkController(NetworkController networkcontroller) {
+    this.networkController = networkcontroller;
+  }
 
-    @FXML
-    public void initialize() {
-        constructGrid(table, 24, 8);
-        constructGrid(handGrid, 20, 2);
-        setupDrag(stupidTest);
-        model = new ClientModel();
-    }
+  @FXML
+  public void initialize() {
+    constructGrid(table, 24, 8);
+    constructGrid(handGrid, 20, 2);
+    setupDrag(stupidTest);
+    model = new ClientModel();
+  }
 
-    @FXML
-    public void drawStone() throws IOException {
-        // Server request: Get stone from bag
+  @FXML
+  public void drawStone() throws IOException {
+    model.finishTurn();
+    networkController.sendDrawRequest();
+    // Server request: Get stone from bag
 
     /*
     TODO: Set stone to desired value
@@ -59,31 +60,31 @@ public class GameController {
     stoneController.setStone(3, "rot");
     */
 
-        Text drawnStone = new Text("5");
+    Text drawnStone = new Text("5");
 
-        handGrid.add(drawnStone, handCount, 0);
-        setupDrag(drawnStone);
-        handCount++;
+    handGrid.add(drawnStone, handCount, 0);
+    setupDrag(drawnStone);
+    handCount++;
+  }
+
+  @FXML
+  void constructGrid(GridPane grid, int columns, int rows) {
+    for(int x = 0; x < columns; x++) {
+      for(int y = 0; y < rows; y++) {
+        StackPane cell = new StackPane();
+        setupDrop(cell);
+
+        cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
+        cell.setPrefHeight(768.0/rows);
+        cell.getStyleClass().add("cell");
+        grid.add(cell, x, y);
+      }
     }
-
-    @FXML
-    void constructGrid(GridPane grid, int columns, int rows) {
-        for(int x = 0; x < columns; x++) {
-            for(int y = 0; y < rows; y++) {
-                StackPane cell = new StackPane();
-                setupDrop(cell);
-
-                cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
-                cell.setPrefHeight(768.0/rows);
-                cell.getStyleClass().add("cell");
-                grid.add(cell, x, y);
-            }
-        }
-    }
+  }
 
 
-    void setupDrag(Text test) {
-        // Start drag here
+  void setupDrag(Text test) {
+    // Start drag here
     /*
     test.setOnDragDetected(event -> {
       Dragboard dragBoard = test.startDragAndDrop(TransferMode.ANY);
@@ -94,23 +95,23 @@ public class GameController {
     });
     */
 
-        test.setOnDragDetected(event -> {
-            Dragboard db = test.startDragAndDrop(TransferMode.ANY);
-            ClipboardContent content = new ClipboardContent();
-            content.putString(test.getText());
-            db.setContent(content);
-            event.consume();
-        });
-    }
+    test.setOnDragDetected(event -> {
+      Dragboard db = test.startDragAndDrop(TransferMode.ANY);
+      ClipboardContent content = new ClipboardContent();
+      content.putString(test.getText());
+      db.setContent(content);
+      event.consume();
+    });
+  }
 
-    void setupDrop(StackPane target) {
-        // Accept drop here
-        target.setOnDragOver(event -> {
-            if (event.getGestureSource() != target && event.getDragboard().hasString()) {
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
-        });
+  void setupDrop(StackPane target) {
+    // Accept drop here
+    target.setOnDragOver(event -> {
+      if (event.getGestureSource() != target && event.getDragboard().hasString()) {
+        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+      }
+      event.consume();
+    });
 
     /*
     // Drop here
@@ -126,69 +127,68 @@ public class GameController {
     });
     */
 
-        target.setOnDragOver(event -> {
-            if (event.getGestureSource() != target &&
-                    event.getDragboard().hasString()) {
-                /* allow for both copying and moving, whatever user chooses */
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
+    target.setOnDragOver(event -> {
+      if (event.getGestureSource() != target &&
+          event.getDragboard().hasString()) {
+        /* allow for both copying and moving, whatever user chooses */
+        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+      }
 
-            event.consume();
-        });
-    }
+      event.consume();
+    });
+  }
 
-    // TODO: Remove test method
-    void setupDrop(Text target) {
-        // Accept drop here
-        target.setOnDragOver(event -> {
-            event.acceptTransferModes(TransferMode.ANY);
-            event.consume();
-        });
+  // TODO: Remove test method
+  void setupDrop(Text target) {
+    // Accept drop here
+    target.setOnDragOver(event -> {
+      event.acceptTransferModes(TransferMode.ANY);
+      event.consume();
+    });
 
-        // Drop here
-        target.setOnDragDropped(event -> {
-            Dragboard dragboard = event.getDragboard();
-            if (dragboard.hasFiles()) {
-                target.setText(dragboard.getString());
-            }
-            event.consume();
-        });
-    }
+    // Drop here
+    target.setOnDragDropped(event -> {
+      Dragboard dragboard = event.getDragboard();
+      if (dragboard.hasFiles()) {
+        target.setText(dragboard.getString());
+      }
+      event.consume();
+    });
+  }
 
-    public void setTable(StoneInfo[][] table) {
-        model.setTable(table);
-    }
+  public void setTable(StoneInfo[][] table) {
+    model.setTable(table);
+  }
 
-    public void setPlayerHand(StoneInfo[][] hand) {
-        model.setHand(hand);
-    }
+  public void setPlayerHand(StoneInfo[][] hand) {
+    model.setHand(hand);
+  }
 
-    public void notifyInvalidMove() {
-        model.notifyInvalidMove();
-    }
+  public void notifyInvalidMove() {
 
-    public void setBagSize(int bagSize) {
-        model.setBagSize(bagSize);
-    }
+  }
 
-    public void notifyTurn() {
-        model.setMyTurn(true);
-    }
+  public void setBagSize(int bagSize) {
+    model.setBagSize(bagSize);
+  }
 
-    public void setHandSizes(List<Integer> sizes) {
-        model.setHandSizes(sizes);
-    }
+  public void notifyTurn() {
+    model.notifyTurn();
+  }
 
-    public void setPlayerNames(List<String> names) {
-        model.setPlayerNames(names);
-    }
+  public void setHandSizes(List<Integer> sizes) {
+    model.setHandSizes(sizes);
+  }
 
-    public void notifyCurrentPlayer(int playerID) {
-        model.setCurrentPlayer(playerID);
-    }
+  public void setPlayerNames(List<String> names) {
+    model.setPlayerNames(names);
+  }
 
-    public void notifyGameStart() {
-        model.notifyGameStart();
-    }
+  public void notifyCurrentPlayer(int playerID) {
+    model.setCurrentPlayer(playerID);
+  }
 
+  public void notifyGameStart() {
+    model.notifyGameStart();
+  }
 }
