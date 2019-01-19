@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<?import javafx.scene.control.Label?>
+<VBox alignment="TOP_CENTER" prefHeight="50.0" prefWidth="30.0"
+      fx:id="stone"
+      fx:controller="GameController"
+      xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="stoneLabel" prefHeight="50.0" prefWidth="30.0"/>
+      <Text fx:id="number" text="5" />
+   </children>
+</VBox>
