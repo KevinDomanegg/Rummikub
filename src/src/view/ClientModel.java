@@ -20,8 +20,16 @@ public class ClientModel {
     this.hand = newHand;
   }
 
+  StoneInfo[][] getHand() {
+    return hand;
+  }
+
   public void setTable(StoneInfo[][] newTable) {
     this.table = newTable;
+  }
+
+  StoneInfo[][] getTable() {
+    return table;
   }
 
   public void notifyInvalidMove() {
