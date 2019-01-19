@@ -11,9 +11,9 @@ import java.awt.*;
 
 
 public class Main extends Application {
-  //StartController startController;
+  private StartController startController;
   //WaitController waitController;
-  GameController gameController;
+//  GameController gameController;
 
   public static void main(String[] args) {
     launch(args);
@@ -29,14 +29,16 @@ public class Main extends Application {
     gameController = loader.getController();
     */
 
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+//    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
     Parent root = loader.load();
-    gameController = loader.getController();
+//    gameController = loader.getController();
+    startController = loader.getController();
 
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-    scene.getStylesheets().add("View/gameStyle.css");
+//    scene.getStylesheets().add("View/gameStyle.css");
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();

@@ -4,9 +4,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
 
@@ -17,8 +18,6 @@ import java.io.IOException;
  * Connects the Start-view to the model.
  */
 public class StartController {
-
-
 
     @FXML
     private TextField nameField;
@@ -46,7 +45,6 @@ public class StartController {
         switchToWait();
     }
 
-
     @FXML
     private void switchToErrorView() throws IOException {
         Stage stage = (Stage) ipField.getScene().getWindow();
@@ -57,20 +55,31 @@ public class StartController {
 
     }
 
-    @FXML
-    private void switchToWait() throws IOException {
-        NetworkController networkController =
-                new NetworkController(nameField.getText(),
-                        Integer.parseUnsignedInt(ageField.getText()), ipField.getText());
+    private void switchToWait() {
+        // Create local the Client and then pass it to: RequestBuilder and NetworkController
+        RummiClient client = new RummiClient(ipField.getText());
+        // Create a RequestBuilder
+        RequestBuilder reqBuilder = new RequestBuilder(client);
+        // send request to set a player
+        reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
+
+//        NetworkController networkController = new NetworkController(client);
         System.out.println("Client:" + nameField.getText() + " started");
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
-        Parent root = loader.load();
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         WaitController waitController = loader.getController();
-        waitController.setNetworkController(networkController);
-        networkController.setWaitController(waitController);
+        waitController.setIpAddress(ipField.getText());
+//        waitController.setNetworkController(networkController);
+//        networkController.setWaitController(waitController);
+        waitController.setRequestBuilder(reqBuilder);
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);

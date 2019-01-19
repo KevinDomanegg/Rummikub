@@ -5,6 +5,7 @@ import communication.request.RequestID;
 import communication.request.SimpleRequest;
 import network.client.RummiClient;
 
+import java.io.IOException;
 import java.util.List;
 
 public class NetworkController implements Controller {
@@ -14,8 +15,8 @@ public class NetworkController implements Controller {
   private WaitController waitController;
   private RummiClient client;
 
-  NetworkController(String name, int age, String serverIP) {
-    client = new RummiClient(name, age, serverIP);
+  NetworkController(RummiClient client) {
+    this.client = client;
     client.start();
   }
 
@@ -83,7 +84,8 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyGameStart() {
-   gameController.notifyGameStart();
+    waitController.switchToGameView();
+    gameController.notifyGameStart();
   }
 
   /**

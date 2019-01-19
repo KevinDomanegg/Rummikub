@@ -16,15 +16,17 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import network.client.RequestBuilder;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 public class GameController {
-  int handCount = 0;
-  private NetworkController networkController;
-  private ClientModel model;
+    int handCount = 0;
+    private NetworkController networkController;
+    private ClientModel model;
+    private RequestBuilder requestBuilder;
 
   @FXML Text timer;
   @FXML GridPane table;
@@ -38,13 +40,17 @@ public class GameController {
     this.networkController = networkcontroller;
   }
 
-  @FXML
-  public void initialize() {
-    constructGrid(table, 24, 8);
-    constructGrid(handGrid, 20, 2);
-    setupDrag(stupidTest);
-    model = new ClientModel();
-  }
+    void setRequestBuilder(RequestBuilder requestBuilder) {
+        this.requestBuilder = requestBuilder;
+    }
+
+    @FXML
+    public void initialize() {
+        constructGrid(table, 24, 8);
+        constructGrid(handGrid, 20, 2);
+        setupDrag(stupidTest);
+        model = new ClientModel();
+    }
 
   @FXML
   public void drawStone() throws IOException {

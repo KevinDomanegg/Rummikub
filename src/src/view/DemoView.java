@@ -17,6 +17,7 @@ public class DemoView {
   private StoneInfo[][] hand;
   private int bagSize;
   private List<Integer> handSizes;
+  private String name;
 
   public DemoView() {
   }
