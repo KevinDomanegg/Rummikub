@@ -10,6 +10,7 @@
 
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.shape.Rectangle?>
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -100,6 +101,7 @@
                                 <!-- Add row via Java with tag=RowConstraints -->
                             </rowConstraints>
                             <children>
+
                             </children>
                         </GridPane>
                     </children>

@@ -61,8 +61,10 @@ Text {
     -fx-border-color: green;
 }
 
-#tableContainer {
-
+.stone {
+    -fx-background-color: white;
+    -fx-pref-width: 20;
+    -fx-pref-height: 40;
 }
 
 #bottomPane {
