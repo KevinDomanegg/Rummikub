@@ -13,8 +13,6 @@ import java.io.IOException;
 public class WaitController {
 
   private RequestBuilder requestBuilder;
-
-  @FXML
   private String ipAddress;
 
   @FXML
