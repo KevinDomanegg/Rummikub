@@ -15,6 +15,7 @@ public class ShellController {
   private boolean isHost;
   private boolean isYourTurn;
   private boolean isGameStarted;
+  private String username;
 
   public ShellController(DemoView view) {
     this.view = view;
@@ -32,7 +33,7 @@ public class ShellController {
   }
 
   public void join(String name, int age, String serverIP) {
-    client = new RummiClient(name, age, serverIP);
+    client = new RummiClient(serverIP);
     client.setGameInfoHandler_Shell(new GameInfoHandler_Shell(this));
     client.start();
     System.out.println("Client:" + name + " started");
@@ -96,7 +97,7 @@ public class ShellController {
 
   void notifyTurn() {
     isYourTurn = true;
-    view.printYourTurn(client.getUserName());
+    view.printYourTurn(username);
   }
 
   void setTable(StoneInfo[][] table) {

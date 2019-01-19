@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.StartController">
+   <children>
+      <HBox layoutX="261.0" layoutY="276.0" />
+      <Label text="name" layoutX="164.0" layoutY="101.0" prefHeight="17.0" prefWidth="47.0"/>
+      <TextField fx:id="nameField" layoutX="223.0" layoutY="96.0" />
+      <Label text="age" layoutX="164.0" layoutY="154.0"/>
+      <TextField fx:id="ageField" layoutX="223.0" layoutY="149.0" />
+      <Button text="Host" layoutX="223.0" layoutY="200.0" mnemonicParsing="false" onMouseClicked="#hostGame" onAction="#hostGame"/>
+      <TextField fx:id="ipField" layoutX="223.0" layoutY="263.0" />
+      <Label text="IP-Server" layoutX="151.0" layoutY="268.0" prefHeight="17.0" prefWidth="71.0"/>
+      <Button text = "Join" layoutX="223.0" layoutY="310.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="47.0" onMouseClicked="#joinGame" onAction="#joinGame"/>
+   </children>
+</AnchorPane>
