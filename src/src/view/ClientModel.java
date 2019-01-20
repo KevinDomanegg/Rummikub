@@ -5,16 +5,21 @@ import communication.request.SimpleRequest;
 
 import java.util.List;
 
-public class ClientModel {
+final class ClientModel {
 
   private StoneInfo[][] table;
   private StoneInfo[][] hand;
   private List<Integer> handSizes;
   private List<String> playersNames;
   private int BagSize;
+  private int currentPlayerID;
   private boolean isMyTurn;
   private boolean isGameStarted;
-  private int currentPlayerID;
+  private final boolean isHost;
+
+  ClientModel(boolean isHost) {
+    this.isHost = isHost;
+  }
 
   public void setHand(StoneInfo[][] newHand) {
     this.hand = newHand;
@@ -78,5 +83,9 @@ public class ClientModel {
 
   void notifyGameStart() {
     this.isGameStarted = true;
+  }
+
+  boolean isHost() {
+    return isHost;
   }
 }
