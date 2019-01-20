@@ -42,13 +42,13 @@ public class NetworkController implements Controller {
     this.startController = startController;
   }
 
-  public void setUsername(String username, int username_id) {
-    startController.setUsername(username, username_id);
-  }
+//  public void setUsername(String username, int username_id) {
+//    waitController.setPlayerUsername(username);
+//  }
 
-  public void setIPAddress(String ip) {
-    startController.setIpAddress(ip);
-  }
+//  public void setIPAddress(String ip) {
+//    startController.setIpAddress(ip);
+//  }
 
   /**
    * Sets the names of all the players in the game.
@@ -58,7 +58,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> names) {
-    gameController.setPlayerNames(names);
+    waitController.setPlayerNames(names);
   }
 
   /**
@@ -78,7 +78,14 @@ public class NetworkController implements Controller {
    * @param table the new table
    */
   @Override
-  public void setTable(StoneInfo[][] table) {
+  public synchronized void setTable(StoneInfo[][] table) {
+    while (gameController == null) {
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
     gameController.setTable(table);
   }
 

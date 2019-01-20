@@ -1,5 +1,6 @@
 package view;
 
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,11 +14,13 @@ import network.client.RequestBuilder;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import network.client.RummiClient;
 
 public class WaitController implements Initializable {
 
   private RequestBuilder requestBuilder;
   private NetworkController networkController;
+  private ClientModel model;
 
   @FXML
   private Text ipAddress;
@@ -54,21 +57,9 @@ public class WaitController implements Initializable {
     this.ipAddress.setText(ipAddress);
   }
 
- void setPlayerUsername(String username, int id) {
-    switch (id) {
-      case 0:
-        this.player0.setText(username);
-        break;
-      case 1:
-        this.player1.setText(username);
-        break;
-      case 2:
-        this.player2.setText(username);
-        break;
-      case 3:
-        this.player3.setText(username);
-    }
- }
+// void setPlayerUsername(String username) {
+//    names.add(username);
+// }
 
   public void switchToGameView() {
     Stage stage = (Stage) startGameButton.getScene().getWindow();
@@ -81,6 +72,7 @@ public class WaitController implements Initializable {
     }
 
     GameController gameController = loader.getController();
+    gameController.setModel(model);
 
     gameController.setRequestBuilder(requestBuilder);
     networkController.setGameController(gameController);
@@ -92,6 +84,31 @@ public class WaitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+
     //ipAddress.setText();
+  }
+
+  void setPlayerNames(List<String> names) {
+    model.setPlayerNames(names);
+    for (int i = 0; i < names.size(); i++) {
+      switch (i) {
+        case 0:
+          player0.setText(names.get(0));
+          break;
+        case 1:
+          player1.setText(names.get(1));
+          break;
+        case 2:
+          player2.setText(names.get(2));
+          break;
+        case 3:
+        default:
+          player3.setText(names.get(3));
+      }
+    }
+  }
+
+  public void setModel(ClientModel model) {
+    this.model = model;
   }
 }
