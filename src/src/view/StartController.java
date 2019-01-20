@@ -63,6 +63,7 @@ public class StartController {
     @FXML
     void hostGame() throws IOException {
        new RummiServer().start();
+       ipField.setText("localhost");
        switchToWait();
     }
 
