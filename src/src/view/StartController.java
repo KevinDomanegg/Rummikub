@@ -57,14 +57,13 @@ public class StartController {
 
     @FXML
     void joinGame() throws IOException {
-        switchToWait(ipField.getText());
+        switchToWait();
     }
 
     @FXML
     void hostGame() throws IOException {
-        RummiServer server = new RummiServer();
-        server.start();
-        switchToWait(server.getIP());
+       new RummiServer().start();
+       switchToWait();
     }
 
     @FXML
@@ -78,9 +77,9 @@ public class StartController {
     }
 
 
-    private void switchToWait(String ip) {
+    private void switchToWait() {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
-        RummiClient client = new RummiClient(ip);
+        RummiClient client = new RummiClient(ipField.getText());
         // Create a RequestBuilder
         RequestBuilder reqBuilder = new RequestBuilder(client);
         // send request to set a player
@@ -100,7 +99,7 @@ public class StartController {
         }
         WaitController waitController = loader.getController();
         this.waitController = waitController;
-        waitController.setIpAddress(ip);
+        waitController.setIpAddress(ipField.getText());
         waitController.setNetworkController(networkController);
         networkController.setWaitController(waitController);
         waitController.setRequestBuilder(reqBuilder);
