@@ -13,7 +13,7 @@ import java.awt.*;
 public class Main extends Application {
   private StartController startController;
   //WaitController waitController;
-//  GameController gameController;
+  GameController gameController; //TODO: Hide
 
   public static void main(String[] args) {
     launch(args);
@@ -22,23 +22,16 @@ public class Main extends Application {
   //TODO: Catch exception
   @Override
   public void start(Stage primaryStage) throws Exception {
-    /*
-    TODO: Start -> (event) -> Wait -> (event) -> Game
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitView.fxml"));
-    Parent root = loader.load();
-    gameController = loader.getController();
-    */
-
-//    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    // FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml")); //TODO: Change
     FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
     Parent root = loader.load();
-//    gameController = loader.getController();
+    //gameController = loader.getController();
     startController = loader.getController();
 
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-//    scene.getStylesheets().add("view/gameStyle.css");
+    //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
