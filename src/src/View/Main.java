@@ -38,7 +38,7 @@ public class Main extends Application {
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-//    scene.getStylesheets().add("View/gameStyle.css");
+//    scene.getStylesheets().add("view/gameStyle.css");
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
