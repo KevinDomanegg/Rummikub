@@ -58,13 +58,13 @@ public class WaitController implements Initializable {
     switch (id) {
       case 0:
         this.player0.setText(username);
-        return;
+        break;
       case 1:
         this.player1.setText(username);
-        return;
+        break;
       case 2:
         this.player2.setText(username);
-        return;
+        break;
       case 3:
         this.player3.setText(username);
     }
