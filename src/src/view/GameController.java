@@ -37,7 +37,6 @@ public class GameController {
 
     @FXML
     public void initialize() {
-      model = new ClientModel();
       constructGrid(table, true, 24, 8);
       constructGrid(handGrid, false, 20, 2);
       putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("black", 5)); //TODO: Remove
@@ -128,7 +127,7 @@ public class GameController {
   }
 
   public void notifyInvalidMove() {
-
+    // error view
   }
 
   public void setBagSize(int bagSize) {
@@ -153,5 +152,9 @@ public class GameController {
 
   public void notifyGameStart() {
     model.notifyGameStart();
+  }
+
+  public void setModel(ClientModel model) {
+    this.model = model;
   }
 }

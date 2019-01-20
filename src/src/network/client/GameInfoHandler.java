@@ -44,14 +44,12 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
       case GAME_START:
         controller.notifyGameStart();
         return;
-      case IP_ADDRESS:
-        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
-        return;
-      case USERNAME:
-          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
+//      case IP_ADDRESS:
+//        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
+//        return;
+//      case USERNAME:
+//          controller.setUsername(((NameInfo) gameInfo).getUsername());
       default:
     }
   }
-
-
 }
