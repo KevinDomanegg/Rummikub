@@ -20,16 +20,16 @@ import java.net.UnknownHostException;
  */
 public class StartController {
 
-    @FXML
-    private TextField nameField;
-    @FXML
-    private TextField ageField;
+  @FXML
+  private TextField nameField;
+  @FXML
+  private TextField ageField;
 
-    @FXML
-    private TextField ipField;
+  @FXML
+  private TextField ipField;
 
-    //private String username;
-    //private int username_id;
+  //private String username;
+  //private int username_id;
 //    private WaitController waitController;
 //    private String[] usernames = new String[4];
 
@@ -49,66 +49,61 @@ public class StartController {
 //      } else {
 //        usernames[username_id] = username;
 //      }
-//    }
 
-    @FXML
-    void joinGame() throws IOException {
-      switchToWait(new ClientModel(false));
+  //    }
+  @FXML
+  void hostGame() throws UnknownHostException {
+    new RummiServer().start();
+    ipField.setText(Inet4Address.getLocalHost().getHostAddress());
+    switchToWait(new ClientModel(true));
+  }
+
+  @FXML
+  void joinGame() throws IOException {
+    switchToWait(new ClientModel(false));
+  }
+
+
+  @FXML
+  private void switchToErrorView() throws IOException {
+    Stage stage = (Stage) ipField.getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("Error.fxml"));
+    Parent root = loader.load();
+    Scene errorScene = new Scene(root, 600, 400);
+    stage.setScene(errorScene);
+
+  }
+
+  private void switchToWait(ClientModel model) {
+    // Create local the Client and then pass it to: RequestBuilder and NetworkController
+    RummiClient client = new RummiClient(ipField.getText());
+    // Create a RequestBuilder
+    RequestBuilder reqBuilder = new RequestBuilder(client);
+    // send request to set a player
+
+    NetworkController networkController = new NetworkController(client);
+    networkController.setStartController(this);
+    System.out.println("Client:" + nameField.getText() + " started");
+
+    Stage stage = (Stage) nameField.getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
+    Parent root = loader.getRoot();
+    try {
+      root = loader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+    WaitController waitController = loader.getController();
+    waitController.setModel(model);
+    waitController.setIpAddress(ipField.getText());
+    waitController.setNetworkController(networkController);
+    networkController.setWaitController(waitController);
+    waitController.setRequestBuilder(reqBuilder);
 
-    @FXML
-    void hostGame() throws UnknownHostException {
-      new RummiServer().start();
-      ipField.setText(Inet4Address.getLocalHost().getHostAddress());
-      switchToWait(new ClientModel(true));
-    }
+    reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
-    @FXML
-    private void switchToErrorView() throws IOException {
-        Stage stage = (Stage) ipField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Error.fxml"));
-        Parent root = loader.load();
-        Scene errorScene = new Scene(root, 600, 400);
-        stage.setScene(errorScene);
-
-    }
-
-
-    private void switchToWait(ClientModel model) {
-        // Create local the Client and then pass it to: RequestBuilder and NetworkController
-        RummiClient client = new RummiClient(ipField.getText());
-        // Create a RequestBuilder
-        RequestBuilder reqBuilder = new RequestBuilder(client);
-        // send request to set a player
-        reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
-
-        NetworkController networkController = new NetworkController(client);
-        networkController.setStartController(this);
-        System.out.println("Client:" + nameField.getText() + " started");
-
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        WaitController waitController = loader.getController();
-        waitController.setModel(model);
-        waitController.setIpAddress(ipField.getText());
-        waitController.setNetworkController(networkController);
-        networkController.setWaitController(waitController);
-        waitController.setRequestBuilder(reqBuilder);
-
-//        waitController.setIpAddress(ip);
-//        for (int i = 0; i < usernames.length; i++) {
-//          if (usernames[i] != null) {
-//            waitController.setPlayerUsername(usernames[i], i);
-//          }
-//        }
-
-        Scene gameScene = new Scene(root, 1024, 768);
-        stage.setScene(gameScene);
-    }
+    Scene gameScene = new Scene(root, 1024, 768);
+    stage.setScene(gameScene);
+  }
 }
+

@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
@@ -14,13 +15,15 @@ import network.client.RequestBuilder;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import network.client.RummiClient;
 
 public class WaitController implements Initializable {
 
   private RequestBuilder requestBuilder;
   private NetworkController networkController;
   private ClientModel model;
+
+  @FXML
+  private Label waitingState;
 
   @FXML
   private Text ipAddress;
@@ -45,6 +48,13 @@ public class WaitController implements Initializable {
     requestBuilder.sendStartRequest();
   }
 
+  public void setModel(ClientModel model) {
+    if (model.isHost()) {
+      waitingState.setText("hosting game");
+    }
+    this.model = model;
+  }
+
   void setNetworkController(NetworkController networkController) {
     this.networkController = networkController;
   }
@@ -57,14 +67,10 @@ public class WaitController implements Initializable {
     this.ipAddress.setText(ipAddress);
   }
 
-// void setPlayerUsername(String username) {
-//    names.add(username);
-// }
-
-  public void switchToGameView() {
+  void switchToGameView() {
     Stage stage = (Stage) startGameButton.getScene().getWindow();
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
-    Parent root = null;
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    Parent root = loader.getRoot();
     try {
       root = loader.load();
     } catch (IOException e) {
@@ -84,13 +90,19 @@ public class WaitController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-
+//    startGameButton.visibleProperty().bind(model.hostProperty());
     //ipAddress.setText();
   }
 
   void setPlayerNames(List<String> names) {
     model.setPlayerNames(names);
-    for (int i = 0; i < names.size(); i++) {
+    int numberOfPlayers = names.size();
+    if (numberOfPlayers > 1 && model.isHost()) {
+      startGameButton.setVisible(true);
+    } else {
+      startGameButton.setVisible(false);
+    }
+    for (int i = 0; i < numberOfPlayers; i++) {
       switch (i) {
         case 0:
           player0.setText(names.get(0));
@@ -106,9 +118,5 @@ public class WaitController implements Initializable {
           player3.setText(names.get(3));
       }
     }
-  }
-
-  public void setModel(ClientModel model) {
-    this.model = model;
   }
 }

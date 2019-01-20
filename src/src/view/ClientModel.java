@@ -4,6 +4,9 @@ import communication.gameinfo.StoneInfo;
 import communication.request.SimpleRequest;
 
 import java.util.List;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ObservableValue;
 
 final class ClientModel {
 
@@ -16,6 +19,7 @@ final class ClientModel {
   private boolean isMyTurn;
   private boolean isGameStarted;
   private final boolean isHost;
+  private BooleanProperty host = new SimpleBooleanProperty();
 
   ClientModel(boolean isHost) {
     this.isHost = isHost;
@@ -87,5 +91,9 @@ final class ClientModel {
 
   boolean isHost() {
     return isHost;
+  }
+
+  BooleanProperty hostProperty() {
+    return host;
   }
 }
