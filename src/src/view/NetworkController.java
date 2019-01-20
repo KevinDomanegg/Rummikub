@@ -78,7 +78,14 @@ public class NetworkController implements Controller {
    * @param table the new table
    */
   @Override
-  public void setTable(StoneInfo[][] table) {
+  public synchronized void setTable(StoneInfo[][] table) {
+    while (gameController == null) {
+      try {
+        wait();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
     gameController.setTable(table);
   }
 
