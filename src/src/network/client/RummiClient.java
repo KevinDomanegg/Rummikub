@@ -21,6 +21,9 @@ public class RummiClient extends Thread {
   //CREATE A NEW CLIENT WITH USERNAME, AGE AND IP ADDRESS OF THE SERVER("localhost" or ip)
   public RummiClient(String serverIPAddress) {
     connected = true;
+    if (serverIPAddress.equals("")) {
+      serverIPAddress = "localhost";
+    }
     try {
       serverSocket = new Socket(serverIPAddress, 48410);
       outToServer = new ObjectOutputStream(serverSocket.getOutputStream());
