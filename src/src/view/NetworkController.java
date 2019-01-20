@@ -113,12 +113,12 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyGameStart() {
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-        waitController.switchToGameView();
-      }
-    });
+    waitController.switchToGameView();
+//    Platform.runLater(new Runnable() {
+//      @Override
+//      public void run() {
+//      }
+//    });
     //gameController.notifyGameStart();
   }
 
