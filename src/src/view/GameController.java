@@ -13,27 +13,32 @@ import network.client.RequestBuilder;
 import java.util.List;
 
 public class GameController {
-  @FXML
-  Text timer;
-  @FXML
-  GridPane table;
-  @FXML
-  GridPane handGrid;
-  @FXML
-  Pane opponentMid;
-  private NetworkController networkController;
-  private ClientModel model;
-  private RequestBuilder requestBuilder;
-  private DataFormat stoneFormat = new DataFormat("stoneFormat");
+    private NetworkController networkController;
+    private ClientModel model;
+    private RequestBuilder requestBuilder;
+    private DataFormat stoneFormat = new DataFormat("stoneFormat");
+
+  @FXML Text timer;
+  @FXML GridPane table;
+  @FXML GridPane handGrid;
+  @FXML Pane opponentMid;
+
+  String name = "Player";
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
   }
 
-  void setRequestBuilder(RequestBuilder requestBuilder) {
-    this.requestBuilder = requestBuilder;
-  }
+    void setRequestBuilder(RequestBuilder requestBuilder) {
+        this.requestBuilder = requestBuilder;
+    }
 
+    @FXML
+    public void initialize() {
+      constructGrid(table, true, 24, 8);
+      constructGrid(handGrid, false, 20, 2);
+      putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("black", 5)); //TODO: Remove
+    }
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
@@ -196,5 +201,9 @@ public class GameController {
 
   public void notifyGameStart() {
     model.notifyGameStart();
+  }
+
+  public void setModel(ClientModel model) {
+    this.model = model;
   }
 }
