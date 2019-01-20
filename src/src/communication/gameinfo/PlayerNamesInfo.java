@@ -12,7 +12,7 @@ public final class PlayerNamesInfo implements GameInfo, Serializable {
   }
 
   @Override public GameInfoID getGameInfoID() {
-    return null;
+    return GameInfoID.PLAYER_NAMES;
   }
 
   public List<String> getNames() {

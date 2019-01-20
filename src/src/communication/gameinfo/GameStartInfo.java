@@ -12,6 +12,6 @@ public class GameStartInfo implements GameInfo, Serializable {
 
   @Override
   public GameInfoID getGameInfoID() {
-    return gameInfoID;
+    return GameInfoID.GAME_START;
   }
 }

@@ -43,14 +43,12 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         return;
       case GAME_START:
         controller.notifyGameStart();
+        return;
       case IP_ADDRESS:
-        try {
-          controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress()); // TODO FIX THIS
-        } catch (ClassCastException e) {}
+        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
+        return;
       case USERNAME:
-        try {
-          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId()); // TODO: FUCKING EXCEPTION ?!?!?!
-        } catch (ClassCastException e) {}
+          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
       default:
     }
   }

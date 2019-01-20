@@ -102,7 +102,7 @@ class RequestHandler {
       case SET_PLAYER:
         game.setPlayer(((ConcreteSetPlayer) request).getAge());
         for (int i = 0; i < usernames.length; i++) {
-          if (usernames[i] != null) {
+          if (usernames[i] == null) {
             usernames[i] = ((ConcreteSetPlayer) request).getName();
             break;
           }
@@ -115,6 +115,23 @@ class RequestHandler {
 
   private void sendUsernames(int playerID, String username) {
     server.sendToPlayer(playerID, new GameUsernames(username, playerID));
+
+    // sends to all new players the new connected player
+    for (int i = 0; i < usernames.length; i++) {
+      if (usernames[i] != null) {
+        if (!usernames[i].equals(username)) {
+          server.sendToPlayer(i, new GameUsernames(username, playerID));
+        }
+      }
+    }
+    // sends to the new player tha other connected players
+    for (int i = 0; i < usernames.length; i++) {
+      if (usernames[i] != null) {
+        if (!(usernames[i].equals(username))) {
+          server.sendToPlayer(playerID, new GameUsernames(usernames[i], i));
+        }
+      }
+    }
   }
 
   private void sendTableToPlayer(int playerID) {

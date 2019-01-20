@@ -1,5 +1,6 @@
 package view;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,8 +32,10 @@ public class StartController {
     private TextField ipField;
 
     private String ip;
-    private String username;
-    private int username_id;
+    //private String username;
+    //private int username_id;
+    private WaitController waitController;
+    private String[] usernames = new String[4];
 
 /*  StartController(Main networkController, ClientModel model, RummiClient client) {
     this.networkController = networkController;
@@ -45,8 +48,11 @@ public class StartController {
     }
 
     void setUsername(String username, int username_id) {
-        this.username = username;
-        this.username_id = username_id;
+      if (waitController != null) {
+        waitController.setPlayerUsername(username, username_id);
+      } else {
+        usernames[username_id] = username;
+      }
     }
 
     @FXML
@@ -92,13 +98,18 @@ public class StartController {
             e.printStackTrace();
         }
         WaitController waitController = loader.getController();
+        this.waitController = waitController;
         waitController.setIpAddress(ipField.getText());
         waitController.setNetworkController(networkController);
         networkController.setWaitController(waitController);
         waitController.setRequestBuilder(reqBuilder);
 
         waitController.setIpAddress(ip);
-        waitController.setPlayerUsername(username, username_id);
+        for (int i = 0; i < usernames.length; i++) {
+          if (usernames[i] != null) {
+            waitController.setPlayerUsername(usernames[i], i);
+          }
+        }
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
