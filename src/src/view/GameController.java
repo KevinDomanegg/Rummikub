@@ -25,8 +25,6 @@ public class GameController {
   @FXML GridPane handGrid;
   @FXML Pane opponentMid;
 
-  String name = "Player";
-
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
   }
@@ -35,12 +33,17 @@ public class GameController {
         this.requestBuilder = requestBuilder;
     }
 
+    // called once when FXML is loaded
     @FXML
     public void initialize() {
-      model = new ClientModel();
       constructGrid(table, true, 24, 8);
       constructGrid(handGrid, false, 20, 2);
-      putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("black", 5)); //TODO: Remove
+      putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5)); //TODO: Remove
+    }
+
+    public void updateGrids() {
+      constructGrid(table, true, 24, 8);
+      constructGrid(handGrid, false, 20, 2);
     }
 
   @FXML
@@ -68,6 +71,9 @@ public class GameController {
   }
 
   private void setupDragAndDrop(Pane cell, boolean isTable) {
+    int columnIndex = GridPane.getColumnIndex(cell);
+    int rowIndex = GridPane.getRowIndex(cell);
+
     // Start drag and drop, copy stone to clipboard, delete stone in model
     cell.setOnDragDetected(event -> {
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
@@ -75,23 +81,17 @@ public class GameController {
 
       // Get stone from model
       StoneInfo[][] stoneGrid;
-      StoneInfo cellContent = new StoneInfo("black", 5); //TODO: Remove
-      int column = GridPane.getColumnIndex(cell);
-      int row = GridPane.getRowIndex(cell);
-      /* TODO: Enable
       if (isTable) {
         stoneGrid = model.getTable();
-        cellContent = stoneGrid[column][row];
       } else {
         stoneGrid = model.getHand();
-        cellContent = stoneGrid[column][row];
       }
-      */
+      StoneInfo cellContent = stoneGrid[columnIndex][rowIndex];
 
       // Put stone on clipboard
       content.put(stoneFormat, cellContent);
       dragBoard.setContent(content);
-      //stoneGrid[column][row] = null; TODO: Enable
+      stoneGrid[columnIndex][rowIndex] = null;
       event.consume();
     });
 
@@ -105,6 +105,19 @@ public class GameController {
 
     //
     cell.setOnDragDropped(event -> {
+      // Delete source stone
+      Pane sourceCell = (Pane) event.getGestureSource();
+      int column = GridPane.getColumnIndex(sourceCell);
+      int row = GridPane.getRowIndex(sourceCell);
+      StoneInfo[][] stoneGrid; //TODO: This is replicated code
+      if (isTable) {
+        stoneGrid = model.getTable();
+      } else {
+        stoneGrid = model.getHand();
+      }
+      stoneGrid[column][row] = null;
+
+      //Setting new cell
       StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
       putStoneInCell(cell, stoneInfo);
       event.consume();
@@ -113,8 +126,10 @@ public class GameController {
 
   private void putStoneInCell(Pane cell, StoneInfo stone) {
     Rectangle stoneBackground = new Rectangle(20, 40);
+    stoneBackground.getStyleClass().add("stone");
     Text stoneValue = new Text(Integer.toString(stone.getNumber()));
-    stoneValue.getStyleClass().add(stone.getColor()); //TODO: Configure style classes
+    stoneValue.getStyleClass().add(stone.getColor());
+    stoneValue.getStyleClass().add("stoneValue");
     cell.getChildren().add(stoneBackground);
     cell.getChildren().add(stoneValue);
   }
