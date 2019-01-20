@@ -14,7 +14,7 @@
            xmlns="http://javafx.com/javafx/8.0.172-ea"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.StartController"
-           stylesheets="view.startStyle.css">
+           stylesheets="@/view/startStyle.css">
    <children>
       <VBox>
          <children>

@@ -33,12 +33,6 @@ public class GameController {
         this.requestBuilder = requestBuilder;
     }
 
-    @FXML
-    public void initialize() {
-      constructGrid(table, true, 24, 8);
-      constructGrid(handGrid, false, 20, 2);
-      putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("black", 5)); //TODO: Remove
-    }
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
