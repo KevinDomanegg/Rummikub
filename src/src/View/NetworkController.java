@@ -3,6 +3,14 @@ package view;
 import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import network.client.GameInfoHandler;
 import network.client.RummiClient;
 
 import java.io.IOException;
@@ -15,9 +23,11 @@ public class NetworkController implements Controller {
   private WaitController waitController;
   private RummiClient client;
 
+
   NetworkController(RummiClient client) {
     this.client = client;
     client.start();
+    client.setGameInfoHandler(new GameInfoHandler(this));
   }
 
   void setWaitController(WaitController waitController) {
@@ -26,6 +36,18 @@ public class NetworkController implements Controller {
 
   void setGameController(GameController gameController) {
     this.gameController = gameController;
+  }
+
+  void setStartController(StartController startController) {
+    this.startController = startController;
+  }
+
+  public void setUsername(String username, int username_id) {
+    startController.setUsername(username, username_id);
+  }
+
+  public void setIPAddress(String ip) {
+    startController.setIpAddress(ip);
   }
 
   /**
@@ -84,8 +106,13 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyGameStart() {
-    waitController.switchToGameView();
-    gameController.notifyGameStart();
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        waitController.switchToGameView();
+      }
+    });
+    //gameController.notifyGameStart();
   }
 
   /**
@@ -115,11 +142,6 @@ public class NetworkController implements Controller {
   public void setBagSize(int bagSize) {
     gameController.setBagSize(bagSize);
 
-  }
-
-  void sendStartRequest() {
-    client.sendRequest(new SimpleRequest(RequestID.START));
-    // requestbuid.sfje
   }
 
   void sendDrawRequest() {

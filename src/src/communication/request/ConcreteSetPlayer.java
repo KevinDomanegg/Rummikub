@@ -19,6 +19,10 @@ public final class ConcreteSetPlayer implements Request, Serializable {
     return RequestID.SET_PLAYER;
   }
 
+  public String getName() {
+    return name;
+  }
+
   public int getAge() {
     return age;
   }

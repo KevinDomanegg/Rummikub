@@ -1,11 +1,6 @@
 package network.server;
 //Might be better to move this class to the game-package
-import communication.gameinfo.BagInfo;
-import communication.gameinfo.GameInfoID;
-import communication.gameinfo.GridInfo;
-import communication.gameinfo.HandSizesInfo;
-import communication.gameinfo.SimpleGameInfo;
-import communication.gameinfo.StoneInfo;
+import communication.gameinfo.*;
 import communication.request.*;
 import game.Coordinate;
 import game.Game;
@@ -24,9 +19,12 @@ class RequestHandler {
   private Game game;
   private Server server;
 
+  private String[] usernames;
+
   RequestHandler(Server server, Game game) {
     this.server = server;
     this.game = game;
+    usernames = new String[4];
   }
 
   private static StoneInfo[][] parseStoneInfoGrid(int width, int height, Map<Coordinate, Stone> stones) {
@@ -45,6 +43,7 @@ class RequestHandler {
   void applyRequest(Request request, int playerID){
     switch (request.getRequestID()){
       case START:
+        //starts the game
         startGame();
         return;
       case HAND_MOVE:
@@ -102,9 +101,20 @@ class RequestHandler {
         return;
       case SET_PLAYER:
         game.setPlayer(((ConcreteSetPlayer) request).getAge());
+        for (int i = 0; i < usernames.length; i++) {
+          if (usernames[i] != null) {
+            usernames[i] = ((ConcreteSetPlayer) request).getName();
+            break;
+          }
+        }
+        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
         return;
       default:
     }
+  }
+
+  private void sendUsernames(int playerID, String username) {
+    server.sendToPlayer(playerID, new GameUsernames(username, playerID));
   }
 
   private void sendTableToPlayer(int playerID) {
@@ -116,6 +126,9 @@ class RequestHandler {
   }
 
   private void startGame() {
+    // send start warning
+    sendStartGameToAll();
+    // START THE GAME
     game.start();
     // send table first to all
     sendTableToALl();
@@ -157,5 +170,9 @@ class RequestHandler {
     List<Integer> handSizes = game.getPlayerHandSizes();
     Collections.rotate(handSizes, -playerID);
     server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
+  }
+
+  private void sendStartGameToAll() {
+    server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
   }
 }

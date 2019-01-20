@@ -1,18 +1,13 @@
 package network.client;
 
-import communication.gameinfo.BagInfo;
-import communication.gameinfo.CurrentPlayerInfo;
-import communication.gameinfo.GameInfo;
-import communication.gameinfo.GridInfo;
-import communication.gameinfo.HandSizesInfo;
-import communication.gameinfo.PlayerNamesInfo;
+import communication.gameinfo.*;
 import view.NetworkController;
 
-class GameInfoHandler {
+public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
 
   private NetworkController controller;
 
-  GameInfoHandler(NetworkController controller) {
+  public GameInfoHandler(NetworkController controller) {
     this.controller = controller;
 //    this.client = client;
   }
@@ -41,11 +36,21 @@ class GameInfoHandler {
       case PLAYER_NAMES:
         controller.setPlayerNames(((PlayerNamesInfo) gameInfo).getNames());
         return;
+      case DRAW:
+        break;
       case CURRENT_PLAYER:
         controller.notifyCurrentPlayer(((CurrentPlayerInfo) gameInfo).getPlayerID());
         return;
       case GAME_START:
         controller.notifyGameStart();
+      case IP_ADDRESS:
+        try {
+          controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress()); // TODO FIX THIS
+        } catch (ClassCastException e) {}
+      case USERNAME:
+        try {
+          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId()); // TODO: FUCKING EXCEPTION ?!?!?!
+        } catch (ClassCastException e) {}
       default:
     }
   }

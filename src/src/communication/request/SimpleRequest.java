@@ -14,6 +14,6 @@ public final class SimpleRequest implements Request, Serializable {
 
   @Override
   public RequestID getRequestID() {
-    return null;
+    return id;
   }
 }

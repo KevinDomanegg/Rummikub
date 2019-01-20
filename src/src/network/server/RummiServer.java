@@ -1,10 +1,13 @@
 package network.server;
 
+import communication.gameinfo.GameIPAddress;
 import communication.gameinfo.GameInfo;
 import communication.request.Request;
 
 import game.Game;
 import game.RummiGame;
+import network.client.RummiClient;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -90,6 +93,12 @@ public class RummiServer extends Thread implements Server {
     senders[id] = new ServerSender(clients[id], this, id);
     senders[id].start();
     System.out.println("RummiServer: connected to " + id);
+    // SENDS THE IP ADDRESS OF THE SERVER
+    try {
+      sendToPlayer(id, new GameIPAddress(getIP()));
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
