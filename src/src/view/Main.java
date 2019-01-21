@@ -42,7 +42,7 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     //FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("start.fxml"));
     Parent root = loader.load();
     //gameController = loader.getController();
     startController = loader.getController();

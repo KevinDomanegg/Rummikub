@@ -145,7 +145,7 @@ public class StartController {
 
         //Stage stage = (Stage) nameField.getScene().getWindow();
       stage = (Stage) nameField.getScene().getWindow();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("wait.fxml"));
         Parent root = loader.getRoot();
         try {
             root = loader.load();

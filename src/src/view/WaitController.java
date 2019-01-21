@@ -91,7 +91,7 @@ public class WaitController implements Initializable {
     networkController.stopMusicInWaiting();
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
       Parent root = loader.getRoot();
       //loader.setRoot(this);
       try {
