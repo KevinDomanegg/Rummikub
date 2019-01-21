@@ -48,11 +48,13 @@ class RequestHandler {
         game.moveStoneOnHand(playerID,
             new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
             new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
+        sendHandToPlayer(playerID);
         return;
       case TABLE_MOVE:
         ConcreteMove tableMove = (ConcreteMove) request;
         game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
             new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
+        sendTableToALl();
         return;
       case PUT_STONE:
         ConcreteMove putStone = (ConcreteMove) request;

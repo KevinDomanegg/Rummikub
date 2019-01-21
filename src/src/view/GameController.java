@@ -96,7 +96,9 @@ public class GameController {
    */
   @FXML
   void constructGrid(GridPane grid, boolean isTable) {
-    //grid.getChildren().clear();
+    Platform.runLater(() -> {
+      grid.getChildren().clear();
+    });
     StoneInfo[][] currentGrid;
     if (isTable) {
       currentGrid = model.getTable();
@@ -154,20 +156,9 @@ public class GameController {
       StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
 
       if (cellContent != null) {
-        cell.getChildren().clear();
-
         // Put stone on clipboard
         content.put(stoneFormat, cellContent);
         dragBoard.setContent(content);
-
-        /*
-        if (isTable) {
-          model.setTable(stoneGrid);
-        } else {
-          model.setHand(stoneGrid);
-        }
-        //updateView();
-        */
       }
       event.consume();
     });
@@ -184,31 +175,32 @@ public class GameController {
     cell.setOnDragDropped(event -> {
       Dragboard dragboard = event.getDragboard();
       StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
+      /*
       putStoneInCell(cell, sourceStone);
 
+//
+      // Set stone in model
+      StoneInfo[][] stoneGrid;
+      if (isTable) {
+        stoneGrid = model.getTable();
+      } else {
+        stoneGrid = model.getHand();
+      }
+      stoneGrid[thisColumn][thisRow] = sourceStone;
+      */
+
       // Get source cell's coordinates
+
       Pane sourceCell = (Pane) event.getGestureSource();
-      Parent sourceParent = sourceCell.getParent();
+      sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
       int sourceRow = GridPane.getRowIndex(sourceCell);
 
-      Parent targetParent = cell.getParent();
-
-      if (sourceParent.getId().equals("handGrid")) {
-        if (targetParent.getId().equals("handGrid")) {
-          requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
-        } else {
-          requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
-        }
-      } else {
-        requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
-      }
-      event.consume();
 
 
+      /*
+      sourceCell.getChildren().clear();
 
-      /* TODO: Old code
-      StoneInfo[][] stoneGrid; //TODO: This is replicated code
       if (isTable) {
         stoneGrid = model.getTable();
         stoneGrid[sourceColumn][sourceRow] = null;
@@ -218,11 +210,22 @@ public class GameController {
         stoneGrid[sourceColumn][sourceRow] = null;
         model.setHand(stoneGrid);
       }
-
-      //Setting new cell
-      StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
-      putStoneInCell(cell, stoneInfo);
       */
+
+
+        Parent sourceParent = sourceCell.getParent();
+        Parent targetParent = cell.getParent();
+
+        if (sourceParent.getId().equals("handGrid")) {
+          if (targetParent.getId().equals("handGrid")) {
+            requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+          } else {
+            requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          }
+        } else {
+          requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+        }
+      event.consume();
     });
   }
 
@@ -233,6 +236,7 @@ public class GameController {
    * @param stone Properties (color, value) of the stone which shall be displayed
    */
   private void putStoneInCell(Pane cell, StoneInfo stone) {
+    cell.getChildren().clear();
     Rectangle stoneBackground = new Rectangle(20, 40);
     stoneBackground.getStyleClass().add("stone");
     Text stoneValue = new Text(Integer.toString(stone.getNumber()));
@@ -244,12 +248,16 @@ public class GameController {
 
   public void setTable(StoneInfo[][] table) {
     model.setTable(table);
-    constructGrid(this.table, true);
+    Platform.runLater(() -> {
+      constructGrid(this.table, true);
+    });
   }
 
   public void setPlayerHand(StoneInfo[][] hand) {
     model.setHand(hand);
-    constructGrid(handGrid, false);
+    Platform.runLater(() -> {
+      constructGrid(handGrid, false);
+    });
   }
 
   public void notifyInvalidMove() {
