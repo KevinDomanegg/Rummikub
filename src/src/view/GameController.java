@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GameController {
     private NetworkController networkController;
-    private ClientModel model;
+    private ClientModel model = new ClientModel();
     private StoneInfo[][] tableData;
     private StoneInfo[][] handData;
     private RequestBuilder requestBuilder;
@@ -38,7 +38,7 @@ public class GameController {
    */
   @FXML
   public void initialize() {
-    //updateView();
+    updateView();
 
     //TODO: Remove this line
     //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
