@@ -1,0 +1,48 @@
+.inputArea {
+    -fx-spacing: 7;
+}
+
+.buttonArea {
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+
+#vContainer {
+    -fx-max-width: 600;
+}
+
+#root {
+    -fx-pref-width: 1024;
+    -fx-pref-height: 768;
+    -fx-background-color: #095F94;
+}
+
+#header {
+    -fx-alignment: TOP_CENTER;
+}
+
+#content {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 15;
+    -fx-max-height: 400;
+    -fx-max-width: 600;
+
+    -fx-border-color: white;
+    -fx-border-radius: 5;
+    -fx-background-color: #095F94;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, #00000066, 20, 0.1, 0, 0);
+}
+
+#footer {
+    -fx-alignment: BOTTOM_CENTER;
+}
+
+#title {
+    -fx-font-size: 80;
+    -fx-font-weight: 700;
+}
+
+.whiteText {
+    -fx-fill: white;
+}
