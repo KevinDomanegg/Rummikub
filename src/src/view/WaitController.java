@@ -1,5 +1,6 @@
 package view;
 
+import communication.gameinfo.StoneInfo;
 import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -122,5 +123,29 @@ public class WaitController implements Initializable {
       waitingState.setText("hosting Game");
     }
     ipAddress.setText(model.getServerIP());
+  }
+
+  public void setTable(StoneInfo[][] table) {
+    model.setTable(table);
+  }
+
+  public void setPlayerHand(StoneInfo[][] hand) {
+    model.setHand(hand);
+  }
+
+  public void notifyTurn() {
+    model.notifyTurn();
+  }
+
+  public void notifyCurrentPlayer(int playerID) {
+    model.setCurrentPlayer(playerID);
+  }
+
+  public void setHandSizes(List<Integer> sizes) {
+    model.setHandSizes(sizes);
+  }
+
+  public void setBagSize(int bagSize) {
+    model.setBagSize(bagSize);
   }
 }

@@ -116,8 +116,6 @@ class RequestHandler {
   }
 
   private void startGame() {
-    // send start warning
-    sendStartGameToAll();
     // START THE GAME
     game.start();
     // send table first to all
@@ -132,6 +130,8 @@ class RequestHandler {
     sendHandSizesToAll();
     // notify the start player
     notifyTurnToPlayer();
+    // send start warning
+    sendStartGameToAll();
   }
 
   private void sendBagSizeToAll() {
