@@ -7,14 +7,21 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.URISyntaxException;
 import java.net.UnknownHostException;
 
 /**
@@ -26,13 +33,38 @@ public class StartController {
     private RummiClient client;
     private RummiServer server;
 
-    @FXML
+  private Main main;
+  //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\waitingMusic.mp3").toURI().toString());
+  private Media sound;
+
+  {
+    try {
+      sound = new Media((getClass().getResource("waitingMusic.mp3")).toURI().toString());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private MediaPlayer mediaPlayer = new MediaPlayer(sound);
+
+
+  @FXML
     private TextField nameField;
     @FXML
     private TextField ageField;
-
     @FXML
     private TextField ipField;
+    @FXML
+    private StackPane vContainer;
+    @FXML
+    private AnchorPane errorPane;
+    @FXML
+    private Text errorMessage;
+
+    @FXML
+    public void initialize() {
+        errorPane.setVisible(false);
+    }
 
 //    private String ip;
     //private String username;
@@ -58,14 +90,16 @@ public class StartController {
 //    }
 
     @FXML
-    void joinGame() {
+    void joinGame() throws IOException {
         switchToWait(new ClientModel(false));
+        main.stopMusic();
     }
 
     @FXML
-    void hostGame() {
+    void hostGame() throws IOException {
        server = new RummiServer();
        server.start();
+       main.stopMusic();
        try {
            ipField.setText(Inet4Address.getLocalHost().getHostAddress());
        } catch (UnknownHostException e) {
@@ -75,26 +109,26 @@ public class StartController {
     }
 
     @FXML
-    private void switchToErrorView() throws IOException {
-        Stage stage = (Stage) ipField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Error.fxml"));
-        Parent root = loader.load();
-        Scene errorScene = new Scene(root, 600, 400);
-        stage.setScene(errorScene);
-
+    private void switchToErrorView(String message) throws IOException {
+        errorMessage.setText(message);
+        errorPane.setVisible(true);
+        vContainer.setVisible(false);
     }
 
-
-    private void switchToWait(ClientModel model) {
+    private void switchToWait(ClientModel model) throws IOException {
+        try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
         client = new RummiClient(ipField.getText());
         model.setServerIP(ipField.getText());
         // Create a RequestBuilder
         RequestBuilder reqBuilder = new RequestBuilder(client);
 
-        NetworkController networkController = new NetworkController(client);
-        networkController.setStartController(this);
-        System.out.println("Client:" + nameField.getText() + " started");
+      NetworkController networkController = new NetworkController(client);
+      networkController.setStartController(this);
+      System.out.println("Client:" + nameField.getText() + " started");
+
+      //A LITTLE MUSIC
+      mediaPlayer.play();
 
         Stage stage = (Stage) nameField.getScene().getWindow();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
@@ -115,6 +149,9 @@ public class StartController {
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
+        } catch(NumberFormatException ex) {
+            switchToErrorView("age has to be a number");
+        }
     }
 
     void killThreads() {
@@ -125,4 +162,15 @@ public class StartController {
             server.suicide();
         }
     }
+
+    @FXML
+    void handleOkButton() {
+        vContainer.setVisible(true);
+        errorPane.setVisible(false);
+
+    }
+
+  public void setMain(Main main) {
+      this.main = main;
+  }
 }

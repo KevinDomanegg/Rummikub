@@ -2,7 +2,6 @@ package network.client;
 
 import communication.gameinfo.*;
 import view.NetworkController;
-import view.RummiController;
 
 public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
 
