@@ -2,6 +2,7 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -17,13 +18,13 @@ public class GameController {
   @FXML
   Text timer;
   @FXML
-  GridPane table;
+  private GridPane table;
   @FXML
-  GridPane handGrid;
+  private GridPane handGrid;
   @FXML
-  Pane opponentMid;
+  private Pane opponentMid;
   private NetworkController networkController;
-  private ClientModel model;
+  private ClientModel model = buildTestModel();
   private StoneInfo[][] tableData;
   private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
@@ -66,9 +67,6 @@ public class GameController {
   @FXML
   public void initialize() {
     updateView();
-
-    //TODO: Remove this line
-    //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
   }
 
   /**
@@ -134,6 +132,7 @@ public class GameController {
    * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, boolean isTable) {
+    // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
     int thisRow = GridPane.getRowIndex(cell);
 
@@ -176,12 +175,30 @@ public class GameController {
       event.consume();
     });
 
-    //
+    // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
-      // Delete source stone
+      // Get source cell's coordinates
       Pane sourceCell = (Pane) event.getGestureSource();
+      Parent sourceParent = sourceCell.getParent();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
       int sourceRow = GridPane.getRowIndex(sourceCell);
+
+      Parent targetParent = cell.getParent();
+
+      if (sourceParent.getId().equals("handGrid")) {
+        if (targetParent.getId().equals("handGrid")) {
+          requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+        } else {
+          requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+        }
+      } else {
+        requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+      }
+      event.consume();
+
+
+
+      /* TODO: Old code
       StoneInfo[][] stoneGrid; //TODO: This is replicated code
       if (isTable) {
         stoneGrid = model.getTable();
@@ -196,7 +213,7 @@ public class GameController {
       //Setting new cell
       StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
       putStoneInCell(cell, stoneInfo);
-      event.consume();
+      */
     });
   }
 
@@ -218,10 +235,12 @@ public class GameController {
 
   public void setTable(StoneInfo[][] table) {
     model.setTable(table);
+    constructGrid(this.table, true);
   }
 
   public void setPlayerHand(StoneInfo[][] hand) {
     model.setHand(hand);
+    constructGrid(handGrid, false);
   }
 
   public void notifyInvalidMove() {

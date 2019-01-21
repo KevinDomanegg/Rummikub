@@ -9,7 +9,7 @@ Text {
 }
 
 .hand {
-    -fx-background-color: red;
+    -fx-background-color: black;
 }
 
 .opponent {
@@ -53,18 +53,14 @@ Text {
     -fx-border-color: white;
     -fx-fill: none;
     -fx-alignment: CENTER;
-    -fx-pref-height: 50;
-    -fx-pref-width: 30;
-}
-
-.dropHover {
-    -fx-border-color: green;
+    -fx-pref-height: 55;
+    -fx-pref-width: 40;
 }
 
 .stone {
-    -fx-background-color: white;
-    -fx-pref-width: 20;
-    -fx-pref-height: 40;
+    -fx-fill: white;
+    -fx-max-width: 20;
+    -fx-max-height: 40;
 }
 
 #bottomPane {
@@ -72,6 +68,22 @@ Text {
     -fx-padding: 50 0 0 0;
 }
 
-.rot {
+.red {
     -fx-fill: red;
+}
+
+.yellow {
+    -fx-fill: yellow;
+}
+
+.blue {
+    -fx-fill: blue;
+}
+
+.black {
+    -fx-fill: black;
+}
+
+.joker {
+    -fx-fill: magenta;
 }
