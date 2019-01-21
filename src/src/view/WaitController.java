@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
@@ -87,10 +88,12 @@ public class WaitController implements Initializable {
  }
 
  synchronized void switchToGameView() {
+    networkController.stopMusicInWaiting();
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
       Parent root = loader.getRoot();
+      //loader.setRoot(this);
       try {
         root = loader.load();
       } catch (IOException e) {
