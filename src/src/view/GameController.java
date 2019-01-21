@@ -10,10 +10,13 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import network.client.RequestBuilder;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class GameController {
@@ -31,6 +34,22 @@ public class GameController {
   private ClientModel model;
   private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
+
+  //MUSIC
+  private Media sound_pickupStone;
+  private Media sound_dropStone;
+
+  {
+    try {
+      sound_pickupStone = new Media((getClass().getResource("pickupStone.mp3")).toURI().toString());
+      sound_dropStone = new Media((getClass().getResource("dropStone.mp3")).toURI().toString());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+  }
+  private MediaPlayer mediaPlayer_pickupStone = new MediaPlayer(sound_pickupStone);
+  private MediaPlayer mediaPlayer_dropStone = new MediaPlayer(sound_dropStone);
+
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
@@ -150,6 +169,8 @@ public class GameController {
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
+      mediaPlayer_pickupStone.stop();
+      mediaPlayer_pickupStone.play();
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
 
@@ -180,6 +201,8 @@ public class GameController {
 
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
+      mediaPlayer_dropStone.stop();
+      mediaPlayer_dropStone.play();
       Dragboard dragboard = event.getDragboard();
       StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
       /*
@@ -251,6 +274,7 @@ public class GameController {
     stoneValue.getStyleClass().add("stoneValue");
     cell.getChildren().add(stoneBackground);
     cell.getChildren().add(stoneValue);
+    //STOP MUSIC
   }
 
   public void setTable(StoneInfo[][] table) {

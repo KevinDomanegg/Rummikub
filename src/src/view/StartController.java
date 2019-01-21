@@ -124,6 +124,10 @@ public class StartController {
         vContainer.setVisible(false);
     }
 
+    void stopMusic() {
+      mediaPlayer.stop();
+    }
+
     private void switchToWait(ClientModel model) throws IOException {
         try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
@@ -142,7 +146,7 @@ public class StartController {
         //Stage stage = (Stage) nameField.getScene().getWindow();
       stage = (Stage) nameField.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
-        Parent root = null;
+        Parent root = loader.getRoot();
         try {
             root = loader.load();
         } catch (IOException e) {
