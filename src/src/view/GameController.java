@@ -10,29 +10,32 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import network.client.RequestBuilder;
+
 import java.util.List;
 
 public class GameController {
-    private NetworkController networkController;
-    private ClientModel model;
-    private StoneInfo[][] tableData;
-    private StoneInfo[][] handData;
-
-    private RequestBuilder requestBuilder;
-    private DataFormat stoneFormat = new DataFormat("stoneFormat");
-
-  @FXML Text timer;
-  @FXML GridPane table;
-  @FXML GridPane handGrid;
-  @FXML Pane opponentMid;
+  @FXML
+  Text timer;
+  @FXML
+  GridPane table;
+  @FXML
+  GridPane handGrid;
+  @FXML
+  Pane opponentMid;
+  private NetworkController networkController;
+  private ClientModel model;
+  private StoneInfo[][] tableData;
+  private StoneInfo[][] handData;
+  private RequestBuilder requestBuilder;
+  private DataFormat stoneFormat = new DataFormat("stoneFormat");
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
   }
 
-    void setRequestBuilder(RequestBuilder requestBuilder) {
-        this.requestBuilder = requestBuilder;
-    }
+  void setRequestBuilder(RequestBuilder requestBuilder) {
+    this.requestBuilder = requestBuilder;
+  }
 
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
@@ -53,8 +56,9 @@ public class GameController {
     constructGrid(handGrid, false);
   }
 
-  /** Method to request stone from server and place it in player's hand
-   *  event: User clicks draw button
+  /**
+   * Method to request stone from server and place it in player's hand
+   * event: User clicks draw button
    */
   @FXML
   public void drawStone() {
@@ -65,9 +69,10 @@ public class GameController {
     //TODO: Confirm drawn stone, update view
   }
 
-  /** Method to automatically construct columns, rows, and cells with StackPane in it.
+  /**
+   * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-   * @param grid The FXML GridPane where the cells shall be constructed in
+   * @param grid    The FXML GridPane where the cells shall be constructed in
    * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
    */
   @FXML
@@ -102,9 +107,10 @@ public class GameController {
     }
   }
 
-  /** Method to setup drag event, content to copy on clipboard, and drop event for a cell
+  /**
+   * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
-   * @param cell Pane where the event shall be registered
+   * @param cell    Pane where the event shall be registered
    * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, boolean isTable) {
@@ -163,9 +169,10 @@ public class GameController {
     });
   }
 
-  /** Method for displaying a stone in a cell
+  /**
+   * Method for displaying a stone in a cell
    *
-   * @param cell Cell in which the stone shall be displayed
+   * @param cell  Cell in which the stone shall be displayed
    * @param stone Properties (color, value) of the stone which shall be displayed
    */
   private void putStoneInCell(Pane cell, StoneInfo stone) {
@@ -214,8 +221,9 @@ public class GameController {
     model.notifyGameStart();
   }
 
-  /** Method to update the data from the server.
-   *  Triggers view update
+  /**
+   * Method to update the data from the server.
+   * Triggers view update
    *
    * @param model New model from server
    */
