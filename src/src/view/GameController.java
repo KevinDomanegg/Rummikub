@@ -37,6 +37,17 @@ public class GameController {
     this.requestBuilder = requestBuilder;
   }
 
+  StoneInfo[][] buildTestTable() {
+    StoneInfo[][] result = new StoneInfo[2][20];
+    for (int x = 0; x < 2; x++) {
+      for (int y = 0; y < 20; y++) {
+        StoneInfo cell = new StoneInfo("red", 5);
+        result[x][y] = cell;
+      }
+    }
+    return result;
+  }
+
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
@@ -79,12 +90,14 @@ public class GameController {
   void constructGrid(GridPane grid, boolean isTable) {
     //TODO: Set model here
 
-    StoneInfo[][] currentGrid;
-    if (isTable) {
-      currentGrid = model.getTable();
-    } else {
-      currentGrid = model.getHand();
-    }
+//    StoneInfo[][] currentGrid;
+//    if (isTable) {
+//      currentGrid = model.getTable();
+//    } else {
+//      currentGrid = model.getHand();
+//    }
+
+    StoneInfo[][] currentGrid = buildTestTable();
 
     int columns = currentGrid.length;
     int rows = currentGrid[0].length;
