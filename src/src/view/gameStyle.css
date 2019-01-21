@@ -5,7 +5,8 @@ Text {
 #root {
     -fx-pref-width: 1024;
     -fx-pref-height: 768;
-    -fx-background-color: #095F94;
+    -fx-background-image: url("backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
 }
 
 .hand {
@@ -71,22 +72,26 @@ Text {
     -fx-padding: 50 0 0 0;
 }
 
-.red {
+.RED {
     -fx-fill: red;
 }
 
-.yellow {
+.YELLOW {
     -fx-fill: yellow;
 }
 
-.blue {
+.BLUE {
     -fx-fill: blue;
 }
 
-.black {
+.BLACK {
     -fx-fill: black;
 }
 
-.joker {
+.JOKER {
     -fx-fill: magenta;
+}
+
+.stoneValue {
+    -fx-font-weight: 700;
 }

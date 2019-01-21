@@ -11,7 +11,8 @@
         xmlns="http://javafx.com/javafx"
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="view.WaitController"
-        stylesheets="@/view/waitStyle.css">
+        stylesheets="@/view/waitStyle.css"
+        fx:id="root">
    <children>
       <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="joining game">
          <font>
