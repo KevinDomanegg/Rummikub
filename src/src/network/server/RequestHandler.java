@@ -80,9 +80,9 @@ class RequestHandler {
           notifyTurnToPlayer();
         } else {
           // send the original table to the current player
-          sendTableToPlayer(playerID);
+          sendTableToALl();
           // send the original hand to the current player
-          sendHandToPlayer(playerID);
+          sendHandSizesToAll();
           // notify wrong move
           server.sendToPlayer(playerID, new SimpleGameInfo(GameInfoID.INVALID_MOVE));
         }

@@ -59,6 +59,7 @@ public class Main extends Application {
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
+    startController.setMain(this);
 
     primaryStage.setOnCloseRequest(e -> {
       System.out.println("klicked  on x");

@@ -50,6 +50,10 @@ public class NetworkController implements Controller {
     startController.returnToStart();
   }
 
+  void stopMusicInWaiting() {
+    startController.stopMusic();
+  }
+
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);
 //  }
