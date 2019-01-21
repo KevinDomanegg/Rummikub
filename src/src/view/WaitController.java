@@ -71,23 +71,27 @@ public class WaitController implements Initializable {
  }
 
   public void switchToGameView() {
-    Stage stage = (Stage) startGameButton.getScene().getWindow();
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
-    Parent root = null;
-    try {
-      root = loader.load();
-    } catch (IOException e) {
-      e.printStackTrace();
+    synchronized (networkController) {
+      Stage stage = (Stage) startGameButton.getScene().getWindow();
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
+      Parent root = null;
+      try {
+        root = loader.load();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+
+      GameController gameController = loader.getController();
+
+      gameController.setRequestBuilder(requestBuilder);
+      networkController.setGameController(gameController);
+
+      Scene gameScene = new Scene(root, 1024, 768);
+      gameScene.getStylesheets().add("view/gameStyle.css");
+      stage.setScene(gameScene);
+      notifyAll();
     }
-
-    GameController gameController = loader.getController();
-
-    gameController.setRequestBuilder(requestBuilder);
-    networkController.setGameController(gameController);
-
-    Scene gameScene = new Scene(root, 1024, 768);
-    gameScene.getStylesheets().add("view/gameStyle.css");
-    stage.setScene(gameScene);
+   //System.out.println("switched to game");
   }
 
   @Override
