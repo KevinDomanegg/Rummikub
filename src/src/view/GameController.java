@@ -23,6 +23,10 @@ public class GameController {
   private GridPane table;
   @FXML
   private GridPane handGrid;
+  @FXML
+  private VBox errorPane;
+  @FXML
+  private Text errorMessage;
   private NetworkController networkController;
   private ClientModel model;
   private RequestBuilder requestBuilder;
@@ -87,7 +91,7 @@ public class GameController {
       networkController.sendDrawRequest();
       model.finishTurn();
     } else {
-      // error
+      showErrorView();
     }
   }
 
@@ -311,7 +315,18 @@ public class GameController {
       requestBuilder.sendConfirmMoveRequest();
       model.finishTurn();
     } else {
-      // error
+      showErrorView();
     }
+  }
+
+  private void showErrorView() {
+    errorMessage.setText("it's not you turn!");
+    errorPane.setVisible(true);
+    table.setVisible(false);
+  }
+
+  @FXML private void handleOkButton() {
+    errorPane.setVisible(false);
+    table.setVisible(true);
   }
 }

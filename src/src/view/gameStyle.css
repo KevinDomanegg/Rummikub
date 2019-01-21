@@ -28,6 +28,9 @@ Text {
     -fx-padding: 20;
 }
 
+#errorPane {
+    -fx-alignment: CENTER;
+}
 
 #opponentLeft {
     -fx-rotate: -90;
