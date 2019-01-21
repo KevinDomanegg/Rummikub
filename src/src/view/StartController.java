@@ -23,8 +23,8 @@ import java.net.UnknownHostException;
  */
 public class StartController {
 
-    RummiClient client;
-    RummiServer server;
+    private RummiClient client;
+    private RummiServer server;
 
     @FXML
     private TextField nameField;
@@ -34,11 +34,10 @@ public class StartController {
     @FXML
     private TextField ipField;
 
-    private String ip;
+//    private String ip;
     //private String username;
     //private int username_id;
-    private WaitController waitController;
-    private String[] usernames = new String[4];
+//    private String[] usernames = new String[4];
 
 /*  StartController(Main networkController, ClientModel model, RummiClient client) {
     this.networkController = networkController;
@@ -46,29 +45,33 @@ public class StartController {
     this.client = client;
   }*/
 
-    void setIpAddress(String ip) {
-        this.ip = ip;
-    }
+//    void setIpAddress(String ip) {
+//        this.ip = ip;
+//    }
 
-    void setUsername(String username, int username_id) {
-      if (waitController != null) {
-        waitController.setPlayerUsername(username, username_id);
-      } else {
-        usernames[username_id] = username;
-      }
+//    void setUsername(String username, int username_id) {
+//      if (waitController != null) {
+//        waitController.setPlayerUsername(username, username_id);
+//      } else {
+//        usernames[username_id] = username;
+//      }
+//    }
+
+    @FXML
+    void joinGame() {
+        switchToWait(new ClientModel(false));
     }
 
     @FXML
-    void joinGame() throws IOException {
-        switchToWait();
-    }
-
-    @FXML
-    void hostGame() throws IOException {
+    void hostGame() {
        server = new RummiServer();
        server.start();
-       ipField.setText("localhost");
-       switchToWait();
+       try {
+           ipField.setText(Inet4Address.getLocalHost().getHostAddress());
+       } catch (UnknownHostException e) {
+           e.printStackTrace();
+       }
+        switchToWait(new ClientModel(true));
     }
 
     @FXML
@@ -82,13 +85,12 @@ public class StartController {
     }
 
 
-    private void switchToWait() {
+    private void switchToWait(ClientModel model) {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
         client = new RummiClient(ipField.getText());
+        model.setServerIP(ipField.getText());
         // Create a RequestBuilder
         RequestBuilder reqBuilder = new RequestBuilder(client);
-        // send request to set a player
-        reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
         NetworkController networkController = new NetworkController(client);
         networkController.setStartController(this);
@@ -103,18 +105,13 @@ public class StartController {
             e.printStackTrace();
         }
         WaitController waitController = loader.getController();
-        this.waitController = waitController;
-        waitController.setIpAddress(ipField.getText());
         waitController.setNetworkController(networkController);
         networkController.setWaitController(waitController);
         waitController.setRequestBuilder(reqBuilder);
+        waitController.setModel(model);
 
-        waitController.setIpAddress(ip);
-        for (int i = 0; i < usernames.length; i++) {
-          if (usernames[i] != null) {
-            waitController.setPlayerUsername(usernames[i], i);
-          }
-        }
+        // send request to set a player
+        reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);

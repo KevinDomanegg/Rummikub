@@ -38,7 +38,7 @@ public class GameController {
    */
   @FXML
   public void initialize() {
-    //updateView();
+    updateView();
 
     //TODO: Remove this line
     //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));

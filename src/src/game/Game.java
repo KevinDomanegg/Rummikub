@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public interface Game {
 
-  void setPlayer(int age);
+  void setPlayer(String name, int age);
 
   void start();
 
@@ -49,6 +49,8 @@ public interface Game {
   int getNumberOfPlayers();
 
   List<Entry<Integer, Integer>> getFinalRank();
+
+  List<String> getPlayerNames();
 
   // ? int getTime();
 }

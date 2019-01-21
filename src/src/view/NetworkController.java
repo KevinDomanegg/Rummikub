@@ -43,13 +43,13 @@ public class NetworkController implements Controller {
     this.startController = startController;
   }
 
-  public void setUsername(String username, int username_id) {
-    startController.setUsername(username, username_id);
-  }
+//  public void setUsername(String username, int username_id) {
+//    startController.setUsername(username, username_id);
+//  }
 
-  public void setIPAddress(String ip) {
-    startController.setIpAddress(ip);
-  }
+//  public void setIPAddress(String ip) {
+//    startController.setIpAddress(ip);
+//  }
 
   /**
    * Sets the names of all the players in the game.
@@ -59,6 +59,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> names) {
+    if (gameController == null) {
+      waitController.setPlayerNames(names);
+      return;
+    }
     gameController.setPlayerNames(names);
   }
 
@@ -117,12 +121,9 @@ public class NetworkController implements Controller {
   @Override
   public void notifyGameStart() {
 
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-        waitController.switchToGameView();
-        //System.out.println("notified gamecontroller to switch1");
-      }
+    Platform.runLater(() -> {
+      //System.out.println("notified gamecontroller to switch1");
+      waitController.switchToGameView();
     });
 
     //System.out.println("notified gamecontroller to switch2");
