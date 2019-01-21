@@ -14,7 +14,7 @@ import java.util.List;
 
 public class GameController {
     private NetworkController networkController;
-    private ClientModel model = new ClientModel();
+    private ClientModel model;
     private StoneInfo[][] tableData;
     private StoneInfo[][] handData;
     private RequestBuilder requestBuilder;

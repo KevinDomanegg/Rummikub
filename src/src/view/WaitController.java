@@ -1,11 +1,13 @@
 package view;
 
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
@@ -18,6 +20,11 @@ public class WaitController implements Initializable {
 
   private RequestBuilder requestBuilder;
   private NetworkController networkController;
+
+  private ClientModel model;
+
+  @FXML
+  private Label waitingState;
 
   @FXML
   private Text ipAddress;
@@ -50,27 +57,31 @@ public class WaitController implements Initializable {
     this.requestBuilder = requestBuilder;
   }
 
-  void setIpAddress(String ipAddress) {
-    this.ipAddress.setText(ipAddress);
-  }
-
- void setPlayerUsername(String username, int id) {
-    switch (id) {
-      case 0:
-        this.player0.setText(username);
-        break;
-      case 1:
-        this.player1.setText(username);
-        break;
-      case 2:
-        this.player2.setText(username);
-        break;
-      case 3:
-        this.player3.setText(username);
-    }
+ void setPlayerNames(List<String> names) {
+   int size = names.size();
+   switch (size) {
+     case 4:
+       player3.setText(names.get(3));
+     case 3:
+       player2.setText(names.get(2));
+     case 2:
+       player1.setText(names.get(1));
+     case 1:
+       player0.setText(names.get(0));
+     default:
+   }
+   if (model.isHost()) {
+      if (size > 1) {
+        // start button visible
+        startGameButton.setVisible(true);
+        return;
+      }
+   }
+   // start button not visible
+   startGameButton.setVisible(false);
  }
 
-  public synchronized void switchToGameView() {
+ synchronized void switchToGameView() {
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
@@ -82,6 +93,7 @@ public class WaitController implements Initializable {
       }
 
       GameController gameController = loader.getController();
+      gameController.setModel(model);
 
       gameController.setRequestBuilder(requestBuilder);
       networkController.setGameController(gameController);
@@ -97,5 +109,13 @@ public class WaitController implements Initializable {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     //ipAddress.setText();
+  }
+
+  void setModel(ClientModel model) {
+    this.model = model;
+    if (model.isHost()) {
+      waitingState.setText("hosting Game");
+    }
+    ipAddress.setText(model.getServerIP());
   }
 }

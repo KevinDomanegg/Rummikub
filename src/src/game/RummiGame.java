@@ -43,8 +43,8 @@ public class RummiGame implements Game {
     currentPlayerID = (currentPlayerID + 1) % players.size();
   }
 
-  @Override public void setPlayer(int age) {
-    players.add(new Player(age));
+  @Override public void setPlayer(String name, int age) {
+    players.add(new Player(name, age));
   }
 
   /** starts the game by handing out stones and determining the start player. */
@@ -190,6 +190,11 @@ public class RummiGame implements Game {
     return players.stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
+  @Override
+  public List<String> getPlayerNames() {
+    return players.stream().map(Player::getName).collect(Collectors.toList());
+  }
+
   @Override public int getCurrentPlayerID(){
     return currentPlayerID;
   }
@@ -213,8 +218,8 @@ public class RummiGame implements Game {
   @Override public int getNumberOfPlayers() {
     return players.size();
   }
-
   // for test
+
   Stack<MoveTrace> getTrace() {
     return trace;
   }

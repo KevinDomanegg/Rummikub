@@ -18,7 +18,6 @@ public class Main extends Application {
 
   public static void main(String[] args) {
     launch(args);
-    //System.out.println(Thread.getAllStackTraces().keySet().toString());
   }
 
   //TODO: Catch exception
@@ -40,7 +39,7 @@ public class Main extends Application {
     primaryStage.setTitle("Rummikub");
     //Scene scene = resolution(root);
     Scene scene = new Scene(root, 1024, 768);
-//    scene.getStylesheets().add("view/gameStyle.css");
+    //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
