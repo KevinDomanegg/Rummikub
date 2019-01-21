@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
@@ -22,6 +23,10 @@ public class GameController {
   private GridPane table;
   @FXML
   private GridPane handGrid;
+  @FXML
+  private VBox errorPane;
+  @FXML
+  private Text errorMessage;
   private NetworkController networkController;
   private ClientModel model;
   private RequestBuilder requestBuilder;
@@ -81,11 +86,13 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
-    networkController.sendDrawRequest();
-    model.finishTurn();
-    // Server request: Get stone from bag
-
-    //TODO: Confirm drawn stone, update view
+    if (model.isMyTurn()) {
+      // Server request: Get stone from bag
+      networkController.sendDrawRequest();
+      model.finishTurn();
+    } else {
+      showErrorView();
+    }
   }
 
   /**
@@ -282,6 +289,7 @@ public class GameController {
 
   public void notifyCurrentPlayer(int playerID) {
     model.setCurrentPlayer(playerID);
+    // show current player on view
   }
 
   public void notifyGameStart() {
@@ -297,5 +305,36 @@ public class GameController {
   public void setModel(ClientModel model) {
     this.model = model;
     updateView();
+  }
+
+  @FXML
+  private void sendResetRequest() {
+    if (model.isMyTurn()) {
+      requestBuilder.sendResetRequest();
+      model.finishTurn();
+    } else {
+      // error
+    }
+  }
+
+  @FXML
+  private void sendConfirmMoveRequest() {
+    if (model.isMyTurn()) {
+      requestBuilder.sendConfirmMoveRequest();
+      model.finishTurn();
+    } else {
+      showErrorView();
+    }
+  }
+
+  private void showErrorView() {
+    errorMessage.setText("it's not you turn!");
+    errorPane.setVisible(true);
+    table.setVisible(false);
+  }
+
+  @FXML private void handleOkButton() {
+    errorPane.setVisible(false);
+    table.setVisible(true);
   }
 }

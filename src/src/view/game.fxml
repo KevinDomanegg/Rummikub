@@ -11,6 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -62,6 +65,21 @@
     <center>
         <StackPane fx:id="tableContainer">
             <children>
+                <VBox fx:id="errorPane" visible="false">
+                    <children>
+                        <Label layoutX="252.0" layoutY="64.0" text="-Error-" textFill="#d01818">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Label>
+                        <Text fx:id="errorMessage" layoutX="70.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="459.2060546875">
+                            <font>
+                                <Font size="36.0" />
+                            </font>
+                        </Text>
+                        <Button fx:id="okButton" layoutX="281.0" layoutY="299.0" mnemonicParsing="false" text="OK" onMouseClicked="#handleOkButton"/>
+                    </children>
+                </VBox>
                 <!-- table grid -->
                 <GridPane fx:id="table">
                     <children>
@@ -83,7 +101,8 @@
                     <children>
                         <Button fx:id="drawButton" text="Draw stone"
                                 onMouseClicked="#drawStone"/>
-                        <Button fx:id="undoButton" text="Undo"/>
+                        <Button fx:id="resetButton" text="Reset" onMouseClicked="#sendResetRequest"/>
+                        <Button fx:id="checkButton" text="Check" onMouseClicked="#sendConfirmMoveRequest"/>
                     </children>
                 </HBox>
 
