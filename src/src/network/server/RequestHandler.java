@@ -19,12 +19,9 @@ class RequestHandler {
   private Game game;
   private Server server;
 
-  private String[] usernames;
-
   RequestHandler(Server server, Game game) {
     this.server = server;
     this.game = game;
-    usernames = new String[4];
   }
 
   private static StoneInfo[][] parseStoneInfoGrid(int width, int height, Map<Coordinate, Stone> stones) {
@@ -100,37 +97,13 @@ class RequestHandler {
         sendHandSizesToAll();
         return;
       case SET_PLAYER:
-        game.setPlayer(((ConcreteSetPlayer) request).getAge());
-        for (int i = 0; i < usernames.length; i++) {
-          if (usernames[i] == null) {
-            usernames[i] = ((ConcreteSetPlayer) request).getName();
-            break;
-          }
-        }
-        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
+        ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
+        game.setPlayer(setPlayer.getName(), setPlayer.getAge());
+        sendPlayerNamesToAll();
+//        server.sendToAll(new NameInfo(setPlayer.getName()));
+//        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
         return;
       default:
-    }
-  }
-
-  private void sendUsernames(int playerID, String username) {
-    server.sendToPlayer(playerID, new GameUsernames(username, playerID));
-
-    // sends to all new players the new connected player
-    for (int i = 0; i < usernames.length; i++) {
-      if (usernames[i] != null) {
-        if (!usernames[i].equals(username)) {
-          server.sendToPlayer(i, new GameUsernames(username, playerID));
-        }
-      }
-    }
-    // sends to the new player tha other connected players
-    for (int i = 0; i < usernames.length; i++) {
-      if (usernames[i] != null) {
-        if (!(usernames[i].equals(username))) {
-          server.sendToPlayer(playerID, new GameUsernames(usernames[i], i));
-        }
-      }
     }
   }
 
@@ -143,8 +116,6 @@ class RequestHandler {
   }
 
   private void startGame() {
-    // send start warning
-    sendStartGameToAll();
     // START THE GAME
     game.start();
     // send table first to all
@@ -159,6 +130,8 @@ class RequestHandler {
     sendHandSizesToAll();
     // notify the start player
     notifyTurnToPlayer();
+    // send start warning
+    sendStartGameToAll();
   }
 
   private void sendBagSizeToAll() {
@@ -180,6 +153,15 @@ class RequestHandler {
     for (int playerID = 1; playerID < game.getNumberOfPlayers(); playerID++) {
       Collections.rotate(handSizes, -1);
       server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
+    }
+  }
+
+  private void sendPlayerNamesToAll() {
+    List<String> names = game.getPlayerNames();
+    server.sendToPlayer(0, new PlayerNamesInfo(names));
+    for (int playerID = 1; playerID < game.getNumberOfPlayers(); playerID++) {
+      Collections.rotate(names, -1);
+      server.sendToPlayer(playerID, new PlayerNamesInfo(names));
     }
   }
 

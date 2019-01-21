@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.deploy.uitoolkit.impl.fx.ui.ErrorPane;
 import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
@@ -10,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.GameInfoHandler;
 import network.client.RummiClient;
@@ -43,13 +46,17 @@ public class NetworkController implements Controller {
     this.startController = startController;
   }
 
-  public void setUsername(String username, int username_id) {
-    startController.setUsername(username, username_id);
+  void returnToStartView() {
+    startController.returnToStart();
   }
 
-  public void setIPAddress(String ip) {
-    startController.setIpAddress(ip);
-  }
+//  public void setUsername(String username, int username_id) {
+//    startController.setUsername(username, username_id);
+//  }
+
+//  public void setIPAddress(String ip) {
+//    startController.setIpAddress(ip);
+//  }
 
   /**
    * Sets the names of all the players in the game.
@@ -59,6 +66,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> names) {
+    if (gameController == null) {
+      waitController.setPlayerNames(names);
+      return;
+    }
     gameController.setPlayerNames(names);
   }
 
@@ -70,6 +81,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setHandSizes(List<Integer> sizes) {
+    if (gameController == null) {
+      waitController.setHandSizes(sizes);
+      return;
+    }
     gameController.setHandSizes(sizes);
   }
 
@@ -80,6 +95,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setTable(StoneInfo[][] table) {
+    if (gameController == null) {
+      waitController.setTable(table);
+      return;
+    }
     synchronized (this) {
       while (gameController == null) {
         try {
@@ -100,6 +119,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerHand(StoneInfo[][] hand) {
+    if (gameController == null) {
+      waitController.setPlayerHand(hand);
+      return;
+    }
     gameController.setPlayerHand(hand);
   }
 
@@ -108,6 +131,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyTurn() {
+    if (gameController == null) {
+      waitController.notifyTurn();
+      return;
+    }
     gameController.notifyTurn();
   }
 
@@ -117,12 +144,9 @@ public class NetworkController implements Controller {
   @Override
   public void notifyGameStart() {
 
-    Platform.runLater(new Runnable() {
-      @Override
-      public void run() {
-        waitController.switchToGameView();
-        //System.out.println("notified gamecontroller to switch1");
-      }
+    Platform.runLater(() -> {
+      //System.out.println("notified gamecontroller to switch1");
+      waitController.switchToGameView();
     });
 
     //System.out.println("notified gamecontroller to switch2");
@@ -136,6 +160,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
+    if (gameController == null) {
+      waitController.notifyCurrentPlayer(playerID);
+      return;
+    }
     gameController.notifyCurrentPlayer(playerID);
   }
 
@@ -154,8 +182,11 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
+    if (gameController == null) {
+      waitController.setBagSize(bagSize);
+      return;
+    }
     gameController.setBagSize(bagSize);
-
   }
 
   void sendDrawRequest() {

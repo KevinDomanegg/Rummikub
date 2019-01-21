@@ -14,7 +14,8 @@
 <BorderPane fx:id="root"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="view.GameController">
+            fx:controller="view.GameController"
+            stylesheets="@/view/gameStyle.css">
     <top>
         <StackPane fx:id="top">
             <children>
@@ -37,7 +38,7 @@
                     <!-- Menu buttons -->
                     <children>
                         <Button fx:id="quitButton" mnemonicParsing="false"
-                                text="Quit"/>
+                                text="Quit" onMouseClicked="#returnToStart"/>
                     </children>
                 </StackPane>
             </children>

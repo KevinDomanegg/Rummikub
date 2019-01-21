@@ -1,14 +1,7 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -18,148 +11,207 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import network.client.RequestBuilder;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class GameController {
-    int handCount = 0;
-    private NetworkController networkController;
-    private ClientModel model;
-    private RequestBuilder requestBuilder;
-
-  @FXML Text timer;
-  @FXML GridPane table;
-  @FXML GridPane handGrid;
-  @FXML Pane opponentMid;
-  @FXML Text stupidTest;
-
-  String name = "Player";
+  @FXML
+  Text timer;
+  @FXML
+  GridPane table;
+  @FXML
+  GridPane handGrid;
+  @FXML
+  Pane opponentMid;
+  private NetworkController networkController;
+  private ClientModel model;
+  private StoneInfo[][] tableData;
+  private StoneInfo[][] handData;
+  private RequestBuilder requestBuilder;
+  private static DataFormat stoneFormat = new DataFormat("stoneFormat");
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
   }
 
-    void setRequestBuilder(RequestBuilder requestBuilder) {
-        this.requestBuilder = requestBuilder;
-    }
+  void setRequestBuilder(RequestBuilder requestBuilder) {
+    this.requestBuilder = requestBuilder;
+  }
 
-    @FXML
-    public void initialize() {
-        constructGrid(table, 24, 8);
-        constructGrid(handGrid, 20, 2);
-        setupDrag(stupidTest);
-        model = new ClientModel();
+  /* TODO: REMOVE TEST METHODS*/
+  StoneInfo[][] buildTestTable(int columns, int rows) {
+    StoneInfo[][] result = new StoneInfo[columns][rows];
+    for (int x = 0; x < columns; x=x+2) {
+      for (int y = 0; y < rows; y=y+2) {
+        StoneInfo cell = new StoneInfo("red", 5);
+        result[x][y] = cell;
+      }
     }
+    return result;
+  }
 
+  ClientModel buildTestModel() {
+    ClientModel result = new ClientModel(false);
+    result.setHand(buildTestTable(20,2));
+    result.setTable(buildTestTable(40,8));
+    return result;
+  }
+
+  public void returnToStart() {
+    networkController.returnToStartView();
+  }
+
+  /**
+   * This method is automatically called after the FXMLLoader loaded all FXML content.
+   */
   @FXML
-  public void drawStone() throws IOException {
-    model.finishTurn();
+  public void initialize() {
+//    updateView();
+    //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
+  }
+
+  /**
+   * Updates FXML with data from model.
+   */
+  public void updateView() {
+    constructGrid(table, true);
+    constructGrid(handGrid, false);
+  }
+
+  /**
+   * Method to request stone from server and place it in player's hand
+   * event: User clicks draw button
+   */
+  @FXML
+  public void drawStone() {
     networkController.sendDrawRequest();
+    model.finishTurn();
     // Server request: Get stone from bag
 
-    /*
-    TODO: Set stone to desired value
-    FXMLLoader loader = new FXMLLoader();
-    VBox cell = loader.load(getClass().getResource("Stone.fxml"));
-    StoneController stoneController = loader.getController();
-    stoneController.setStone(3, "rot");
-    */
-
-    Text drawnStone = new Text("5");
-
-    handGrid.add(drawnStone, handCount, 0);
-    setupDrag(drawnStone);
-    handCount++;
+    //TODO: Confirm drawn stone, update view
   }
 
+  /**
+   * Method to automatically construct columns, rows, and cells with StackPane in it.
+   *
+   * @param grid    The FXML GridPane where the cells shall be constructed in
+   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
+   */
   @FXML
-  void constructGrid(GridPane grid, int columns, int rows) {
-    for(int x = 0; x < columns; x++) {
-      for(int y = 0; y < rows; y++) {
-        StackPane cell = new StackPane();
-        setupDrop(cell);
+  void constructGrid(GridPane grid, boolean isTable) {
+    StoneInfo[][] currentGrid;
+    if (isTable) {
+      currentGrid = model.getTable();
+    } else {
+      currentGrid = model.getHand();
+    }
 
-        cell.setPrefWidth(1024.0/columns); //TODO: Configure for hand, too
-        cell.setPrefHeight(768.0/rows);
+    int columns = currentGrid.length;
+    int rows = currentGrid[0].length;
+
+
+    for (int x = 0; x < columns; x++) {
+      for (int y = 0; y < rows; y++) {
+        StackPane cell = new StackPane();
+
+        if (currentGrid[x][y] != null) {
+          StoneInfo stone = currentGrid[x][y];
+          putStoneInCell(cell, stone);
+        }
+
         cell.getStyleClass().add("cell");
         grid.add(cell, x, y);
+        setupDragAndDrop(cell, isTable);
       }
     }
   }
 
+  /**
+   * Method to setup drag event, content to copy on clipboard, and drop event for a cell
+   *
+   * @param cell    Pane where the event shall be registered
+   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+   */
+  private void setupDragAndDrop(Pane cell, boolean isTable) {
+    int thisColumn = GridPane.getColumnIndex(cell);
+    int thisRow = GridPane.getRowIndex(cell);
 
-  void setupDrag(Text test) {
-    // Start drag here
-    /*
-    test.setOnDragDetected(event -> {
-      Dragboard dragBoard = test.startDragAndDrop(TransferMode.ANY);
+    // Start drag and drop, copy stone to clipboard, delete stone in view
+    cell.setOnDragDetected(event -> {
+      Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
-      content.putString(test.getText());
-      dragBoard.setContent(content);
+
+      // Get stone from model
+      StoneInfo[][] stoneGrid;
+      if (isTable) {
+        stoneGrid = model.getTable();
+      } else {
+        stoneGrid = model.getHand();
+      }
+      StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
+
+      if (cellContent != null) {
+        cell.getChildren().clear();
+
+        // Put stone on clipboard
+        content.put(stoneFormat, cellContent);
+        dragBoard.setContent(content);
+        //stoneGrid[thisColumn][thisRow] = null;
+        if (isTable) {
+          model.setTable(stoneGrid);
+        } else {
+          model.setHand(stoneGrid);
+        }
+        //updateView();
+      }
       event.consume();
     });
-    */
 
-/*    test.setOnDragDetected(event -> {
-      Dragboard db = test.startDragAndDrop(TransferMode.ANY);
-      ClipboardContent content = new ClipboardContent();
-      content.putString(test.getText());
-      db.setContent(content);
+    // Enable cell to accept drop
+    cell.setOnDragOver(event -> {
+      if (event.getDragboard().hasContent(stoneFormat)) {
+        event.acceptTransferModes(TransferMode.ANY);
+      }
       event.consume();
-    });*/
+    });
+
+    //
+    cell.setOnDragDropped(event -> {
+      // Delete source stone
+      Pane sourceCell = (Pane) event.getGestureSource();
+      int sourceColumn = GridPane.getColumnIndex(sourceCell);
+      int sourceRow = GridPane.getRowIndex(sourceCell);
+      StoneInfo[][] stoneGrid; //TODO: This is replicated code
+      if (isTable) {
+        stoneGrid = model.getTable();
+        stoneGrid[sourceColumn][sourceRow] = null;
+        model.setTable(stoneGrid);
+      } else {
+        stoneGrid = model.getHand();
+        stoneGrid[sourceColumn][sourceRow] = null;
+        model.setHand(stoneGrid);
+      }
+
+      //Setting new cell
+      StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
+      putStoneInCell(cell, stoneInfo);
+      event.consume();
+    });
   }
 
-  void setupDrop(StackPane target) {
-    // Accept drop here
-    target.setOnDragOver(event -> {
-      if (event.getGestureSource() != target && event.getDragboard().hasString()) {
-        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-      }
-      event.consume();
-    });
-
-    /*
-    // Drop here
-    target.setOnDragDropped(event -> {
-      Dragboard dragboard = event.getDragboard();
-      if (dragboard.hasFiles()) {
-        System.out.println(dragboard.toString());
-        //target.getChildren().removeAll();
-        Text content = new Text(dragboard.getString());
-        target.getChildren().add(content);
-      }
-      event.consume();
-    });
-    */
-
-    target.setOnDragOver(event -> {
-      if (event.getGestureSource() != target &&
-          event.getDragboard().hasString()) {
-        /* allow for both copying and moving, whatever user chooses */
-        event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-      }
-
-      event.consume();
-    });
-  }
-
-  // TODO: Remove test method
-  void setupDrop(Text target) {
-    // Accept drop here
-    target.setOnDragOver(event -> {
-      event.acceptTransferModes(TransferMode.ANY);
-      event.consume();
-    });
-
-    // Drop here
-    target.setOnDragDropped(event -> {
-      Dragboard dragboard = event.getDragboard();
-      if (dragboard.hasFiles()) {
-        target.setText(dragboard.getString());
-      }
-      event.consume();
-    });
+  /**
+   * Method for displaying a stone in a cell
+   *
+   * @param cell  Cell in which the stone shall be displayed
+   * @param stone Properties (color, value) of the stone which shall be displayed
+   */
+  private void putStoneInCell(Pane cell, StoneInfo stone) {
+    Rectangle stoneBackground = new Rectangle(20, 40);
+    stoneBackground.getStyleClass().add("stone");
+    Text stoneValue = new Text(Integer.toString(stone.getNumber()));
+    stoneValue.getStyleClass().add(stone.getColor());
+    stoneValue.getStyleClass().add("stoneValue");
+    cell.getChildren().add(stoneBackground);
+    cell.getChildren().add(stoneValue);
   }
 
   public void setTable(StoneInfo[][] table) {
@@ -196,5 +248,16 @@ public class GameController {
 
   public void notifyGameStart() {
     model.notifyGameStart();
+  }
+
+  /**
+   * Method to update the data from the server.
+   * Triggers view update
+   *
+   * @param model New model from server
+   */
+  public void setModel(ClientModel model) {
+    this.model = model;
+    updateView();
   }
 }

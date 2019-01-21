@@ -6,6 +6,11 @@ import view.NetworkController;
 public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
 
   private NetworkController controller;
+//  private RummiController controller;
+
+//  public GameInfoHandler(RummiController controller) {
+//    this.controller = controller;
+//  }
 
   public GameInfoHandler(NetworkController controller) {
     this.controller = controller;
@@ -54,13 +59,13 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         System.out.println("handling gamestart");
         controller.notifyGameStart();
         return;
-      case IP_ADDRESS:
-        System.out.println("handling ip");
-        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
-        return;
-      case USERNAME:
-        System.out.println("handling username");
-          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
+//      case IP_ADDRESS:
+//        System.out.println("handling ip");
+//        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
+//        return;
+//      case USERNAME:
+//        System.out.println("handling username");
+//          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
       default:
         System.out.println("handling default");
         break;

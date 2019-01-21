@@ -49,8 +49,8 @@ public class TestShell {
 
   public static void testGame(){
     RummiGame game = new RummiGame();
-    game.setPlayer(17);
-    game.setPlayer(19);
+    game.setPlayer("player1",17);
+    game.setPlayer("player2", 19);
     game.start();
     System.out.println("Initial Game:");
     System.out.println(game.getPlayerStones(game.getCurrentPlayerID()));
