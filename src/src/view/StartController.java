@@ -32,6 +32,7 @@ public class StartController {
 
     private RummiClient client;
     private RummiServer server;
+    private Stage stage;
 
   private Main main;
   //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\waitingMusic.mp3").toURI().toString());
@@ -89,6 +90,14 @@ public class StartController {
 //      }
 //    }
 
+    void returnToStart() {
+      try {
+        main.start(stage);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
     @FXML
     void joinGame() throws IOException {
         switchToWait(new ClientModel(false));
@@ -130,8 +139,9 @@ public class StartController {
       //A LITTLE MUSIC
       mediaPlayer.play();
 
-        Stage stage = (Stage) nameField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
+        //Stage stage = (Stage) nameField.getScene().getWindow();
+      stage = (Stage) nameField.getScene().getWindow();
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("Wait.fxml"));
         Parent root = null;
         try {
             root = loader.load();

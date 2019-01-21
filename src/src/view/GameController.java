@@ -23,7 +23,7 @@ public class GameController {
   @FXML
   Pane opponentMid;
   private NetworkController networkController;
-  private ClientModel model = buildTestModel();
+  private ClientModel model;
   private StoneInfo[][] tableData;
   private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
@@ -54,6 +54,10 @@ public class GameController {
     result.setHand(buildTestTable(20,2));
     result.setTable(buildTestTable(40,8));
     return result;
+  }
+
+  public void returnToStart() {
+    networkController.returnToStartView();
   }
 
   /**
@@ -192,7 +196,6 @@ public class GameController {
       //Setting new cell
       StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
       putStoneInCell(cell, stoneInfo);
-      //updateView();
       event.consume();
     });
   }

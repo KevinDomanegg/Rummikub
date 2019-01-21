@@ -38,7 +38,7 @@
                     <!-- Menu buttons -->
                     <children>
                         <Button fx:id="quitButton" mnemonicParsing="false"
-                                text="Quit"/>
+                                text="Quit" onMouseClicked="#returnToStart"/>
                     </children>
                 </StackPane>
             </children>
