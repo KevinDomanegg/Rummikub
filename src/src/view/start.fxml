@@ -7,8 +7,28 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.StartController">
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane styleClass="root"
+           xmlns="http://javafx.com/javafx/8.0.172-ea"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="view.StartController"
+           stylesheets="@/view/startStyle.css">
    <children>
+      <VBox>
+         <children>
+            <Label text="Name:" />
+            <TextField fx:id="nameField" />
+            <Label text="Age:" />
+            <TextField fx:id="ageField" />
+            <Button text="Host" onMouseClicked="#hostGame" />
+            <Label text="IP address:" />
+            <TextField fx:id="ipField" text="IP-Server" />
+            <Button text="Join" onMouseClicked="#joinGame" />
+         </children>
+      </VBox>
+      <!--
       <HBox layoutX="261.0" layoutY="276.0" />
       <Label layoutX="13.0" layoutY="226.0" prefHeight="17.0" prefWidth="47.0" text="name" />
       <TextField fx:id="nameField" layoutX="72.0" layoutY="211.0" />
@@ -27,6 +47,6 @@
          <font>
             <Font name="System Bold" size="11.0" />
          </font>
-      </Label>
+      </Label>-->
    </children>
-</AnchorPane>
+</StackPane>
