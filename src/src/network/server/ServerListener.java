@@ -12,6 +12,7 @@ public class ServerListener extends Thread {
   private int id;
   private boolean connected = false;
   private Request request;
+  ObjectInputStream in;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -34,7 +35,7 @@ public class ServerListener extends Thread {
 
     try {
 
-      ObjectInputStream in = new ObjectInputStream(clientIn.getInputStream());
+      in = new ObjectInputStream(clientIn.getInputStream());
       this.connected = true;
 
       while (connected) {
@@ -58,12 +59,19 @@ public class ServerListener extends Thread {
 
       }
     } catch (IOException e) {
-      this.connected = false;
+      //this.connected = false;
       server.disconnectClient(id);
     }
+    System.out.println("ServerListener terminated");
   }
 
   void disconnect() {
     this.connected = false;
+    try {
+      this.clientIn.close();
+      in.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -28,6 +28,7 @@ public class RummiServer extends Thread implements Server {
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
+  private ServerSocket server;
   private int numOfClients;
   private boolean running = true;
   private RequestHandler requestHandler;
@@ -49,7 +50,7 @@ public class RummiServer extends Thread implements Server {
   @Override
   public void run() {
     try {
-      ServerSocket server = new ServerSocket(PORT);
+      server = new ServerSocket(PORT);
       Socket client;
       while (running) {
         synchronized (this) {
@@ -74,9 +75,11 @@ public class RummiServer extends Thread implements Server {
           System.out.println("number of clients: " + numOfClients);
         }
       }
+      //cleanup();
     } catch (IOException e) {
       this.running = false;
     }
+    System.out.println("Server terminated");
   }
 
   /**
@@ -107,14 +110,32 @@ public class RummiServer extends Thread implements Server {
    * @param id of the client
    */
   synchronized void disconnectClient(int id) {
+
     clients[id] = null;
-    listeners[id].disconnect();
+    if (listeners[id] != null) {
+      listeners[id].disconnect();
+    }
     listeners[id] = null;
-    senders[id].disconnect();
+    if (senders[id] !=  null) {
+      senders[id].disconnect();
+    }
     senders[id] = null;
     this.numOfClients--;
     System.out.println("RummiServer: disconnected from " + id);
+
+    //When the client who has hosted the game disconnects, terminate the server
+    if (id == 0) {
+      suicide();
+    }
     notifyAll();
+  }
+
+  private void cleanup() {
+    for (int i = 0; i < clients.length; i++) {
+      if (clients[i] != null) {
+        disconnectClient(i);
+      }
+    }
   }
 
   /**
@@ -159,6 +180,16 @@ public class RummiServer extends Thread implements Server {
   @Override
   public String getIP() throws UnknownHostException{
     return InetAddress.getLocalHost().getHostAddress();
+  }
+
+  public void suicide() {
+    running = false;
+    try {
+      server.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    cleanup();
   }
 
 }

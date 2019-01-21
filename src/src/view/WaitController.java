@@ -70,7 +70,7 @@ public class WaitController implements Initializable {
     }
  }
 
-  public void switchToGameView() {
+  public synchronized void switchToGameView() {
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
@@ -90,8 +90,8 @@ public class WaitController implements Initializable {
       gameScene.getStylesheets().add("view/gameStyle.css");
       stage.setScene(gameScene);
       notifyAll();
+      //System.out.println("switched to game");
     }
-   //System.out.println("switched to game");
   }
 
   @Override
