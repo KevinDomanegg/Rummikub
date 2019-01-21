@@ -1,5 +1,8 @@
 package network.client;
 
+import communication.Serializer;
+import communication.request.Request;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -9,8 +12,9 @@ public class RummiClient extends Thread {
   //Connection variables
   private boolean connected;
   private Socket serverSocket;
-  private ObjectOutputStream outToServer;
+  private PrintWriter outToServer;
   ClientListener listener;
+  private Serializer serializer;
 
   //GameInfoHandler
   private GameInfoHandler gameInfoHandler;
@@ -22,9 +26,10 @@ public class RummiClient extends Thread {
   //CREATE A NEW CLIENT WITH USERNAME, AGE AND IP ADDRESS OF THE SERVER("localhost" or ip)
   public RummiClient(String serverIPAddress) {
     connected = true;
+    serializer = new Serializer();
     try {
       serverSocket = new Socket(serverIPAddress, 48410);
-      outToServer = new ObjectOutputStream(serverSocket.getOutputStream());
+      outToServer = new PrintWriter(serverSocket.getOutputStream());
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -69,14 +74,10 @@ public class RummiClient extends Thread {
   }
 
   public synchronized void sendRequest(Object request) {
-    try {
-      //out = new ObjectOutputStream(clientOut.getOutputStream());
-      outToServer.writeObject(request);
+
+      String json = serializer.serialize((Request) request);
+      outToServer.println(json);
       outToServer.flush();
-    } catch (IOException e) {
-      connected = false;
-      notifyAll();
-    }
   }
 
   public synchronized void disconnect() {
