@@ -10,24 +10,60 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane styleClass="root"
-           xmlns="http://javafx.com/javafx/8.0.172-ea"
+<?import javafx.scene.text.Text?>
+<StackPane fx:id="root"
+           xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.StartController"
            stylesheets="@/view/startStyle.css">
    <children>
-      <VBox>
-         <children>
-            <Label text="Name:" />
-            <TextField fx:id="nameField" />
-            <Label text="Age:" />
-            <TextField fx:id="ageField" />
-            <Button text="Host" onMouseClicked="#hostGame" />
-            <Label text="IP address:" />
-            <TextField fx:id="ipField" text="IP-Server" />
-            <Button text="Join" onMouseClicked="#joinGame" />
-         </children>
-      </VBox>
+       <StackPane fx:id="vContainer">
+           <children>
+               <StackPane fx:id="header">
+                   <children>
+                       <Text fx:id="title" styleClass="whiteText" text="Rummikub" />
+                   </children>
+               </StackPane>
+               <VBox fx:id="content">
+                   <children>
+                       <VBox styleClass="inputArea">
+                           <children>
+                               <Text text="Name:" styleClass="whiteText" />
+                               <TextField fx:id="nameField" />
+                           </children>
+                       </VBox>
+                       <VBox styleClass="inputArea">
+                           <children>
+                               <Text text="Age:" styleClass="whiteText" />
+                               <TextField fx:id="ageField" />
+                           </children>
+                       </VBox>
+                       <HBox styleClass="buttonArea">
+                           <children>
+                               <Button text="Host" onMouseClicked="#hostGame" />
+                               <Text text="or" styleClass="whiteText" />
+                           </children>
+                       </HBox>
+                       <VBox styleClass="inputArea">
+                           <children>
+                               <Text text="IP address:" styleClass="whiteText"/>
+                               <TextField fx:id="ipField" promptText="Server IP" />
+                           </children>
+                       </VBox>
+                       <HBox styleClass="buttonArea">
+                           <children>
+                               <Button text="Join" onMouseClicked="#joinGame" />
+                           </children>
+                       </HBox>
+                   </children>
+               </VBox>
+               <StackPane fx:id="footer" pickOnBounds="false">
+                   <children>
+                       <Text text="brought to you by the Curry Gang" styleClass="whiteText" />
+                   </children>
+               </StackPane>
+           </children>
+       </StackPane>
       <!--
       <HBox layoutX="261.0" layoutY="276.0" />
       <Label layoutX="13.0" layoutY="226.0" prefHeight="17.0" prefWidth="47.0" text="name" />
