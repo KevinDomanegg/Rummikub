@@ -24,7 +24,7 @@ public class GameController {
   @FXML
   private Pane opponentMid;
   private NetworkController networkController;
-  private ClientModel model = buildTestModel();
+  private ClientModel model;
   private StoneInfo[][] tableData;
   private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
@@ -66,7 +66,8 @@ public class GameController {
    */
   @FXML
   public void initialize() {
-    updateView();
+//    updateView();
+    //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
   }
 
   /**

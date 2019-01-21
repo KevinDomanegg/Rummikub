@@ -81,6 +81,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setHandSizes(List<Integer> sizes) {
+    if (gameController == null) {
+      waitController.setHandSizes(sizes);
+      return;
+    }
     gameController.setHandSizes(sizes);
   }
 
@@ -91,6 +95,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setTable(StoneInfo[][] table) {
+    if (gameController == null) {
+      waitController.setTable(table);
+      return;
+    }
     synchronized (this) {
       while (gameController == null) {
         try {
@@ -111,6 +119,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerHand(StoneInfo[][] hand) {
+    if (gameController == null) {
+      waitController.setPlayerHand(hand);
+      return;
+    }
     gameController.setPlayerHand(hand);
   }
 
@@ -119,6 +131,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyTurn() {
+    if (gameController == null) {
+      waitController.notifyTurn();
+      return;
+    }
     gameController.notifyTurn();
   }
 
@@ -144,6 +160,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
+    if (gameController == null) {
+      waitController.notifyCurrentPlayer(playerID);
+      return;
+    }
     gameController.notifyCurrentPlayer(playerID);
   }
 
@@ -162,8 +182,11 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
+    if (gameController == null) {
+      waitController.setBagSize(bagSize);
+      return;
+    }
     gameController.setBagSize(bagSize);
-
   }
 
   void sendDrawRequest() {
