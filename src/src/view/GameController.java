@@ -1,6 +1,7 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.input.ClipboardContent;
@@ -21,12 +22,8 @@ public class GameController {
   private GridPane table;
   @FXML
   private GridPane handGrid;
-  @FXML
-  private Pane opponentMid;
   private NetworkController networkController;
   private ClientModel model;
-  private StoneInfo[][] tableData;
-  private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
 
@@ -99,6 +96,7 @@ public class GameController {
    */
   @FXML
   void constructGrid(GridPane grid, boolean isTable) {
+    //grid.getChildren().clear();
     StoneInfo[][] currentGrid;
     if (isTable) {
       currentGrid = model.getTable();
@@ -119,9 +117,13 @@ public class GameController {
           putStoneInCell(cell, stone);
         }
 
-        cell.getStyleClass().add("cell");
-        grid.add(cell, x, y);
-        setupDragAndDrop(cell, isTable);
+        int finalX = x;
+        int finalY = y;
+        Platform.runLater(() -> {
+          cell.getStyleClass().add("cell");
+          grid.add(cell, finalX, finalY);
+          setupDragAndDrop(cell, isTable);
+        });
       }
     }
   }
@@ -157,13 +159,15 @@ public class GameController {
         // Put stone on clipboard
         content.put(stoneFormat, cellContent);
         dragBoard.setContent(content);
-        //stoneGrid[thisColumn][thisRow] = null;
+
+        /*
         if (isTable) {
           model.setTable(stoneGrid);
         } else {
           model.setHand(stoneGrid);
         }
         //updateView();
+        */
       }
       event.consume();
     });
@@ -178,6 +182,10 @@ public class GameController {
 
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
+      Dragboard dragboard = event.getDragboard();
+      StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
+      putStoneInCell(cell, sourceStone);
+
       // Get source cell's coordinates
       Pane sourceCell = (Pane) event.getGestureSource();
       Parent sourceParent = sourceCell.getParent();

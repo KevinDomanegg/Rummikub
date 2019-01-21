@@ -59,6 +59,7 @@ class RequestHandler {
         game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
             new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
         sendHandSizesToPlayer(playerID);
+        sendTableToALl();
         return;
       case DRAW:
         game.drawStone();

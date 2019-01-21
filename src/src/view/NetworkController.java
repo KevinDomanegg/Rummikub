@@ -99,16 +99,7 @@ public class NetworkController implements Controller {
       waitController.setTable(table);
       return;
     }
-    synchronized (this) {
-      while (gameController == null) {
-        try {
-          wait();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-      gameController.setTable(table);
-    }
+    gameController.setTable(table);
   }
 
 

@@ -61,7 +61,7 @@
                        <VBox styleClass="inputArea">
                            <children>
                                <Text text="IP address:" styleClass="whiteText"/>
-                               <TextField fx:id="ipField" promptText="Server IP" />
+                               <TextField fx:id="ipField" text="localhost" />
                            </children>
                        </VBox>
                        <HBox styleClass="buttonArea">

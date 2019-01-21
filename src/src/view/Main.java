@@ -32,7 +32,7 @@ public class Main extends Application {
   private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
   //WaitController waitController;
-//  GameController gameController;
+  GameController gameController;
 
   public static void main(String[] args) {
     launch(args);
@@ -41,17 +41,10 @@ public class Main extends Application {
   //TODO: Catch exception
   @Override
   public void start(Stage primaryStage) throws Exception {
-    /*
-    TODO: Start -> (event) -> Wait -> (event) -> Game
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitView.fxml"));
-    Parent root = loader.load();
-    gameController = loader.getController();
-    */
-
-//    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    //FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
     Parent root = loader.load();
-//    gameController = loader.getController();
+    //gameController = loader.getController();
     startController = loader.getController();
     startController.setMain(this);
 
