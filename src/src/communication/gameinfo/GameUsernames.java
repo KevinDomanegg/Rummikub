@@ -2,15 +2,18 @@ package communication.gameinfo;
 
 import java.io.Serializable;
 
-/**
- * name info for a new player who just joined the game.
- */
-public class NameInfo implements GameInfo, Serializable {
+public class GameUsernames implements GameInfo, Serializable {
 
   private String username;
+  private int id;
 
-  public NameInfo(String username) {
+  public GameUsernames(String username, int id) {
     this.username = username;
+    this.id = id;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getUsername() {

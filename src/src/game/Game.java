@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public interface Game {
 
-  void setPlayer(String name, int age);
+  void setPlayer(int age);
 
   void start();
 
@@ -33,8 +33,6 @@ public interface Game {
   Map<Coordinate, Stone> getPlayerStones(int playerID);
 
   List<Integer> getPlayerHandSizes();
-
-  List<String> getPlayerNames();
 
   int getBagSize();
 
