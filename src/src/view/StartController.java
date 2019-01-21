@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
@@ -49,9 +52,19 @@ public class StartController {
     private TextField nameField;
     @FXML
     private TextField ageField;
-
     @FXML
     private TextField ipField;
+    @FXML
+    private StackPane vContainer;
+    @FXML
+    private AnchorPane errorPane;
+    @FXML
+    private Text errorMessage;
+
+    @FXML
+    public void initialize() {
+        errorPane.setVisible(false);
+    }
 
 //    private String ip;
     //private String username;
@@ -77,13 +90,13 @@ public class StartController {
 //    }
 
     @FXML
-    void joinGame() {
+    void joinGame() throws IOException {
         switchToWait(new ClientModel(false));
         main.stopMusic();
     }
 
     @FXML
-    void hostGame() {
+    void hostGame() throws IOException {
        server = new RummiServer();
        server.start();
        main.stopMusic();
@@ -96,17 +109,14 @@ public class StartController {
     }
 
     @FXML
-    private void switchToErrorView() throws IOException {
-        Stage stage = (Stage) ipField.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Error.fxml"));
-        Parent root = loader.load();
-        Scene errorScene = new Scene(root, 600, 400);
-        stage.setScene(errorScene);
-
+    private void switchToErrorView(String message) throws IOException {
+        errorMessage.setText(message);
+        errorPane.setVisible(true);
+        vContainer.setVisible(false);
     }
 
-
-    private void switchToWait(ClientModel model) {
+    private void switchToWait(ClientModel model) throws IOException {
+        try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
         client = new RummiClient(ipField.getText());
         model.setServerIP(ipField.getText());
@@ -139,6 +149,9 @@ public class StartController {
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
+        } catch(NumberFormatException ex) {
+            switchToErrorView("age has to be a number");
+        }
     }
 
     void killThreads() {
@@ -148,6 +161,13 @@ public class StartController {
         if (server != null) {
             server.suicide();
         }
+    }
+
+    @FXML
+    void handleOkButton() {
+        vContainer.setVisible(true);
+        errorPane.setVisible(false);
+
     }
 
   public void setMain(Main main) {

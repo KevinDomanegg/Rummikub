@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.deploy.uitoolkit.impl.fx.ui.ErrorPane;
 import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
@@ -10,6 +11,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.GameInfoHandler;
 import network.client.RummiClient;
