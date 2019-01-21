@@ -4,26 +4,17 @@ import communication.gameinfo.StoneInfo;
 import communication.request.SimpleRequest;
 
 import java.util.List;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ObservableValue;
 
-final class ClientModel {
+public class ClientModel {
 
   private StoneInfo[][] table;
   private StoneInfo[][] hand;
   private List<Integer> handSizes;
   private List<String> playersNames;
   private int BagSize;
-  private int currentPlayerID;
   private boolean isMyTurn;
   private boolean isGameStarted;
-  private final boolean isHost;
-  private BooleanProperty host = new SimpleBooleanProperty();
-
-  ClientModel(boolean isHost) {
-    this.isHost = isHost;
-  }
+  private int currentPlayerID;
 
   public void setHand(StoneInfo[][] newHand) {
     this.hand = newHand;
@@ -87,13 +78,5 @@ final class ClientModel {
 
   void notifyGameStart() {
     this.isGameStarted = true;
-  }
-
-  boolean isHost() {
-    return isHost;
-  }
-
-  BooleanProperty hostProperty() {
-    return host;
   }
 }

@@ -4,6 +4,7 @@ import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,13 +43,13 @@ public class NetworkController implements Controller {
     this.startController = startController;
   }
 
-//  public void setUsername(String username, int username_id) {
-//    waitController.setPlayerUsername(username);
-//  }
+  public void setUsername(String username, int username_id) {
+    startController.setUsername(username, username_id);
+  }
 
-//  public void setIPAddress(String ip) {
-//    startController.setIpAddress(ip);
-//  }
+  public void setIPAddress(String ip) {
+    startController.setIpAddress(ip);
+  }
 
   /**
    * Sets the names of all the players in the game.
@@ -58,7 +59,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> names) {
-    waitController.setPlayerNames(names);
+    gameController.setPlayerNames(names);
   }
 
   /**
@@ -78,15 +79,17 @@ public class NetworkController implements Controller {
    * @param table the new table
    */
   @Override
-  public synchronized void setTable(StoneInfo[][] table) {
-    while (gameController == null) {
-      try {
-        wait();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+  public void setTable(StoneInfo[][] table) {
+    synchronized (this) {
+      while (gameController == null) {
+        try {
+          wait();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
+      gameController.setTable(table);
     }
-    gameController.setTable(table);
   }
 
 
@@ -113,12 +116,16 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyGameStart() {
-    waitController.switchToGameView();
-//    Platform.runLater(new Runnable() {
-//      @Override
-//      public void run() {
-//      }
-//    });
+
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        waitController.switchToGameView();
+        //System.out.println("notified gamecontroller to switch1");
+      }
+    });
+
+    //System.out.println("notified gamecontroller to switch2");
     //gameController.notifyGameStart();
   }
 

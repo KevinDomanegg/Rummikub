@@ -3,13 +3,11 @@ package game;
 import java.util.Map;
 
 class Player {
-  private final String name;
   private final int age;
   private RummiHand hand;
   private boolean hasPlayedFirstMove;
 
-  Player(String name, int age) {
-    this.name = name;
+  Player(int age) {
     this.age = age;
     hand = new RummiHand();
   }
@@ -80,7 +78,4 @@ class Player {
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
   }
 
-  String getName() {
-    return name;
-  }
 }
