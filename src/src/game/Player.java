@@ -55,7 +55,11 @@ class Player {
     return hand.size();
   }
 
+  String getName() {
+    return name;
+  }
   // for test
+
   @Override public String toString() {
     return "Player(" + age + ")";
   }
@@ -78,9 +82,5 @@ class Player {
 
   int getPoints() {
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
-  }
-
-  String getName() {
-    return name;
   }
 }

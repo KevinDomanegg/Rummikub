@@ -15,6 +15,8 @@ import java.util.List;
 public class GameController {
     private NetworkController networkController;
     private ClientModel model;
+    private StoneInfo[][] tableData;
+    private StoneInfo[][] handData;
     private RequestBuilder requestBuilder;
     private DataFormat stoneFormat = new DataFormat("stoneFormat");
 
@@ -22,8 +24,6 @@ public class GameController {
   @FXML GridPane table;
   @FXML GridPane handGrid;
   @FXML Pane opponentMid;
-
-  String name = "Player";
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
@@ -41,7 +41,7 @@ public class GameController {
     updateView();
 
     //TODO: Remove this line
-    putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
+    //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
   }
 
   /**
@@ -73,13 +73,28 @@ public class GameController {
    */
   @FXML
   void constructGrid(GridPane grid, boolean isTable, int columns, int rows) {
+    //TODO: Set model here
     for (int x = 0; x < columns; x++) {
       for (int y = 0; y < rows; y++) {
         StackPane cell = new StackPane();
-        setupDragAndDrop(cell, isTable);
+
+        // Set stone from model (if present)
+        StoneInfo[][] currentGrid;
+        if (isTable) {
+          currentGrid = tableData;
+        } else {
+          currentGrid = handData;
+        }
+
+        //TODO: When can I access the data?
+        if (currentGrid != null && currentGrid[x] != null && currentGrid[x][y] != null) {
+          StoneInfo stone = currentGrid[x][y];
+          putStoneInCell(cell, stone);
+        }
 
         cell.getStyleClass().add("cell");
         grid.add(cell, x, y);
+        setupDragAndDrop(cell, isTable);
       }
     }
   }
@@ -197,7 +212,15 @@ public class GameController {
     model.notifyGameStart();
   }
 
+  /** Method to update the data from the server.
+   *  Triggers view update
+   *
+   * @param model New model from server
+   */
   public void setModel(ClientModel model) {
     this.model = model;
+    this.handData = model.getHand();
+    this.tableData = model.getTable();
+    updateView();
   }
 }

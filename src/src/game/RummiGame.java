@@ -3,6 +3,7 @@ package game;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -157,11 +158,11 @@ public class RummiGame implements Game {
    * or the played table is not consistent
    */
   @Override public boolean isConsistent() {
-    if (!currentPlayer().hasPlayedFirstMove() && firstMovePoints < MIN_FIRST_MOVE_POINTS) {
-      firstMovePoints = 0;
-      reset();
-      return false;
-    }
+//    if (!currentPlayer().hasPlayedFirstMove() && firstMovePoints < MIN_FIRST_MOVE_POINTS) {
+//      firstMovePoints = 0;
+//      reset();
+//      return false;
+//    }
     if (table.isConsistent()) {
       // clear the trace for the next turn
       trace.clear();
@@ -189,7 +190,8 @@ public class RummiGame implements Game {
     return players.stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
-  @Override public List<String> getPlayerNames() {
+  @Override
+  public List<String> getPlayerNames() {
     return players.stream().map(Player::getName).collect(Collectors.toList());
   }
 
@@ -216,8 +218,8 @@ public class RummiGame implements Game {
   @Override public int getNumberOfPlayers() {
     return players.size();
   }
-
   // for test
+
   Stack<MoveTrace> getTrace() {
     return trace;
   }

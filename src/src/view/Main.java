@@ -1,6 +1,7 @@
 package view;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +14,7 @@ import java.awt.*;
 public class Main extends Application {
   private StartController startController;
   //WaitController waitController;
-  GameController gameController; //TODO: Hide
+//  GameController gameController;
 
   public static void main(String[] args) {
     launch(args);
@@ -22,10 +23,17 @@ public class Main extends Application {
   //TODO: Catch exception
   @Override
   public void start(Stage primaryStage) throws Exception {
-    // FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml")); //TODO: Change
+    /*
+    TODO: Start -> (event) -> Wait -> (event) -> Game
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("WaitView.fxml"));
+    Parent root = loader.load();
+    gameController = loader.getController();
+    */
+
+//    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
     FXMLLoader loader = new FXMLLoader(getClass().getResource("Start.fxml"));
     Parent root = loader.load();
-    //gameController = loader.getController();
+//    gameController = loader.getController();
     startController = loader.getController();
 
     primaryStage.setTitle("Rummikub");
@@ -35,6 +43,12 @@ public class Main extends Application {
     primaryStage.setScene(scene);
     //primaryStage.setFullScreen(true);
     primaryStage.show();
+
+    primaryStage.setOnCloseRequest(e -> {
+      System.out.println("klicked  on x");
+      startController.killThreads();
+      Platform.exit();
+    });
   }
 
   /**

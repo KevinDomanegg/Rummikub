@@ -10,6 +10,7 @@ public class RummiClient extends Thread {
   private boolean connected;
   private Socket serverSocket;
   private ObjectOutputStream outToServer;
+  ClientListener listener;
 
   //GameInfoHandler
   private GameInfoHandler gameInfoHandler;
@@ -41,7 +42,7 @@ public class RummiClient extends Thread {
   public void run() {
       //serverSocket = new Socket(serverIPAddress, 48410);
       // Add a listener to this Client
-      ClientListener listener = new ClientListener(serverSocket, this);
+      listener = new ClientListener(serverSocket, this);
       listener.start();
       synchronized (this) {
         try {
@@ -50,7 +51,7 @@ public class RummiClient extends Thread {
           try {
             wait();
           } catch (InterruptedException e) {
-            connected = false;
+            disconnect();
           }
         }
         //NOT CONNECTED ANYMORE
@@ -60,6 +61,7 @@ public class RummiClient extends Thread {
           e.printStackTrace();
         }
       }
+      System.out.println("Client terminated");
   }
 
   void applyGameInfoHandler(Object gameInfo) {
@@ -78,6 +80,7 @@ public class RummiClient extends Thread {
   }
 
   public synchronized void disconnect() {
+    listener.disconnect();
     this.connected = false;
     notifyAll();
   }

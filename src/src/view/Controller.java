@@ -12,10 +12,10 @@ public interface Controller {
 
   /**
    * Sets the names of all the players in the game.
-   * @param name list of names, ordered clockwise
+   * @param names list of names, ordered clockwise
    *             The name of the recipient is on position 0
    */
-  void setPlayerNames(List<String> name);
+  void setPlayerNames(List<String> names);
 
   /**
    * Sets the number of Stones each player has in its hand.

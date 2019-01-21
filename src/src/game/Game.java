@@ -34,8 +34,6 @@ public interface Game {
 
   List<Integer> getPlayerHandSizes();
 
-  List<String> getPlayerNames();
-
   int getBagSize();
 
   int getCurrentPlayerID();
@@ -51,6 +49,8 @@ public interface Game {
   int getNumberOfPlayers();
 
   List<Entry<Integer, Integer>> getFinalRank();
+
+  List<String> getPlayerNames();
 
   // ? int getTime();
 }

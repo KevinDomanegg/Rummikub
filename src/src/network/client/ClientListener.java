@@ -13,6 +13,7 @@ class ClientListener extends Thread {
   private Socket server;
   private RummiClient myClient;
   private boolean connected;
+  private ObjectInputStream receiveMessage;
 
   //CREATES A LISTENER FOR ONLY ONE CLIENT
   ClientListener(Socket server, RummiClient myClient) {
@@ -24,20 +25,39 @@ class ClientListener extends Thread {
   @Override
   public void run() {
     try {
-      ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
+      receiveMessage = new ObjectInputStream(server.getInputStream());
 
       while (connected) {
+        Object o;
         try {
-          myClient.applyGameInfoHandler(recieveMessage.readObject());
+
+          o = receiveMessage.readObject();
+          if (o instanceof GameInfo) {
+
+            myClient.applyGameInfoHandler(o);
+          }
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
+          disconnect();
         } catch (IOException e) {
-          connected = false;
+          disconnect();
         }
       }
 
     } catch (IOException e) {
-      connected = false;
+      disconnect();
+    }
+
+  }
+
+  void disconnect() {
+    System.out.println("Called disconnect in ClientListener");
+    connected = false;
+    try {
+      receiveMessage.close();
+      server.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

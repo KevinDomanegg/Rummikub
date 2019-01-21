@@ -49,7 +49,7 @@ public class TestShell {
 
   public static void testGame(){
     RummiGame game = new RummiGame();
-    game.setPlayer("player1", 17);
+    game.setPlayer("player1",17);
     game.setPlayer("player2", 19);
     game.start();
     System.out.println("Initial Game:");

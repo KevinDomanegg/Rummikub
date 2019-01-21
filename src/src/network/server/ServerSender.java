@@ -48,7 +48,7 @@ public class ServerSender extends Thread {
       out.writeObject(info);
       out.flush();
     } catch (IOException e) {
-      connected = false;
+      disconnect();
       notifyAll();
     }
   }
@@ -86,13 +86,20 @@ public class ServerSender extends Thread {
         server.disconnectClient(this.id);
       }
     }
+    System.out.println("ServerSender terminated");
   }
 
     /**
      * Disconnects from the client.
      */
-  void disconnect(){
+  synchronized void disconnect(){
     this.connected = false;
-    // notifyAll()?
+    try{
+      this.clientOut.close();
+      out.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    notifyAll();
   }
 }
