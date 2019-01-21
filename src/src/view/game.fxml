@@ -83,7 +83,8 @@
                     <children>
                         <Button fx:id="drawButton" text="Draw stone"
                                 onMouseClicked="#drawStone"/>
-                        <Button fx:id="undoButton" text="Undo"/>
+                        <Button fx:id="resetButton" text="Reset" onMouseClicked="#sendResetRequest"/>
+                        <Button fx:id="checkButton" text="Check" onMouseClicked="#sendConfirmMoveRequest"/>
                     </children>
                 </HBox>
 

@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
@@ -289,5 +290,15 @@ public class GameController {
   public void setModel(ClientModel model) {
     this.model = model;
     updateView();
+  }
+
+  @FXML
+  private void sendResetRequest() {
+    requestBuilder.sendResetRequest();
+  }
+
+  @FXML
+  private void sendConfirmMoveRequest() {
+    requestBuilder.sendConfirmMoveRequest();
   }
 }
