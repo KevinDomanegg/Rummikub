@@ -42,7 +42,7 @@ public class RummiClient extends Thread {
   public void run() {
       //serverSocket = new Socket(serverIPAddress, 48410);
       // Add a listener to this Client
-      ClientListener listener = new ClientListener(serverSocket, this);
+      listener = new ClientListener(serverSocket, this);
       listener.start();
       synchronized (this) {
         try {
