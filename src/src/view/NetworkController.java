@@ -46,6 +46,10 @@ public class NetworkController implements Controller {
     this.startController = startController;
   }
 
+  void returnToStartView() {
+    startController.returnToStart();
+  }
+
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);
 //  }

@@ -57,6 +57,10 @@ public class WaitController implements Initializable {
     this.requestBuilder = requestBuilder;
   }
 
+  void returnToStartView() {
+    networkController.returnToStartView();
+  }
+
  void setPlayerNames(List<String> names) {
    int size = names.size();
    switch (size) {
@@ -85,7 +89,7 @@ public class WaitController implements Initializable {
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
-      Parent root = null;
+      Parent root = loader.getRoot();
       try {
         root = loader.load();
       } catch (IOException e) {
@@ -96,6 +100,7 @@ public class WaitController implements Initializable {
       gameController.setModel(model);
 
       gameController.setRequestBuilder(requestBuilder);
+      gameController.setNetworkController(networkController);
       networkController.setGameController(gameController);
 
       Scene gameScene = new Scene(root, 1024, 768);

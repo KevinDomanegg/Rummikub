@@ -48,6 +48,10 @@ public class GameController {
     return result;
   }
 
+  public void returnToStart() {
+    networkController.returnToStartView();
+  }
+
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
