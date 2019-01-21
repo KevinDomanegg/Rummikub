@@ -23,11 +23,11 @@ public class GameController {
   @FXML
   Pane opponentMid;
   private NetworkController networkController;
-  private ClientModel model;
+  private ClientModel model = buildTestModel();
   private StoneInfo[][] tableData;
   private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
-  private DataFormat stoneFormat = new DataFormat("stoneFormat");
+  private static DataFormat stoneFormat = new DataFormat("stoneFormat");
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
@@ -37,14 +37,22 @@ public class GameController {
     this.requestBuilder = requestBuilder;
   }
 
-  StoneInfo[][] buildTestTable() {
-    StoneInfo[][] result = new StoneInfo[2][20];
-    for (int x = 0; x < 2; x++) {
-      for (int y = 0; y < 20; y++) {
+  /* TODO: REMOVE TEST METHODS*/
+  StoneInfo[][] buildTestTable(int columns, int rows) {
+    StoneInfo[][] result = new StoneInfo[columns][rows];
+    for (int x = 0; x < columns; x=x+2) {
+      for (int y = 0; y < rows; y=y+2) {
         StoneInfo cell = new StoneInfo("red", 5);
         result[x][y] = cell;
       }
     }
+    return result;
+  }
+
+  ClientModel buildTestModel() {
+    ClientModel result = new ClientModel(false);
+    result.setHand(buildTestTable(20,2));
+    result.setTable(buildTestTable(40,8));
     return result;
   }
 
@@ -88,16 +96,12 @@ public class GameController {
    */
   @FXML
   void constructGrid(GridPane grid, boolean isTable) {
-    //TODO: Set model here
-
-//    StoneInfo[][] currentGrid;
-//    if (isTable) {
-//      currentGrid = model.getTable();
-//    } else {
-//      currentGrid = model.getHand();
-//    }
-
-    StoneInfo[][] currentGrid = buildTestTable();
+    StoneInfo[][] currentGrid;
+    if (isTable) {
+      currentGrid = model.getTable();
+    } else {
+      currentGrid = model.getHand();
+    }
 
     int columns = currentGrid.length;
     int rows = currentGrid[0].length;
@@ -107,8 +111,7 @@ public class GameController {
       for (int y = 0; y < rows; y++) {
         StackPane cell = new StackPane();
 
-        //TODO: When can I access the data?
-        if (currentGrid[x] != null && currentGrid[x][y] != null) {
+        if (currentGrid[x][y] != null) {
           StoneInfo stone = currentGrid[x][y];
           putStoneInCell(cell, stone);
         }
@@ -127,10 +130,10 @@ public class GameController {
    * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, boolean isTable) {
-    int columnIndex = GridPane.getColumnIndex(cell);
-    int rowIndex = GridPane.getRowIndex(cell);
+    int thisColumn = GridPane.getColumnIndex(cell);
+    int thisRow = GridPane.getRowIndex(cell);
 
-    // Start drag and drop, copy stone to clipboard, delete stone in model
+    // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
@@ -142,13 +145,21 @@ public class GameController {
       } else {
         stoneGrid = model.getHand();
       }
-      StoneInfo cellContent = stoneGrid[columnIndex][rowIndex];
+      StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
 
       if (cellContent != null) {
+        cell.getChildren().clear();
+
         // Put stone on clipboard
         content.put(stoneFormat, cellContent);
         dragBoard.setContent(content);
-        stoneGrid[columnIndex][rowIndex] = null;
+        //stoneGrid[thisColumn][thisRow] = null;
+        if (isTable) {
+          model.setTable(stoneGrid);
+        } else {
+          model.setHand(stoneGrid);
+        }
+        //updateView();
       }
       event.consume();
     });
@@ -165,19 +176,23 @@ public class GameController {
     cell.setOnDragDropped(event -> {
       // Delete source stone
       Pane sourceCell = (Pane) event.getGestureSource();
-      int column = GridPane.getColumnIndex(sourceCell);
-      int row = GridPane.getRowIndex(sourceCell);
+      int sourceColumn = GridPane.getColumnIndex(sourceCell);
+      int sourceRow = GridPane.getRowIndex(sourceCell);
       StoneInfo[][] stoneGrid; //TODO: This is replicated code
       if (isTable) {
         stoneGrid = model.getTable();
+        stoneGrid[sourceColumn][sourceRow] = null;
+        model.setTable(stoneGrid);
       } else {
         stoneGrid = model.getHand();
+        stoneGrid[sourceColumn][sourceRow] = null;
+        model.setHand(stoneGrid);
       }
-      stoneGrid[column][row] = null;
 
       //Setting new cell
       StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
       putStoneInCell(cell, stoneInfo);
+      //updateView();
       event.consume();
     });
   }
