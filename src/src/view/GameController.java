@@ -82,11 +82,13 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
-    networkController.sendDrawRequest();
-    model.finishTurn();
-    // Server request: Get stone from bag
-
-    //TODO: Confirm drawn stone, update view
+    if (model.isMyTurn()) {
+      // Server request: Get stone from bag
+      networkController.sendDrawRequest();
+      model.finishTurn();
+    } else {
+      // error
+    }
   }
 
   /**
@@ -275,6 +277,7 @@ public class GameController {
 
   public void notifyCurrentPlayer(int playerID) {
     model.setCurrentPlayer(playerID);
+    // show current player on view
   }
 
   public void notifyGameStart() {
@@ -294,11 +297,21 @@ public class GameController {
 
   @FXML
   private void sendResetRequest() {
-    requestBuilder.sendResetRequest();
+    if (model.isMyTurn()) {
+      requestBuilder.sendResetRequest();
+      model.finishTurn();
+    } else {
+      // error
+    }
   }
 
   @FXML
   private void sendConfirmMoveRequest() {
-    requestBuilder.sendConfirmMoveRequest();
+    if (model.isMyTurn()) {
+      requestBuilder.sendConfirmMoveRequest();
+      model.finishTurn();
+    } else {
+      // error
+    }
   }
 }
