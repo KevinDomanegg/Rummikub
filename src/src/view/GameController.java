@@ -17,6 +17,7 @@ public class GameController {
     private ClientModel model;
     private StoneInfo[][] tableData;
     private StoneInfo[][] handData;
+
     private RequestBuilder requestBuilder;
     private DataFormat stoneFormat = new DataFormat("stoneFormat");
 
@@ -48,8 +49,8 @@ public class GameController {
    * Updates FXML with data from model.
    */
   public void updateView() {
-    constructGrid(table, true, 24, 8);
-    constructGrid(handGrid, false, 20, 2);
+    constructGrid(table, true);
+    constructGrid(handGrid, false);
   }
 
   /** Method to request stone from server and place it in player's hand
@@ -68,26 +69,28 @@ public class GameController {
    *
    * @param grid The FXML GridPane where the cells shall be constructed in
    * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
-   * @param columns Number of columns to be constructed
-   * @param rows Number of rows to be constructed
    */
   @FXML
-  void constructGrid(GridPane grid, boolean isTable, int columns, int rows) {
+  void constructGrid(GridPane grid, boolean isTable) {
     //TODO: Set model here
+
+    StoneInfo[][] currentGrid;
+    if (isTable) {
+      currentGrid = model.getTable();
+    } else {
+      currentGrid = model.getHand();
+    }
+
+    int columns = currentGrid.length;
+    int rows = currentGrid[0].length;
+
+
     for (int x = 0; x < columns; x++) {
       for (int y = 0; y < rows; y++) {
         StackPane cell = new StackPane();
 
-        // Set stone from model (if present)
-        StoneInfo[][] currentGrid;
-        if (isTable) {
-          currentGrid = tableData;
-        } else {
-          currentGrid = handData;
-        }
-
         //TODO: When can I access the data?
-        if (currentGrid != null && currentGrid[x] != null && currentGrid[x][y] != null) {
+        if (currentGrid[x] != null && currentGrid[x][y] != null) {
           StoneInfo stone = currentGrid[x][y];
           putStoneInCell(cell, stone);
         }
@@ -173,7 +176,6 @@ public class GameController {
     stoneValue.getStyleClass().add("stoneValue");
     cell.getChildren().add(stoneBackground);
     cell.getChildren().add(stoneValue);
-    updateView();
   }
 
   public void setTable(StoneInfo[][] table) {
@@ -219,8 +221,6 @@ public class GameController {
    */
   public void setModel(ClientModel model) {
     this.model = model;
-    this.handData = model.getHand();
-    this.tableData = model.getTable();
     updateView();
   }
 }
