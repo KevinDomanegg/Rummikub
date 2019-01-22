@@ -89,6 +89,7 @@ public class Main extends Application {
       mediaPlayer.stop();
       try {
         hostJoinStage(new Stage());
+        primaryStage.close();
       } catch (Exception e) {
         e.printStackTrace();
       }
