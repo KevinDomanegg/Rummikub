@@ -22,6 +22,11 @@ class Player {
     return hand.getStones();
   }
 
+  /**
+   * pushes the given stone into the next free position of the player's hand.
+   *
+   * @param stone the new stone to be pushed on hand
+   */
   void pushStone(Stone stone) {
     hand.setStone(nextFreeCoordinate(hand.getStones()), stone);
   }
@@ -39,16 +44,30 @@ class Player {
     return null;
   }
 
-  void moveStone(Coordinate initialPosition, Coordinate targetPosition) {
-    hand.setStone(targetPosition, hand.getStones().remove(initialPosition));
-//    Stone movedStone = currentHand.getStones().get(initialPosition);
-//
-//    currentHand.setStone(targetPosition, movedStone);
-//    currentHand.getStones().remove(initialPosition);
+  /**
+   * moves stone from the given sourcePosition to the given targetPosition o.
+   * If a stone at the targetPosition already exist, it will be swapped.
+   *
+   * @param sourcePosition
+   * @param targetPosition
+   */
+  void moveStone(Coordinate sourcePosition, Coordinate targetPosition) {
+    // save the chosen stone
+    Stone chosenStone = hand.removeStone(sourcePosition);
+    // move the stone at targetPosition to the sourcePosition
+    hand.setStone(sourcePosition, hand.removeStone(targetPosition));
+    // move the chosen stone to the targetPosition
+    hand.setStone(targetPosition, chosenStone);
   }
 
-  Stone popStone(Coordinate initialPosition) {
-    return hand.getStones().remove(initialPosition);
+  /**
+   * pops the stone at the given sourcePosition.
+   *
+   * @param sourcePosition the position of the wanted stone
+   * @return the wanted stone
+   */
+  Stone popStone(Coordinate sourcePosition) {
+    return hand.getStones().remove(sourcePosition);
   }
 
   int getHandSize() {
@@ -58,8 +77,8 @@ class Player {
   String getName() {
     return name;
   }
-  // for test
 
+  // for test
   @Override public String toString() {
     return "Player(" + age + ")";
   }
@@ -72,15 +91,27 @@ class Player {
     return hand.getHeight();
   }
 
+  /** changes this player's state to hasPlayedFirstMove. */
   void playedFirstMove() {
     hasPlayedFirstMove = true;
   }
 
+  /**
+   * gives the state if this player has played the first move.
+   *
+   * @return true if only if this player has played the first move
+   */
   boolean hasPlayedFirstMove() {
     return hasPlayedFirstMove;
   }
 
+  /**
+   * gives the sum of all of the points of stones on this player's hand
+   *
+   * @return the sum of the points of stones on this player's hand.
+   */
   int getPoints() {
+    // all points of stones represent a negative number
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
   }
 }

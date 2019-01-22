@@ -3,32 +3,36 @@ package game;
 import java.util.*;
 
 public class RummiHand implements Grid {
-  private Map<Coordinate, Stone> grid;
+  private Map<Coordinate, Stone> stones;
   private static final int HEIGHT = 2;
   private static final int WIDTH = 20;
 
 
-  public RummiHand(){
-    grid = new HashMap<>();
+  RummiHand(){
+    stones = new HashMap<>();
   }
 
   @Override
   public void setStone(Coordinate coordinate, Stone stone){
-    grid.put(coordinate, stone);
+    stones.put(coordinate, stone);
+  }
+
+  @Override public Stone removeStone(Coordinate coordinate) {
+    return stones.remove(coordinate);
   }
 
   @Override
   public Map<Coordinate,Stone> getStones(){
-    return grid;
+    return stones;
   }
 
   @Override
   public void clear(){
-    grid.clear();
+    stones.clear();
   }
 
   public int size() {
-    return grid.size();
+    return stones.size();
   }
 
   @Override
@@ -46,9 +50,9 @@ public class RummiHand implements Grid {
   @Override
   public String toString() {
     String stonesOnHand = "";
-    int handSize = grid.size();
+    int handSize = stones.size();
 
-    for (Map.Entry<Coordinate, Stone> entry : grid.entrySet()){
+    for (Map.Entry<Coordinate, Stone> entry : stones.entrySet()){
       stonesOnHand = stonesOnHand + "Coordinate: " + entry.getKey().toString() + "; " +
           "Stone: " + entry.getValue().toString() + "\n";
     }

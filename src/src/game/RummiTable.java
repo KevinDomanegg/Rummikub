@@ -14,7 +14,7 @@ public class RummiTable implements Grid {
 
   private Map<Coordinate, Stone> stones;
 
-  public RummiTable() {
+  RummiTable() {
     stones = new HashMap<>(WIDTH * HEIGHT);
   }
 
@@ -24,6 +24,10 @@ public class RummiTable implements Grid {
 
   @Override public void setStone(Coordinate coordinate, Stone stone) {
     stones.put(coordinate, stone);
+  }
+
+  @Override public Stone removeStone(Coordinate coordinate) {
+    return stones.remove(coordinate);
   }
 
   @Override public int getWidth() {
@@ -38,7 +42,7 @@ public class RummiTable implements Grid {
     stones.clear();
   }
 
-  public boolean isConsistent() {
+  boolean isConsistent() {
     // check the minimal Condition (:= a valid set has at least 3 stones)
     if (stones.size() < MIN_SET_SIZE) {
       return false;
@@ -148,9 +152,9 @@ public class RummiTable implements Grid {
 
   public static void main(String[] args) {
     RummiTable table = new RummiTable();
-    table.setStone(new Coordinate(0, 0), new Stone(Color.BLUE, 1));
-    table.setStone(new Coordinate(1, 0), new Stone());
-    table.setStone(new Coordinate(2, 0), new Stone(Color.BLUE, 3));
+    table.setStone(new Coordinate(0, 0), new Stone(Color.YELLOW, 5));
+    table.setStone(new Coordinate(1, 0), new Stone(Color.BLUE, 5));
+    table.setStone(new Coordinate(2, 0), new Stone());
     System.out.println(table.isConsistent());
   }
 }

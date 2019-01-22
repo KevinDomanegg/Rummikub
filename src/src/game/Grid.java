@@ -8,6 +8,8 @@ public interface Grid {
 
   void setStone(Coordinate coordinate, Stone stone);
 
+  Stone removeStone(Coordinate coordinate);
+
   int getWidth();
 
   int getHeight();
