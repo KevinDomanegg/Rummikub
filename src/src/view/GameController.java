@@ -169,6 +169,9 @@ public class GameController {
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
+      if (!model.isMyTurn()) {
+        return;
+      }
       mediaPlayer_pickupStone.stop();
       mediaPlayer_pickupStone.play();
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
@@ -335,7 +338,7 @@ public class GameController {
   private void sendResetRequest() {
     if (model.isMyTurn()) {
       requestBuilder.sendResetRequest();
-      model.finishTurn();
+      //model.finishTurn();
     } else {
       // error
     }
@@ -352,7 +355,7 @@ public class GameController {
   }
 
   private void showErrorView() {
-    errorMessage.setText("it's not you turn!");
+    errorMessage.setText("It's not you turn!");
     errorPane.setVisible(true);
     table.setVisible(false);
   }

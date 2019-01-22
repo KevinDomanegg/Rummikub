@@ -74,13 +74,15 @@ class RequestHandler {
         return;
       case CONFIRM_MOVE:
         if (game.isConsistent()) {
-          // send the changed table first
-          sendTableToALl();
+          /*// send the changed table first
+          sendTableToALl();*/
           // then notify the turn to the next player
           notifyTurnToPlayer();
         } else {
           // send the original table to the current player
           sendTableToALl();
+          //send old hand back
+          sendHandToPlayer(playerID);
           // send the original hand to the current player
           sendHandSizesToAll();
           // notify wrong move
