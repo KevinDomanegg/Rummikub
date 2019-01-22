@@ -1,6 +1,9 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -14,6 +17,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import network.client.RequestBuilder;
 
 import java.net.URISyntaxException;
@@ -38,17 +42,20 @@ public class GameController {
   //MUSIC
   private Media sound_pickupStone;
   private Media sound_dropStone;
+  private Media sound_drawStone;
 
   {
     try {
       sound_pickupStone = new Media((getClass().getResource("pickupStone.mp3")).toURI().toString());
       sound_dropStone = new Media((getClass().getResource("dropStone.mp3")).toURI().toString());
+      sound_drawStone = new Media((getClass().getResource("drawStone.mp3")).toURI().toString());
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
   }
   private MediaPlayer mediaPlayer_pickupStone = new MediaPlayer(sound_pickupStone);
   private MediaPlayer mediaPlayer_dropStone = new MediaPlayer(sound_dropStone);
+  private MediaPlayer mediaPlayer_drawStone = new MediaPlayer(sound_drawStone);
 
 
   void setNetworkController(NetworkController networkcontroller) {
@@ -106,6 +113,8 @@ public class GameController {
   @FXML
   public void drawStone() {
     if (model.isMyTurn()) {
+      mediaPlayer_drawStone.stop();
+      mediaPlayer_drawStone.play();
       // Server request: Get stone from bag
       networkController.sendDrawRequest();
       model.finishTurn();

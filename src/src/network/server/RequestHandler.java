@@ -64,6 +64,7 @@ class RequestHandler {
         sendTableToALl();
         return;
       case DRAW:
+        game.reset();
         game.drawStone();
         // send the player new hand with a drawn stone
         sendHandToPlayer(playerID);
