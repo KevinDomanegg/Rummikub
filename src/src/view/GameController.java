@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -26,6 +27,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GameController {
+
+  @FXML private Label player0Name;
+  @FXML private Label player0Hand;
+  @FXML private Label player1Name;
+  @FXML private Label player2Name;
+  @FXML private Label player3Name;
+  @FXML private Label player1Hand;
+  @FXML private Label player2Hand;
+  @FXML private Label player3Hand;
+
   @FXML
   Text timer;
   @FXML
@@ -88,7 +99,7 @@ public class GameController {
           timer_task.cancel();
           return;
         }
-        timer.setText(""+interval);
+        timer.setText("" + interval);
         interval--;
       }
     }, delay, period);
@@ -317,41 +328,67 @@ public class GameController {
     //STOP MUSIC
   }
 
-  public void setTable(StoneInfo[][] table) {
+  void setTable(StoneInfo[][] table) {
     model.setTable(table);
     Platform.runLater(() -> {
       constructGrid(this.table, true);
     });
   }
 
-  public void setPlayerHand(StoneInfo[][] hand) {
+  void setPlayerHand(StoneInfo[][] hand) {
     model.setHand(hand);
     Platform.runLater(() -> {
       constructGrid(handGrid, false);
     });
   }
 
-  public void notifyInvalidMove() {
+  void notifyInvalidMove() {
 
   }
 
-  public void setBagSize(int bagSize) {
+  void setBagSize(int bagSize) {
     model.setBagSize(bagSize);
   }
 
-  public void notifyTurn() {
+  void notifyTurn() {
     model.notifyTurn();
   }
 
-  public void setHandSizes(List<Integer> sizes) {
+  void setHandSizes(List<Integer> sizes) {
     model.setHandSizes(sizes);
+    Platform.runLater(() -> {
+      switch (sizes.size()) {
+        case 4:
+          player3Hand.setText(sizes.get(3).toString());
+        case 3:
+          player2Hand.setText(sizes.get(2).toString());
+        case 2:
+          player1Hand.setText(sizes.get(1).toString());
+        case 1:
+          player0Hand.setText(sizes.get(0).toString());
+        default:
+      }
+    });
   }
 
-  public void setPlayerNames(List<String> names) {
-    model.setPlayerNames(names);
+  void setPlayerNames(List<String> names) {
+    player3Name.setText("H");
+    Platform.runLater(() -> {
+      switch (names.size()) {
+        case 4:
+          player3Name.setText(names.get(3));
+        case 3:
+          player2Name.setText(names.get(2));
+        case 2:
+          player1Name.setText(names.get(1));
+        case 1:
+          player0Name.setText(names.get(0));
+        default:
+      }
+    });
   }
 
-  public void notifyCurrentPlayer(int playerID) {
+  void notifyCurrentPlayer(int playerID) {
     model.setCurrentPlayer(playerID);
     // set up the timer
     timer_countDown.cancel();
@@ -360,18 +397,16 @@ public class GameController {
     // show current player on view
   }
 
-  public void notifyGameStart() {
-    model.notifyGameStart();
-  }
-
   /**
    * Method to update the data from the server.
    * Triggers view update
    *
    * @param model New model from server
    */
-  public void setModel(ClientModel model) {
+  void setModel(ClientModel model) {
     this.model = model;
+    setPlayerNames(model.getPlayersNames());
+    setHandSizes(model.getHandSizes());
     updateView();
   }
 

@@ -27,11 +27,18 @@
                     </children>
                 </StackPane>
 
-                <StackPane alignment="CENTER">
-                    <!-- opponentMid's hand -->
+                <StackPane maxHeight="30" maxWidth="200" prefHeight="69.0"
+                  prefWidth="600.0"
+                  xmlns="http://javafx.com/javafx"
+                  xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
                     <children>
-                        <fx:include fx:id="opponentMid"
-                                    source="OpponentHand.fxml"/>
+                        <HBox styleClass="opponent">
+                            <children>
+                                <Label fx:id="player2Name" styleClass="text"
+                                  text="x" />
+                                <Label fx:id="player2Hand" styleClass="text" text="x" />
+                            </children>
+                        </HBox>
                     </children>
                 </StackPane>
 
@@ -48,15 +55,36 @@
 
     <left>
         <!-- opponentLeft's hand -->
-        <StackPane fx:id="opponentLeft">
-            <fx:include source="OpponentHand.fxml"/>
+        <StackPane maxHeight="30" maxWidth="200" prefHeight="69.0"
+          prefWidth="600.0"
+          xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
+            <children>
+                <HBox styleClass="opponent">
+                    <children>
+                        <Label fx:id="player1Name" styleClass="text"
+                          text="x" />
+                        <Label fx:id="player1Hand" styleClass="text" text="x" />
+                    </children>
+                </HBox>
+            </children>
         </StackPane>
     </left>
 
     <right>
         <!-- opponentRight's hand -->
-        <StackPane fx:id="opponentRight">
-            <fx:include source="OpponentHand.fxml"/>
+        <StackPane maxHeight="30" maxWidth="200" prefHeight="69.0"
+          prefWidth="600.0"
+          xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml/1" styleClass="hand">
+            <children>
+                <HBox styleClass="opponent">
+                    <children>
+                        <Label fx:id="player3Name" styleClass="text" text="x" />
+                        <Label fx:id="player3Hand" styleClass="text" text="x" />
+                    </children>
+                </HBox>
+            </children>
         </StackPane>
     </right>
 
@@ -108,7 +136,8 @@
                       prefWidth="100.0" maxWidth="400">
                     <!-- hand of executing player -->
                     <children>
-                        <Text fx:id="playerInfo" text="player: stone count"/>
+                        <Label fx:id="player0Name" styleClass="text" text="x"/>
+                        <Label fx:id="player0Hand" styleClass="text" text="x"/>
                         <GridPane fx:id="handGrid" styleClass="hand"
                                   alignment="CENTER_LEFT">
                             <!-- Own hand -->

@@ -63,29 +63,30 @@ public class WaitController implements Initializable {
     networkController.returnToStartView();
   }
 
- void setPlayerNames(List<String> names) {
-   int size = names.size();
-   switch (size) {
-     case 4:
-       player3.setText(names.get(3));
-     case 3:
-       player2.setText(names.get(2));
-     case 2:
-       player1.setText(names.get(1));
-     case 1:
-       player0.setText(names.get(0));
-     default:
-   }
-   if (model.isHost()) {
+  void setPlayerNames(List<String> names) {
+    model.setPlayerNames(names);
+    int size = names.size();
+    switch (size) {
+      case 4:
+        player3.setText(names.get(3));
+      case 3:
+        player2.setText(names.get(2));
+      case 2:
+        player1.setText(names.get(1));
+      case 1:
+        player0.setText(names.get(0));
+      default:
+    }
+    if (model.isHost()) {
       if (size > 1) {
         // start button visible
         startGameButton.setVisible(true);
         return;
       }
-   }
-   // start button not visible
-   startGameButton.setVisible(false);
- }
+    }
+    // start button not visible
+    startGameButton.setVisible(false);
+  }
 
  synchronized void switchToGameView() {
     networkController.stopMusicInWaiting();
