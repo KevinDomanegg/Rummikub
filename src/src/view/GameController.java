@@ -22,6 +22,8 @@ import network.client.RequestBuilder;
 
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameController {
   @FXML
@@ -44,6 +46,10 @@ public class GameController {
   private Media sound_dropStone;
   private Media sound_drawStone;
 
+  //TIMER
+  private Timer timer_countDown;
+  private TimerTask timer_task;
+
   {
     try {
       sound_pickupStone = new Media((getClass().getResource("pickupStone.mp3")).toURI().toString());
@@ -64,6 +70,28 @@ public class GameController {
 
   void setRequestBuilder(RequestBuilder requestBuilder) {
     this.requestBuilder = requestBuilder;
+  }
+
+  void setTimer() {
+    int delay = 1000;
+    int period = 1000;
+    timer_countDown = new Timer();
+    timer_countDown.scheduleAtFixedRate(timer_task = new TimerTask() {
+      int interval = 30;
+      public void run() {
+        if (interval == 0) {
+          if (model.isMyTurn()) {
+            requestBuilder.sendTimeOutRequest();
+            model.finishTurn();
+          }
+          timer_countDown.cancel();
+          timer_task.cancel();
+          return;
+        }
+        timer.setText(""+interval);
+        interval--;
+      }
+    }, delay, period);
   }
 
   /* TODO: REMOVE TEST METHODS*/
@@ -325,6 +353,10 @@ public class GameController {
 
   public void notifyCurrentPlayer(int playerID) {
     model.setCurrentPlayer(playerID);
+    // set up the timer
+    timer_countDown.cancel();
+    timer_task.cancel();
+    setTimer();
     // show current player on view
   }
 

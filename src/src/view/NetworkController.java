@@ -54,6 +54,7 @@ public class NetworkController implements Controller {
     startController.stopMusic();
   }
 
+
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);
 //  }
@@ -131,6 +132,7 @@ public class NetworkController implements Controller {
       return;
     }
     gameController.notifyTurn();
+    //gameController.setTimer();
   }
 
   /**
@@ -142,6 +144,7 @@ public class NetworkController implements Controller {
     Platform.runLater(() -> {
       //System.out.println("notified gamecontroller to switch1");
       waitController.switchToGameView();
+      gameController.setTimer();
     });
 
     //System.out.println("notified gamecontroller to switch2");

@@ -92,7 +92,7 @@ public class StartController {
 
     void returnToStart() {
       try {
-        main.start(stage);
+        main.hostJoinStage(stage);
       } catch (Exception e) {
         e.printStackTrace();
       }
