@@ -1,8 +1,11 @@
 package game;
 
 
+import game.Stone.Color;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -264,6 +267,24 @@ public class RummiGame implements Game {
 
   @Override public List<String> getPlayerNames() {
     return players.stream().map(Player::getName).collect(Collectors.toList());
+  }
+
+  /**
+   * sorts stones on the hand of the player with the given playerID by group-set.
+   *
+   * @param playerID the id of the player whose hand will be sorted
+   */
+  @Override public void sortPlayerHandByGroup(int playerID) {
+    players.get(playerID).sortHandByGroup();
+  }
+
+  /**
+   * sorts stones on the hand of the player with the given playerID by run-set.
+   *
+   * @param playerID the id of the player whose hand will be sorted
+   */
+  @Override public void sortPlayerHandByRun(int playerID) {
+    players.get(playerID).sortHandByRun();
   }
 
   @Override public int getCurrentPlayerID() {
