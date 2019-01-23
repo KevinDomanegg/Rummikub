@@ -6,6 +6,7 @@ import communication.gameinfo.GameInfo;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 
@@ -32,13 +33,18 @@ class ClientListener extends Thread {
       receiveMessage = new Scanner(server.getInputStream());
 
       while (connected) {
-        String json;
+        String json = null;
+        try {
           json = receiveMessage.nextLine();
+        } catch (NoSuchElementException e) {
+          disconnect();
+        }
+        if (json != null) {
           GameInfo info = deserializer.deserializeInfo(json);
-          if (info instanceof GameInfo) {
-
+          if (info != null) {
             myClient.applyGameInfoHandler(info);
           }
+        }
       }
 
     } catch (IOException e) {
@@ -54,6 +60,7 @@ class ClientListener extends Thread {
       receiveMessage.close();
       server.close();
     } catch (IOException e) {
+      System.out.println("exception while closing the listener");
       e.printStackTrace();
     }
   }
