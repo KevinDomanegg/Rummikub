@@ -1,10 +1,12 @@
 package network.server;
 
+import communication.Deserializer;
 import communication.request.Request;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ServerListener extends Thread {
   private RummiServer server;
@@ -12,7 +14,8 @@ public class ServerListener extends Thread {
   private int id;
   private boolean connected = false;
   private Request request;
-  ObjectInputStream in;
+  private Scanner in;
+  private Deserializer deserializer;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -35,19 +38,20 @@ public class ServerListener extends Thread {
 
     try {
 
-      in = new ObjectInputStream(clientIn.getInputStream());
+      deserializer = new Deserializer();
+      in = new Scanner(clientIn.getInputStream());
       this.connected = true;
 
       while (connected) {
-        Object o = null;
+        String json = null;
         try {
-          o = in.readObject();
-          request = (Request) o;
-        } catch (ClassNotFoundException | ClassCastException e) {
+          json = in.nextLine();
+          request = deserializer.deserializeRequest(json);
+        } catch (ClassCastException e) {
           connected = false;
         }
 
-        if (o == null) {
+        if (json == null) {
           System.out.println("Client " + id + " not connected");
           this.connected = false;
           server.disconnectClient(id);
