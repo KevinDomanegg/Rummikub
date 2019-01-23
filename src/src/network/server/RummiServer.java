@@ -109,7 +109,7 @@ public class RummiServer extends Thread implements Server {
    *
    * @param id of the client
    */
-  synchronized void disconnectClient(int id) {
+  void disconnectClient(int id) {
 
     clients[id] = null;
     if (listeners[id] != null) {
@@ -126,16 +126,18 @@ public class RummiServer extends Thread implements Server {
     //When the client who has hosted the game disconnects, terminate the server
     if (id == 0) {
       suicide();
+      return;
     }
-    notifyAll();
+    //notifyAll();
   }
 
-  private void cleanup() {
+  private synchronized void cleanup() {
     for (int i = 0; i < clients.length; i++) {
       if (clients[i] != null) {
         disconnectClient(i);
       }
     }
+    notifyAll();
   }
 
   /**

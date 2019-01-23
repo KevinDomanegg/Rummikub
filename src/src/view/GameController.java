@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -47,6 +48,7 @@ public class GameController {
   private VBox errorPane;
   @FXML
   private Text errorMessage;
+
   private NetworkController networkController;
   private ClientModel model;
   private RequestBuilder requestBuilder;
@@ -60,6 +62,9 @@ public class GameController {
   //TIMER
   private Timer timer_countDown;
   private TimerTask timer_task;
+
+  //NO HOST AVAILABLE
+  private boolean serverNotAvailable;
 
   {
     try {
@@ -129,8 +134,20 @@ public class GameController {
     return result;
   }
 
-  public void returnToStart() {
-    networkController.returnToStartView();
+  public void returnToStart(boolean noServerAvailable) {
+    if (noServerAvailable) {
+      serverNotAvailable = true;
+      showErrorView("THE HOST HAS LEFT THE GAME!");
+    } else {
+      networkController.returnToStartView();
+    }
+  }
+
+
+  public void quitButton() {
+    Platform.runLater(() -> {
+      returnToStart(false);
+    });
   }
 
   /**
@@ -163,7 +180,7 @@ public class GameController {
       networkController.sendDrawRequest();
       model.finishTurn();
     } else {
-      showErrorView();
+      showErrorView("Error! It is not your turn");
     }
   }
 
@@ -431,18 +448,22 @@ public class GameController {
       requestBuilder.sendConfirmMoveRequest();
       model.finishTurn();
     } else {
-      showErrorView();
+      showErrorView("Error! It is not your turn");
     }
   }
 
-  private void showErrorView() {
-    errorMessage.setText("It's not you turn!");
+  private void showErrorView(String message) {
+    errorMessage.setText(message);
     errorPane.setVisible(true);
     table.setVisible(false);
   }
 
   @FXML private void handleOkButton() {
-    errorPane.setVisible(false);
-    table.setVisible(true);
+    if (serverNotAvailable) {
+      returnToStart(false);
+    } else {
+      errorPane.setVisible(false);
+      table.setVisible(true);
+    }
   }
 }

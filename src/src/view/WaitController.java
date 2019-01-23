@@ -48,6 +48,8 @@ public class WaitController implements Initializable {
   @FXML
   private Text player3;
 
+  private Stage stage;
+
   @FXML
   private void startGame() {
     requestBuilder.sendStartRequest();
@@ -61,8 +63,8 @@ public class WaitController implements Initializable {
     this.requestBuilder = requestBuilder;
   }
 
-  void returnToStartView() {
-    networkController.returnToStartView();
+  Stage getStage() {
+    return stage;
   }
 
   void setPlayerNames(List<String> names) {
@@ -93,7 +95,7 @@ public class WaitController implements Initializable {
  synchronized void switchToGameView() {
     networkController.stopMusicInWaiting();
     synchronized (networkController) {
-      Stage stage = (Stage) startGameButton.getScene().getWindow();
+      stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
       Parent root = loader.getRoot();
       //loader.setRoot(this);

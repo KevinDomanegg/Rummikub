@@ -45,8 +45,8 @@
                 <StackPane alignment="CENTER_RIGHT">
                     <!-- Menu buttons -->
                     <children>
-                        <Button fx:id="quitButton" mnemonicParsing="false"
-                                text="Quit" onMouseClicked="#returnToStart"/>
+                        <Button fx:id="quitGame" mnemonicParsing="false"
+                                text="Quit" onMouseClicked="#quitButton" />
                     </children>
                 </StackPane>
             </children>

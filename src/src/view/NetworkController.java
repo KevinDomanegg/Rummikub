@@ -47,7 +47,13 @@ public class NetworkController implements Controller {
   }
 
   void returnToStartView() {
-    startController.returnToStart();
+    gameController.stopTimer();
+    Stage primaryStage = waitController.getStage();
+    startController.returnToStart(primaryStage);
+  }
+
+  public void noServerAvailable() {
+    gameController.returnToStart(true);
   }
 
   void stopMusicInWaiting() {
@@ -55,8 +61,13 @@ public class NetworkController implements Controller {
   }
 
   void killThreads() {
-    startController.killThreads();
+    if (gameController != null) {
+      gameController.stopTimer();
+    }
+    client.disconnect();
+    System.out.println("kill client thread was pressed");
   }
+
 
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);

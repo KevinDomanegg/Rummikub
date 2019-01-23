@@ -30,12 +30,9 @@ import java.net.UnknownHostException;
  */
 public class StartController {
 
-    private RummiClient client;
-    private RummiServer server;
-    private Stage stage;
+  private Stage stage;
 
   private Main main;
-  //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\waitingMusic.mp3").toURI().toString());
   private Media sound;
 
   {
@@ -90,9 +87,9 @@ public class StartController {
 //      }
 //    }
 
-    void returnToStart() {
+    void returnToStart(Stage primaryStage) {
       try {
-        main.hostJoinStage(stage);
+        main.hostJoinStage(primaryStage); // new stage or just stage???
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -117,8 +114,7 @@ public class StartController {
           e.printStackTrace();
         }
       } else {
-        server = new RummiServer();
-        server.start();
+        new RummiServer().start();
         main.stopMusic();
         try {
           ipField.setText(Inet4Address.getLocalHost().getHostAddress());
@@ -143,7 +139,7 @@ public class StartController {
     private void switchToWait(ClientModel model) throws IOException {
         try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
-        client = new RummiClient(ipField.getText());
+        RummiClient client = new RummiClient(ipField.getText());
         if (!client.isServerOK()) {
           switchToErrorView("THERE IS NO SERVER YOU ASSHOLE!");
           return;
@@ -154,13 +150,14 @@ public class StartController {
 
       NetworkController networkController = new NetworkController(client);
       networkController.setStartController(this);
+      main.setNetworkController(networkController);
       System.out.println("Client:" + nameField.getText() + " started");
 
       //A LITTLE MUSIC
       mediaPlayer.play();
 
-        //Stage stage = (Stage) nameField.getScene().getWindow();
-      stage = (Stage) nameField.getScene().getWindow();
+      Stage stage = (Stage) nameField.getScene().getWindow();
+      //stage = (Stage) nameField.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("wait.fxml"));
         Parent root = loader.getRoot();
         try {
@@ -181,7 +178,8 @@ public class StartController {
         stage.setScene(gameScene);
           stage.setOnCloseRequest(e -> {
             System.out.println("klicked  on x");
-            killThreads();
+            //killThreads();
+            networkController.killThreads();
             Platform.exit();
           });
         } catch(NumberFormatException ex) {
@@ -189,20 +187,10 @@ public class StartController {
         }
     }
 
-    void killThreads() {
-        if (client != null) {
-            client.disconnect();
-        }
-        if (server != null) {
-            server.suicide();
-        }
-    }
-
     @FXML
     void handleOkButton() {
         vContainer.setVisible(true);
         errorPane.setVisible(false);
-
     }
 
   public void setMain(Main main) {
