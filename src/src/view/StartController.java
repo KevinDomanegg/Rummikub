@@ -100,21 +100,33 @@ public class StartController {
 
     @FXML
     void joinGame() throws IOException {
+      if (nameField.getText().equals("")) {
+        switchToErrorView("You must choose a username!");
+      } else {
         switchToWait(new ClientModel(false));
         main.stopMusic();
+      }
     }
 
     @FXML
     void hostGame() throws IOException {
-       server = new RummiServer();
-       server.start();
-       main.stopMusic();
-       try {
-           ipField.setText(Inet4Address.getLocalHost().getHostAddress());
-       } catch (UnknownHostException e) {
-           e.printStackTrace();
-       }
+      if (nameField.getText().equals("")) {
+        try {
+          switchToErrorView("You must have a username!");
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      } else {
+        server = new RummiServer();
+        server.start();
+        main.stopMusic();
+        try {
+          ipField.setText(Inet4Address.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+          e.printStackTrace();
+        }
         switchToWait(new ClientModel(true));
+      }
     }
 
     @FXML
@@ -132,6 +144,10 @@ public class StartController {
         try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
         client = new RummiClient(ipField.getText());
+        if (!client.isServerOK()) {
+          switchToErrorView("THERE IS NO SERVER YOU ASSHOLE!");
+          return;
+        }
         model.setServerIP(ipField.getText());
         // Create a RequestBuilder
         RequestBuilder reqBuilder = new RequestBuilder(client);
@@ -163,8 +179,13 @@ public class StartController {
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
+          stage.setOnCloseRequest(e -> {
+            System.out.println("klicked  on x");
+            killThreads();
+            Platform.exit();
+          });
         } catch(NumberFormatException ex) {
-            switchToErrorView("age has to be a number");
+            switchToErrorView("Age has to be a number!");
         }
     }
 

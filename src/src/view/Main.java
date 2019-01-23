@@ -70,7 +70,7 @@ public class Main extends Application {
 
     primaryStage.setOnCloseRequest(e -> {
       System.out.println("klicked  on x");
-      startController.killThreads();
+      //startController.killThreads();
       Platform.exit();
     });
     //--------------------------------------------------------

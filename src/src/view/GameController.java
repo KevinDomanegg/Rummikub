@@ -88,7 +88,7 @@ public class GameController {
     int period = 1000;
     timer_countDown = new Timer();
     timer_countDown.scheduleAtFixedRate(timer_task = new TimerTask() {
-      int interval = 30;
+      int interval = 60;
       public void run() {
         if (interval == 0) {
           if (model.isMyTurn()) {
