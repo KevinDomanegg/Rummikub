@@ -5,11 +5,12 @@ Text {
 #root {
     -fx-pref-width: 1024;
     -fx-pref-height: 768;
-    -fx-background-color: #095F94;
+    -fx-background-image: url("backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
 }
 
 .hand {
-    -fx-background-color: red;
+    -fx-background-color: black;
 }
 
 .opponent {
@@ -28,6 +29,9 @@ Text {
     -fx-padding: 20;
 }
 
+#errorPane {
+    -fx-alignment: CENTER;
+}
 
 #opponentLeft {
     -fx-rotate: -90;
@@ -53,18 +57,14 @@ Text {
     -fx-border-color: white;
     -fx-fill: none;
     -fx-alignment: CENTER;
-    -fx-pref-height: 50;
-    -fx-pref-width: 30;
-}
-
-.dropHover {
-    -fx-border-color: green;
+    -fx-pref-height: 55;
+    -fx-pref-width: 40;
 }
 
 .stone {
-    -fx-background-color: white;
-    -fx-pref-width: 20;
-    -fx-pref-height: 40;
+    -fx-fill: white;
+    -fx-max-width: 20;
+    -fx-max-height: 40;
 }
 
 #bottomPane {
@@ -72,6 +72,26 @@ Text {
     -fx-padding: 50 0 0 0;
 }
 
-.rot {
+.RED {
     -fx-fill: red;
+}
+
+.YELLOW {
+    -fx-fill: yellow;
+}
+
+.BLUE {
+    -fx-fill: blue;
+}
+
+.BLACK {
+    -fx-fill: black;
+}
+
+.JOKER {
+    -fx-fill: magenta;
+}
+
+.stoneValue {
+    -fx-font-weight: 700;
 }

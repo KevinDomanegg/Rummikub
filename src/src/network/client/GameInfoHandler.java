@@ -31,6 +31,7 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
       case INVALID_MOVE:
         System.out.println("handling invalid");
         controller.notifyInvalidMove();
+        controller.notifyTurn();
         return;
       case BAG:
         System.out.println("handling bag");

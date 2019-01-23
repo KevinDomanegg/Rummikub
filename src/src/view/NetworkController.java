@@ -50,6 +50,14 @@ public class NetworkController implements Controller {
     startController.returnToStart();
   }
 
+  void stopMusicInWaiting() {
+    startController.stopMusic();
+  }
+
+  void killThreads() {
+    startController.killThreads();
+  }
+
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);
 //  }
@@ -99,16 +107,7 @@ public class NetworkController implements Controller {
       waitController.setTable(table);
       return;
     }
-    synchronized (this) {
-      while (gameController == null) {
-        try {
-          wait();
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      }
-      gameController.setTable(table);
-    }
+    gameController.setTable(table);
   }
 
 
@@ -136,6 +135,7 @@ public class NetworkController implements Controller {
       return;
     }
     gameController.notifyTurn();
+    //gameController.setTimer();
   }
 
   /**
@@ -147,6 +147,7 @@ public class NetworkController implements Controller {
     Platform.runLater(() -> {
       //System.out.println("notified gamecontroller to switch1");
       waitController.switchToGameView();
+      gameController.setTimer();
     });
 
     //System.out.println("notified gamecontroller to switch2");

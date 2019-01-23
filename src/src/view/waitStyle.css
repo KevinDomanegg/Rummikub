@@ -1,0 +1,4 @@
+#root {
+    -fx-background-image: url("backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
+}

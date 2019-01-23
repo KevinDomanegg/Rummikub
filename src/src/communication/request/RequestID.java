@@ -14,5 +14,6 @@ public enum RequestID {
   DRAW,
   CONFIRM_MOVE,
   GIVE_UP,
-  RESET
+  RESET,
+  TIME_OUT
 }

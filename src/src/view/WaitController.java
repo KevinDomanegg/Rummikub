@@ -2,6 +2,8 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
@@ -62,35 +65,38 @@ public class WaitController implements Initializable {
     networkController.returnToStartView();
   }
 
- void setPlayerNames(List<String> names) {
-   int size = names.size();
-   switch (size) {
-     case 4:
-       player3.setText(names.get(3));
-     case 3:
-       player2.setText(names.get(2));
-     case 2:
-       player1.setText(names.get(1));
-     case 1:
-       player0.setText(names.get(0));
-     default:
-   }
-   if (model.isHost()) {
+  void setPlayerNames(List<String> names) {
+    model.setPlayerNames(names);
+    int size = names.size();
+    switch (size) {
+      case 4:
+        player3.setText(names.get(3));
+      case 3:
+        player2.setText(names.get(2));
+      case 2:
+        player1.setText(names.get(1));
+      case 1:
+        player0.setText(names.get(0));
+      default:
+    }
+    if (model.isHost()) {
       if (size > 1) {
         // start button visible
         startGameButton.setVisible(true);
         return;
       }
-   }
-   // start button not visible
-   startGameButton.setVisible(false);
- }
+    }
+    // start button not visible
+    startGameButton.setVisible(false);
+  }
 
  synchronized void switchToGameView() {
+    networkController.stopMusicInWaiting();
     synchronized (networkController) {
       Stage stage = (Stage) startGameButton.getScene().getWindow();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("Game.fxml"));
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
       Parent root = loader.getRoot();
+      //loader.setRoot(this);
       try {
         root = loader.load();
       } catch (IOException e) {
@@ -109,7 +115,15 @@ public class WaitController implements Initializable {
       stage.setScene(gameScene);
       notifyAll();
       //System.out.println("switched to game");
+       stage.setOnCloseRequest(e -> {
+        System.out.println("klicked  on x");
+        // Closes the Timer
+        gameController.stopTimer();
+        networkController.killThreads();
+        Platform.exit();
+      });
     }
+
   }
 
   @Override

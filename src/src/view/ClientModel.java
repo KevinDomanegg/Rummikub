@@ -105,4 +105,8 @@ final class ClientModel {
   String getServerIP() {
     return serverIP;
   }
+
+  boolean isMyTurn() {
+    return isMyTurn;
+  }
 }

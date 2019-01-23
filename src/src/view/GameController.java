@@ -1,33 +1,79 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import network.client.RequestBuilder;
 
+import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GameController {
+
+  @FXML private Label player0Name;
+  @FXML private Label player0Hand;
+  @FXML private Label player1Name;
+  @FXML private Label player2Name;
+  @FXML private Label player3Name;
+  @FXML private Label player1Hand;
+  @FXML private Label player2Hand;
+  @FXML private Label player3Hand;
+
   @FXML
   Text timer;
   @FXML
-  GridPane table;
+  private GridPane table;
   @FXML
-  GridPane handGrid;
+  private GridPane handGrid;
   @FXML
-  Pane opponentMid;
+  private VBox errorPane;
+  @FXML
+  private Text errorMessage;
   private NetworkController networkController;
   private ClientModel model;
-  private StoneInfo[][] tableData;
-  private StoneInfo[][] handData;
   private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
+
+  //MUSIC
+  private Media sound_pickupStone;
+  private Media sound_dropStone;
+  private Media sound_drawStone;
+
+  //TIMER
+  private Timer timer_countDown;
+  private TimerTask timer_task;
+
+  {
+    try {
+      sound_pickupStone = new Media((getClass().getResource("pickupStone.mp3")).toURI().toString());
+      sound_dropStone = new Media((getClass().getResource("dropStone.mp3")).toURI().toString());
+      sound_drawStone = new Media((getClass().getResource("drawStone.mp3")).toURI().toString());
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+  }
+  private MediaPlayer mediaPlayer_pickupStone = new MediaPlayer(sound_pickupStone);
+  private MediaPlayer mediaPlayer_dropStone = new MediaPlayer(sound_dropStone);
+  private MediaPlayer mediaPlayer_drawStone = new MediaPlayer(sound_drawStone);
+
 
   void setNetworkController(NetworkController networkcontroller) {
     this.networkController = networkcontroller;
@@ -35,6 +81,33 @@ public class GameController {
 
   void setRequestBuilder(RequestBuilder requestBuilder) {
     this.requestBuilder = requestBuilder;
+  }
+
+  void setTimer() {
+    int delay = 1000;
+    int period = 1000;
+    timer_countDown = new Timer();
+    timer_countDown.scheduleAtFixedRate(timer_task = new TimerTask() {
+      int interval = 60;
+      public void run() {
+        if (interval == 0) {
+          if (model.isMyTurn()) {
+            requestBuilder.sendTimeOutRequest();
+            model.finishTurn();
+          }
+          timer_countDown.cancel();
+          timer_task.cancel();
+          return;
+        }
+        timer.setText("" + interval);
+        interval--;
+      }
+    }, delay, period);
+  }
+
+  void stopTimer() {
+    timer_task.cancel();
+    timer_countDown.cancel();
   }
 
   /* TODO: REMOVE TEST METHODS*/
@@ -83,11 +156,15 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
-    networkController.sendDrawRequest();
-    model.finishTurn();
-    // Server request: Get stone from bag
-
-    //TODO: Confirm drawn stone, update view
+    if (model.isMyTurn()) {
+      mediaPlayer_drawStone.stop();
+      mediaPlayer_drawStone.play();
+      // Server request: Get stone from bag
+      networkController.sendDrawRequest();
+      model.finishTurn();
+    } else {
+      showErrorView();
+    }
   }
 
   /**
@@ -98,6 +175,9 @@ public class GameController {
    */
   @FXML
   void constructGrid(GridPane grid, boolean isTable) {
+    Platform.runLater(() -> {
+      grid.getChildren().clear();
+    });
     StoneInfo[][] currentGrid;
     if (isTable) {
       currentGrid = model.getTable();
@@ -118,9 +198,13 @@ public class GameController {
           putStoneInCell(cell, stone);
         }
 
-        cell.getStyleClass().add("cell");
-        grid.add(cell, x, y);
-        setupDragAndDrop(cell, isTable);
+        int finalX = x;
+        int finalY = y;
+        Platform.runLater(() -> {
+          cell.getStyleClass().add("cell");
+          grid.add(cell, finalX, finalY);
+          setupDragAndDrop(cell, isTable);
+        });
       }
     }
   }
@@ -132,11 +216,17 @@ public class GameController {
    * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, boolean isTable) {
+    // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
     int thisRow = GridPane.getRowIndex(cell);
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
+      if (!model.isMyTurn()) {
+        return;
+      }
+      mediaPlayer_pickupStone.stop();
+      mediaPlayer_pickupStone.play();
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
 
@@ -150,18 +240,9 @@ public class GameController {
       StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
 
       if (cellContent != null) {
-        cell.getChildren().clear();
-
         // Put stone on clipboard
         content.put(stoneFormat, cellContent);
         dragBoard.setContent(content);
-        //stoneGrid[thisColumn][thisRow] = null;
-        if (isTable) {
-          model.setTable(stoneGrid);
-        } else {
-          model.setHand(stoneGrid);
-        }
-        //updateView();
       }
       event.consume();
     });
@@ -174,13 +255,38 @@ public class GameController {
       event.consume();
     });
 
-    //
+    // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
-      // Delete source stone
+      mediaPlayer_dropStone.stop();
+      mediaPlayer_dropStone.play();
+      Dragboard dragboard = event.getDragboard();
+      StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
+      /*
+      putStoneInCell(cell, sourceStone);
+
+//
+      // Set stone in model
+      StoneInfo[][] stoneGrid;
+      if (isTable) {
+        stoneGrid = model.getTable();
+      } else {
+        stoneGrid = model.getHand();
+      }
+      stoneGrid[thisColumn][thisRow] = sourceStone;
+      */
+
+      // Get source cell's coordinates
+
       Pane sourceCell = (Pane) event.getGestureSource();
+      sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
       int sourceRow = GridPane.getRowIndex(sourceCell);
-      StoneInfo[][] stoneGrid; //TODO: This is replicated code
+
+
+
+      /*
+      sourceCell.getChildren().clear();
+
       if (isTable) {
         stoneGrid = model.getTable();
         stoneGrid[sourceColumn][sourceRow] = null;
@@ -190,10 +296,21 @@ public class GameController {
         stoneGrid[sourceColumn][sourceRow] = null;
         model.setHand(stoneGrid);
       }
+      */
 
-      //Setting new cell
-      StoneInfo stoneInfo = (StoneInfo) event.getDragboard().getContent(stoneFormat); //TODO: Is parsing correct?
-      putStoneInCell(cell, stoneInfo);
+
+        Parent sourceParent = sourceCell.getParent();
+        Parent targetParent = cell.getParent();
+
+        if (sourceParent.getId().equals("handGrid")) {
+          if (targetParent.getId().equals("handGrid")) {
+            requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+          } else {
+            requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          }
+        } else {
+          requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+        }
       event.consume();
     });
   }
@@ -205,6 +322,7 @@ public class GameController {
    * @param stone Properties (color, value) of the stone which shall be displayed
    */
   private void putStoneInCell(Pane cell, StoneInfo stone) {
+    cell.getChildren().clear();
     Rectangle stoneBackground = new Rectangle(20, 40);
     stoneBackground.getStyleClass().add("stone");
     Text stoneValue = new Text(Integer.toString(stone.getNumber()));
@@ -212,42 +330,76 @@ public class GameController {
     stoneValue.getStyleClass().add("stoneValue");
     cell.getChildren().add(stoneBackground);
     cell.getChildren().add(stoneValue);
+    //STOP MUSIC
   }
 
-  public void setTable(StoneInfo[][] table) {
+  void setTable(StoneInfo[][] table) {
     model.setTable(table);
+    Platform.runLater(() -> {
+      constructGrid(this.table, true);
+    });
   }
 
-  public void setPlayerHand(StoneInfo[][] hand) {
+  void setPlayerHand(StoneInfo[][] hand) {
     model.setHand(hand);
+    Platform.runLater(() -> {
+      constructGrid(handGrid, false);
+    });
   }
 
-  public void notifyInvalidMove() {
+  void notifyInvalidMove() {
 
   }
 
-  public void setBagSize(int bagSize) {
+  void setBagSize(int bagSize) {
     model.setBagSize(bagSize);
   }
 
-  public void notifyTurn() {
+  void notifyTurn() {
     model.notifyTurn();
   }
 
-  public void setHandSizes(List<Integer> sizes) {
+  void setHandSizes(List<Integer> sizes) {
     model.setHandSizes(sizes);
+    Platform.runLater(() -> {
+      switch (sizes.size()) {
+        case 4:
+          player3Hand.setText(sizes.get(3).toString());
+        case 3:
+          player2Hand.setText(sizes.get(2).toString());
+        case 2:
+          player1Hand.setText(sizes.get(1).toString());
+        case 1:
+          player0Hand.setText(sizes.get(0).toString());
+        default:
+      }
+    });
   }
 
-  public void setPlayerNames(List<String> names) {
-    model.setPlayerNames(names);
+  void setPlayerNames(List<String> names) {
+    player3Name.setText("H");
+    Platform.runLater(() -> {
+      switch (names.size()) {
+        case 4:
+          player3Name.setText(names.get(3));
+        case 3:
+          player2Name.setText(names.get(2));
+        case 2:
+          player1Name.setText(names.get(1));
+        case 1:
+          player0Name.setText(names.get(0));
+        default:
+      }
+    });
   }
 
-  public void notifyCurrentPlayer(int playerID) {
+  void notifyCurrentPlayer(int playerID) {
     model.setCurrentPlayer(playerID);
-  }
-
-  public void notifyGameStart() {
-    model.notifyGameStart();
+    // set up the timer
+    timer_countDown.cancel();
+    timer_task.cancel();
+    setTimer();
+    // show current player on view
   }
 
   /**
@@ -256,8 +408,41 @@ public class GameController {
    *
    * @param model New model from server
    */
-  public void setModel(ClientModel model) {
+  void setModel(ClientModel model) {
     this.model = model;
+    setPlayerNames(model.getPlayersNames());
+    setHandSizes(model.getHandSizes());
     updateView();
+  }
+
+  @FXML
+  private void sendResetRequest() {
+    if (model.isMyTurn()) {
+      requestBuilder.sendResetRequest();
+      //model.finishTurn();
+    } else {
+      // error
+    }
+  }
+
+  @FXML
+  private void sendConfirmMoveRequest() {
+    if (model.isMyTurn()) {
+      requestBuilder.sendConfirmMoveRequest();
+      model.finishTurn();
+    } else {
+      showErrorView();
+    }
+  }
+
+  private void showErrorView() {
+    errorMessage.setText("It's not you turn!");
+    errorPane.setVisible(true);
+    table.setVisible(false);
+  }
+
+  @FXML private void handleOkButton() {
+    errorPane.setVisible(false);
+    table.setVisible(true);
   }
 }

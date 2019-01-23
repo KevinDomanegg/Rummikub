@@ -1,5 +1,7 @@
 package network.client;
 
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.SimpleGameInfo;
 import communication.Serializer;
 import communication.request.Request;
 
@@ -14,6 +16,7 @@ public class RummiClient extends Thread {
   private Socket serverSocket;
   private PrintWriter outToServer;
   ClientListener listener;
+  private boolean serverOK = true;
   private Serializer serializer;
 
   //GameInfoHandler
@@ -31,8 +34,13 @@ public class RummiClient extends Thread {
       serverSocket = new Socket(serverIPAddress, 48410);
       outToServer = new PrintWriter(serverSocket.getOutputStream());
     } catch (IOException e) {
-      e.printStackTrace();
+      System.out.println("There is no server in this ip address!");
+      serverOK = false;
     }
+  }
+
+  public boolean isServerOK() {
+    return serverOK;
   }
 
   public void setGameInfoHandler_Shell(GameInfoHandler_Shell gameInfoHandler) {

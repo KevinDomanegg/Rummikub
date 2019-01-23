@@ -42,5 +42,9 @@ public class RequestBuilder {
     client.sendRequest(new ConcreteSetPlayer(username, age));
   }
 
+  public void sendTimeOutRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+  }
+
 
 }
