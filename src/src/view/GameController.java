@@ -105,6 +105,11 @@ public class GameController {
     }, delay, period);
   }
 
+  void stopTimer() {
+    timer_task.cancel();
+    timer_countDown.cancel();
+  }
+
   /* TODO: REMOVE TEST METHODS*/
   StoneInfo[][] buildTestTable(int columns, int rows) {
     StoneInfo[][] result = new StoneInfo[columns][rows];

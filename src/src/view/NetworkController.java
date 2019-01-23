@@ -54,6 +54,9 @@ public class NetworkController implements Controller {
     startController.stopMusic();
   }
 
+  void killThreads() {
+    startController.killThreads();
+  }
 
 //  public void setUsername(String username, int username_id) {
 //    startController.setUsername(username, username_id);

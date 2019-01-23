@@ -2,6 +2,8 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -113,7 +115,15 @@ public class WaitController implements Initializable {
       stage.setScene(gameScene);
       notifyAll();
       //System.out.println("switched to game");
+       stage.setOnCloseRequest(e -> {
+        System.out.println("klicked  on x");
+        // Closes the Timer
+        gameController.stopTimer();
+        networkController.killThreads();
+        Platform.exit();
+      });
     }
+
   }
 
   @Override
