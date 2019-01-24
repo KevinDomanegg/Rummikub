@@ -44,7 +44,7 @@ public interface Controller {
   /**
    * Notifies the controller that the game has started.
    */
-  void notifyGameStart() throws IOException;
+  void notifyGameStart();
 
   /**
    * Notifies the controller about the player that is currently playing.
@@ -61,4 +61,8 @@ public interface Controller {
    * @param bagSize number of stones in the bag
    */
   void setBagSize(int bagSize);
+
+  void noServerAvailable();
+
+  void showError(String errorMessage);
 }

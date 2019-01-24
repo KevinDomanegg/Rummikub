@@ -38,32 +38,28 @@ public class GameController {
   @FXML private Label player2Hand;
   @FXML private Label player3Hand;
 
-  @FXML
-  Text timer;
-  @FXML
-  private GridPane table;
-  @FXML
-  private GridPane handGrid;
-  @FXML
-  private VBox errorPane;
-  @FXML
-  private Text errorMessage;
+  @FXML Text timer;
+  @FXML private GridPane tableGrid;
+  @FXML private GridPane handGrid;
+  @FXML private VBox errorPane;
+  @FXML private Text errorMessage;
 
-  private NetworkController networkController;
-  private ClientModel model;
-  private RequestBuilder requestBuilder;
+//  private NetworkController networkController;
+  private MainController mainController;
+//  private ClientModel model;
+//  private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
 
-  //MUSIC
+  // MUSIC
   private Media sound_pickupStone;
   private Media sound_dropStone;
   private Media sound_drawStone;
 
-  //TIMER
+  // TIMER
   private Timer timer_countDown;
   private TimerTask timer_task;
 
-  //NO HOST AVAILABLE
+  // NO HOST AVAILABLE
   private boolean serverNotAvailable;
 
   {
@@ -75,40 +71,50 @@ public class GameController {
       e.printStackTrace();
     }
   }
+
   private MediaPlayer mediaPlayer_pickupStone = new MediaPlayer(sound_pickupStone);
   private MediaPlayer mediaPlayer_dropStone = new MediaPlayer(sound_dropStone);
   private MediaPlayer mediaPlayer_drawStone = new MediaPlayer(sound_drawStone);
 
+//  void setNetworkController(NetworkController networkcontroller) {
+//    this.networkController = networkcontroller;
+//  }
 
-  void setNetworkController(NetworkController networkcontroller) {
-    this.networkController = networkcontroller;
+  void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
-  void setRequestBuilder(RequestBuilder requestBuilder) {
-    this.requestBuilder = requestBuilder;
-  }
 
-  void setTimer() {
-    int delay = 1000;
-    int period = 1000;
-    timer_countDown = new Timer();
-    timer_countDown.scheduleAtFixedRate(timer_task = new TimerTask() {
-      int interval = 60;
-      public void run() {
-        if (interval == 0) {
-          if (model.isMyTurn()) {
-            requestBuilder.sendTimeOutRequest();
-            model.finishTurn();
-          }
-          timer_countDown.cancel();
-          timer_task.cancel();
-          return;
-        }
-        timer.setText("" + interval);
-        interval--;
-      }
-    }, delay, period);
-  }
+//  void setRequestBuilder(RequestBuilder requestBuilder) {
+//    this.requestBuilder = requestBuilder;
+//  }
+
+//  void setTimer() {
+//    int delay = 1000;
+//    int period = 1000;
+//    timer_countDown = new Timer();
+//    timer_countDown.scheduleAtFixedRate(
+//        timer_task =
+//            new TimerTask() {
+//              int interval = 60;
+//
+//              public void run() {
+//                if (interval == 0) {
+//                  if (model.isMyTurn()) {
+//                    requestBuilder.sendTimeOutRequest();
+//                    model.finishTurn();
+//                  }
+//                  timer_countDown.cancel();
+//                  timer_task.cancel();
+//                  return;
+//                }
+//                timer.setText("" + interval);
+//                interval--;
+//              }
+//            },
+//        delay,
+//        period);
+//  }
 
   void stopTimer() {
     timer_task.cancel();
@@ -118,8 +124,8 @@ public class GameController {
   /* TODO: REMOVE TEST METHODS*/
   StoneInfo[][] buildTestTable(int columns, int rows) {
     StoneInfo[][] result = new StoneInfo[columns][rows];
-    for (int x = 0; x < columns; x=x+2) {
-      for (int y = 0; y < rows; y=y+2) {
+    for (int x = 0; x < columns; x = x + 2) {
+      for (int y = 0; y < rows; y = y + 2) {
         StoneInfo cell = new StoneInfo("red", 5);
         result[x][y] = cell;
       }
@@ -129,8 +135,8 @@ public class GameController {
 
   ClientModel buildTestModel() {
     ClientModel result = new ClientModel(false);
-    result.setHand(buildTestTable(20,2));
-    result.setTable(buildTestTable(40,8));
+    result.setHand(buildTestTable(20, 2));
+    result.setTable(buildTestTable(40, 8));
     return result;
   }
 
@@ -139,10 +145,9 @@ public class GameController {
       serverNotAvailable = true;
       showErrorView("THE HOST HAS LEFT THE GAME!");
     } else {
-      networkController.returnToStartView();
+//      networkController.returnToStartView();
     }
   }
-
 
   public void quitButton() {
     Platform.runLater(() -> {
@@ -163,8 +168,8 @@ public class GameController {
    * Updates FXML with data from model.
    */
   public void updateView() {
-    constructGrid(table, true);
-    constructGrid(handGrid, false);
+//    constructGrid(table, true);
+//    constructGrid(handGrid, false);
   }
 
   /**
@@ -173,54 +178,43 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
-    if (model.isMyTurn()) {
-      mediaPlayer_drawStone.stop();
-      mediaPlayer_drawStone.play();
-      // Server request: Get stone from bag
-      networkController.sendDrawRequest();
-      model.finishTurn();
-    } else {
-      showErrorView("Error! It is not your turn");
-    }
+//    if (model.isMyTurn()) {
+//      mediaPlayer_drawStone.stop();
+//      mediaPlayer_drawStone.play();
+//      // Server request: Get stone from bag
+//      networkController.sendDrawRequest();
+//      model.finishTurn();
+//    } else {
+//      showErrorView("Error! It is not your turn");
+//    }
   }
 
   /**
-   * Method to automatically construct columns, rows, and cells with StackPane in it.
-   *
-   * @param grid    The FXML GridPane where the cells shall be constructed in
-   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
    */
   @FXML
-  void constructGrid(GridPane grid, boolean isTable) {
-    Platform.runLater(() -> {
-      grid.getChildren().clear();
-    });
-    StoneInfo[][] currentGrid;
-    if (isTable) {
-      currentGrid = model.getTable();
-    } else {
-      currentGrid = model.getHand();
-    }
+  void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
+      pane.getChildren().clear();
 
-    int columns = currentGrid.length;
-    int rows = currentGrid[0].length;
+    int width = stoneGrid.length;
+    int height = stoneGrid[0].length;
 
-
-    for (int x = 0; x < columns; x++) {
-      for (int y = 0; y < rows; y++) {
+    StoneInfo stoneInfo = null;
+    for (int x = 0; x < width; x++) {
+      for (int y = 0; y < height; y++) {
         StackPane cell = new StackPane();
 
-        if (currentGrid[x][y] != null) {
-          StoneInfo stone = currentGrid[x][y];
-          putStoneInCell(cell, stone);
+        if (stoneGrid[x][y] != null) {
+          stoneInfo = stoneGrid[x][y];
+          putStoneInCell(cell, stoneInfo);
         }
 
         int finalX = x;
         int finalY = y;
+        StoneInfo finalStoneInfo = stoneInfo;
         Platform.runLater(() -> {
           cell.getStyleClass().add("cell");
-          grid.add(cell, finalX, finalY);
-          setupDragAndDrop(cell, isTable);
+          pane.add(cell, finalX, finalY);
+          setupDragAndDrop(cell, finalStoneInfo);
         });
       }
     }
@@ -228,37 +222,36 @@ public class GameController {
 
   /**
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
-   *
-   * @param cell    Pane where the event shall be registered
-   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+   *  @param cell    Pane where the event shall be registered
+   * @param stoneInfo Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
-  private void setupDragAndDrop(Pane cell, boolean isTable) {
+  private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
     // Get cell coordinates
-    int thisColumn = GridPane.getColumnIndex(cell);
-    int thisRow = GridPane.getRowIndex(cell);
+//    int thisColumn = GridPane.getColumnIndex(cell);
+//    int thisRow = GridPane.getRowIndex(cell);
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
-      if (!model.isMyTurn()) {
-        return;
-      }
+//      if (!model.isMyTurn()) {
+//        return;
+//      }
       mediaPlayer_pickupStone.stop();
       mediaPlayer_pickupStone.play();
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
 
       // Get stone from model
-      StoneInfo[][] stoneGrid;
-      if (isTable) {
-        stoneGrid = model.getTable();
-      } else {
-        stoneGrid = model.getHand();
-      }
-      StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
+//      StoneInfo[][] stoneGrid;
+//      if (isTable) {
+////        stoneGrid = model.getTable();
+//      } else {
+////        stoneGrid = model.getHand();
+//      }
+//      StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
 
-      if (cellContent != null) {
+      if (stoneInfo != null) {
         // Put stone on clipboard
-        content.put(stoneFormat, cellContent);
+        content.put(stoneFormat, stoneInfo);
         dragBoard.setContent(content);
       }
       event.consume();
@@ -321,12 +314,12 @@ public class GameController {
 
         if (sourceParent.getId().equals("handGrid")) {
           if (targetParent.getId().equals("handGrid")) {
-            requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+//            requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
           } else {
-            requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+//            requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
           }
         } else {
-          requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+//          requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
       event.consume();
     });
@@ -351,16 +344,16 @@ public class GameController {
   }
 
   void setTable(StoneInfo[][] table) {
-    model.setTable(table);
+//    model.setTable(table);
     Platform.runLater(() -> {
-      constructGrid(this.table, true);
+      constructGrid(table, tableGrid);
     });
   }
 
   void setPlayerHand(StoneInfo[][] hand) {
-    model.setHand(hand);
+//    model.setHand(hand);
     Platform.runLater(() -> {
-      constructGrid(handGrid, false);
+      constructGrid(hand, handGrid);
     });
   }
 
@@ -368,29 +361,29 @@ public class GameController {
 
   }
 
-  void setBagSize(int bagSize) {
-    model.setBagSize(bagSize);
-  }
+//  void setBagSize(int bagSize) {
+//    model.setBagSize(bagSize);
+//  }
 
-  void notifyTurn() {
-    model.notifyTurn();
-  }
+//  void notifyTurn() {
+//    model.notifyTurn();
+//  }
 
   void setHandSizes(List<Integer> sizes) {
-    model.setHandSizes(sizes);
-    Platform.runLater(() -> {
-      switch (sizes.size()) {
-        case 4:
-          player3Hand.setText(sizes.get(3).toString());
-        case 3:
-          player2Hand.setText(sizes.get(2).toString());
-        case 2:
-          player1Hand.setText(sizes.get(1).toString());
-        case 1:
-          player0Hand.setText(sizes.get(0).toString());
-        default:
-      }
-    });
+//    model.setHandSizes(sizes);
+//    Platform.runLater(() -> {
+//      switch (sizes.size()) {
+//        case 4:
+//          player3Hand.setText(sizes.get(3).toString());
+//        case 3:
+//          player2Hand.setText(sizes.get(2).toString());
+//        case 2:
+//          player1Hand.setText(sizes.get(1).toString());
+//        case 1:
+//          player0Hand.setText(sizes.get(0).toString());
+//        default:
+//      }
+//    });
   }
 
   void setPlayerNames(List<String> names) {
@@ -411,12 +404,12 @@ public class GameController {
   }
 
   void notifyCurrentPlayer(int playerID) {
-    model.setCurrentPlayer(playerID);
-    // set up the timer
-    timer_countDown.cancel();
-    timer_task.cancel();
-    setTimer();
-    // show current player on view
+//    model.setCurrentPlayer(playerID);
+//    // set up the timer
+//    timer_countDown.cancel();
+//    timer_task.cancel();
+//    setTimer();
+//    // show current player on view
   }
 
   /**
@@ -426,36 +419,36 @@ public class GameController {
    * @param model New model from server
    */
   void setModel(ClientModel model) {
-    this.model = model;
-    setPlayerNames(model.getPlayersNames());
-    setHandSizes(model.getHandSizes());
-    updateView();
+//    this.model = model;
+//    setPlayerNames(model.getPlayersNames());
+//    setHandSizes(model.getHandSizes());
+//    updateView();
   }
 
   @FXML
   private void sendResetRequest() {
-    if (model.isMyTurn()) {
-      requestBuilder.sendResetRequest();
-      //model.finishTurn();
-    } else {
-      // error
-    }
+//    if (model.isMyTurn()) {
+//      requestBuilder.sendResetRequest();
+//      //model.finishTurn();
+//    } else {
+//      // error
+//    }
   }
 
   @FXML
   private void sendConfirmMoveRequest() {
-    if (model.isMyTurn()) {
-      requestBuilder.sendConfirmMoveRequest();
-      model.finishTurn();
-    } else {
-      showErrorView("Error! It is not your turn");
-    }
+//    if (model.isMyTurn()) {
+//      requestBuilder.sendConfirmMoveRequest();
+//      model.finishTurn();
+//    } else {
+//      showErrorView("Error! It is not your turn");
+//    }
   }
 
   private void showErrorView(String message) {
     errorMessage.setText(message);
     errorPane.setVisible(true);
-    table.setVisible(false);
+    tableGrid.setVisible(false);
   }
 
   @FXML private void handleOkButton() {
@@ -463,15 +456,21 @@ public class GameController {
       returnToStart(false);
     } else {
       errorPane.setVisible(false);
-      table.setVisible(true);
+      tableGrid.setVisible(true);
     }
   }
 
-  @FXML private void sendSortHandByGroupRequest() {
-    requestBuilder.sendSortHandByGroupRequest();
+  public void sendSortHandByGroupRequest(MouseEvent mouseEvent) {
   }
 
-  @FXML private void sendSortHandByRunRequest() {
-    requestBuilder.sendSortHandByRunRequest();
+  public void sendSortHandByRunRequest(MouseEvent mouseEvent) {
   }
+
+//  @FXML private void sendSortHandByGroupRequest() {
+//    requestBuilder.sendSortHandByGroupRequest();
+//  }
+
+//  @FXML private void sendSortHandByRunRequest() {
+//    requestBuilder.sendSortHandByRunRequest();
+//  }
 }

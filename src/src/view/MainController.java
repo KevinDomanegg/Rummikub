@@ -1,49 +1,74 @@
 package view;
 
-import com.sun.deploy.uitoolkit.impl.fx.ui.ErrorPane;
 import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.GameInfoHandler;
+import network.client.RequestBuilder;
 import network.client.RummiClient;
+import network.server.RummiServer;
 
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.List;
 
-public class NetworkController implements Controller {
+public class MainController implements Controller {
 
-  private StartController startController;
   private GameController gameController;
+  private StartController startController;
   private WaitController waitController;
+  private Stage primaryStage;
   private RummiClient client;
+  private RequestBuilder requestBuilder;
+  private String serverIP;
 
 
-  NetworkController(RummiClient client) {
-    this.client = client;
-    client.start();
-    client.setGameInfoHandler(new GameInfoHandler(this));
+  MainController(Stage primaryStage) {
+    this.primaryStage = primaryStage;
   }
 
-  void setWaitController(WaitController waitController) {
-    this.waitController = waitController;
+  private void switchScene(String fxml) throws IOException {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
+    Parent root = loader.load();
+    switch (fxml) {
+      case "start.fxml":
+        startController = loader.getController();
+        startController.setMainController(this);
+        break;
+      case "wait.fxml":
+        waitController = loader.getController();
+        waitController.setMainController(this);
+        break;
+      case "game.fxml":
+        System.out.println("GAME CONTROLLER");
+        gameController = loader.getController();
+        gameController.setMainController(this);
+        break;
+    }
+
+    Scene scene = new Scene(root, 1024, 768);
+    primaryStage.setScene(scene);
+    primaryStage.show();
   }
 
-  void setGameController(GameController gameController) {
-    this.gameController = gameController;
+  private void switchToWaitScene() throws IOException {
+    switchScene("wait.fxml");
+    waitController.setServerIP(serverIP);
   }
 
-  void setStartController(StartController startController) {
-    this.startController = startController;
+  void switchToStartScene() throws IOException {
+    switchScene("start.fxml");
+  }
+
+  private void switchToGameScene() throws IOException{
+     switchScene("game.fxml");
+
   }
 
   void returnToStartView() {
@@ -60,7 +85,7 @@ public class NetworkController implements Controller {
 
   @Override
   public void showError(String errorMessage) {
-
+    // switchToError
   }
 
 //  void mute() {
@@ -70,7 +95,7 @@ public class NetworkController implements Controller {
 //  void unMute() {
 //    startController.unMuteMusic();
 //  }
-
+//
 //  void stopMusicInWaiting() {
 //    startController.stopMusic();
 //  }
@@ -104,9 +129,7 @@ public class NetworkController implements Controller {
       waitController.setPlayerNames(names);
       return;
     }
-    Platform.runLater(() -> {
-      gameController.setPlayerNames(names);
-    });
+    gameController.setPlayerNames(names);
   }
 
   /**
@@ -117,13 +140,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setHandSizes(List<Integer> sizes) {
-//    if (gameController == null) {
-//      waitController.setHandSizes(sizes);
-//      return;
-//    }
-    Platform.runLater(() -> {
       gameController.setHandSizes(sizes);
-    });
   }
 
   /**
@@ -133,13 +150,10 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setTable(StoneInfo[][] table) {
-//    if (gameController == null) {
-//      waitController.setTable(table);
-//      return;
-//    }
-    Platform.runLater(() -> {
-      gameController.setTable(table);
-    });
+    System.out.println("set table");
+    gameController.setTable(table);
+
+
   }
 
 
@@ -150,13 +164,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setPlayerHand(StoneInfo[][] hand) {
-//    if (gameController == null) {
-//      waitController.setPlayerHand(hand);
-//      return;
-//    }
-    Platform.runLater(() -> {
-      gameController.setPlayerHand(hand);
-    });
+    gameController.setPlayerHand(hand);
   }
 
   /**
@@ -164,30 +172,21 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyTurn() {
-    /*if (gameController == null) {
-      waitController.notifyTurn();
-      return;
-    }*/
-//    Platform.runLater(() -> {
 //      gameController.notifyTurn();
-//    });
-    //gameController.setTimer();
   }
 
   /**
    * Notifies the controller that the game has started.
    */
-  @Override
-  public void notifyGameStart() {
-
+  @Override public void notifyGameStart() {
     Platform.runLater(() -> {
-      //System.out.println("notified gamecontroller to switch1");
-//      waitController.switchToGameView();
-//      gameController.setTimer();
+      try {
+        switchToGameScene();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     });
 
-    //System.out.println("notified gamecontroller to switch2");
-    //gameController.notifyGameStart();
   }
 
   /**
@@ -197,13 +196,7 @@ public class NetworkController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
-//    if (gameController == null) {
-//      waitController.notifyCurrentPlayer(playerID);
-//      return;
-//    }
-    Platform.runLater(() -> {
       gameController.notifyCurrentPlayer(playerID);
-    });
   }
 
   /**
@@ -223,16 +216,36 @@ public class NetworkController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
-//    if (gameController == null) {
-//      waitController.setBagSize(bagSize);
-//      return;
-//    }
-    Platform.runLater(() -> {
 //      gameController.setBagSize(bagSize);
-    });
   }
 
   void sendDrawRequest() {
     client.sendRequest(new SimpleRequest(RequestID.DRAW));
+  }
+
+  void initPlayer(String serverIP, String name, int age) {
+    client = new RummiClient(serverIP);
+    client.setGameInfoHandler(new GameInfoHandler(this));
+    client.start();
+    requestBuilder = new RequestBuilder(client);
+    try{
+      switchToWaitScene();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    requestBuilder.sendSetPlayerRequest(name, age);
+  }
+
+  void startServer() {
+    new RummiServer().start();
+    try{
+      serverIP = Inet4Address.getLocalHost().getHostAddress();
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void sendStartRequest() {
+    requestBuilder.sendStartRequest();
   }
 }

@@ -1,20 +1,19 @@
 package network.client;
 
 import communication.gameinfo.*;
-import view.NetworkController;
+import view.Controller;
 
 public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
 
-  private NetworkController controller;
+  private Controller controller;
 //  private RummiController controller;
 
 //  public GameInfoHandler(RummiController controller) {
 //    this.controller = controller;
 //  }
 
-  public GameInfoHandler(NetworkController controller) {
+  public GameInfoHandler(Controller controller) {
     this.controller = controller;
-//    this.client = client;
   }
 
   void applyGameInfo(Object gameInfo) {
@@ -28,10 +27,11 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         System.out.println("handling table");
         controller.setTable(((GridInfo) gameInfo).getGrid());
         return;
-      case INVALID_MOVE:
-        System.out.println("handling invalid");
-        controller.notifyInvalidMove();
-        controller.notifyTurn();
+      case ERROR:
+        System.out.println("handling error");
+        controller.showError(((ErrorInfo) gameInfo).getErrorMessage());
+//        controller.notifyInvalidMove();
+//        controller.notifyTurn();
         return;
       case BAG:
         System.out.println("handling bag");

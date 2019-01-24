@@ -14,7 +14,7 @@ public enum GameInfoID {
   PLAYER_NAMES,
   DRAW, // for shell,
   CURRENT_PLAYER,
-  INVALID_MOVE,
+  ERROR,
   YOUR_TURN,
   GAME_START,
   IP_ADDRESS,

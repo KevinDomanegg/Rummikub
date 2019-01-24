@@ -6,6 +6,7 @@ import communication.gameinfo.SimpleGameInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -32,14 +33,12 @@ class ClientListener extends Thread {
       receiveMessage = new ObjectInputStream(server.getInputStream());
 
       while (connected) {
-        Object o;
+        Object gameInfo;
         try {
 
-          o = receiveMessage.readObject();
-          if (o instanceof GameInfo) {
-
-            myClient.applyGameInfoHandler(o);
-          }
+          gameInfo = receiveMessage.readObject();
+          System.out.println(gameInfo);
+          myClient.applyGameInfoHandler(gameInfo);
         } catch (ClassNotFoundException e) {
           e.printStackTrace();
           disconnect();
