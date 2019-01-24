@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class RummiHand implements Grid {
-  private static final int HEIGHT = 2;
-  private static final int WIDTH = 20;
+  private static final int HEIGHT = 3;
+  private static final int WIDTH = 18;
 
   private Map<Coordinate, Stone> stones;
 

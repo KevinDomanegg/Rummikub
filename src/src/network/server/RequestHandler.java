@@ -49,20 +49,17 @@ class RequestHandler {
             new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
             new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
         sendHandToPlayer(playerID);
-        sendHandSizesToAll();
         return;
       case TABLE_MOVE:
         ConcreteMove tableMove = (ConcreteMove) request;
         game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
             new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
         sendTableToALl();
-        sendHandSizesToAll();
         return;
       case PUT_STONE:
         ConcreteMove putStone = (ConcreteMove) request;
         game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
             new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
-        sendHandSizesToPlayer(playerID);
         sendTableToALl();
         sendHandSizesToAll();
         return;
@@ -72,9 +69,11 @@ class RequestHandler {
         // send the player new hand with a drawn stone
         sendHandToPlayer(playerID);
         // notify all players that a stone is drew
+        sendTableToALl();
+        // ??
         server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
         sendHandSizesToAll();
-        notifyTurnToNextPlayer();
+        notifyTurnToPlayer();
         //SEND NEW COUNTDOWN FOR 30 SECONDS
         //sendNewTimer();
         return;
@@ -83,7 +82,7 @@ class RequestHandler {
           /*// send the changed table first
           sendTableToALl();*/
           // then notify the turn to the next player
-          notifyTurnToNextPlayer();
+          notifyTurnToPlayer();
           //sendNewTimer();
         } else {
           // send the original table to all players
@@ -99,9 +98,11 @@ class RequestHandler {
         return;
       case RESET:
         game.reset();
-        sendTableToPlayer(playerID);
+//        sendTableToPlayer(playerID);
+        sendTableToALl();
         sendHandToPlayer(playerID);
-        sendHandSizesToPlayer(playerID);
+        sendHandSizesToAll();
+//        sendHandSizesToPlayer(playerID);
         return;
       case GIVE_UP:
         game.playerHasLeft(playerID);
@@ -120,7 +121,7 @@ class RequestHandler {
           /*// send the changed table first
           sendTableToALl();*/
           // then notify the turn to the next player
-          notifyTurnToNextPlayer();
+          notifyTurnToPlayer();
         } else {
           // sends original table
           sendTableToALl();
@@ -131,7 +132,7 @@ class RequestHandler {
           sendHandToPlayer(playerID);
           // send changed hand to player
           sendHandSizesToAll();
-          notifyTurnToNextPlayer();
+          notifyTurnToPlayer();
         }
         return;
       case SORT_HAND_BY_GROUP:
@@ -149,7 +150,7 @@ class RequestHandler {
     server.sendToPlayer(playerID, new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 
-  private void notifyTurnToNextPlayer() {
+  private void notifyTurnToPlayer() {
     server.sendToPlayer(game.getCurrentPlayerID(), new SimpleGameInfo(GameInfoID.YOUR_TURN));
     // Notifies the players whose is playing
     server.sendToAll(new CurrentPlayerInfo(game.getCurrentPlayerID()));
@@ -169,7 +170,7 @@ class RequestHandler {
     // send to each player their hand sizes in a corresponding order
     sendHandSizesToAll();
     // notify the start player
-    notifyTurnToNextPlayer();
+    notifyTurnToPlayer();
     // send start warning
     sendStartGameToAll();
   }
