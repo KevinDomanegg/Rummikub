@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.StageStyle;
 
+import javax.swing.*;
 import java.io.File;
 
 import java.awt.*;
@@ -91,16 +92,18 @@ public class Main extends Application {
   //TODO: Catch exception
   @Override
   public void start(Stage primaryStage) throws Exception {
-    hostJoinStage(primaryStage);
-    /*StackPane root = new StackPane();
+    //hostJoinStage(primaryStage);
+    StackPane root = new StackPane();
     root.getChildren().add(mediaView);
     Scene scene = new Scene(root, 600,350);
     primaryStage.setScene(scene);
     // SET THE ENTRANCE VIDEO WINDOW A FEST SIZE ONLY
-    primaryStage.setMinWidth(600.0);
-    primaryStage.setMinHeight(350.0);
-    primaryStage.setMaxHeight(350.0);
-    primaryStage.setMaxWidth(600.0);
+    primaryStage.setResizable(false);
+    primaryStage.initStyle(StageStyle.UNDECORATED);
+    //primaryStage.setMinWidth(600.0);
+    //primaryStage.setMinHeight(350.0);
+    //primaryStage.setMaxHeight(350.0);
+    //primaryStage.setMaxWidth(600.0);
     primaryStage.show();
     mediaPlayer_video.play();
     mediaPlayer_video.setOnEndOfMedia(() -> {
@@ -112,7 +115,7 @@ public class Main extends Application {
         e.printStackTrace();
       }
       //Platform.runLater(() -> System.out.println(mediaPlayer.getStatus()));
-    });*/
+    });
   }
 
   void stopMusic() {
