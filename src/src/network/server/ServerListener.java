@@ -45,10 +45,15 @@ public class ServerListener extends Thread {
           request = (Request) o;
         } catch (ClassNotFoundException | ClassCastException e) {
           connected = false;
+        } catch (IOException e) {
+          connected = false;
+          server.disconnectClient(id);
+          System.out.println("Client " + id + " has disconnected");
         }
 
         if (o == null) {
           System.out.println("Client " + id + " not connected");
+          System.out.println("ServerListener just got a NULL value");
           this.connected = false;
           server.disconnectClient(id);
           break;
@@ -59,7 +64,7 @@ public class ServerListener extends Thread {
 
       }
     } catch (IOException e) {
-      //this.connected = false;
+      this.connected = false;
       server.disconnectClient(id);
     }
     System.out.println("ServerListener terminated");

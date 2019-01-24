@@ -47,11 +47,35 @@ public class NetworkController implements Controller {
   }
 
   void returnToStartView() {
-    startController.returnToStart();
+    gameController.stopTimer();
+    Stage primaryStage = waitController.getStage();
+    startController.returnToStart(primaryStage);
+  }
+
+  public void noServerAvailable() {
+    if (gameController != null) {
+      gameController.returnToStart(true);
+    }
+  }
+
+  void mute() {
+    startController.muteMusic();
+  }
+
+  void unMute() {
+    startController.unMuteMusic();
   }
 
   void stopMusicInWaiting() {
     startController.stopMusic();
+  }
+
+  void killThreads() {
+    if (gameController != null) {
+      gameController.stopTimer();
+    }
+    client.disconnect();
+    System.out.println("kill client thread was pressed");
   }
 
 

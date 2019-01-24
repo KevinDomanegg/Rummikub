@@ -2,6 +2,8 @@ package view;
 
 import communication.gameinfo.StoneInfo;
 import java.util.List;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -47,6 +49,14 @@ public class WaitController implements Initializable {
   private Text player3;
 
   @FXML
+  private Button notMuteButton;
+
+  @FXML
+  private Button muteButton;
+
+  private Stage stage;
+
+  @FXML
   private void startGame() {
     requestBuilder.sendStartRequest();
   }
@@ -59,8 +69,8 @@ public class WaitController implements Initializable {
     this.requestBuilder = requestBuilder;
   }
 
-  void returnToStartView() {
-    networkController.returnToStartView();
+  Stage getStage() {
+    return stage;
   }
 
   void setPlayerNames(List<String> names) {
@@ -91,7 +101,7 @@ public class WaitController implements Initializable {
  synchronized void switchToGameView() {
     networkController.stopMusicInWaiting();
     synchronized (networkController) {
-      Stage stage = (Stage) startGameButton.getScene().getWindow();
+      stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
       Parent root = loader.getRoot();
       //loader.setRoot(this);
@@ -113,7 +123,15 @@ public class WaitController implements Initializable {
       stage.setScene(gameScene);
       notifyAll();
       //System.out.println("switched to game");
+       stage.setOnCloseRequest(e -> {
+        System.out.println("klicked  on x");
+        // Closes the Timer
+        gameController.stopTimer();
+        networkController.killThreads();
+        Platform.exit();
+      });
     }
+
   }
 
   @Override
@@ -151,5 +169,19 @@ public class WaitController implements Initializable {
 
   public void setBagSize(int bagSize) {
     model.setBagSize(bagSize);
+  }
+
+  @FXML
+  void mute() {
+    networkController.mute();
+    muteButton.setVisible(false);
+    notMuteButton.setVisible(true);
+  }
+
+  @FXML
+  void unMute() {
+    networkController.unMute();
+    notMuteButton.setVisible(false);
+    muteButton.setVisible(true);
   }
 }
