@@ -15,5 +15,7 @@ public enum RequestID {
   CONFIRM_MOVE,
   GIVE_UP,
   RESET,
-  TIME_OUT
+  TIME_OUT,
+  SORT_HAND_BY_GROUP,
+  SORT_HAND_BY_RUN
 }

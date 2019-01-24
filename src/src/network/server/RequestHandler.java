@@ -116,23 +116,31 @@ class RequestHandler {
 //        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
         return;
       case TIME_OUT:
-            if (game.isConsistent()) {
+        if (game.isConsistent()) {
           /*// send the changed table first
           sendTableToALl();*/
-              // then notify the turn to the next player
-              notifyTurnToNextPlayer();
-            } else {
-              // sends original table
-              sendTableToALl();
+          // then notify the turn to the next player
+          notifyTurnToNextPlayer();
+        } else {
+          // sends original table
+          sendTableToALl();
 
-              sendHandToPlayer(playerID);
-              // draw stone cause table not consistent and the time is out
-              game.drawStone();
-              sendHandToPlayer(playerID);
-              // send changed hand to player
-              sendHandSizesToAll();
-              notifyTurnToNextPlayer();
+          sendHandToPlayer(playerID);
+          // draw stone cause table not consistent and the time is out
+          game.drawStone();
+          sendHandToPlayer(playerID);
+          // send changed hand to player
+          sendHandSizesToAll();
+          notifyTurnToNextPlayer();
         }
+        return;
+      case SORT_HAND_BY_GROUP:
+        game.sortPlayerHandByGroup(playerID);
+        sendHandToPlayer(playerID);
+        return;
+      case SORT_HAND_BY_RUN:
+        game.sortPlayerHandByRun(playerID);
+        sendHandToPlayer(playerID);
       default:
     }
   }

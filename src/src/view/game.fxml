@@ -129,6 +129,8 @@
                                 onMouseClicked="#drawStone"/>
                         <Button fx:id="resetButton" text="Reset" onMouseClicked="#sendResetRequest"/>
                         <Button fx:id="checkButton" text="Check" onMouseClicked="#sendConfirmMoveRequest"/>
+                        <Button fx:id="sortHandByGroupButton" text="Group" onMouseClicked="#sendSortHandByGroupRequest"/>
+                        <Button fx:id="sortHandByRunButton" text="Run" onMouseClicked="#sendSortHandByRunRequest"/>
                     </children>
                 </HBox>
 

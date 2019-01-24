@@ -466,4 +466,12 @@ public class GameController {
       table.setVisible(true);
     }
   }
+
+  @FXML private void sendSortHandByGroupRequest() {
+    requestBuilder.sendSortHandByGroupRequest();
+  }
+
+  @FXML private void sendSortHandByRunRequest() {
+    requestBuilder.sendSortHandByRunRequest();
+  }
 }
