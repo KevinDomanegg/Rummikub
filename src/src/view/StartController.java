@@ -1,12 +1,15 @@
 package view;
 
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -17,7 +20,10 @@ import javafx.stage.Stage;
 import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
+import javafx.scene.image.Image;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -136,6 +142,14 @@ public class StartController {
       mediaPlayer.stop();
     }
 
+    void muteMusic() {
+      mediaPlayer.pause();
+    }
+
+    void unMuteMusic() {
+      mediaPlayer.play();
+    }
+
     private void switchToWait(ClientModel model) throws IOException {
         try {
         // Create local the Client and then pass it to: RequestBuilder and NetworkController
@@ -157,7 +171,6 @@ public class StartController {
       mediaPlayer.play();
 
       Stage stage = (Stage) nameField.getScene().getWindow();
-      //stage = (Stage) nameField.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("wait.fxml"));
         Parent root = loader.getRoot();
         try {
@@ -171,11 +184,11 @@ public class StartController {
         waitController.setRequestBuilder(reqBuilder);
         waitController.setModel(model);
 
-        // send request to set a player
+          // send request to set a player
         reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
-        Scene gameScene = new Scene(root, 1024, 768);
-        stage.setScene(gameScene);
+          Scene gameScene = new Scene(root, 1024, 768);
+          stage.setScene(gameScene);
           stage.setOnCloseRequest(e -> {
             System.out.println("klicked  on x");
             //killThreads();

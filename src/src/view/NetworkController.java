@@ -53,7 +53,17 @@ public class NetworkController implements Controller {
   }
 
   public void noServerAvailable() {
-    gameController.returnToStart(true);
+    if (gameController != null) {
+      gameController.returnToStart(true);
+    }
+  }
+
+  void mute() {
+    startController.muteMusic();
+  }
+
+  void unMute() {
+    startController.unMuteMusic();
   }
 
   void stopMusicInWaiting() {

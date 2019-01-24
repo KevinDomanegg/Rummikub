@@ -10,6 +10,8 @@ import javafx.scene.media.*;
 import javafx.stage.Stage;
 //MUSIC
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.StageStyle;
+
 import java.io.File;
 
 import java.awt.*;
@@ -68,7 +70,9 @@ public class Main extends Application {
     Scene scene = new Scene(root, 1024, 768);
     //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
     primaryStage.setScene(scene);
-    //primaryStage.setFullScreen(true);
+    // MINIMUM WINDOW SIZE
+    primaryStage.setMinHeight(650.0);
+    primaryStage.setMinWidth(600.0);
     primaryStage.show();
     mediaPlayer_video.play();
     startController.setMain(this);
@@ -92,6 +96,11 @@ public class Main extends Application {
     root.getChildren().add(mediaView);
     Scene scene = new Scene(root, 600,350);
     primaryStage.setScene(scene);
+    // SET THE ENTRANCE VIDEO WINDOW A FEST SIZE ONLY
+    primaryStage.setMinWidth(600.0);
+    primaryStage.setMinHeight(350.0);
+    primaryStage.setMaxHeight(350.0);
+    primaryStage.setMaxWidth(600.0);
     primaryStage.show();
     mediaPlayer_video.play();
     mediaPlayer_video.setOnEndOfMedia(() -> {

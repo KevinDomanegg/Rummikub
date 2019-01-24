@@ -48,6 +48,12 @@ public class WaitController implements Initializable {
   @FXML
   private Text player3;
 
+  @FXML
+  private Button notMuteButton;
+
+  @FXML
+  private Button muteButton;
+
   private Stage stage;
 
   @FXML
@@ -163,5 +169,19 @@ public class WaitController implements Initializable {
 
   public void setBagSize(int bagSize) {
     model.setBagSize(bagSize);
+  }
+
+  @FXML
+  void mute() {
+    networkController.mute();
+    muteButton.setVisible(false);
+    notMuteButton.setVisible(true);
+  }
+
+  @FXML
+  void unMute() {
+    networkController.unMute();
+    notMuteButton.setVisible(false);
+    muteButton.setVisible(true);
   }
 }
