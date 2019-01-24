@@ -142,7 +142,7 @@ public class WaitController implements Initializable {
   void setModel(ClientModel model) {
     this.model = model;
     if (model.isHost()) {
-      waitingState.setText("hosting Game");
+      waitingState.setText("Hosting Game");
     }
     ipAddress.setText(model.getServerIP());
   }

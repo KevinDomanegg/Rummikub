@@ -8,24 +8,29 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" stylesheets="@/view/waitStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WaitController">
+<AnchorPane fx:id="root" prefHeight="735.0" prefWidth="999.0" stylesheets="@/view/waitStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WaitController">
    <children>
-      <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="joining game">
+      <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="Joining game">
          <font>
             <Font size="36.0" />
          </font>
+          <!--<graphic>
+              <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <Image url="@/view/testHOST.png" />
+              </ImageView>
+          </graphic>-->
       </Label>
       <Label layoutX="73.0" layoutY="138.0" text="Game IP:" />
       <Text fx:id="ipAddress" layoutX="139.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="160.2060546875" />
-      <Label layoutX="73.0" layoutY="183.0" text="Players(0-3):" />
-      <Text fx:id="player0" layoutX="73.0" layoutY="237.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user0 not connected" wrappingWidth="160.2060546875" />
-      <Text fx:id="player1" layoutX="73.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user1 not connected" wrappingWidth="160.2060546875" />
-      <Text fx:id="player2" layoutX="73.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user2 not connected" wrappingWidth="160.2060546875" />
-      <Text fx:id="player3" layoutX="73.0" layoutY="320.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user3 not connected" wrappingWidth="160.2060546875" />
-      <Button fx:id="startGameButton" layoutX="506.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#startGame" text="StartGame" />
+      <Text layoutX="73.0" layoutY="183.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Players(0-3):" wrappingWidth="160.2060546875" />
+      <Text fx:id="player0" layoutX="128.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user0 not connected" wrappingWidth="160.2060546875" />
+      <Text fx:id="player1" layoutX="543.0" layoutY="405.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user1 not connected" wrappingWidth="160.2060546875" />
+      <Text fx:id="player2" layoutX="128.0" layoutY="597.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user2 not connected" wrappingWidth="160.2060546875" />
+      <Text fx:id="player3" layoutX="543.0" layoutY="597.0" strokeType="OUTSIDE" strokeWidth="0.0" text="user3 not connected" wrappingWidth="160.2060546875" />
+      <Button fx:id="startGameButton" layoutX="720.0" layoutY="133.0" mnemonicParsing="false" onMouseClicked="#startGame" text="StartGame" />
       <Button fx:id="notMuteButton" layoutX="10.0" layoutY="10.0" onMouseClicked="#unMute" visible="true">
          <graphic>
-            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" >
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/view/muteButton.png" />
                </image>
@@ -41,5 +46,17 @@
             </ImageView>
          </graphic>
       </Button>
+        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="131.0" layoutY="293.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@/view/blackAvatar.png" />
+        </ImageView>
+        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="131.0" layoutY="483.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@/view/womanAvatar.png" />
+        </ImageView>
+        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="543.0" layoutY="483.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@/view/blackAvatar.png" />
+        </ImageView>
+        <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="543.0" layoutY="293.0" pickOnBounds="true" preserveRatio="true">
+            <Image url="@/view/womanAvatar.png" />
+        </ImageView>
    </children>
 </AnchorPane>
