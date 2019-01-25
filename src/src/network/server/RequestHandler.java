@@ -68,58 +68,68 @@ class RequestHandler {
       sendHandToPlayer(playerID);
       return;
       case TABLE_MOVE:
-      ConcreteMove tableMove = (ConcreteMove) request;
-      game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
-            new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
-      sendTableToALl();
-      return;
+        if (isCurrentPlayer(playerID)) {
+          ConcreteMove tableMove = (ConcreteMove) request;
+          game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
+              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
+        }
+        sendTableToALl();
+        return;
       case PUT_STONE:
-      ConcreteMove putStone = (ConcreteMove) request;
-      game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
-            new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
-      sendTableToALl();
-      sendHandSizesToAll();
+        if (isCurrentPlayer(playerID)) {
+          ConcreteMove putStone = (ConcreteMove) request;
+          game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
+              new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+          sendHandSizesToAll();
+        }
+        sendTableToALl();
+        sendHandToPlayer(playerID);
       return;
       case DRAW:
-      game.reset();
-      game.drawStone();
-      // send the player new hand with a drawn stone
-      sendHandToPlayer(playerID);
-      // notify all players that a stone is drew
-      sendTableToALl();
-      // ??
-      server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
-      sendHandSizesToAll();
-      notifyTurnToPlayer();
+        if (isCurrentPlayer(playerID)) {
+          game.reset();
+          game.drawStone();
+          // send the player new hand with a drawn stone
+          sendHandToPlayer(playerID);
+          // send the original table to all
+          sendTableToALl();
+          sendHandSizesToAll();
+          notifyTurnToPlayer();
+        }
+//        server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
       //SEND NEW COUNTDOWN FOR 30 SECONDS
       //sendNewTimer();
       return;
       case CONFIRM_MOVE:
-      if (game.isConsistent()) {
+        if (isCurrentPlayer(playerID)) {
+          if (game.isConsistent()) {
           /*// send the changed table first
           sendTableToALl();*/
-          // then notify the turn to the next player
-          notifyTurnToPlayer();
-          //sendNewTimer();
-        } else {
-          // send the original table to all players
-          sendTableToALl();
-          // send the original hand to the current player
-          sendHandToPlayer(playerID);
-          // send the original hand sizes to all players
+            // then notify the turn to the next player
+            notifyTurnToPlayer();
+            // sendNewTimer();
+          } else {
+            // send the original table to all players
+            sendTableToALl();
+            // send the original hand to the current player
+            sendHandToPlayer(playerID);
+            // send the original hand sizes to all players
+            sendHandSizesToAll();
+            // notify wrong move
+            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
+          }
           sendHandSizesToAll();
-          // notify wrong move
-          server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
         }
-      sendHandSizesToAll();
-      return;
+        return;
       case RESET:
-      game.reset();
+        if (isCurrentPlayer(playerID)) {
+          game.reset();
 //        sendTableToPlayer(playerID);
-      sendTableToALl();
-      sendHandToPlayer(playerID);
-      sendHandSizesToAll();
+          sendTableToALl();
+          sendHandToPlayer(playerID);
+          sendHandSizesToAll();
 //        sendHandSizesToPlayer(playerID);
+        }
       return;
       case GIVE_UP:
       game.playerHasLeft(playerID);
@@ -154,6 +164,14 @@ class RequestHandler {
         sendHandToPlayer(playerID);
       default:
     }
+  }
+
+  private boolean isCurrentPlayer(int playID) {
+    if (game.getCurrentPlayerID() != playID) {
+      server.sendToPlayer(playID, new ErrorInfo("not your turn!"));
+      return false;
+    }
+    return true;
   }
 
   private void sendTableToPlayer(int playerID) {

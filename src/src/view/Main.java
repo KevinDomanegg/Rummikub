@@ -20,7 +20,6 @@ public class Main extends Application {
   //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\startMusic.mp3").toURI().toString());
 //  private Media sound;
 //  private Media video;
-  private NetworkController networkController;
 //  {
 //    try{
 //      //video = new Media((getClass().getResource("animeTestVideo.mp4")).toURI().toString());
@@ -40,10 +39,6 @@ public class Main extends Application {
 
   //WaitController waitController;
   GameController gameController;
-
-  void setNetworkController(NetworkController networkController) {
-    this.networkController = networkController;
-  }
 
   public static void main(String[] args) {
     launch(args);
@@ -72,16 +67,6 @@ public class Main extends Application {
     primaryStage.show();
     //mediaPlayer_video.play();
 //    startController.setMain(this);
-
-    primaryStage.setOnCloseRequest(e -> {
-      System.out.println("klicked  on x");
-      if (networkController != null) {
-        networkController.killThreads();
-      }
-      //startController.killThreads();
-      Platform.exit();
-    });
-    //--------------------------------------------------------
   }
 
   //TODO: Catch exception
@@ -91,36 +76,6 @@ public class Main extends Application {
     primaryStage.setMinHeight(650.0);
     primaryStage.setMinWidth(600.0);
     new MainController(primaryStage).switchToStartScene();
-
-//    Maincontroller controller = new Maincontroller();
-//    controller.startVideo();
-
-
-
-    //hostJoinStage(primaryStage);
-//    StackPane root = new StackPane();
-//    root.getChildren().add(mediaView);
-//    Scene scene = new Scene(root, 600,350);
-//    primaryStage.setScene(scene);
-//    // SET THE ENTRANCE VIDEO WINDOW A FEST SIZE ONLY
-//    primaryStage.setResizable(false);
-//    primaryStage.initStyle(StageStyle.UNDECORATED);
-//    //primaryStage.setMinWidth(600.0);
-//    //primaryStage.setMinHeight(350.0);
-//    //primaryStage.setMaxHeight(350.0);
-//    //primaryStage.setMaxWidth(600.0);
-//    primaryStage.show();
-//    mediaPlayer_video.play();
-//    mediaPlayer_video.setOnEndOfMedia(() -> {
-//      mediaPlayer.stop();
-//      try {
-//        hostJoinStage(new Stage());
-//        primaryStage.close();
-//      } catch (Exception e) {
-//        e.printStackTrace();
-//      }
-//      //Platform.runLater(() -> System.out.println(mediaPlayer.getStatus()));
-//    });
   }
 
   void stopMusic() {

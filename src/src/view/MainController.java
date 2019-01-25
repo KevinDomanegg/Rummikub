@@ -153,8 +153,6 @@ public class MainController implements Controller {
   public void setTable(StoneInfo[][] table) {
     System.out.println("set table");
     gameController.setTable(table);
-
-
   }
 
 
@@ -249,5 +247,42 @@ public class MainController implements Controller {
 
   void sendStartRequest() {
     requestBuilder.sendStartRequest();
+  }
+
+  void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+  }
+
+  void sendPutStoneRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+  }
+
+  void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+  }
+
+  void sendConfirmMoveRequest() {
+    requestBuilder.sendConfirmMoveRequest();
+  }
+
+  void sendSortHandByGroupRequest() {
+    requestBuilder.sendSortHandByGroupRequest();
+  }
+
+  void sendSortHandByRunRequest() {
+    requestBuilder.sendSortHandByRunRequest();
+  }
+
+  void quitGame() {
+    client.disconnect();
+    try {
+      switchToStartScene();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void sendResetRequest() {
+    requestBuilder.sendResetRequest();
   }
 }
