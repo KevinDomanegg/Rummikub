@@ -3,31 +3,51 @@ package game;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Objects;
+
 import static org.junit.Assert.*;
 
 public class CoordinateTest {
-  static Coordinate coordinate1;
-  static Coordinate coordinate2;
-  static Coordinate coordinate3;
 
-  @Before
-  public void initAll(){
-    coordinate1 = new Coordinate(1, 4);
-    coordinate2 = new Coordinate(1, 5);
-    coordinate3 = new Coordinate(1,4);
+  @Test
+  public void initTest() {
+    Coordinate coordinate1 = new Coordinate(1, 4);
+    Coordinate coordinate2 = new Coordinate(1, 5);
+
+    assertEquals(coordinate1.getCol(), 1);
+    assertEquals(coordinate1.getRow(), 4);
+    assertEquals(coordinate2.getCol(), 1);
+    assertEquals(coordinate2.getRow(), 5);
   }
 
 
-  //Testing if the equals Method is able to compare two different
-  //Coordinates with the same Variables x and y.
   @Test
   public void equalsTest() {
-    System.out.println("TestEquals.");
-    assert(coordinate1.equals(coordinate3));
+    Coordinate coordinate1 = new Coordinate(1, 4);
+    Coordinate coordinate2 = new Coordinate(1, 5);
+    Coordinate coordinate3 = new Coordinate(1,4);
+
     assertEquals(coordinate1, coordinate3);
     assertTrue(coordinate1.equals(coordinate3));
     assertTrue(coordinate2.equals(coordinate2));
-    assertTrue(coordinate1.equals(coordinate2) == false);
-    System.out.println("EndOfTestEquals.");
+    assertFalse(coordinate2.equals(new Object()));
+    assertFalse(coordinate1.equals(coordinate2));
+
   }
+
+  @Test
+  public void printTest() {
+    Coordinate coordinate1 = new Coordinate(1, 4);
+
+    assertTrue(coordinate1.toString().equals("(Col: " + coordinate1.getCol() + ",Row: " + coordinate1.getRow() + ")"));
+  }
+
+  @Test
+  public void hashTest() {
+    Coordinate coordinate1 = new Coordinate(1, 4);
+
+    assertEquals(Objects.hash(coordinate1.getCol(), coordinate1.getRow()), coordinate1.hashCode());
+  }
+
+
 }
