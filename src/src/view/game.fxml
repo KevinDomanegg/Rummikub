@@ -46,7 +46,7 @@
                     <!-- Menu buttons -->
                     <children>
                         <Button fx:id="quitGame" mnemonicParsing="false"
-                                text="Quit" onMouseClicked="#quitButton" />
+                                text="Quit" onMouseClicked="#quitGame" />
                     </children>
                 </StackPane>
             </children>
@@ -107,7 +107,7 @@
                     </children>
                 </VBox>
                 <!-- table grid -->
-                <GridPane fx:id="table">
+                <GridPane fx:id="tableGrid" alignment="CENTER">
                     <children>
                         <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
                     </children>

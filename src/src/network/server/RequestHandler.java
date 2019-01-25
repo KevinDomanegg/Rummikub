@@ -40,7 +40,6 @@ class RequestHandler {
   void applyRequest(Request request, int playerID){
     switch (request.getRequestID()){
       case START:
-        notifyGameStartToAll();
         // check the minimum
         if (playerID != 0) {
           server.sendToPlayer(playerID, new ErrorInfo("only host can start the game."));
@@ -51,6 +50,7 @@ class RequestHandler {
           return;
         }
         //starts the game
+        notifyGameStartToAll();
         startGame();
         return;
       case SET_PLAYER:
@@ -175,10 +175,11 @@ class RequestHandler {
     for (int playerID = 0; playerID < game.getNumberOfPlayers(); playerID++) {
       sendHandToPlayer(playerID);
     }
-    // send bag size to all
-    sendBagSizeToAll();
+    sendPlayerNamesToAll();
     // send to each player their hand sizes in a corresponding order
     sendHandSizesToAll();
+    // send bag size to all
+    sendBagSizeToAll();
     // notify the start player
     notifyTurnToPlayer();
   }

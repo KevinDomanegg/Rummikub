@@ -51,10 +51,11 @@ public class MainController implements Controller {
         gameController.setMainController(this);
         break;
     }
-
     Scene scene = new Scene(root, 1024, 768);
-    primaryStage.setScene(scene);
-    primaryStage.show();
+    Platform.runLater(() -> {
+      primaryStage.setScene(scene);
+      primaryStage.show();
+    });
   }
 
   private void switchToWaitScene() throws IOException {
@@ -179,13 +180,13 @@ public class MainController implements Controller {
    * Notifies the controller that the game has started.
    */
   @Override public void notifyGameStart() {
-    Platform.runLater(() -> {
-      try {
-        switchToGameScene();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    });
+    try {
+      switchToGameScene();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+//    Platform.runLater(() -> {
+//    });
 
   }
 
@@ -196,7 +197,8 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
-      gameController.notifyCurrentPlayer(playerID);
+    gameController.notifyCurrentPlayer(playerID);
+//    Platform.runLater(() ->);
   }
 
   /**
@@ -204,9 +206,8 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyInvalidMove() {
-    Platform.runLater(() -> {
-      gameController.notifyInvalidMove();
-    });
+    gameController.notifyInvalidMove();
+//    Platform.runLater(() -> gameController.notifyInvalidMove());
   }
 
   /**
@@ -233,6 +234,7 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    primaryStage.setOnCloseRequest(event -> client.disconnect());
     requestBuilder.sendSetPlayerRequest(name, age);
   }
 
