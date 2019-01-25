@@ -22,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import network.client.RequestBuilder;
+import view.music.Music;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -63,19 +64,8 @@ public class GameController {
   // NO HOST AVAILABLE
   private boolean serverNotAvailable;
 
-  {
-    try {
-      sound_pickupStone = new Media((getClass().getResource("pickupStone.mp3")).toURI().toString());
-      sound_dropStone = new Media((getClass().getResource("dropStone.mp3")).toURI().toString());
-      sound_drawStone = new Media((getClass().getResource("drawStone.mp3")).toURI().toString());
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-  }
 
-  private MediaPlayer mediaPlayer_pickupStone = new MediaPlayer(sound_pickupStone);
-  private MediaPlayer mediaPlayer_dropStone = new MediaPlayer(sound_dropStone);
-  private MediaPlayer mediaPlayer_drawStone = new MediaPlayer(sound_drawStone);
+
 
 //  void setNetworkController(NetworkController networkcontroller) {
 //    this.networkController = networkcontroller;
@@ -170,6 +160,7 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
+    Music.playSoundOf("draw stone");
 //    if (model.isMyTurn()) {
 //      mediaPlayer_drawStone.stop();
 //      mediaPlayer_drawStone.play();
@@ -229,8 +220,7 @@ public class GameController {
 //      if (!model.isMyTurn()) {
 //        return;
 //      }
-      mediaPlayer_pickupStone.stop();
-      mediaPlayer_pickupStone.play();
+      Music.playSoundOf("pick up stone");
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       ClipboardContent content = new ClipboardContent();
 
@@ -252,8 +242,7 @@ public class GameController {
 
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
-      mediaPlayer_dropStone.stop();
-      mediaPlayer_dropStone.play();
+      Music.playSoundOf("drop stone");
 
       Pane sourceCell = (Pane) event.getGestureSource();
       sourceCell.getChildren().clear();

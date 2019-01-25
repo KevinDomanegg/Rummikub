@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import network.client.RequestBuilder;
+import view.music.Music;
 
 import java.io.IOException;
 import java.net.URL;
@@ -180,14 +181,14 @@ public class WaitController implements Initializable {
 
   @FXML
   private void mute() {
-//    networkController.mute();
+    Music.muteSoundOfWait();
     muteButton.setVisible(false);
     notMuteButton.setVisible(true);
   }
 
   @FXML
   private void unMute() {
-//    networkController.unMute();
+    Music.playMusicNow();
     notMuteButton.setVisible(false);
     muteButton.setVisible(true);
   }

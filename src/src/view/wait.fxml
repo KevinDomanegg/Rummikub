@@ -32,7 +32,7 @@
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/view/muteButton.png" />
+                  <Image url="@/view/images/muteButton.png" />
                </image>
             </ImageView>
          </graphic>
@@ -41,22 +41,22 @@
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/view/notMuteButton.png" />
+                  <Image url="@/view/images/notMuteButton.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="131.0" layoutY="293.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@/view/blackAvatar.png" />
+            <Image url="@/view/images/blackAvatar.png" />
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="131.0" layoutY="483.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@/view/womanAvatar.png" />
+            <Image url="@/view/images/womanAvatar.png" />
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="543.0" layoutY="483.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@/view/blackAvatar.png" />
+            <Image url="@/view/images/blackAvatar.png" />
         </ImageView>
         <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="543.0" layoutY="293.0" pickOnBounds="true" preserveRatio="true">
-            <Image url="@/view/womanAvatar.png" />
+            <Image url="@/view/images/womanAvatar.png" />
         </ImageView>
    </children>
 </AnchorPane>

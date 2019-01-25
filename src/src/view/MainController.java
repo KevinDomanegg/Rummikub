@@ -12,6 +12,7 @@ import network.client.GameInfoHandler;
 import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
+import view.music.Music;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -38,15 +39,19 @@ public class MainController implements Controller {
     Parent root = loader.load();
     switch (fxml) {
       case "start.fxml":
+        Music.selectMusic("start", new Music());
+        Music.playMusicNow();
         startController = loader.getController();
         startController.setMainController(this);
         break;
       case "wait.fxml":
+        Music.selectMusic("wait", new Music());
+        Music.playMusicNow();
         waitController = loader.getController();
         waitController.setMainController(this);
         break;
       case "game.fxml":
-        System.out.println("GAME CONTROLLER");
+        Music.selectMusic("game", new Music());
         gameController = loader.getController();
         gameController.setMainController(this);
         break;
@@ -130,7 +135,7 @@ public class MainController implements Controller {
       waitController.setPlayerNames(names);
       return;
     }
-    gameController.setPlayerNames(names);
+      gameController.setPlayerNames(names);
   }
 
   /**
@@ -141,7 +146,7 @@ public class MainController implements Controller {
    */
   @Override
   public void setHandSizes(List<Integer> sizes) {
-      gameController.setHandSizes(sizes);
+    gameController.setHandSizes(sizes);
   }
 
   /**
