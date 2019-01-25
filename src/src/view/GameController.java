@@ -30,14 +30,14 @@ import java.util.TimerTask;
 
 public class GameController {
 
-  @FXML private Label player0Name;
-  @FXML private Label player0Hand;
-  @FXML private Label player1Name;
-  @FXML private Label player2Name;
-  @FXML private Label player3Name;
-  @FXML private Label player1Hand;
-  @FXML private Label player2Hand;
-  @FXML private Label player3Hand;
+  @FXML private Text player0Name;
+  @FXML private Text player0Hand;
+  @FXML private Text player1Name;
+  @FXML private Text player2Name;
+  @FXML private Text player3Name;
+  @FXML private Text player1Hand;
+  @FXML private Text player2Hand;
+  @FXML private Text player3Hand;
 
   @FXML Text timer;
   @FXML private GridPane tableGrid;
