@@ -157,4 +157,8 @@ public class RummiTable implements Grid {
     table.setStone(new Coordinate(2, 0), new Stone());
     System.out.println(table.isConsistent());
   }
+
+  public int size(){
+    return stones.size();
+  }
 }
