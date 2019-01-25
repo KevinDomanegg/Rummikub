@@ -149,10 +149,9 @@ public class GameController {
     }
   }
 
-  public void quitButton() {
-    Platform.runLater(() -> {
-      returnToStart(false);
-    });
+  public void quitGame() {
+//    mainController.quitGame();
+    returnToStart(false);
   }
 
   /**
