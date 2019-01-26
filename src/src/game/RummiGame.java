@@ -1,12 +1,9 @@
 package game;
 
 
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 /** Model for the board game Rummikub. */
@@ -105,6 +102,8 @@ public class RummiGame implements Game {
     table.setStone(sourcePosition, table.removeStone(targetPosition));
     // move the chosen stone to targetPosition
     table.setStone(targetPosition, chosenStone);
+    // it seems like maps are not deleting value pairs. The just overwrite the value with null.
+    table.getStones().values().removeIf(Objects::isNull);
   }
 
   /**

@@ -5,6 +5,7 @@ import game.Stone.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 public class RummiTable implements Grid {
   private static final int WIDTH = 20;
@@ -27,7 +28,7 @@ public class RummiTable implements Grid {
   }
 
   @Override public Stone removeStone(Coordinate coordinate) {
-    return stones.remove(coordinate);
+    return  stones.remove(coordinate);
   }
 
   @Override public int getWidth() {
