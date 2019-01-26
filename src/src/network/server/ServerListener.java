@@ -54,6 +54,7 @@ public class ServerListener extends Thread {
 
         if (json == null) {
           System.out.println("Client " + id + " not connected");
+          System.out.println("ServerListener just got a NULL value");
           this.connected = false;
           server.disconnectClient(id);
           break;
@@ -64,7 +65,7 @@ public class ServerListener extends Thread {
 
       }
     } catch (IOException e) {
-      //this.connected = false;
+      this.connected = false;
       server.disconnectClient(id);
     }
     System.out.println("ServerListener terminated");

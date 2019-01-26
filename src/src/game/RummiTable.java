@@ -23,7 +23,9 @@ public class RummiTable implements Grid {
   }
 
   @Override public void setStone(Coordinate coordinate, Stone stone) {
-    stones.put(coordinate, stone);
+    if (stone != null) {
+      stones.put(coordinate, stone);
+    }
   }
 
   @Override public Stone removeStone(Coordinate coordinate) {
@@ -42,6 +44,14 @@ public class RummiTable implements Grid {
     stones.clear();
   }
 
+  /**
+   * checks if all horizontally grouped stones on the table are valid sets.
+   * Valid sets are out of at least three stones and called
+   * Group (same number and different colors) or
+   * Run (same color and sorted number).
+   *
+   * @return true if only if all horizontally grouped stones are valid group or run
+   */
   boolean isConsistent() {
     // check the minimal Condition (:= a valid set has at least 3 stones)
     if (stones.size() < MIN_SET_SIZE) {

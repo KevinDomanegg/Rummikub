@@ -49,6 +49,14 @@ public class WaitController implements Initializable {
   private Text player3;
 
   @FXML
+  private Button notMuteButton;
+
+  @FXML
+  private Button muteButton;
+
+  private Stage stage;
+
+  @FXML
   private void startGame() {
     requestBuilder.sendStartRequest();
   }
@@ -61,8 +69,8 @@ public class WaitController implements Initializable {
     this.requestBuilder = requestBuilder;
   }
 
-  void returnToStartView() {
-    networkController.returnToStartView();
+  Stage getStage() {
+    return stage;
   }
 
   void setPlayerNames(List<String> names) {
@@ -93,7 +101,7 @@ public class WaitController implements Initializable {
  synchronized void switchToGameView() {
     networkController.stopMusicInWaiting();
     synchronized (networkController) {
-      Stage stage = (Stage) startGameButton.getScene().getWindow();
+      stage = (Stage) startGameButton.getScene().getWindow();
       FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
       Parent root = loader.getRoot();
       //loader.setRoot(this);
@@ -110,7 +118,7 @@ public class WaitController implements Initializable {
       gameController.setNetworkController(networkController);
       networkController.setGameController(gameController);
 
-      Scene gameScene = new Scene(root, 1024, 768);
+      Scene gameScene = new Scene(root, 1500, 900);
       gameScene.getStylesheets().add("view/gameStyle.css");
       stage.setScene(gameScene);
       notifyAll();
@@ -134,7 +142,7 @@ public class WaitController implements Initializable {
   void setModel(ClientModel model) {
     this.model = model;
     if (model.isHost()) {
-      waitingState.setText("hosting Game");
+      waitingState.setText("Hosting Game");
     }
     ipAddress.setText(model.getServerIP());
   }
@@ -161,5 +169,19 @@ public class WaitController implements Initializable {
 
   public void setBagSize(int bagSize) {
     model.setBagSize(bagSize);
+  }
+
+  @FXML
+  void mute() {
+    networkController.mute();
+    muteButton.setVisible(false);
+    notMuteButton.setVisible(true);
+  }
+
+  @FXML
+  void unMute() {
+    networkController.unMute();
+    notMuteButton.setVisible(false);
+    muteButton.setVisible(true);
   }
 }

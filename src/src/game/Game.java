@@ -52,5 +52,9 @@ public interface Game {
 
   List<String> getPlayerNames();
 
+  void sortPlayerHandByGroup(int playerID);
+
+  void sortPlayerHandByRun(int playerID);
+
   // ? int getTime();
 }

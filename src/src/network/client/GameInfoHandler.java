@@ -60,6 +60,9 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         System.out.println("handling gamestart");
         controller.notifyGameStart();
         return;
+      case SERVER_NOT_AVAILABLE:
+        controller.noServerAvailable();
+        return;
 //      case IP_ADDRESS:
 //        System.out.println("handling ip");
 //        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());

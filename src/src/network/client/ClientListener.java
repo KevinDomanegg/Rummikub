@@ -2,6 +2,10 @@ package network.client;
 
 import communication.Deserializer;
 import communication.gameinfo.GameInfo;
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.SimpleGameInfo;
+import communication.request.RequestID;
+import communication.request.SimpleRequest;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -53,7 +57,7 @@ class ClientListener extends Thread {
 
   }
 
-  void disconnect() {
+   void disconnect() {
     System.out.println("Called disconnect in ClientListener");
     connected = false;
     try {

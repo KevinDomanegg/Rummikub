@@ -11,6 +11,9 @@ import javafx.scene.media.*;
 import javafx.stage.Stage;
 //MUSIC
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.StageStyle;
+
+import javax.swing.*;
 import java.io.File;
 
 import java.awt.*;
@@ -23,6 +26,7 @@ public class Main extends Application {
   //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\startMusic.mp3").toURI().toString());
   private Media sound;
   private Media video;
+  private NetworkController networkController;
   {
     try{
       //video = new Media((getClass().getResource("animeTestVideo.mp4")).toURI().toString());
@@ -42,6 +46,10 @@ public class Main extends Application {
 
   //WaitController waitController;
   GameController gameController;
+
+  void setNetworkController(NetworkController networkController) {
+    this.networkController = networkController;
+  }
 
   public static void main(String[] args) {
     launch(args);
@@ -64,13 +72,18 @@ public class Main extends Application {
     Scene scene = new Scene(root, 1024, 768);
     //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
     primaryStage.setScene(scene);
-    //primaryStage.setFullScreen(true);
+    // MINIMUM WINDOW SIZE
+    primaryStage.setMinHeight(650.0);
+    primaryStage.setMinWidth(600.0);
     primaryStage.show();
     mediaPlayer_video.play();
     startController.setMain(this);
 
     primaryStage.setOnCloseRequest(e -> {
       System.out.println("klicked  on x");
+      if (networkController != null) {
+        networkController.killThreads();
+      }
       //startController.killThreads();
       //Platform.exit();
       QuantumToolkit.getToolkit().exit();
@@ -81,10 +94,18 @@ public class Main extends Application {
   //TODO: Catch exception
   @Override
   public void start(Stage primaryStage) throws Exception {
+    //hostJoinStage(primaryStage);
     StackPane root = new StackPane();
     root.getChildren().add(mediaView);
     Scene scene = new Scene(root, 600,350);
     primaryStage.setScene(scene);
+    // SET THE ENTRANCE VIDEO WINDOW A FEST SIZE ONLY
+    primaryStage.setResizable(false);
+    primaryStage.initStyle(StageStyle.UNDECORATED);
+    //primaryStage.setMinWidth(600.0);
+    //primaryStage.setMinHeight(350.0);
+    //primaryStage.setMaxHeight(350.0);
+    //primaryStage.setMaxWidth(600.0);
     primaryStage.show();
     mediaPlayer_video.play();
     mediaPlayer_video.setOnEndOfMedia(() -> {
@@ -97,35 +118,6 @@ public class Main extends Application {
       }
       //Platform.runLater(() -> System.out.println(mediaPlayer.getStatus()));
     });
-
-    /*//FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("start.fxml"));
-    Parent root = loader.load();
-    //gameController = loader.getController();
-    startController = loader.getController();
-    startController.setMain(this);
-
-
-    // A Little Music
-    //mediaPlayer.play();
-    root.getChildrenUnmodifiable().add(mediaView);
-    mediaPlayer_video.play();
-
-    primaryStage.setTitle("Rummikub");
-    //Scene scene = resolution(root);
-    Scene scene = new Scene(root, 1024, 768);
-    //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
-    primaryStage.setScene(scene);
-    //primaryStage.setFullScreen(true);
-    primaryStage.show();
-    mediaPlayer_video.play();
-    startController.setMain(this);
-
-    primaryStage.setOnCloseRequest(e -> {
-      System.out.println("klicked  on x");
-      startController.killThreads();
-      Platform.exit();
-    });*/
   }
 
   void stopMusic() {
