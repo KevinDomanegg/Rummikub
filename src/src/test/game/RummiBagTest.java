@@ -8,6 +8,9 @@ import org.junit.runner.JUnitCore;
 
 import java.util.ArrayList;
 
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 
 public class RummiBagTest {
   static final int BAG_SIZE = 106;

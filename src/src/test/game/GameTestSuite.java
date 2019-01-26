@@ -11,7 +11,9 @@ import org.junit.runners.Suite;
     RummiBagTest.class,
     RummiHandTest.class,
     RummiTableTest.class,
-    StoneTest.class
+    StoneTest.class,
+    MoveTraceTest.class,
+    RummiGameTest.class
 })
 
 public class GameTestSuite {

@@ -2,10 +2,13 @@ package game;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import java.util.Objects;
 
 import static org.junit.Assert.*;
+
 
 public class CoordinateTest {
 
