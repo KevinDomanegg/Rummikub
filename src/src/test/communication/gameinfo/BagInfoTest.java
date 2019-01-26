@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BagInfoTest {
+
   @Test
   public void initTest() {
     BagInfo bagInfo1 = new BagInfo(2);
