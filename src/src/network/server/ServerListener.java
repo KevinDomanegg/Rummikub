@@ -6,6 +6,7 @@ import communication.request.Request;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ServerListener extends Thread {
@@ -47,8 +48,8 @@ public class ServerListener extends Thread {
         try {
           json = in.nextLine();
           request = deserializer.deserializeRequest(json);
-        } catch (ClassCastException e) {
-          connected = false;
+        } catch (ClassCastException  | NoSuchElementException e) {
+          disconnect();
         }
 
         if (json == null) {

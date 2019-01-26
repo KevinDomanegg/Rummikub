@@ -57,8 +57,9 @@ class ClientListener extends Thread {
     System.out.println("Called disconnect in ClientListener");
     connected = false;
     try {
-      receiveMessage.close();
       server.close();
+      receiveMessage.close();
+      //server.close();
     } catch (IOException e) {
       System.out.println("exception while closing the listener");
       e.printStackTrace();
