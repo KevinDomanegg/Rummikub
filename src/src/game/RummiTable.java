@@ -42,6 +42,10 @@ public class RummiTable implements Grid {
     stones.clear();
   }
 
+  public int size(){
+    return stones.size();
+  }
+
   boolean isConsistent() {
     // check the minimal Condition (:= a valid set has at least 3 stones)
     if (stones.size() < MIN_SET_SIZE) {
@@ -148,17 +152,5 @@ public class RummiTable implements Grid {
       expectedNumber = (expectedNumber == 0) ? number + 1 : expectedNumber + 1;
     }
     return true;
-  }
-
-  public static void main(String[] args) {
-    RummiTable table = new RummiTable();
-    table.setStone(new Coordinate(0, 0), new Stone(Color.YELLOW, 5));
-    table.setStone(new Coordinate(1, 0), new Stone(Color.BLUE, 5));
-    table.setStone(new Coordinate(2, 0), new Stone());
-    System.out.println(table.isConsistent());
-  }
-
-  public int size(){
-    return stones.size();
   }
 }
