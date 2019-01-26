@@ -7,8 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 
 public class RummiTable implements Grid {
-  private static final int WIDTH = 20;
-  private static final int HEIGHT = 5;
+  private static final int WIDTH = 26;
+  private static final int HEIGHT = 8;
   private static final int MIN_SET_SIZE = 3;
   private static final int MAX_GROUP_SIZE = 4;
 
@@ -44,6 +44,15 @@ public class RummiTable implements Grid {
     stones.clear();
   }
 
+  Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
+    int col = coordinate.getCol();
+    // find the first stone for a potential set
+    while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
+      col--;
+    }
+    return new Coordinate(col, coordinate.getRow());
+  }
+
   /**
    * checks if all horizontally grouped stones on the table are valid sets.
    * Valid sets are out of at least three stones and called
@@ -69,13 +78,9 @@ public class RummiTable implements Grid {
        }
        // check if the first(current) coordinate of the potential set is already confirmed
        if (checkingList.contains(coordinate)) {
-         col = coordinate.getCol();
-         // find the first stone for a potential set
-         while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
-           col--;
-         }
          // the coordinate of the first stone in a potential set
-         coordinate = new Coordinate(col, coordinate.getRow());
+         coordinate = getFirstCoordOfSetAt(coordinate);
+         col = coordinate.getCol();
          // count the number of neighbors of the first stone of a potential set
          while (col < WIDTH && checkingList.remove(new Coordinate(col, coordinate.getRow()))) {
            setSize++;
@@ -160,6 +165,23 @@ public class RummiTable implements Grid {
     return true;
   }
 
+  @Override
+  public String toString() {
+    StringBuilder stringBuilder = new StringBuilder();
+    Coordinate coordinate;
+    for (int row = 0; row < HEIGHT; row++) {
+      for (int col = 0; col < WIDTH; col++) {
+        if (stones.containsKey((coordinate = new Coordinate(col, row)))) {
+          stringBuilder.append("Coordinate: ").append(coordinate)
+              .append(", Stone: ").append(stones.get(coordinate)).append('\n');
+        }
+      }
+    }
+    stringBuilder.append(stones.size());
+    return stringBuilder.toString();
+  }
+
+  // for test
   public static void main(String[] args) {
     RummiTable table = new RummiTable();
     table.setStone(new Coordinate(0, 0), new Stone(Color.YELLOW, 5));

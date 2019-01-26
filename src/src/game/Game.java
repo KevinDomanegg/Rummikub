@@ -10,15 +10,17 @@ public interface Game {
 
   void start();
 
-  void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition);
+  void moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void putStone(Coordinate initialPosition, Coordinate targetPosition);
+  void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
+  void putStone(Coordinate sourcePosition, Coordinate targetPosition);
+
+  void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   void drawStone();
 
-  void playerHasLeft(int playerPosition);
+  void playerHasLeft(int playerID);
 
   void reset();
 
