@@ -14,7 +14,9 @@ public class RummiHand implements Grid {
 
   @Override
   public void setStone(Coordinate coordinate, Stone stone){
-    stones.put(coordinate, stone);
+    if(stones.size() < HEIGHT * WIDTH){
+      stones.put(coordinate, stone);
+    }
   }
 
   @Override public Stone removeStone(Coordinate coordinate) {

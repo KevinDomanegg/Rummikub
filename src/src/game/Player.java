@@ -91,6 +91,10 @@ class Player {
     return hand.getHeight();
   }
 
+  RummiHand getHand() {
+    return hand;
+  }
+
   /** changes this player's state to hasPlayedFirstMove. */
   void playedFirstMove() {
     hasPlayedFirstMove = true;
@@ -113,5 +117,6 @@ class Player {
   int getPoints() {
     // all points of stones represent a negative number
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
+    //how do I change the negative points for the Joker?
   }
 }
