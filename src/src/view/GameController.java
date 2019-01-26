@@ -1,12 +1,16 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+import java.util.Map.Entry;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
@@ -351,6 +355,17 @@ public class GameController {
   @FXML
   private void sendSortHandByRunRequest() {
     mainController.sendSortHandByRunRequest();
+  }
+
+  void showRanke(List<Entry<Integer, Integer>> finalRank) {
+
+  }
+
+  public void showRank() {
+    List<Entry<Integer, Integer>> rank = new ArrayList<>();
+    rank.add(new SimpleEntry<>(1, 0));
+    rank.add(new SimpleEntry<>(0, -30));
+    mainController.showRank(rank);
   }
 
 //  @FXML private void sendSortHandByGroupRequest() {

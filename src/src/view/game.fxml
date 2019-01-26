@@ -131,6 +131,7 @@
                         <Button fx:id="checkButton" text="Check" onMouseClicked="#sendConfirmMoveRequest"/>
                         <Button fx:id="sortHandByGroupButton" text="Group" onMouseClicked="#sendSortHandByGroupRequest"/>
                         <Button fx:id="sortHandByRunButton" text="Run" onMouseClicked="#sendSortHandByRunRequest"/>
+                        <Button fx:id="testRankButton" text="testRank" onMouseClicked="#showRank"/>
                     </children>
                 </HBox>
 

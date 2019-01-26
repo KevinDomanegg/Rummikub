@@ -103,6 +103,7 @@ class RequestHandler {
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
           if (game.isConsistent()) {
+            checkWinner();
           /*// send the changed table first
           sendTableToALl();*/
             // then notify the turn to the next player
@@ -138,6 +139,7 @@ class RequestHandler {
       return;
       case TIME_OUT:
         if (game.isConsistent()) {
+          checkWinner();
           /*// send the changed table first
           sendTableToALl();*/
           // then notify the turn to the next player
@@ -241,5 +243,11 @@ class RequestHandler {
 
   private void notifyGameStartToAll() {
     server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
+  }
+
+  private void checkWinner() {
+    if (game.hasWinner()) {
+      server.sendToAll(new RankInfo(game.getFinalRank()));
+    }
   }
 }

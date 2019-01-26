@@ -2,6 +2,7 @@ package game;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -385,7 +386,7 @@ public class RummiGame implements Game {
     for (int playerID = 0; playerID < players.size(); playerID++) {
       rank.add(new SimpleEntry<>(playerID, players.get(playerID).getPoints()));
     }
-    rank.sort((x, y) -> x.getKey().compareTo(y.getValue()));
+    rank.sort(Comparator.comparing(Entry::getValue));
     return rank;
   }
 

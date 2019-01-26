@@ -3,10 +3,12 @@ package view;
 import communication.gameinfo.StoneInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
+import java.util.Map.Entry;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import network.client.GameInfoHandler;
 import network.client.RequestBuilder;
@@ -24,6 +26,7 @@ public class MainController implements Controller {
   private GameController gameController;
   private StartController startController;
   private WaitController waitController;
+  private WinnerController winnerController;
   private Stage primaryStage;
   private RummiClient client;
   private RequestBuilder requestBuilder;
@@ -92,6 +95,23 @@ public class MainController implements Controller {
   @Override
   public void showError(String errorMessage) {
     // switchToError
+  }
+
+  @Override public void showRank(List<Entry<Integer, Integer>> finalRank) {
+    Stage stage = new Stage();
+    Parent root;
+    try {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("winner.fxml"));
+      root = loader.load();
+      winnerController = loader.getController();
+      winnerController.setRank(finalRank);
+      stage.setScene(new Scene(root));
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.initOwner(primaryStage);
+      stage.showAndWait();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
 //  void mute() {

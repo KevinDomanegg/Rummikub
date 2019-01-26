@@ -63,6 +63,8 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
       case SERVER_NOT_AVAILABLE:
         controller.noServerAvailable();
         return;
+      case RANK:
+        controller.showRank(((RankInfo) gameInfo).getFinalRank());
 //      case IP_ADDRESS:
 //        System.out.println("handling ip");
 //        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
@@ -71,8 +73,6 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
 //        System.out.println("handling username");
 //          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
       default:
-        System.out.println("handling default");
-        break;
     }
     System.out.println("Info handled");
   }
