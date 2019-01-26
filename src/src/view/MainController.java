@@ -39,19 +39,19 @@ public class MainController implements Controller {
     Parent root = loader.load();
     switch (fxml) {
       case "start.fxml":
-        Music.selectMusic("start", new Music());
+        Music.selectMusic("start");
         Music.playMusicNow();
         startController = loader.getController();
         startController.setMainController(this);
         break;
       case "wait.fxml":
-        Music.selectMusic("wait", new Music());
+        Music.selectMusic("wait");
         Music.playMusicNow();
         waitController = loader.getController();
         waitController.setMainController(this);
         break;
       case "game.fxml":
-        Music.selectMusic("game", new Music());
+        Music.selectMusic("game");
         gameController = loader.getController();
         gameController.setMainController(this);
         break;
@@ -287,7 +287,7 @@ public class MainController implements Controller {
     requestBuilder.sendSortHandByRunRequest();
   }
 
-  void quitGame() {
+  void quit() {
     client.disconnect();
     try {
       switchToStartScene();

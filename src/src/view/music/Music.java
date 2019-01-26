@@ -15,22 +15,22 @@ public class Music {
   private static MediaPlayer playing_now;
 
 
-  public static void selectMusic(String view, Object object) {
+  public static void selectMusic(String view) {
     stopAllMusic();
     try {
       switch (view) {
         case "start":
-          Media startView_music = new Media((object.getClass().getResource("startMusic.mp3")).toURI().toString());
+          Media startView_music = new Media(Music.class.getResource("startMusic.mp3").toURI().toString());
           playing_now = new MediaPlayer(startView_music);
           return;
         case "wait":
-          Media waitView_music = new Media((object.getClass().getResource("waitingMusic.mp3")).toURI().toString());
+          Media waitView_music = new Media(Music.class.getResource("waitingMusic.mp3").toURI().toString());
           playing_now = new MediaPlayer(waitView_music);
           return;
         case "game":
-          Media sound_pickupStone = new Media((object.getClass().getResource("pickupStone.mp3")).toURI().toString());
-          Media sound_dropStone = new Media((object.getClass().getResource("dropStone.mp3")).toURI().toString());
-          Media sound_drawStone = new Media((object.getClass().getResource("drawStone.mp3")).toURI().toString());
+          Media sound_pickupStone = new Media(Music.class.getResource("pickupStone.mp3").toURI().toString());
+          Media sound_dropStone = new Media(Music.class.getResource("dropStone.mp3").toURI().toString());
+          Media sound_drawStone = new Media(Music.class.getResource("drawStone.mp3").toURI().toString());
           play_pickupStone = new MediaPlayer(sound_pickupStone);
           play_dropStone = new MediaPlayer(sound_dropStone);
           play_drawStone = new MediaPlayer(sound_drawStone);

@@ -1,23 +1,13 @@
 package view;
 
-import communication.gameinfo.StoneInfo;
 import java.util.List;
-
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import network.client.RequestBuilder;
 import view.music.Music;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -191,6 +181,10 @@ public class WaitController implements Initializable {
     Music.playMusicNow();
     notMuteButton.setVisible(false);
     muteButton.setVisible(true);
+  }
+
+  @FXML private void quitWating() {
+    mainController.quit();
   }
 
   void setServerIP(String serverIP) {

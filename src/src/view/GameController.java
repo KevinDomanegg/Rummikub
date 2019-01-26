@@ -1,30 +1,18 @@
 package view;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import communication.gameinfo.StoneInfo;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
-import network.client.RequestBuilder;
 import view.music.Music;
-
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -134,7 +122,7 @@ public class GameController {
   }
 
   public void quitGame() {
-    mainController.quitGame();
+    mainController.quit();
   }
 
   /**
@@ -161,24 +149,14 @@ public class GameController {
   @FXML
   public void drawStone() {
     Music.playSoundOf("draw stone");
-//    if (model.isMyTurn()) {
-//      mediaPlayer_drawStone.stop();
-//      mediaPlayer_drawStone.play();
-//      // Server request: Get stone from bag
-//      networkController.sendDrawRequest();
-//      model.finishTurn();
-//    } else {
-//      showErrorView("Error! It is not your turn");
-//    }
+    mainController.sendDrawRequest();
   }
 
   /**
    */
   @FXML
   void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
-    Platform.runLater(() -> {
-      pane.getChildren().clear();
-    });
+    Platform.runLater(() -> pane.getChildren().clear());
 
     int width = stoneGrid.length;
     int height = stoneGrid[0].length;

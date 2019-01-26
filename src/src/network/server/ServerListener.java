@@ -1,7 +1,5 @@
 package network.server;
 
-import communication.request.Request;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -11,7 +9,6 @@ public class ServerListener extends Thread {
   private Socket clientIn;
   private int id;
   private boolean connected = false;
-  private Request request;
   ObjectInputStream in;
 
   /**
@@ -34,38 +31,26 @@ public class ServerListener extends Thread {
   public void run() {
 
     try {
-
       in = new ObjectInputStream(clientIn.getInputStream());
-      this.connected = true;
-
-      while (connected) {
-        Object o = null;
-        try {
-          o = in.readObject();
-          request = (Request) o;
-        } catch (ClassNotFoundException | ClassCastException e) {
-          connected = false;
-        } catch (IOException e) {
-          connected = false;
-          server.disconnectClient(id);
-          System.out.println("Client " + id + " has disconnected");
-        }
-
-        if (o == null) {
-          System.out.println("Client " + id + " not connected");
-          System.out.println("ServerListener just got a NULL value");
-          this.connected = false;
-          server.disconnectClient(id);
-          break;
-        }
-
-        System.out.println("Listener: Received " + request.toString());
-        server.applyRequest(request, id);
-
-      }
     } catch (IOException e) {
-      this.connected = false;
-      server.disconnectClient(id);
+      return;
+    }
+    this.connected = true;
+
+    Object request = null;
+    while (connected) {
+      try {
+        request = in.readObject();
+      } catch (IOException e) {
+        connected = false;
+        server.disconnectClient(id);
+        System.out.println("Client " + id + " has disconnected");
+        return;
+      } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+      }
+      System.out.println("Listener: Received " + request);
+      server.applyRequest(request, id);
     }
     System.out.println("ServerListener terminated");
   }

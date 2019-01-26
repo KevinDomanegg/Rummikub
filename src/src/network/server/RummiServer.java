@@ -111,6 +111,9 @@ public class RummiServer extends Thread implements Server {
    */
   void disconnectClient(int id) {
 
+    System.out.println("-----client disconnected: "+ id);
+    System.out.println("-----player numbers: "+ game.getNumberOfPlayers());
+    game.playerHasLeft(id);
     clients[id] = null;
     if (listeners[id] != null) {
       listeners[id].disconnect();
@@ -145,7 +148,7 @@ public class RummiServer extends Thread implements Server {
    *
    * @param request to be applied
    */
-  void applyRequest(Request request, int socketID) {
+  void applyRequest(Object request, int socketID) {
     requestHandler.applyRequest(request, socketID);
   }
 
@@ -185,13 +188,13 @@ public class RummiServer extends Thread implements Server {
   }
 
   public void suicide() {
+    cleanup();
     running = false;
     try {
       server.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    cleanup();
   }
 
 }

@@ -37,8 +37,8 @@ class RequestHandler {
     return grid;
   }
 
-  void applyRequest(Request request, int playerID){
-    switch (request.getRequestID()){
+  void applyRequest(Object request, int playerID){
+    switch (((Request) request).getRequestID()){
       case START:
         // check the minimum
         if (playerID != 0) {

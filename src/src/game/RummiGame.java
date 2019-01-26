@@ -22,6 +22,7 @@ public class RummiGame implements Game {
   private ArrayList<Player> players; // list of players
   private RummiBag bag; // bag where all stones are filled
   private Stack<MoveTrace> trace; // history of the current players each move
+  private boolean isGameOn;
   private int currentPlayerID;
   private int currentPoints; // the points of the first move of a current player
 
@@ -48,11 +49,13 @@ public class RummiGame implements Game {
   /** adds a new player with name and age in this game before the game start. */
   @Override public void setPlayer(String name, int age) {
     players.add(new Player(name, age));
+    System.out.println("---number of players: " + players.size());
   }
 
   /** starts the game by handing out stones and determining the start player. */
   @Override public void start() {
     if (players.size() >= MIN_PLAYERS) {
+      isGameOn = true;
       handOutStones();
       setStartPlayer();
     }
@@ -209,8 +212,17 @@ public class RummiGame implements Game {
    * @param playerID the ID of the player who left
    */
   @Override public void playerHasLeft(int playerID) {
+    System.out.println("---number of players: " + players.size());
+    if (!isGameOn) {
+      players.remove(playerID);
+      return;
+    }
     // remove the player with the playerID and reset their hand into the bag
     bag.addStones(players.remove(playerID).getStones().values());
+    if (players.size() < MIN_PLAYERS) {
+      isGameOn = false;
+      return;
+    }
     // count down the currentPlayerID if the left players ID smaller than the currents
     if (playerID < currentPlayerID) {
       currentPlayerID--;
