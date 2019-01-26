@@ -1,75 +1,76 @@
+/* Tag selectors */
+
+Button {
+    -fx-background-color: white;
+    -fx-text-fill: #095D91;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-effect: dropshadow(gaussian, #00000033, 20, 0.1, 0, 0);
+}
+
+Button:hover {
+    -fx-background-color: #A3CDE2;
+}
+
+Button:pressed {
+    -fx-background-color: #095D91;
+    -fx-text-fill: white;
+}
+
 Text {
     -fx-font-family: Helvetica, Arial, SansSerif;
 }
 
-#root {
-    -fx-pref-width: 1024;
-    -fx-pref-height: 768;
-    -fx-background-image: url("images/backgroundTileBlue.png");
-    -fx-background-repeat: repeat;
-}
 
-.hand {
-    -fx-background-color: black;
-}
-
-.opponent {
-    -fx-alignment: CENTER;
-}
-
-.hand .text {
-    -fx-fill: white;
-}
-
-#timer {
-    -fx-font-size: 25;
-}
-
-#top {
-    -fx-padding: 20;
-}
-
-#errorPane {
-    -fx-alignment: CENTER;
-}
-
-#opponentLeft {
-    -fx-rotate: -90;
-    -fx-padding: 0 -70;
-}
-
-#opponentRight {
-    -fx-rotate: 90;
-    -fx-padding: 0 -70;
-}
-
-#ownHand {
-    -fx-padding: 0 0 20 0;
-    -fx-background-color: black;
-    -fx-pref-width: 200;
-}
-
-#playerInfo {
-    -fx-fill: white;
-}
+/* Class selectors */
 
 .cell {
     -fx-border-color: white;
     -fx-fill: none;
     -fx-alignment: CENTER;
+    -fx-max-height: 55;
     -fx-pref-height: 55;
+    -fx-min-height: 55;
+    -fx-max-width: 40;
     -fx-pref-width: 40;
+    -fx-min-width: 40;
+    }
+
+.cell.hover {
+    -fx-fill: #FFFFFF22;
+}
+
+.centered {
+    -fx-alignment: CENTER;
+}
+
+.hand {
+    -fx-background-color: black;
+    -fx-border-radius: 0 0 10 10;
+    -fx-background-radius: 0 0 10 10;
+}
+
+.ownHand .text {
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+.onEdge {
+    -fx-padding: 20;
 }
 
 .stone {
     -fx-fill: white;
     -fx-max-width: 20;
     -fx-max-height: 40;
+    -fx-arc-height: 7;
+    -fx-arc-width: 7;
 }
 
-#bottomPane {
-    -fx-pref-height: 200; /*TODO: Schlauer lösen! */
-    -fx-padding: 50 0 0 0;
+.shadow {
+    -fx-effect: dropshadow(gaussian, #00000066, 20, 0.1, 0, 0);
 }
 
 .RED {
@@ -94,4 +95,96 @@ Text {
 
 .stoneValue {
     -fx-font-weight: 700;
+}
+
+.opponentHand {
+    -fx-max-width: 600;
+    -fx-pref-width: 600;
+    -fx-min-width: 600;
+    -fx-max-height: 60;
+    -fx-pref-height: 60;
+    -fx-min-height: 60;
+    -fx-alignment: CENTER;
+    -fx-padding: 10;
+}
+
+
+/* ID selectors */
+
+#top {
+    -fx-max-height: 150;
+    -fx-pref-height: 150;
+    -fx-min-height: 150;
+}
+
+#middle {
+    -fx-max-height: 500;
+    -fx-pref-height: 500;
+    -fx-min-height: 500;
+}
+
+#bottom {
+    -fx-max-height: 250;
+    -fx-pref-height: 250;
+    -fx-min-height: 250;
+}
+
+#root {
+    -fx-background-image: url("images/backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
+}
+
+#timer {
+    -fx-font-size: 25;
+    -fx-fill: white;
+    -fx-font-weight: 700;
+}
+
+#errorPane {
+    -fx-alignment: CENTER;
+}
+
+#opponentLeft {
+    -fx-rotate: -90;
+}
+
+#opponentMid {
+
+}
+
+#opponentRight {
+    -fx-rotate: 90;
+    -fx-padding: 0 0;
+}
+
+#ownHand {
+    -fx-padding: 0 0 20 0;
+    -fx-background-color: black;
+    -fx-pref-width: 750;
+    -fx-max-width: 750;
+    -fx-min-width: 750;
+    -fx-border-radius: 10 10 0 0;
+    -fx-background-radius: 10 10 0 0;
+}
+
+#playerInfo {
+    -fx-fill: white;
+}
+
+#table {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-max-width: 100; /* increased by cells */
+}
+
+#tableContainer {
+    -fx-padding: 50;
+}
+
+#leftContainer {
+    -fx-padding: 0 0 0 -270;
+}
+
+#rightContainer {
+    -fx-padding: 0 -270 0 0;
 }
