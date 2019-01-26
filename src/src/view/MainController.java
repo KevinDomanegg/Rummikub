@@ -227,8 +227,17 @@ public class MainController implements Controller {
     client.sendRequest(new SimpleRequest(RequestID.DRAW));
   }
 
+  void sendTimerRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+  }
+
   void initPlayer(String serverIP, String name, int age) {
     client = new RummiClient(serverIP);
+    if (!client.isServerOK()) {
+      //showError("WRONG ADDRESS YOU JACKASS");
+      startController.setError("ip");
+      return;
+    }
     client.setGameInfoHandler(new GameInfoHandler(this));
     client.start();
     requestBuilder = new RequestBuilder(client);

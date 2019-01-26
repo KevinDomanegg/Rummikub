@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
@@ -56,6 +57,12 @@ public class StartController {
     private AnchorPane errorPane;
     @FXML
     private Text errorMessage;
+    @FXML
+    private Text ipERROR;
+    @FXML
+    private Text ageERROR;
+    @FXML
+    private Text nameERROR;
 
     public void initialize() {
         errorPane.setVisible(false);
@@ -63,6 +70,22 @@ public class StartController {
 
     void setMainController(MainController mainController) {
       this.mainController = mainController;
+    }
+
+    void setError(String error) {
+      switch(error) {
+        case "ip":
+          ipField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          ipERROR.setVisible(true);
+          return;
+        case "age":
+          ageField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          ageERROR.setVisible(true);
+          return;
+        case "name":
+          nameField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          nameERROR.setVisible(true);
+      }
     }
 
 //    private String ip;
@@ -107,7 +130,13 @@ public class StartController {
 //      }
       // error
       if (nameField.getText().equals("")) {
-        switchToErrorView("You must choose a username!");
+        setError("name");
+        return;
+      }
+      try {
+        Integer.parseInt(ageField.getText());
+      } catch (NumberFormatException e) {
+        setError("age");
         return;
       }
       mainController.initPlayer(ipField.getText(), nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
@@ -116,7 +145,16 @@ public class StartController {
     }
 
     @FXML private void hostGame() throws IOException {
-
+      if (nameField.getText().equals("")) {
+        setError("name");
+        return;
+      }
+      try {
+        Integer.parseInt(ageField.getText());
+      } catch (NumberFormatException e) {
+        setError("age");
+        return;
+      }
       ipField.setText("localhost");
       mainController.startServer();
       //   switchToWait(new ClientModel(true));
