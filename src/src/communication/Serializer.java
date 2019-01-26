@@ -11,28 +11,12 @@ import communication.request.Request;
 import communication.request.RequestID;
 
 /**
- * Class serializing Request- and GameInfo-Objects to Json's.
+ * Class serializing Request- and GameInfo-Objects to JSON.
  */
 public class Serializer {
 
-  public static void main(String[] args) {
-    Serializer ser = new Serializer();
-    String requestJson = (ser.serialize(new ConcreteMove(RequestID.HAND_MOVE, 0, 0, 10 ,10)));
-    String infoJson = (ser.serialize(new GameUsernames("Johannes", 0)));
-
-    System.out.println(requestJson);
-    System.out.println(infoJson);
-
-    Deserializer deser = new Deserializer();
-    GameInfo info = deser.deserializeInfo(infoJson);
-    Request request = deser.deserializeRequest(requestJson);
-
-    System.out.println(info);
-    System.out.println(request);
-  }
-
   /**
-   * Serializes a Request.
+   * Serializes a Request to JSON.
    *
    * @param request to be serialized
    * @return serialized representation of the Request
@@ -48,16 +32,18 @@ public class Serializer {
   }
 
   /**
-   * Serializes a GameInfo.
+   * Serializes a GameInfo to JSON.
    *
    * @param gameInfo to be serialized
    * @return serialized representation of the GameInfo
    */
   public String serialize(GameInfo gameInfo) {
+
     Gson gson;
     GsonBuilder builder = new GsonBuilder();
     builder.registerTypeAdapter(GameInfo.class, new InterfaceAdapter<GameInfo>());
     gson = builder.create();
+
     return gson.toJson(gameInfo, GameInfo.class);
   }
 }

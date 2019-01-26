@@ -13,9 +13,9 @@ public class Deserializer {
   private Gson gson;
 
   /**
-   * Deserializes GameInfos.
+   * Deserializes GameInfo's from JSON.
    *
-   * @param json representing a GameInfo
+   * @param json-String representing a GameInfo
    * @return a GameInfo
    */
   public GameInfo deserializeInfo(String json) {
@@ -26,9 +26,9 @@ public class Deserializer {
   }
 
   /**
-   * Deserializes Requests.
+   * Deserializes Request's form JSON.
    *
-   * @param json representing a GameInfo
+   * @param json-String representing a GameInfo
    * @return a GameInfo
    */
   public Request deserializeRequest(String json) {
