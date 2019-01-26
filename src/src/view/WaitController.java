@@ -118,7 +118,7 @@ public class WaitController implements Initializable {
       gameController.setNetworkController(networkController);
       networkController.setGameController(gameController);
 
-      Scene gameScene = new Scene(root, 1024, 768);
+      Scene gameScene = new Scene(root, 1500, 900);
       gameScene.getStylesheets().add("view/gameStyle.css");
       stage.setScene(gameScene);
       notifyAll();

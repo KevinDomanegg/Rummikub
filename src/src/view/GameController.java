@@ -1,25 +1,21 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 import network.client.RequestBuilder;
 
 import java.net.URISyntaxException;
@@ -115,25 +111,6 @@ public class GameController {
     timer_countDown.cancel();
   }
 
-  /* TODO: REMOVE TEST METHODS*/
-  StoneInfo[][] buildTestTable(int columns, int rows) {
-    StoneInfo[][] result = new StoneInfo[columns][rows];
-    for (int x = 0; x < columns; x=x+2) {
-      for (int y = 0; y < rows; y=y+2) {
-        StoneInfo cell = new StoneInfo("red", 5);
-        result[x][y] = cell;
-      }
-    }
-    return result;
-  }
-
-  ClientModel buildTestModel() {
-    ClientModel result = new ClientModel(false);
-    result.setHand(buildTestTable(20,2));
-    result.setTable(buildTestTable(40,8));
-    return result;
-  }
-
   public void returnToStart(boolean noServerAvailable) {
     if (noServerAvailable) {
       serverNotAvailable = true;
@@ -155,8 +132,6 @@ public class GameController {
    */
   @FXML
   public void initialize() {
-//    updateView();
-    //putStoneInCell((Pane) handGrid.getChildren().get(0), new StoneInfo("red", 5));
   }
 
   /**
@@ -195,6 +170,7 @@ public class GameController {
     Platform.runLater(() -> {
       grid.getChildren().clear();
     });
+
     StoneInfo[][] currentGrid;
     if (isTable) {
       currentGrid = model.getTable();
@@ -204,7 +180,6 @@ public class GameController {
 
     int columns = currentGrid.length;
     int rows = currentGrid[0].length;
-
 
     for (int x = 0; x < columns; x++) {
       for (int y = 0; y < rows; y++) {
@@ -233,7 +208,7 @@ public class GameController {
    * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, boolean isTable) {
-    // Get cell coordinates
+   // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
     int thisRow = GridPane.getRowIndex(cell);
 
@@ -245,6 +220,8 @@ public class GameController {
       mediaPlayer_pickupStone.stop();
       mediaPlayer_pickupStone.play();
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
+      Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null);
+      dragBoard.setDragView(cellSnapshot, cell.getWidth()*0.5, cell.getHeight()*0.9); //TODO: Remove magic numbers? Only for cursor pos tho
       ClipboardContent content = new ClipboardContent();
 
       // Get stone from model
@@ -272,25 +249,21 @@ public class GameController {
       event.consume();
     });
 
+    cell.setOnDragEntered(event -> {
+      cell.setStyle("-fx-background-color: #FFFFFF44");
+    });
+
+    cell.setOnDragExited(event -> {
+      cell.setStyle("-fx-background-color: none");
+    });
+
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
       mediaPlayer_dropStone.stop();
       mediaPlayer_dropStone.play();
+
       Dragboard dragboard = event.getDragboard();
       StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
-      /*
-      putStoneInCell(cell, sourceStone);
-
-//
-      // Set stone in model
-      StoneInfo[][] stoneGrid;
-      if (isTable) {
-        stoneGrid = model.getTable();
-      } else {
-        stoneGrid = model.getHand();
-      }
-      stoneGrid[thisColumn][thisRow] = sourceStone;
-      */
 
       // Get source cell's coordinates
 
@@ -298,22 +271,6 @@ public class GameController {
       sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
       int sourceRow = GridPane.getRowIndex(sourceCell);
-
-
-
-      /*
-      sourceCell.getChildren().clear();
-
-      if (isTable) {
-        stoneGrid = model.getTable();
-        stoneGrid[sourceColumn][sourceRow] = null;
-        model.setTable(stoneGrid);
-      } else {
-        stoneGrid = model.getHand();
-        stoneGrid[sourceColumn][sourceRow] = null;
-        model.setHand(stoneGrid);
-      }
-      */
 
 
         Parent sourceParent = sourceCell.getParent();
@@ -343,8 +300,7 @@ public class GameController {
     Rectangle stoneBackground = new Rectangle(20, 40);
     stoneBackground.getStyleClass().add("stone");
     Text stoneValue = new Text(Integer.toString(stone.getNumber()));
-    stoneValue.getStyleClass().add(stone.getColor());
-    stoneValue.getStyleClass().add("stoneValue");
+    stoneValue.getStyleClass().addAll("stoneValue", stone.getColor());
     cell.getChildren().add(stoneBackground);
     cell.getChildren().add(stoneValue);
     //STOP MUSIC

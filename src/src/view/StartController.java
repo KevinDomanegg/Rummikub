@@ -187,7 +187,7 @@ public class StartController {
           // send request to set a player
         reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
-          Scene gameScene = new Scene(root, 1024, 768);
+          Scene gameScene = new Scene(root, 1500, 900);
           stage.setScene(gameScene);
           stage.setOnCloseRequest(e -> {
             System.out.println("klicked  on x");

@@ -135,9 +135,14 @@ Text {
 }
 
 #timer {
-    -fx-font-size: 25;
+    -fx-font-size: 40;
     -fx-fill: white;
     -fx-font-weight: 700;
+}
+
+#timerDescription {
+    -fx-font-size: 25;
+    -fx-fill: white;
 }
 
 #errorPane {
@@ -179,6 +184,10 @@ Text {
 
 #tableContainer {
     -fx-padding: 50;
+}
+
+#timer {
+    -fx-font-weight: 700;
 }
 
 #leftContainer {

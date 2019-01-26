@@ -8,7 +8,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox fx:id="root"
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
@@ -21,11 +20,12 @@
         <StackPane alignment="TOP_CENTER">
           <children>
             <!-- timer -->
-            <StackPane alignment="TOP_LEFT" styleClass="onEdge">
+            <HBox alignment="CENTER_LEFT" styleClass="onEdge" spacing="15">
               <children>
-                <Text fx:id="timer" text="Timer: 30"/>
+                <Text fx:id="timerDescription" text="Timer:"/>
+                <Text fx:id="timer" text="60"/>
               </children>
-            </StackPane>
+            </HBox>
 
             <!-- mid opponent's hand -->
             <HBox fx:id="opponentMid" styleClass="hand, opponentHand, shadow"
