@@ -219,25 +219,17 @@ public class GameController {
       }
       mediaPlayer_pickupStone.stop();
       mediaPlayer_pickupStone.play();
+
+      // Enable cell for drag, load drag view for cursor
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
-      Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null);
-      dragBoard.setDragView(cellSnapshot, cell.getWidth()*0.5, cell.getHeight()*0.9); //TODO: Remove magic numbers? Only for cursor pos tho
+      Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null); //TODO: Improve snapshot
+      dragBoard.setDragView(cellSnapshot, cell.getWidth()*0.5, cell.getHeight()*0.9);
+
+      // Content unused, but mandatory for JavaFX's drag and drop functionality
       ClipboardContent content = new ClipboardContent();
+      content.put(stoneFormat, new StoneInfo("", 0));
+      dragBoard.setContent(content);
 
-      // Get stone from model
-      StoneInfo[][] stoneGrid;
-      if (isTable) {
-        stoneGrid = model.getTable();
-      } else {
-        stoneGrid = model.getHand();
-      }
-      StoneInfo cellContent = stoneGrid[thisColumn][thisRow];
-
-      if (cellContent != null) {
-        // Put stone on clipboard
-        content.put(stoneFormat, cellContent);
-        dragBoard.setContent(content);
-      }
       event.consume();
     });
 
@@ -249,24 +241,26 @@ public class GameController {
       event.consume();
     });
 
+    // Start hover style for cell (not possible by styleClass)
     cell.setOnDragEntered(event -> {
       cell.setStyle("-fx-background-color: #FFFFFF44");
     });
 
+    // Stop hover style for cell (not possible by styleClass)
     cell.setOnDragExited(event -> {
       cell.setStyle("-fx-background-color: none");
     });
 
-    // Put stone in target cell, notify server
+    // Put stone in target cell via server request
     cell.setOnDragDropped(event -> {
       mediaPlayer_dropStone.stop();
       mediaPlayer_dropStone.play();
 
+      // Content unused, but mandatory for JavaFX's drag and drop functionality
       Dragboard dragboard = event.getDragboard();
       StoneInfo sourceStone = (StoneInfo) dragboard.getContent(stoneFormat);
 
       // Get source cell's coordinates
-
       Pane sourceCell = (Pane) event.getGestureSource();
       sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
@@ -285,6 +279,9 @@ public class GameController {
         } else {
           requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
+        // TODO: enable table -> hand move e.g. for picking up jokers?
+
+
       event.consume();
     });
   }
@@ -333,34 +330,36 @@ public class GameController {
   }
 
   void setHandSizes(List<Integer> sizes) {
+    String handAddon = " X";
     model.setHandSizes(sizes);
     Platform.runLater(() -> {
       switch (sizes.size()) {
         case 4:
-          player3Hand.setText(sizes.get(3).toString());
+          player3Hand.setText(sizes.get(3).toString() + handAddon);
         case 3:
-          player2Hand.setText(sizes.get(2).toString());
+          player2Hand.setText(sizes.get(2).toString() + handAddon);
         case 2:
-          player1Hand.setText(sizes.get(1).toString());
+          player1Hand.setText(sizes.get(1).toString() + handAddon);
         case 1:
-          player0Hand.setText(sizes.get(0).toString());
+          player0Hand.setText(sizes.get(0).toString() + handAddon);
         default:
       }
     });
   }
 
   void setPlayerNames(List<String> names) {
-    player3Name.setText("H");
+    String nameAddon = ": ";
+    player3Name.setText("H"); // TODO: Why is that necessary?
     Platform.runLater(() -> {
       switch (names.size()) {
         case 4:
-          player3Name.setText(names.get(3));
+          player3Name.setText(names.get(3) + nameAddon);
         case 3:
-          player2Name.setText(names.get(2));
+          player2Name.setText(names.get(2) + nameAddon);
         case 2:
-          player1Name.setText(names.get(1));
+          player1Name.setText(names.get(1) + nameAddon);
         case 1:
-          player0Name.setText(names.get(0));
+          player0Name.setText(names.get(0) + nameAddon);
         default:
       }
     });
@@ -394,7 +393,7 @@ public class GameController {
       requestBuilder.sendResetRequest();
       //model.finishTurn();
     } else {
-      // error
+      // error TODO
     }
   }
 
