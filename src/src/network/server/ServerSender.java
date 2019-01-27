@@ -83,7 +83,7 @@ public class ServerSender extends Thread {
         }
       } catch (Exception e) {
         this.connected = false;
-        server.disconnectClient(this.id);
+//        server.disconnectClient(this.id);
       }
     }
     System.out.println("ServerSender terminated");

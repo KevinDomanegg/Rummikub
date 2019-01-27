@@ -4,6 +4,7 @@ import communication.gameinfo.StoneInfo;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Interface for a ShellController connecting the network to the client-model and view.
@@ -44,7 +45,7 @@ public interface Controller {
   /**
    * Notifies the controller that the game has started.
    */
-  void notifyGameStart() throws IOException;
+  void notifyGameStart();
 
   /**
    * Notifies the controller about the player that is currently playing.
@@ -61,4 +62,10 @@ public interface Controller {
    * @param bagSize number of stones in the bag
    */
   void setBagSize(int bagSize);
+
+  void noServerAvailable();
+
+  void showError(String errorMessage);
+
+  void showRank(List<Entry<Integer, Integer>> finalRank);
 }

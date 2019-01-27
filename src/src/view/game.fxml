@@ -31,9 +31,9 @@
             <HBox fx:id="opponentMid" styleClass="hand, opponentHand, shadow"
                   alignment="BOTTOM_CENTER">
               <children>
-                <Label fx:id="player2Name" styleClass="whiteText"
+                <Text fx:id="player2Name" styleClass="whiteText"
                        text="x"/>
-                <Label fx:id="player2Hand" styleClass="whiteText"
+                <Text fx:id="player2Hand" styleClass="whiteText"
                        text="x"/>
               </children>
             </HBox>
@@ -42,7 +42,7 @@
             <StackPane alignment="TOP_RIGHT" styleClass="onEdge">
               <children>
                 <Button fx:id="quitGame" mnemonicParsing="false"
-                        text="Quit" onMouseClicked="#quitButton"/>
+                        text="Quit" onMouseClicked="#quitGame"/>
               </children>
             </StackPane>
           </children>
@@ -59,9 +59,9 @@
             <!-- left opponent's hand -->
             <HBox fx:id="opponentLeft" styleClass="hand, opponentHand, shadow">
               <children>
-                <Label fx:id="player1Name" styleClass="whiteText"
+                <Text fx:id="player1Name" styleClass="whiteText"
                        text="x"/>
-                <Label fx:id="player1Hand" styleClass="whiteText" text="x"/>
+                <Text fx:id="player1Hand" styleClass="whiteText" text="x"/>
               </children>
             </HBox>
           </children>
@@ -73,8 +73,8 @@
               <!-- right opponent's hand -->
               <HBox fx:id="opponentRight" styleClass="hand, opponentHand, shadow">
                 <children>
-                  <Label fx:id="player3Name" styleClass="whiteText" text="x"/>
-                  <Label fx:id="player3Hand" styleClass="whiteText" text="x"/>
+                  <Text fx:id="player3Name" styleClass="whiteText" text="x"/>
+                  <Text fx:id="player3Hand" styleClass="whiteText" text="x"/>
                 </children>
               </HBox>
           </children>
@@ -106,7 +106,7 @@
               </children>
             </VBox>
             <!-- table grid -->
-            <GridPane fx:id="table" alignment="CENTER">
+            <GridPane fx:id="tableGrid" alignment="CENTER">
               <children>
                 <!-- Position elements with GridPane.columnIndex="x" GridPane.rowIndex="y" -->
               </children>
@@ -140,6 +140,7 @@
                             onMouseClicked="#sendSortHandByGroupRequest"/>
                     <Button fx:id="sortHandByRunButton" text="Run"
                             onMouseClicked="#sendSortHandByRunRequest"/>
+                    <Button fx:id="testRankButton" text="testRank" onMouseClicked="#showRank"/>
                   </children>
                 </HBox>
               </children>
@@ -148,8 +149,8 @@
             <VBox fx:id="ownHand" styleClass="shadow" alignment="TOP_CENTER">
               <!-- hand of executing player -->
               <children>
-                <Label fx:id="player0Name" styleClass="whiteText" text="x"/>
-                <Label fx:id="player0Hand" styleClass="whiteText" text="x"/>
+                <Text fx:id="player0Name" styleClass="whiteText" text="x"/>
+                <Text fx:id="player0Hand" styleClass="whiteText" text="x"/>
                 <GridPane fx:id="handGrid" styleClass="hand"
                           alignment="CENTER">
                   <!-- Own hand -->

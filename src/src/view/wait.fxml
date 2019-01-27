@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="root" prefHeight="909.0" prefWidth="999.0" stylesheets="@/view/waitStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WaitController">
    <children>
-      <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="Joining game">
+      <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="Waiting for Game Start...">
          <font>
             <Font size="36.0" />
          </font>
@@ -58,5 +58,6 @@
         <ImageView fitHeight="300.0" fitWidth="300.0" layoutX="553.0" layoutY="269.0" pickOnBounds="true" preserveRatio="true">
             <Image url="@/view/images/dog_dancing_gif.gif" />
         </ImageView>
+      <Button layoutX="838.0" layoutY="26.0" mnemonicParsing="false" onMouseClicked="#quitWating" prefHeight="38.0" prefWidth="72.0" text="Quit" />
    </children>
 </AnchorPane>

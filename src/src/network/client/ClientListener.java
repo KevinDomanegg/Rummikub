@@ -7,6 +7,7 @@ import communication.gameinfo.SimpleGameInfo;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
 
+import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;

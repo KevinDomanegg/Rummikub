@@ -1,20 +1,19 @@
 package network.client;
 
 import communication.gameinfo.*;
-import view.NetworkController;
+import view.Controller;
 
 public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
 
-  private NetworkController controller;
+  private Controller controller;
 //  private RummiController controller;
 
 //  public GameInfoHandler(RummiController controller) {
 //    this.controller = controller;
 //  }
 
-  public GameInfoHandler(NetworkController controller) {
+  public GameInfoHandler(Controller controller) {
     this.controller = controller;
-//    this.client = client;
   }
 
   void applyGameInfo(Object gameInfo) {
@@ -28,10 +27,11 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         System.out.println("handling table");
         controller.setTable(((GridInfo) gameInfo).getGrid());
         return;
-      case INVALID_MOVE:
-        System.out.println("handling invalid");
-        controller.notifyInvalidMove();
-        controller.notifyTurn();
+      case ERROR:
+        System.out.println("handling error");
+        controller.showError(((ErrorInfo) gameInfo).getErrorMessage());
+//        controller.notifyInvalidMove();
+//        controller.notifyTurn();
         return;
       case BAG:
         System.out.println("handling bag");
@@ -63,6 +63,8 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
       case SERVER_NOT_AVAILABLE:
         controller.noServerAvailable();
         return;
+      case RANK:
+        controller.showRank(((RankInfo) gameInfo).getFinalRank());
 //      case IP_ADDRESS:
 //        System.out.println("handling ip");
 //        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
@@ -71,8 +73,6 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
 //        System.out.println("handling username");
 //          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
       default:
-        System.out.println("handling default");
-        break;
     }
     System.out.println("Info handled");
   }
