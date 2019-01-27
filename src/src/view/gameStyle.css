@@ -26,6 +26,16 @@ Text {
 
 /* Class selectors */
 
+.activeOpponent {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.activeOwnHand {
+    -fx-border-color: white;
+    -fx-border-width: 2 2 0 2;
+}
+
 .cell {
     -fx-border-color: white;
     -fx-fill: none;
@@ -52,9 +62,11 @@ Text {
     -fx-background-radius: 0 0 10 10;
 }
 
-.ownHand .text {
+.whiteText {
     -fx-fill: white;
     -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-font-weight: 700;
 }
 
 .onEdge {
@@ -159,7 +171,6 @@ Text {
 
 #opponentRight {
     -fx-rotate: 90;
-    -fx-padding: 0 0;
 }
 
 #ownHand {
