@@ -31,9 +31,9 @@
             <HBox fx:id="opponentMid" styleClass="hand, opponentHand, shadow"
                   alignment="BOTTOM_CENTER">
               <children>
-                <Text fx:id="player2Name" styleClass="whiteText"
+                <Text fx:id="midPlayerName" styleClass="whiteText"
                        text="x"/>
-                <Text fx:id="player2Hand" styleClass="whiteText"
+                <Text fx:id="midPlayerHand" styleClass="whiteText"
                        text="x"/>
               </children>
             </HBox>
@@ -59,9 +59,9 @@
             <!-- left opponent's hand -->
             <HBox fx:id="opponentLeft" styleClass="hand, opponentHand, shadow">
               <children>
-                <Text fx:id="player1Name" styleClass="whiteText"
+                <Text fx:id="leftPlayerName" styleClass="whiteText"
                        text="x"/>
-                <Text fx:id="player1Hand" styleClass="whiteText" text="x"/>
+                <Text fx:id="leftPlayerHand" styleClass="whiteText" text="x"/>
               </children>
             </HBox>
           </children>
@@ -73,8 +73,8 @@
               <!-- right opponent's hand -->
               <HBox fx:id="opponentRight" styleClass="hand, opponentHand, shadow">
                 <children>
-                  <Text fx:id="player3Name" styleClass="whiteText" text="x"/>
-                  <Text fx:id="player3Hand" styleClass="whiteText" text="x"/>
+                  <Text fx:id="rightPlayerName" styleClass="whiteText" text="x"/>
+                  <Text fx:id="rightPlayerHand" styleClass="whiteText" text="x"/>
                 </children>
               </HBox>
           </children>
@@ -146,11 +146,11 @@
               </children>
             </VBox>
 
-            <VBox fx:id="ownHand" styleClass="shadow" alignment="TOP_CENTER">
+            <VBox fx:id="ownBoard" styleClass="shadow" alignment="TOP_CENTER">
               <!-- hand of executing player -->
               <children>
-                <Text fx:id="player0Name" styleClass="whiteText" text="x"/>
-                <Text fx:id="player0Hand" styleClass="whiteText" text="x"/>
+                <Text fx:id="ownName" styleClass="whiteText" text="x"/>
+                <Text fx:id="ownHand" styleClass="whiteText" text="x"/>
                 <GridPane fx:id="handGrid" styleClass="hand"
                           alignment="CENTER">
                   <!-- Own hand -->

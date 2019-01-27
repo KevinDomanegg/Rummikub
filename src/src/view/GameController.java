@@ -31,14 +31,14 @@ public class GameController {
   @FXML private HBox opponentMid;
   @FXML private HBox opponentLeft;
 
-  @FXML private Text player0Name;
-  @FXML private Text player0Hand;
-  @FXML private Text player1Name;
-  @FXML private Text player2Name;
-  @FXML private Text player3Name;
-  @FXML private Text player1Hand;
-  @FXML private Text player2Hand;
-  @FXML private Text player3Hand;
+  @FXML private Text ownName;
+  @FXML private Text ownHand;
+  @FXML private Text leftPlayerName;
+  @FXML private Text midPlayerName;
+  @FXML private Text rightPlayerName;
+  @FXML private Text leftPlayerHand;
+  @FXML private Text midPlayerHand;
+  @FXML private Text rightPlayerHand;
 
   @FXML private Text timer;
   @FXML private GridPane tableGrid;
@@ -288,37 +288,41 @@ public class GameController {
 //  }
 
   void setHandSizes(List<Integer> sizes) {
+    ownHand.setText(String.valueOf(sizes.get(0)));
     switch (sizes.size()) {
       case 4:
-        player3Hand.setText(sizes.get(3).toString());
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
+        midPlayerHand.setText(String.valueOf(sizes.get(2)));
+        rightPlayerHand.setText(String.valueOf(sizes.get(3)));
+        return;
       case 3:
-        player2Hand.setText(sizes.get(2).toString());
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
+        rightPlayerHand.setText(String.valueOf(sizes.get(2)));
+        return;
       case 2:
-        player1Hand.setText(sizes.get(1).toString());
-      case 1:
-        player0Hand.setText(sizes.get(0).toString());
+        midPlayerHand.setText(String.valueOf(sizes.get(1)));
       default:
     }
   }
 
   void setPlayerNames(List<String> names) {
-    player0Name.setText(names.get(0));
+    ownName.setText(names.get(0));
     switch (names.size()) {
       case 4:
-        player3Name.setText(names.get(3));
-        player2Name.setText(names.get(2));
-        player1Name.setText(names.get(1));
+        leftPlayerName.setText(names.get(1));
+        midPlayerName.setText(names.get(2));
+        rightPlayerName.setText(names.get(3));
         return;
       case 3:
-      opponentMid.setVisible(false);
-      player1Name.setText(names.get(1));
-      player3Name.setText(names.get(2));
+        opponentMid.setVisible(false);
+        leftPlayerName.setText(names.get(1));
+        rightPlayerName.setText(names.get(2));
         return;
       case 2:
       opponentMid.setVisible(true);
       opponentLeft.setVisible(false);
       opponentRight.setVisible(false);
-      player2Name.setText(names.get(1));
+      midPlayerName.setText(names.get(1));
       default:
     }
   }
