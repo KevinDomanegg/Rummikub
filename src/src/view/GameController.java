@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -45,6 +46,7 @@ public class GameController {
   @FXML private GridPane handGrid;
   @FXML private VBox errorPane;
   @FXML private Text errorMessage;
+  @FXML private VBox ownBoard;
 
 //  private NetworkController networkController;
   private MainController mainController;
@@ -87,7 +89,7 @@ public class GameController {
 //
 //              public void run() {
 //                if (interval == 0) {
-//                  if (model.isMyTurn()) {
+//                  if (model.yourTurn()) {
 //                    requestBuilder.sendTimeOutRequest();
 //                    model.finishTurn();
 //                  }
@@ -121,6 +123,15 @@ public class GameController {
     mainController.quit();
   }
 
+
+  void yourTurn() {
+    ownBoard.setStyle("-fx-border-color: green ; -fx-border-width: 2px ;");
+  }
+
+  private void endOfYourTurn() {
+    ownBoard.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+  }
+
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
@@ -144,6 +155,7 @@ public class GameController {
   public void drawStone() {
     Music.playSoundOf("draw stone");
     mainController.sendDrawRequest();
+    endOfYourTurn();
   }
 
   /**
@@ -260,7 +272,6 @@ public class GameController {
           mainController.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
       }
-
       event.consume();
     });
   }
@@ -342,13 +353,21 @@ public class GameController {
   }
 
   void notifyCurrentPlayer(int playerID) {
+//    switch (playerID) {
+//      case 1:
+//        if (opponentMid.isVisible()) {
+//          opponentMid.blinkblink();
+//        } else {
+//          opponentLeft.blinkblink();
+//        }
+    }
 //    model.setCurrentPlayer(playerID);
 //    // set up the timer
 //    timer_countDown.cancel();
 //    timer_task.cancel();
 //    setTimer();
 //    // show current player on view
-  }
+//  }
 
   @FXML
   private void sendResetRequest() {
@@ -358,6 +377,7 @@ public class GameController {
   @FXML
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
+    endOfYourTurn();
   }
 
   //TODO

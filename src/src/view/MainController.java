@@ -199,7 +199,7 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyTurn() {
-//      gameController.notifyTurn();
+    gameController.yourTurn();
   }
 
   /**
