@@ -3,27 +3,33 @@ package view;
 import communication.gameinfo.StoneInfo;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
-import javafx.scene.media.Media;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.music.Music;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameController {
+
+  @FXML private HBox opponentRight;
+  @FXML private HBox opponentMid;
+  @FXML private HBox opponentLeft;
 
   @FXML private Text player0Name;
   @FXML private Text player0Hand;
@@ -34,7 +40,7 @@ public class GameController {
   @FXML private Text player2Hand;
   @FXML private Text player3Hand;
 
-  @FXML Text timer;
+  @FXML private Text timer;
   @FXML private GridPane tableGrid;
   @FXML private GridPane handGrid;
   @FXML private VBox errorPane;
@@ -45,11 +51,6 @@ public class GameController {
 //  private ClientModel model;
 //  private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
-
-  // MUSIC
-  private Media sound_pickupStone;
-  private Media sound_dropStone;
-  private Media sound_drawStone;
 
   // TIMER
   private Timer timer_countDown;
@@ -147,9 +148,9 @@ public class GameController {
   /**
    * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-   * @param grid    The FXML GridPane where the cells shall be constructed in
-   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
-   */
+//   * @param grid    The FXML GridPane where the cells shall be constructed in
+//   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
+//   */
   @FXML
   void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
     Platform.runLater(() -> pane.getChildren().clear());
@@ -182,9 +183,9 @@ public class GameController {
   /**
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
-   * @param cell    Pane where the event shall be registered
-   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
-   */
+//   * @param cell    Pane where the event shall be registered
+//   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+//   */
   private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
     // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
@@ -301,15 +302,23 @@ public class GameController {
   }
 
   void setPlayerNames(List<String> names) {
+    player0Name.setText(names.get(0));
     switch (names.size()) {
       case 4:
         player3Name.setText(names.get(3));
-      case 3:
         player2Name.setText(names.get(2));
-      case 2:
         player1Name.setText(names.get(1));
-      case 1:
-        player0Name.setText(names.get(0));
+        return;
+      case 3:
+      opponentMid.setVisible(false);
+      player1Name.setText(names.get(1));
+      player3Name.setText(names.get(2));
+        return;
+      case 2:
+      opponentMid.setVisible(true);
+      opponentLeft.setVisible(false);
+      opponentRight.setVisible(false);
+      player2Name.setText(names.get(1));
       default:
     }
   }
