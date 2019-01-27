@@ -4,6 +4,7 @@ import communication.gameinfo.GameInfoID;
 import communication.gameinfo.SimpleGameInfo;
 import communication.Serializer;
 import communication.request.Request;
+import communication.request.SimpleRequest;
 
 import java.io.*;
 import java.net.Socket;
@@ -89,6 +90,7 @@ public class RummiClient extends Thread {
   }
 
   public synchronized void disconnect() {
+    gameInfoHandler.applyGameInfo(new SimpleGameInfo(GameInfoID.SERVER_NOT_AVAILABLE));
     listener.disconnect();
     this.connected = false;
     notifyAll();
