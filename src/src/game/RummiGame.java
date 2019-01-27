@@ -240,6 +240,7 @@ public class RummiGame implements Game {
     while (!trace.empty()) {
       undo();
     }
+    currentPoints = 0;
   }
 
   /** undoes the last move of the current player. */
