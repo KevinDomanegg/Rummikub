@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 public interface Game {
 
-  void setPlayer(String name, int age);
+  void setPlayer(int playerID, String name, int age);
 
   void start();
 

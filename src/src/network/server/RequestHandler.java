@@ -55,7 +55,7 @@ class RequestHandler {
         return;
       case SET_PLAYER:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-        game.setPlayer(setPlayer.getName(), setPlayer.getAge());
+        game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge());
 //        sendPlayerNamesToAll();
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
 //        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
