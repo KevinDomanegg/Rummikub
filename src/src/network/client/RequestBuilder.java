@@ -47,4 +47,11 @@ public class RequestBuilder {
   }
 
 
+  public void sendSortHandByGroupRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.SORT_HAND_BY_GROUP));
+  }
+
+  public void sendSortHandByRunRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.SORT_HAND_BY_RUN));
+  }
 }

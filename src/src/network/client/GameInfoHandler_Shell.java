@@ -24,7 +24,7 @@ class GameInfoHandler_Shell {
       case TABLE:
         shellController.setTable(((GridInfo) gameinfo).getGrid());
         return;
-      case INVALID_MOVE:
+      case ERROR:
         shellController.printWrongMove();
         return;
       case BAG:

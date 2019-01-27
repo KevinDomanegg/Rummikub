@@ -12,7 +12,6 @@ public class Stone {
     this.number = number;
   }
 
-
   public Stone() {
     color = Color.JOKER;
     number = JOKER_POINTS;
@@ -26,11 +25,9 @@ public class Stone {
     return number;
   }
 
-
-  //Testmethods
-
+  // Testmethods
   @Override
   public String toString() {
-    return "(Color: " + color + "," + "Number: " + " " + number +")";
+    return "(Color: " + color + ", " + "Number: " + " " + number +")";
   }
 }

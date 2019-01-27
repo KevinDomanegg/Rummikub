@@ -5,11 +5,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
@@ -18,7 +17,6 @@ import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.URISyntaxException;
@@ -30,23 +28,21 @@ import java.net.UnknownHostException;
  */
 public class StartController {
 
-    private RummiClient client;
-    private RummiServer server;
-    private Stage stage;
+  private Stage stage;
 
-  private Main main;
-  //private Media sound = new Media(new File("C:\\Users\\Angelos Kafounis\\Desktop\\rummikub---currygang\\src\\src\\view\\waitingMusic.mp3").toURI().toString());
-  private Media sound;
+  //private Main main;
+  //private Media sound;
+  private MainController mainController;
 
-  {
-    try {
-      sound = new Media((getClass().getResource("waitingMusic.mp3")).toURI().toString());
-    } catch (URISyntaxException e) {
-      e.printStackTrace();
-    }
-  }
+//  {
+//    try {
+//      sound = new Media((getClass().getResource("waitingMusic.mp3")).toURI().toString());
+//    } catch (URISyntaxException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
-  private MediaPlayer mediaPlayer = new MediaPlayer(sound);
+  //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
   @FXML
@@ -61,10 +57,35 @@ public class StartController {
     private AnchorPane errorPane;
     @FXML
     private Text errorMessage;
-
     @FXML
+    private Text ipERROR;
+    @FXML
+    private Text ageERROR;
+    @FXML
+    private Text nameERROR;
+
     public void initialize() {
         errorPane.setVisible(false);
+    }
+
+    void setMainController(MainController mainController) {
+      this.mainController = mainController;
+    }
+
+    void setError(String error) {
+      switch(error) {
+        case "ip":
+          ipField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          ipERROR.setVisible(true);
+          return;
+        case "age":
+          ageField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          ageERROR.setVisible(true);
+          return;
+        case "name":
+          nameField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+          nameERROR.setVisible(true);
+      }
     }
 
 //    private String ip;
@@ -90,31 +111,54 @@ public class StartController {
 //      }
 //    }
 
-    void returnToStart() {
-      try {
-        main.hostJoinStage(stage);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+    void returnToStart(Stage primaryStage) {
+//      primaryStagetry {
+//        main.hostJoinStage(primaryStage); // new stage or just stage???
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
     }
 
     @FXML
     void joinGame() throws IOException {
-        switchToWait(new ClientModel(false));
-        main.stopMusic();
+      // music
+//      main.stopMusic();
+//      try {
+//        ipField.setText(Inet4Address.getLocalHost().getHostAddress());
+//      } catch (UnknownHostException e) {
+//        e.printStackTrace();
+//      }
+      // error
+      if (nameField.getText().equals("")) {
+        setError("name");
+        return;
+      }
+      try {
+        Integer.parseInt(ageField.getText());
+      } catch (NumberFormatException e) {
+        setError("age");
+        return;
+      }
+      mainController.initPlayer(ipField.getText(), nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
+//      mainController.switchToWaitScene();
+//      switchToWait(new ClientModel(false));
     }
 
-    @FXML
-    void hostGame() throws IOException {
-       server = new RummiServer();
-       server.start();
-       main.stopMusic();
-       try {
-           ipField.setText(Inet4Address.getLocalHost().getHostAddress());
-       } catch (UnknownHostException e) {
-           e.printStackTrace();
-       }
-        switchToWait(new ClientModel(true));
+    @FXML private void hostGame() throws IOException {
+      if (nameField.getText().equals("")) {
+        setError("name");
+        return;
+      }
+      try {
+        Integer.parseInt(ageField.getText());
+      } catch (NumberFormatException e) {
+        setError("age");
+        return;
+      }
+      ipField.setText("localhost");
+      mainController.startServer();
+      //   switchToWait(new ClientModel(true));
+      joinGame();
     }
 
     @FXML
@@ -124,67 +168,75 @@ public class StartController {
         vContainer.setVisible(false);
     }
 
-    void stopMusic() {
-      mediaPlayer.stop();
-    }
+//    void stopMusic() {
+//      mediaPlayer.stop();
+//    }
+//
+//    void muteMusic() {
+//      mediaPlayer.pause();
+//    }
+//
+//    void unMuteMusic() {
+//      mediaPlayer.play();
+//    }
+//
+//  public void setMain(Main main) {
+//      this.main = main;
+//  }
 
-    private void switchToWait(ClientModel model) throws IOException {
-        try {
-        // Create local the Client and then pass it to: RequestBuilder and NetworkController
-        client = new RummiClient(ipField.getText());
-        model.setServerIP(ipField.getText());
-        // Create a RequestBuilder
-        RequestBuilder reqBuilder = new RequestBuilder(client);
+  /*private void switchToWait(ClientModel model) throws IOException {
+      try {
+      // Create local the Client and then pass it to: RequestBuilder and NetworkController
+      RummiClient client = new RummiClient(ipField.getText());
+      if (!client.isServerOK()) {
+        switchToErrorView("THERE IS NO SERVER!");
+        return;
+      }
+      model.setServerIP(ipField.getText());
+      // Create a RequestBuilder
+      RequestBuilder reqBuilder = new RequestBuilder(client);
 
-      NetworkController networkController = new NetworkController(client);
-      networkController.setStartController(this);
-      System.out.println("Client:" + nameField.getText() + " started");
+    NetworkController networkController = new NetworkController(client);
+    networkController.setStartController(this);
+    main.setNetworkController(networkController);
+    System.out.println("Client:" + nameField.getText() + " started");
 
-      //A LITTLE MUSIC
-      mediaPlayer.play();
+    //A LITTLE MUSIC
+    mediaPlayer.play();
 
-        //Stage stage = (Stage) nameField.getScene().getWindow();
-      stage = (Stage) nameField.getScene().getWindow();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("wait.fxml"));
-        Parent root = loader.getRoot();
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        WaitController waitController = loader.getController();
-        waitController.setNetworkController(networkController);
-        networkController.setWaitController(waitController);
-        waitController.setRequestBuilder(reqBuilder);
-        waitController.setModel(model);
+    Stage stage = (Stage) nameField.getScene().getWindow();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("wait.fxml"));
+      Parent root = loader.getRoot();
+      try {
+          root = loader.load();
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+      WaitController waitController = loader.getController();
+      waitController.setNetworkController(networkController);
+      networkController.setWaitController(waitController);
+      waitController.setRequestBuilder(reqBuilder);
+      waitController.setModel(model);
 
         // send request to set a player
-        reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
+      reqBuilder.sendSetPlayerRequest(nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
 
         Scene gameScene = new Scene(root, 1024, 768);
         stage.setScene(gameScene);
-        } catch(NumberFormatException ex) {
-            switchToErrorView("age has to be a number");
-        }
-    }
-
-    void killThreads() {
-        if (client != null) {
-            client.disconnect();
-        }
-        if (server != null) {
-            server.suicide();
-        }
-    }
-
-    @FXML
-    void handleOkButton() {
-        vContainer.setVisible(true);
-        errorPane.setVisible(false);
-
-    }
-
-  public void setMain(Main main) {
-      this.main = main;
+        stage.setOnCloseRequest(e -> {
+          System.out.println("klicked  on x");
+          //killThreads();
+          networkController.killThreads();
+          Platform.exit();
+        });
+      } catch(NumberFormatException ex) {
+          switchToErrorView("Age has to be a number!");
+      }
+  }
+*/
+  @FXML
+  void handleOkButton() {
+    vContainer.setVisible(true);
+    errorPane.setVisible(false);
   }
 }

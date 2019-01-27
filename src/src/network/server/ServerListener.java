@@ -1,10 +1,13 @@
 package network.server;
 
+import communication.Deserializer;
 import communication.request.Request;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class ServerListener extends Thread {
   private RummiServer server;
@@ -12,7 +15,8 @@ public class ServerListener extends Thread {
   private int id;
   private boolean connected = false;
   private Request request;
-  ObjectInputStream in;
+  private Scanner in;
+  private Deserializer deserializer;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -35,20 +39,23 @@ public class ServerListener extends Thread {
 
     try {
 
-      in = new ObjectInputStream(clientIn.getInputStream());
+      deserializer = new Deserializer();
+      in = new Scanner(clientIn.getInputStream());
       this.connected = true;
 
       while (connected) {
-        Object o = null;
+        String json = null;
         try {
-          o = in.readObject();
-          request = (Request) o;
-        } catch (ClassNotFoundException | ClassCastException e) {
-          connected = false;
+          json = in.nextLine();
+          request = deserializer.deserializeRequest(json);
+        } catch (ClassCastException  | NoSuchElementException e) {
+          //disconnect();
+          server.disconnectClient(id);
         }
 
-        if (o == null) {
+        if (json == null) {
           System.out.println("Client " + id + " not connected");
+          System.out.println("ServerListener just got a NULL value");
           this.connected = false;
           server.disconnectClient(id);
           break;
@@ -59,8 +66,8 @@ public class ServerListener extends Thread {
 
       }
     } catch (IOException e) {
-      //this.connected = false;
-      server.disconnectClient(id);
+      this.connected = false;
+      //server.disconnectClient(id);
     }
     System.out.println("ServerListener terminated");
   }

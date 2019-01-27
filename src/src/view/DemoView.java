@@ -1,6 +1,8 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import javafx.fxml.FXML;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

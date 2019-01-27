@@ -1,29 +1,23 @@
 package view;
 
-import communication.gameinfo.StoneInfo;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import network.client.RequestBuilder;
-
-import java.io.IOException;
+import view.music.Music;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class WaitController implements Initializable {
 
-  private RequestBuilder requestBuilder;
-  private NetworkController networkController;
+//  private RequestBuilder requestBuilder;
+//  private NetworkController networkController;
+  private MainController mainController;
 
-  private ClientModel model;
+//  private ClientModel model;
 
   @FXML
   private Label waitingState;
@@ -47,26 +41,38 @@ public class WaitController implements Initializable {
   private Text player3;
 
   @FXML
+  private Button notMuteButton;
+
+  @FXML
+  private Button muteButton;
+
+  private Stage stage;
+
+  @FXML
   private void startGame() {
-    requestBuilder.sendStartRequest();
+    mainController.sendStartRequest();
   }
 
-  void setNetworkController(NetworkController networkController) {
-    this.networkController = networkController;
+//  void setNetworkController(NetworkController networkController) {
+//    this.networkController = networkController;
+//  }
+
+  void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
-  void setRequestBuilder(RequestBuilder requestBuilder) {
-    this.requestBuilder = requestBuilder;
-  }
+//  void setRequestBuilder(RequestBuilder requestBuilder) {
+//    this.requestBuilder = requestBuilder;
+//  }
 
-  void returnToStartView() {
-    networkController.returnToStartView();
+  Stage getStage() {
+    return stage;
   }
 
   void setPlayerNames(List<String> names) {
-    model.setPlayerNames(names);
-    int size = names.size();
-    switch (size) {
+    System.out.println(names);
+//    model.setPlayerNames(names);
+    switch (names.size()) {
       case 4:
         player3.setText(names.get(3));
       case 3:
@@ -77,79 +83,111 @@ public class WaitController implements Initializable {
         player0.setText(names.get(0));
       default:
     }
-    if (model.isHost()) {
-      if (size > 1) {
-        // start button visible
-        startGameButton.setVisible(true);
-        return;
-      }
-    }
+//    Platform.runLater(() -> {
+//    });
+//    if (model.isHost()) {
+//      if (size > 1) {
+//        // start button visible
+//        startGameButton.setVisible(true);
+//        return;
+//      }
+//    }
     // start button not visible
-    startGameButton.setVisible(false);
+//    startGameButton.setVisible(false);
   }
 
- synchronized void switchToGameView() {
-    networkController.stopMusicInWaiting();
-    synchronized (networkController) {
-      Stage stage = (Stage) startGameButton.getScene().getWindow();
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
-      Parent root = loader.getRoot();
-      //loader.setRoot(this);
-      try {
-        root = loader.load();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
-      GameController gameController = loader.getController();
-      gameController.setModel(model);
-
-      gameController.setRequestBuilder(requestBuilder);
-      gameController.setNetworkController(networkController);
-      networkController.setGameController(gameController);
-
-      Scene gameScene = new Scene(root, 1024, 768);
-      gameScene.getStylesheets().add("view/gameStyle.css");
-      stage.setScene(gameScene);
-      notifyAll();
-      //System.out.println("switched to game");
-    }
-  }
+// synchronized void switchToGameView() {
+//    networkController.stopMusicInWaiting();
+//    synchronized (networkController) {
+//      stage = (Stage) startGameButton.getScene().getWindow();
+//      FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+//      Parent root = loader.getRoot();
+//      loader.setRoot(this);
+//      try {
+//        root = loader.load();
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+//
+//      GameController gameController = loader.getController();
+//      gameController.setModel(model);
+//
+//      gameController.setRequestBuilder(requestBuilder);
+//      gameController.setNetworkController(networkController);
+//      networkController.setGameController(gameController);
+//
+//      Scene gameScene = new Scene(root, 1024, 768);
+//      gameScene.getStylesheets().add("view/gameStyle.css");
+//      stage.setScene(gameScene);
+//      notifyAll();
+//      System.out.println("switched to game");
+//       stage.setOnCloseRequest(e -> {
+//        System.out.println("klicked  on x");
+//        // Closes the Timer
+//        gameController.stopTimer();
+//        networkController.killThreads();
+//        Platform.exit();
+//      });
+//    }
+//
+//  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     //ipAddress.setText();
   }
 
-  void setModel(ClientModel model) {
-    this.model = model;
-    if (model.isHost()) {
-      waitingState.setText("hosting Game");
-    }
-    ipAddress.setText(model.getServerIP());
+//  void setModel(ClientModel model) {
+//    this.model = model;
+//    if (model.isHost()) {
+//      waitingState.setText("Hosting Game");
+//    }
+//    ipAddress.setText(model.getServerIP());
+//  }
+
+//  public void setTable(StoneInfo[][] table) {
+//    model.setTable(table);
+//  }
+
+//  public void setPlayerHand(StoneInfo[][] hand) {
+//    model.setHand(hand);
+//  }
+
+//  public void notifyTurn() {
+//    model.notifyTurn();
+//  }
+
+//  public void notifyCurrentPlayer(int playerID) {
+//    model.setCurrentPlayer(playerID);
+//  }
+
+//  public void setHandSizes(List<Integer> sizes) {
+//    model.setHandSizes(sizes);
+//  }
+
+//  public void setBagSize(int bagSize) {
+//    model.setBagSize(bagSize);
+//  }
+
+  @FXML
+  private void mute() {
+    Music.muteSoundOfWait();
+    muteButton.setVisible(false);
+    notMuteButton.setVisible(true);
   }
 
-  public void setTable(StoneInfo[][] table) {
-    model.setTable(table);
+  @FXML
+  private void unMute() {
+    Music.playMusicNow();
+    notMuteButton.setVisible(false);
+    muteButton.setVisible(true);
   }
 
-  public void setPlayerHand(StoneInfo[][] hand) {
-    model.setHand(hand);
+  @FXML private void quitWating() {
+    mainController.quit();
   }
 
-  public void notifyTurn() {
-    model.notifyTurn();
-  }
-
-  public void notifyCurrentPlayer(int playerID) {
-    model.setCurrentPlayer(playerID);
-  }
-
-  public void setHandSizes(List<Integer> sizes) {
-    model.setHandSizes(sizes);
-  }
-
-  public void setBagSize(int bagSize) {
-    model.setBagSize(bagSize);
+  void setServerIP(String serverIP) {
+    ipAddress.setText(serverIP);
   }
 }

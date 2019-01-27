@@ -33,23 +33,23 @@ class Player {
 
   private Coordinate nextFreeCoordinate(Map<Coordinate, Stone> stones){
     Coordinate coordinate;
-    for (int x = 0; x < hand.getWidth(); x++){
-      for (int y = 0; y < hand.getHeight(); y++){
-        coordinate = new Coordinate(x, y);
+    for (int row = 0; row < hand.getHeight(); row++){
+      for (int col = 0; col < hand.getWidth(); col++){
+        coordinate = new Coordinate(col, row);
         if (!stones.containsKey(coordinate)) {
           return coordinate;
         }
       }
     }
-    return null;
+    throw new IndexOutOfBoundsException("Hand is full.");
   }
 
   /**
    * moves stone from the given sourcePosition to the given targetPosition o.
    * If a stone at the targetPosition already exist, it will be swapped.
    *
-   * @param sourcePosition
-   * @param targetPosition
+   * @param sourcePosition the position of the subject stone before moving it
+   * @param targetPosition the position of the subject stone after moving it
    */
   void moveStone(Coordinate sourcePosition, Coordinate targetPosition) {
     // save the chosen stone
@@ -110,13 +110,43 @@ class Player {
   }
 
   /**
-   * gives the sum of all of the points of stones on this player's hand
+   * gives the sum of all of the points of stones on this player's hand.
    *
-   * @return the sum of the points of stones on this player's hand.
+   * @return the sum of the points of stones on this player's hand
    */
   int getPoints() {
     // all points of stones represent a negative number
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
     //how do I change the negative points for the Joker?
+  }
+
+  void sortHandByGroup() {
+    hand.sortByGroup();
+  }
+
+  void sortHandByRun() {
+    hand.sortByRun();
+  }
+
+  void clearHand() {
+    hand.clear();
+  }
+
+  // tests sortHandByGroup and sortHandByRun
+  public static void main(String[] args) {
+    Player player = new Player("name1", 0);
+    RummiBag bag = new RummiBag();
+    for (int i = 0; i < 20; i++) {
+      player.pushStone(bag.removeStone());
+    }
+    player.moveStone(new Coordinate(0, 0), new Coordinate(19, 1));
+    player.moveStone(new Coordinate(3, 0), new Coordinate(3, 1));
+    System.out.println("Normal: \n" + player.hand);
+    player.sortHandByGroup();
+    System.out.println("Group: \n" + player.hand);
+    player.sortHandByRun();
+    System.out.println("Run: \n" + player.hand);
+    player.sortHandByGroup();
+    System.out.println("Group: \n" + player.hand);
   }
 }
