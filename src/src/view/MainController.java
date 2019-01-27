@@ -1,6 +1,7 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import communication.request.ConcreteMove;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
 import java.util.Map.Entry;
@@ -249,6 +250,10 @@ public class MainController implements Controller {
 
   void sendTimerRequest() {
     client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+  }
+
+  void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    client.sendRequest(new ConcreteMove(RequestID.WHOLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
   }
 
   void initPlayer(String serverIP, String name, int age) {

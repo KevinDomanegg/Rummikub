@@ -59,7 +59,8 @@ public class GameController {
   // NO HOST AVAILABLE
   private boolean serverNotAvailable;
 
-
+  // Cntrl + Drag and Drop
+  private boolean ctrl;
 
 
 //  void setNetworkController(NetworkController networkcontroller) {
@@ -148,9 +149,9 @@ public class GameController {
   /**
    * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-//   * @param grid    The FXML GridPane where the cells shall be constructed in
-//   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
-//   */
+   * @param stoneGrid    The FXML GridPane where the cells shall be constructed in
+   * @param pane Indicator where a cell shall source its data from in case of drag and drop event
+   */
   @FXML
   void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
     Platform.runLater(() -> pane.getChildren().clear());
@@ -183,9 +184,9 @@ public class GameController {
   /**
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
-//   * @param cell    Pane where the event shall be registered
-//   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
-//   */
+   * @param cell    Pane where the event shall be registered
+   * @param stoneInfo Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+   */
   private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
     // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
@@ -193,9 +194,17 @@ public class GameController {
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
-//      if (!model.isMyTurn()) {
-//        return;
-//      }
+      System.out.println(stoneInfo);
+      if (stoneInfo == null) {
+        return;
+      }
+
+      if (event.isControlDown()) {
+        System.out.println("----------------------------control pushed");
+        ctrl = true;
+      }
+
+
       Music.playSoundOf("pick up stone");
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null);
@@ -229,7 +238,6 @@ public class GameController {
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
       Music.playSoundOf("drop stone");
-
       Pane sourceCell = (Pane) event.getGestureSource();
       sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
@@ -237,16 +245,22 @@ public class GameController {
 
         Parent sourceParent = sourceCell.getParent();
         Parent targetParent = cell.getParent();
-
-        if (sourceParent.getId().equals("handGrid")) {
-          if (targetParent.getId().equals("handGrid")) {
-            mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
-          } else {
-            mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
-          }
+      if (sourceParent.getId().equals("handGrid")) {
+        if (targetParent.getId().equals("handGrid")) {
+          mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+        } else {
+          mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+        }
+      } else {
+        System.out.println("control pressed is: ------- " + ctrl);
+        if (ctrl) {
+          mainController.sendMoveSetOnTableRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          ctrl = false;
         } else {
           mainController.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
+      }
+
       event.consume();
     });
   }

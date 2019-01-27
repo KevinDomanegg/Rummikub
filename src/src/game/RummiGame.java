@@ -175,6 +175,9 @@ public class RummiGame implements Game {
     // check if target position is empty
     if (!table.getStones().containsKey(targetPosition)) {
       Stone movingStone = currentPlayer().popStone(sourcePosition);
+      if (movingStone == null) {
+        return;
+      }
       // add up the currentPoints
       currentPoints += movingStone.getNumber();
       table.setStone(targetPosition, movingStone);

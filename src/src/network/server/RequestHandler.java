@@ -38,6 +38,7 @@ class RequestHandler {
   }
 
   void applyRequest(Object request, int playerID){
+    System.out.println("-----------------------" +request);
     switch (((Request) request).getRequestID()){
       case START:
         // check the minimum
@@ -75,6 +76,13 @@ class RequestHandler {
         }
         sendTableToALl();
         return;
+      case WHOLE_SET_MOVE:
+        if (isCurrentPlayer(playerID)) {
+          ConcreteMove tableMove = (ConcreteMove) request;
+          game.moveSetOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
+              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
+        }
+        sendTableToALl();
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
