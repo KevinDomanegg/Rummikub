@@ -1,9 +1,11 @@
 package network.server;
 
+import communication.Serializer;
 import communication.gameinfo.GameInfo;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerSender extends Thread {
@@ -13,8 +15,9 @@ public class ServerSender extends Thread {
   private boolean send = false;
   private boolean connected = true;
   private GameInfo info = null;
+  private Serializer serializer;
 
-  private ObjectOutputStream out;
+  private PrintWriter out;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -27,8 +30,9 @@ public class ServerSender extends Thread {
     this.clientOut = clientOut;
     this.server = server;
     this.id = id;
+    this.serializer = new Serializer();
     try {
-      this.out = new ObjectOutputStream(clientOut.getOutputStream());
+      this.out = new PrintWriter(clientOut.getOutputStream());
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -43,14 +47,10 @@ public class ServerSender extends Thread {
     /*this.info = info;
     send = true;
     notifyAll();*/
-    try {
-      //out = new ObjectOutputStream(clientOut.getOutputStream());
-      out.writeObject(info);
+      String json = serializer.serialize(info);
+      out.println(json);
       out.flush();
-    } catch (IOException e) {
-      disconnect();
-      notifyAll();
-    }
+
   }
 
   /**

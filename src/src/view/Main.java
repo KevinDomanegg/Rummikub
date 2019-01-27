@@ -1,5 +1,6 @@
 package view;
 
+import com.sun.javafx.tk.quantum.QuantumToolkit;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -84,7 +85,8 @@ public class Main extends Application {
         networkController.killThreads();
       }
       //startController.killThreads();
-      Platform.exit();
+      //Platform.exit();
+      QuantumToolkit.getToolkit().exit();
     });
     //--------------------------------------------------------
   }
