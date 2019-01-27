@@ -115,4 +115,14 @@ public class RummiTableTest {
 
     assertFalse(rummiTable8.isConsistent());
   }
+
+  @Test
+  public void yetAnotherTest(){
+    RummiTable table = new RummiTable();
+    table.setStone(new Coordinate(0, 0), new Stone(Stone.Color.YELLOW, 5));
+    assertEquals("Coordinate: (0, 0), Stone: (Color: YELLOW, Number:  5)" + "\n" + "1", table.toString());
+    table.setStone(new Coordinate(1, 0), new Stone(Stone.Color.BLUE, 5));
+    table.setStone(new Coordinate(2, 0), new Stone());
+    assertTrue(table.isConsistent());
+  }
 }

@@ -6,7 +6,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/src/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/lib" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/lib" type="java-test-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -21,5 +20,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="junit-4.13-beta-1" level="project" />
+    <orderEntry type="library" name="com.google.api-client:google-api-client-gson:1.28.0" level="project" />
+    <orderEntry type="library" name="junit:junit:4.0" level="project" />
   </component>
 </module>

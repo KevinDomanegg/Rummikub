@@ -45,6 +45,10 @@ public class RummiTable implements Grid {
     stones.clear();
   }
 
+  public int size() {
+    return stones.size();
+  }
+
   Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
     int col = coordinate.getCol();
     // find the first stone for a potential set
@@ -180,14 +184,5 @@ public class RummiTable implements Grid {
     }
     stringBuilder.append(stones.size());
     return stringBuilder.toString();
-  }
-
-  // for test
-  public static void main(String[] args) {
-    RummiTable table = new RummiTable();
-    table.setStone(new Coordinate(0, 0), new Stone(Color.YELLOW, 5));
-    table.setStone(new Coordinate(1, 0), new Stone(Color.BLUE, 5));
-    table.setStone(new Coordinate(2, 0), new Stone());
-    System.out.println(table.isConsistent());
   }
 }

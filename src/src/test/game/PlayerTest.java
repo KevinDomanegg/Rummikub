@@ -3,11 +3,6 @@ package game;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.junit.runner.JUnitCore;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 
 public class PlayerTest {
 
@@ -15,10 +10,10 @@ public class PlayerTest {
   public void initTest(){
     Player player1 = new Player("Hyunsung", 23);
 
-    assertTrue(player1.getAge() == 23);
-    assertTrue(player1.getName() == "Hyunsung");
-    assertTrue(player1.getHandHeight() == 2);
-    assertTrue(player1.getHandWidth() == 20);
+    assertEquals(player1.getAge(), 23);
+    assertEquals(player1.getName(),  "Hyunsung");
+    assertEquals(player1.getHandHeight(),  3);
+    assertEquals(player1.getHandWidth(),  18);
 
     player1.pushStone(new Stone(Stone.Color.RED, 1));
     player1.pushStone(new Stone(Stone.Color.YELLOW, 2));
@@ -28,6 +23,8 @@ public class PlayerTest {
     assertTrue(player1.getPoints() == -23 || player1.getPoints() == -6);
 
     assertTrue(player1.getStones().size() == 3);
+    player1.clearHand();
+    assertEquals(player1.getHand().size(), 0);
   }
 
   @Test
@@ -55,8 +52,12 @@ public class PlayerTest {
       }
     }
 
-    player3.pushStone(new Stone(Stone.Color.RED, 1));
-    player3.pushStone(new Stone(Stone.Color.RED, 2));
+    try {
+      player3.pushStone(new Stone(Stone.Color.RED, 1));
+    } catch (Exception e){
+      assertEquals("Hand is full.", e.getMessage());
+    }
+
     assertTrue(player3.getHandSize() == player3.getHandHeight() * player3.getHandWidth());
     player3.popStone(new Coordinate(0,0));
     assertTrue(player3.getHandSize() == player3.getHandHeight() * player3.getHandWidth() - 1);
@@ -65,6 +66,24 @@ public class PlayerTest {
 
     assertTrue(player3.hasPlayedFirstMove() == true);
 
+  }
+
+  @Test
+  public void sortHandByGroupAndRun() {
+    Player player = new Player("name1", 0);
+    RummiBag bag = new RummiBag();
+    for (int i = 0; i < 20; i++) {
+      player.pushStone(bag.removeStone());
+    }
+    player.moveStone(new Coordinate(0, 0), new Coordinate(19, 1));
+    player.moveStone(new Coordinate(3, 0), new Coordinate(3, 1));
+    System.out.println("Normal: \n" + player.getHand());
+    player.sortHandByGroup();
+    System.out.println("Group: \n" + player.getHand());
+    player.sortHandByRun();
+    System.out.println("Run: \n" + player.getHand());
+    player.sortHandByGroup();
+    System.out.println("Group: \n" + player.getHand());
   }
 
   @Test
