@@ -131,16 +131,16 @@ public class RummiServer extends Thread implements Server {
       suicide();
       return;
     }
+
     //notifyAll();
   }
 
-  private synchronized void cleanup() {
+  private void cleanup() {
     for (int i = 0; i < clients.length; i++) {
       if (clients[i] != null) {
         disconnectClient(i);
       }
     }
-    notifyAll();
   }
 
   /**

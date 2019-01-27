@@ -310,7 +310,8 @@ public class MainController implements Controller {
   void quit() {
     client.disconnect();
     try {
-      switchToStartScene();
+      //switchToStartScene();
+      switchScene("start.fxml");
     } catch (IOException e) {
       e.printStackTrace();
     }

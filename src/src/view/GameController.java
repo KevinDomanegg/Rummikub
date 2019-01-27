@@ -112,7 +112,7 @@ public class GameController {
       serverNotAvailable = true;
       showErrorView("THE HOST HAS LEFT THE GAME!");
     } else {
-//      networkController.returnToStartView();
+      quitGame();
     }
   }
 

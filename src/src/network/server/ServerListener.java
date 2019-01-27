@@ -49,7 +49,8 @@ public class ServerListener extends Thread {
           json = in.nextLine();
           request = deserializer.deserializeRequest(json);
         } catch (ClassCastException  | NoSuchElementException e) {
-          disconnect();
+          //disconnect();
+          server.disconnectClient(id);
         }
 
         if (json == null) {
@@ -66,7 +67,7 @@ public class ServerListener extends Thread {
       }
     } catch (IOException e) {
       this.connected = false;
-      server.disconnectClient(id);
+      //server.disconnectClient(id);
     }
     System.out.println("ServerListener terminated");
   }

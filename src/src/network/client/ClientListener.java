@@ -42,7 +42,7 @@ class ClientListener extends Thread {
         try {
           json = receiveMessage.nextLine();
         } catch (NoSuchElementException e) {
-          disconnect();
+          myClient.disconnect();
         }
         if (json != null) {
           GameInfo info = deserializer.deserializeInfo(json);
@@ -53,7 +53,7 @@ class ClientListener extends Thread {
       }
 
     } catch (IOException e) {
-      disconnect();
+      myClient.disconnect();
     }
 
   }
