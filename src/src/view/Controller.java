@@ -1,10 +1,8 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
 /**
  * Interface for a ShellController connecting the network to the client-model and view.
@@ -67,5 +65,5 @@ public interface Controller {
 
   void showError(String errorMessage);
 
-  void showRank(List<Entry<Integer, Integer>> finalRank);
+  void showRank(Map<Integer, Integer> finalRank);
 }

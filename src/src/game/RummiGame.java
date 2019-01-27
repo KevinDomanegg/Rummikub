@@ -31,7 +31,6 @@ public class RummiGame implements Game {
   public RummiGame() {
     table = new RummiTable();
     players = new HashMap<>(MAX_PLAYERS);
-    bag = new RummiBag();
     trace = new Stack<>();
   }
 
@@ -58,9 +57,11 @@ public class RummiGame implements Game {
   /** starts the game by handing out stones and determining the start player. */
   @Override public void start() {
     if (players.size() >= MIN_PLAYERS) {
-      isGameOn = true;
+      bag = new RummiBag();
+      table.clear();
       handOutStones();
       setStartPlayer();
+      isGameOn = true;
     }
     // ?? error?
     // throw new IllegalStateException("not enough players to start the game.");
@@ -68,6 +69,11 @@ public class RummiGame implements Game {
 
   /** first stones will be handed out randomly to each player. */
   private void handOutStones() {
+    // clear players' hands first
+    for (Player player : players.values()) {
+      player.clearHand();
+    }
+    // hand out stones
     for (int i = 0; i < FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
         drawStone();
@@ -382,10 +388,11 @@ public class RummiGame implements Game {
    *
    * @return the sorted (by values (points) list
    */
-  @Override public List<Entry<Integer, Integer>> getFinalRank() {
-    return players.entrySet().stream()
+  @Override public Map<Integer, Integer> getFinalRank() {
+    List<Entry<Integer, Integer>> rank = players.entrySet().stream()
         .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
         .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
+    return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
   public static void main(String[] args) {

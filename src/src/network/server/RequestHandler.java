@@ -1,7 +1,19 @@
 package network.server;
 //Might be better to move this class to the game-package
-import communication.gameinfo.*;
-import communication.request.*;
+import communication.gameinfo.BagInfo;
+import communication.gameinfo.CurrentPlayerInfo;
+import communication.gameinfo.ErrorInfo;
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.GameStartInfo;
+import communication.gameinfo.GridInfo;
+import communication.gameinfo.HandSizesInfo;
+import communication.gameinfo.PlayerNamesInfo;
+import communication.gameinfo.RankInfo;
+import communication.gameinfo.SimpleGameInfo;
+import communication.gameinfo.StoneInfo;
+import communication.request.ConcreteMove;
+import communication.request.ConcreteSetPlayer;
+import communication.request.Request;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -110,24 +122,24 @@ class RequestHandler {
       return;
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
-          if (game.isConsistent()) {
-            checkWinner();
-          /*// send the changed table first
-          sendTableToALl();*/
-            // then notify the turn to the next player
-            notifyTurnToPlayer();
-            // sendNewTimer();
-          } else {
-            // send the original table to all players
-            sendTableToALl();
-            // send the original hand to the current player
-            sendHandToPlayer(playerID);
-            // send the original hand sizes to all players
-            sendHandSizesToAll();
-            // notify wrong move
-            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
-          }
-          sendHandSizesToAll();
+          checkWinner();
+          notifyTurnToPlayer();
+//          if (game.isConsistent()) {host
+//          /*// send the changed table first
+//          sendTableToALl();*/
+//            // then notify the turn to the next player
+//            // sendNewTimer();
+//          } else {
+//            // send the original table to all players
+//            sendTableToALl();
+//            // send the original hand to the current player
+//            sendHandToPlayer(playerID);
+//            // send the original hand sizes to all players
+//            sendHandSizesToAll();
+//            // notify wrong move
+//            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
+//          }
+//          sendHandSizesToAll();
         }
         return;
       case RESET:

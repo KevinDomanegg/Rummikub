@@ -2,7 +2,6 @@ package game;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public interface Game {
 
@@ -50,7 +49,7 @@ public interface Game {
 
   int getNumberOfPlayers();
 
-  List<Entry<Integer, Integer>> getFinalRank();
+  Map<Integer, Integer> getFinalRank();
 
   List<String> getPlayerNames();
 

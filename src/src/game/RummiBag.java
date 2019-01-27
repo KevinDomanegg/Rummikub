@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.Random;
 
 public class RummiBag {
-  private ArrayList<Stone> stones = new ArrayList<>();
+  private static final int MAX_BAG_SIZE = 106;
+  private ArrayList<Stone> stones;
   private Random randomGenerator;
   private final static int STONESOFEACHCOLOR = 13;
 
@@ -14,6 +15,7 @@ public class RummiBag {
   //The bag is initially filled with 13 Numbers of each
   //color and two Jokers.
   RummiBag() {
+    stones = new ArrayList<>(MAX_BAG_SIZE);
     for (Color color : Color.values()) {
       if (color != Color.JOKER) {
         for (int i = 1; i <= STONESOFEACHCOLOR; i++) {

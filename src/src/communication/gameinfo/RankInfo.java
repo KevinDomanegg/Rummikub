@@ -1,13 +1,12 @@
 package communication.gameinfo;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 
 public class RankInfo implements GameInfo, Serializable {
-  private final List<Entry<Integer, Integer>> finalRank;
+  private final Map<Integer, Integer> finalRank;
 
-  public RankInfo(List<Entry<Integer, Integer>> finalRank) {
+  public RankInfo(Map<Integer, Integer> finalRank) {
     this.finalRank = finalRank;
   }
 
@@ -15,7 +14,7 @@ public class RankInfo implements GameInfo, Serializable {
     return GameInfoID.RANK;
   }
 
-  public List<Entry<Integer, Integer>> getFinalRank() {
+  public Map<Integer, Integer> getFinalRank() {
     return finalRank;
   }
 }

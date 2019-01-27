@@ -1,9 +1,9 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -390,9 +390,9 @@ public class GameController {
   }
 
   public void showRank() {
-    List<Entry<Integer, Integer>> rank = new ArrayList<>();
-    rank.add(new SimpleEntry<>(1, 0));
-    rank.add(new SimpleEntry<>(0, -30));
+    Map<Integer, Integer> rank = new HashMap<>();
+    rank.put(1, 0);
+    rank.put(0, -30);
     mainController.showRank(rank);
   }
 }
