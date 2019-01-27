@@ -76,4 +76,39 @@ public class RummiGameTest {
 
     assertFalse(game2.isConsistent());
   }
+
+  @Test
+  public void playerHasLeftTest() {
+    RummiGame game3 = new RummiGame();
+    game3.setPlayer("Peter", 25);
+    game3.setPlayer("Helga", 21);
+    game3.setPlayer("Helga2", 20);
+    game3.start();
+
+    assertEquals(game3.getBagSize(), (106 - 42));
+    game3.playerHasLeft(1);
+    assertEquals(game3.getBagSize(), 106 - 28);
+    game3.playerHasLeft(0);
+    game3.playerHasLeft(0);
+
+  }
+
+  @Test
+  public void rankingTest() {
+    RummiGame game4 = new RummiGame();
+    game4.setPlayer("Peter", 25);
+    game4.setPlayer("Helga", 21);
+    game4.start();
+
+    game4.getPlayerStones(1).clear();
+
+    assertTrue(game4.hasWinner());
+
+    assertTrue(game4.getFinalRank().get(0).getValue() < 0);
+    assertTrue(game4.getFinalRank().get(0).getKey() == 0);
+    assertEquals(game4.getFinalRank().get(1).getValue(), 0.0, 0);
+    assertTrue(game4.getFinalRank().get(1).getKey() == 1);
+
+
+  }
 }

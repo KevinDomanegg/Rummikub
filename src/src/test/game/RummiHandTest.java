@@ -45,6 +45,12 @@ public class RummiHandTest {
 
   }
 
+  @Test
+  public void printTest() {
+    RummiHand rummiHand3 = new RummiHand();
+    rummiHand3.setStone(new Coordinate(1,2), new Stone(Stone.Color.YELLOW, 4));
+    assertTrue(rummiHand3.toString().equals("You have " + 1 + " Stone in your hand." + "\n" + "Coordinate: (Col: 1,Row: 2); Stone: (Color: YELLOW,Number:  4)" + "\n"));
+  }
 
 
 }

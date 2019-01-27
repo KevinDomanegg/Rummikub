@@ -66,4 +66,11 @@ public class PlayerTest {
     assertTrue(player3.hasPlayedFirstMove() == true);
 
   }
+
+  @Test
+  public void printTest() {
+    Player player4 = new Player("Emma", 19);
+
+    assertTrue(player4.toString().equals("Player(" + 19 + ")"));
+  }
 }
