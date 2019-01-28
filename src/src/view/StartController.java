@@ -40,19 +40,11 @@ public class StartController {
     @FXML
     private StackPane vContainer;
     @FXML
-    private AnchorPane errorPane;
-    @FXML
-    private Text errorMessage;
-    @FXML
     private Text ipERROR;
     @FXML
     private Text ageERROR;
     @FXML
     private Text nameERROR;
-
-    public void initialize() {
-        errorPane.setVisible(false);
-    }
 
     void setMainController(MainController mainController) {
       this.mainController = mainController;
@@ -113,7 +105,10 @@ public class StartController {
         return;
       }
       try {
-        Integer.parseInt(ageField.getText());
+        int age = Integer.parseUnsignedInt(ageField.getText());
+        if (age < 6 || age > 150) {
+          throw new NumberFormatException();
+        }
       } catch (NumberFormatException e) {
         setError("age");
         return;
@@ -147,17 +142,4 @@ public class StartController {
       ageField.setStyle(null);
       ageERROR.setVisible(false);
     }
-
-    @FXML
-    private void switchToErrorView(String message) throws IOException {
-        errorMessage.setText(message);
-        errorPane.setVisible(true);
-        vContainer.setVisible(false);
-    }
-
-  @FXML
-  void handleOkButton() {
-    vContainer.setVisible(true);
-    errorPane.setVisible(false);
-  }
 }

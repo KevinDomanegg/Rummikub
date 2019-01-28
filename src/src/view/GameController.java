@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -17,11 +18,8 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.music.Music;
@@ -113,7 +111,7 @@ public class GameController {
   public void returnToStart(boolean noServerAvailable) {
     if (noServerAvailable) {
       serverNotAvailable = true;
-      showErrorView("THE HOST HAS LEFT THE GAME!");
+//      showError("THE HOST HAS LEFT THE GAME!");
     } else {
       quitGame();
     }
@@ -122,7 +120,6 @@ public class GameController {
   public void quitGame() {
     mainController.quit();
   }
-
 
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: green ; -fx-border-width: 2px ;");
@@ -352,22 +349,90 @@ public class GameController {
     }
   }
 
-  void notifyCurrentPlayer(int playerID) {
-//    switch (playerID) {
-//      case 1:
-//        if (opponentMid.isVisible()) {
-//          opponentMid.blinkblink();
-//        } else {
-//          opponentLeft.blinkblink();
-//        }
+  @FXML
+  void notifyCurrentPlayer(int relativeOpponentPosition) {
+
+    HBox[] opponents = new HBox[] {
+            opponentLeft, opponentMid, opponentRight
+    };
+
+    int opponentID = toOpponentID(relativeOpponentPosition, opponents);
+
+    //sets the color of all the opponents
+    for (int i = 1; i < opponents.length + 1; i++) {
+      if (i != opponentID) {
+        //styling non-playing opponents
+        opponents[i - 1].setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+      } else {
+        //styling currently playing opponent
+        opponents[i - 1].setBackground(new Background((new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY))));
+      }
     }
-//    model.setCurrentPlayer(playerID);
-//    // set up the timer
-//    timer_countDown.cancel();
-//    timer_task.cancel();
-//    setTimer();
-//    // show current player on view
-//  }
+  }
+
+  /**
+   * Calculates the id of an opponent based on his relative postion to the player.
+   *
+   * @param relativeOpponentPosition number of steps (clockwise) until you reach the opponent
+   * @return position of the opponent
+   *          0 -> self
+   *          1 -> left
+   *          2 -> middle/top
+   *          3 -> right
+   */
+  private int toOpponentID(int relativeOpponentPosition, HBox[] opponents) {
+
+    //initialize with 1 (the client himself)
+    int numOfPlayers = 1;
+    for (HBox opponent : opponents) {
+      if (opponent.isVisible()) {
+        numOfPlayers++;
+      }
+    }
+    System.out.println("num of player is " + numOfPlayers);
+    System.out.println("relative position is  " + relativeOpponentPosition);
+
+    int opponentID = 0;
+    switch (numOfPlayers) {
+      case 0:
+        opponentID = 0;
+        break;
+
+      case 1:
+        opponentID = 0;
+        break;
+
+      case 2:
+        opponentID = relativeOpponentPosition % 2;
+        if (opponentID == 1) {
+          opponentID = 2;
+        }
+        break;
+
+      case 3:
+
+        if (relativeOpponentPosition == 3) {
+          opponentID = 0;
+        }
+
+        else if (relativeOpponentPosition == 2) {
+          opponentID = 3;
+        } else {
+          opponentID = relativeOpponentPosition;
+        }
+        break;
+
+      case 4:
+        opponentID = relativeOpponentPosition;
+        break;
+
+      default:
+        opponentID = relativeOpponentPosition;
+
+    }
+    System.out.println("OpponentPosition is " + opponentID);
+    return opponentID;
+  }
 
   @FXML
   private void sendResetRequest() {

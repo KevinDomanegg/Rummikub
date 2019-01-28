@@ -16,21 +16,6 @@
            fx:controller="view.StartController"
            stylesheets="@/view/startStyle.css">
    <children>
-       <AnchorPane fx:id="errorPane">
-           <children>
-               <Label layoutX="252.0" layoutY="64.0" text="Error!" textFill="#d01818">
-                   <font>
-                       <Font size="36.0" />
-                   </font>
-               </Label>
-               <Text fx:id="errorMessage" layoutX="70.0" layoutY="182.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" textAlignment="CENTER" wrappingWidth="459.2060546875">
-                   <font>
-                       <Font size="14.0" />
-                   </font>
-               </Text>
-               <Button fx:id="okButton" layoutX="281.0" layoutY="299.0" mnemonicParsing="false" text="OK" onMouseClicked="#handleOkButton"/>
-           </children>
-       </AnchorPane>
        <StackPane fx:id="vContainer">
            <children>
                <StackPane fx:id="header">
@@ -51,7 +36,7 @@
                            <children>
                                <Text text="Age:" styleClass="whiteText" />
                                <TextField fx:id="ageField" />
-                               <Text fx:id="ageERROR" style="-fx-background-color: #ff0022;" text="Error! Age has to be a number" visible="false"/>
+                               <Text fx:id="ageERROR" style="-fx-background-color: #ff0022;" text="Invalid age! age must be: 6 - 150" visible="false"/>
                            </children>
                        </VBox>
                        <HBox styleClass="buttonArea">

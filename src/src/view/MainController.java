@@ -27,6 +27,7 @@ public class MainController implements Controller {
   private StartController startController;
   private WaitController waitController;
   private WinnerController winnerController;
+  private ErrorController errorController;
   private Stage primaryStage;
   private RummiClient client;
   private RequestBuilder requestBuilder;
@@ -87,14 +88,32 @@ public class MainController implements Controller {
   }
 
   public void noServerAvailable() {
-    if (gameController != null) {
-      gameController.returnToStart(true);
+    showError("Host is not connected");
+    try {
+      switchScene("start.fxml");
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
   @Override
   public void showError(String errorMessage) {
-    // switchToError
+    Platform.runLater(() -> {
+      Stage stage = new Stage();
+      Parent root;
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("error.fxml"));
+        root = loader.load();
+        errorController = loader.getController();
+        errorController.setErrorMessage(errorMessage);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(primaryStage);
+        stage.showAndWait();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
   }
 
   @Override public void showRank(Map<Integer, Integer> finalRank) {
@@ -200,6 +219,8 @@ public class MainController implements Controller {
   @Override
   public void notifyTurn() {
     gameController.yourTurn();
+    //needed for the styling of the opponents
+    gameController.notifyCurrentPlayer(0);
   }
 
   /**

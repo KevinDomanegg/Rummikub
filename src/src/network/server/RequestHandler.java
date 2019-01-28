@@ -201,9 +201,54 @@ class RequestHandler {
   }
 
   private void notifyTurnToPlayer() {
-    server.sendToPlayer(game.getCurrentPlayerID(), new SimpleGameInfo(GameInfoID.YOUR_TURN));
-    // Notifies the players whose is playing
-    server.sendToAll(new CurrentPlayerInfo(game.getCurrentPlayerID()));
+
+    int currentPlayerID = game.getCurrentPlayerID();
+
+    for (int i = 0; i < 4; i++) {
+      if (i == currentPlayerID) {
+        // Tells player that it is his turn
+        server.sendToPlayer(i, new SimpleGameInfo(GameInfoID.YOUR_TURN));
+      } else {
+        // Tells other players whose turn it is
+        int relativeID = calculateRelativeID(i, currentPlayerID);
+        server.sendToPlayer(i, new CurrentPlayerInfo(relativeID));
+      }
+    }
+  }
+
+  private int calculateRelativeID(int recipientID, int currentPlayerID) {
+
+    int relativeID;
+    int numOfPlayers = game.getNumberOfPlayers();
+
+    relativeID = currentPlayerID - recipientID;
+    if (relativeID < 0) {
+      relativeID = numOfPlayers + relativeID;
+    }
+
+    return relativeID;
+//    if (numOfPlayers == 4) {
+//      return relativeID;
+//    }
+//
+//    if (numOfPlayers == 3) {
+//      if (relativeID == 2) {
+//        relativeID = 3;
+//        return relativeID;
+//      } else {
+//        return relativeID;
+//      }
+//    }
+//
+//    if (numOfPlayers == 2) {
+//      if (relativeID == 0) {
+//        return relativeID;
+//      } else {
+//        return 2;
+//      }
+//    }
+    //relativeID = relativeID % game.getNumberOfPlayers();
+
   }
 
   private void startGame() {
