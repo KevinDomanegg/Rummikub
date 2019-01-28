@@ -133,7 +133,7 @@ public class GameController {
   }
 
   private void endOfYourTurn() {
-    ownBoard.setStyle("-fx-border-color: black;");
+    ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
     //moveButtons.setVisible(false);
     //backButtons.setVisible(false);
   }
