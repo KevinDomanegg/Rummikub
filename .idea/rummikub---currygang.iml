@@ -22,5 +22,7 @@
     <orderEntry type="library" name="junit-4.13-beta-1" level="project" />
     <orderEntry type="library" name="com.google.api-client:google-api-client-gson:1.28.0" level="project" />
     <orderEntry type="library" name="junit:junit:4.0" level="project" />
+    <orderEntry type="library" name="GSON" level="project" />
+    <orderEntry type="library" name="JUnit" level="project" />
   </component>
 </module>

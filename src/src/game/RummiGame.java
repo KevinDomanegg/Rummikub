@@ -41,6 +41,9 @@ public class RummiGame implements Game {
 
   /** shifts the currentPlayerID depending on the number of players in this game. */
   private void nextTurn() {
+    if (currentPlayer().getHandSize() == 0) {
+      return;
+    }
     // reset currentPoints
     currentPoints = 0;
     // the ID of the current player will be updated

@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -39,6 +40,7 @@ public class GameController {
   @FXML private Text leftPlayerHand;
   @FXML private Text midPlayerHand;
   @FXML private Text rightPlayerHand;
+  @FXML private Text bagSize;
 
   @FXML private Text timer;
   @FXML private GridPane tableGrid;
@@ -46,6 +48,10 @@ public class GameController {
   @FXML private VBox errorPane;
   @FXML private Text errorMessage;
   @FXML private VBox ownBoard;
+
+  @FXML private HBox moveButtons;
+  @FXML private HBox backButtons;
+
 
 //  private NetworkController networkController;
   private MainController mainController;
@@ -123,11 +129,15 @@ public class GameController {
   }
 
   void yourTurn() {
-    ownBoard.setStyle("-fx-border-color: green ; -fx-border-width: 2px ;");
+    ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
+    //moveButtons.setVisible(true);
+    //backButtons.setVisible(true);
   }
 
   private void endOfYourTurn() {
-    ownBoard.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+    ownBoard.setStyle("-fx-border-color: none;");
+    //moveButtons.setVisible(false);
+    //backButtons.setVisible(false);
   }
 
   /**
@@ -311,41 +321,43 @@ public class GameController {
 //  }
 
   void setHandSizes(List<Integer> sizes) {
-    ownHand.setText(String.valueOf(sizes.get(0)));
+    String handComplement = " Stones";
+    ownHand.setText(String.valueOf(sizes.get(0)) + handComplement);
     switch (sizes.size()) {
       case 4:
-        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
-        midPlayerHand.setText(String.valueOf(sizes.get(2)));
-        rightPlayerHand.setText(String.valueOf(sizes.get(3)));
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
+        midPlayerHand.setText(String.valueOf(sizes.get(2)) + handComplement);
+        rightPlayerHand.setText(String.valueOf(sizes.get(3)) + handComplement);
         return;
       case 3:
-        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
-        rightPlayerHand.setText(String.valueOf(sizes.get(2)));
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
+        rightPlayerHand.setText(String.valueOf(sizes.get(2)) + handComplement);
         return;
       case 2:
-        midPlayerHand.setText(String.valueOf(sizes.get(1)));
+        midPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
       default:
     }
   }
 
   void setPlayerNames(List<String> names) {
-    ownName.setText(names.get(0));
+    String nameComplement = ": ";
+    ownName.setText(names.get(0) + nameComplement);
     switch (names.size()) {
       case 4:
-        leftPlayerName.setText(names.get(1));
-        midPlayerName.setText(names.get(2));
-        rightPlayerName.setText(names.get(3));
+        leftPlayerName.setText(names.get(1) + nameComplement);
+        midPlayerName.setText(names.get(2) + nameComplement);
+        rightPlayerName.setText(names.get(3) + nameComplement);
         return;
       case 3:
         opponentMid.setVisible(false);
-        leftPlayerName.setText(names.get(1));
-        rightPlayerName.setText(names.get(2));
+        leftPlayerName.setText(names.get(1) + nameComplement);
+        rightPlayerName.setText(names.get(2) + nameComplement);
         return;
       case 2:
       opponentMid.setVisible(true);
       opponentLeft.setVisible(false);
       opponentRight.setVisible(false);
-      midPlayerName.setText(names.get(1));
+      midPlayerName.setText(names.get(1) + nameComplement);
       default:
     }
   }
@@ -485,5 +497,14 @@ public class GameController {
   @FXML
   private void showHelpScene() {
     mainController.showHelpScene();
+  }
+
+  @FXML
+  private void sendUndoRequest() {
+    //TODO: Undo functionality here
+  }
+
+  public void setBagSize(int bagSize) {
+    this.bagSize.setText(Integer.toString(bagSize));
   }
 }

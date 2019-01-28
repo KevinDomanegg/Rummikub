@@ -57,12 +57,10 @@ public class Main extends Application {
     //mediaPlayer.play();
 
     primaryStage.setTitle("Rummikub");
-    //Scene scene = resolution(root);
-    Scene scene = new Scene(root, 1024, 768);
-    //scene.getStylesheets().add("view/gameStyle.css"); //TODO: Hide
+    Scene scene = new Scene(root, 1500, 900);
     primaryStage.setScene(scene);
     // MINIMUM WINDOW SIZE
-    primaryStage.setMinHeight(650.0);
+    primaryStage.setMinHeight(650.0); //TODO: Do we need this? And why it's 650X600?
     primaryStage.setMinWidth(600.0);
     primaryStage.show();
     //mediaPlayer_video.play();
@@ -80,16 +78,5 @@ public class Main extends Application {
 
   void stopMusic() {
     //this.mediaPlayer.stop();
-  }
-
-  /**
-   * Creates scene depending on the user device's resolution
-   *
-   * @param root parent root
-   * @return new scene with user's resolution
-   */
-  Scene resolution(Parent root) {
-    Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-    return new Scene(root, screen.width, screen.height);
   }
 }

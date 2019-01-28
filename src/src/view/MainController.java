@@ -60,7 +60,7 @@ public class MainController implements Controller {
         gameController.setMainController(this);
         break;
     }
-    Scene scene = new Scene(root, 1024, 768);
+    Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
       primaryStage.setScene(scene);
       primaryStage.show();
@@ -281,7 +281,7 @@ public class MainController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
-//      gameController.setBagSize(bagSize);
+    gameController.setBagSize(bagSize);
   }
 
   void sendDrawRequest() {

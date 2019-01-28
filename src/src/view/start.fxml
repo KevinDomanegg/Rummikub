@@ -7,68 +7,74 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
 <StackPane fx:id="root"
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.StartController"
            stylesheets="@/view/startStyle.css">
-   <children>
-       <StackPane fx:id="vContainer">
-           <children>
-               <StackPane fx:id="header">
-                   <children>
+  <children>
+    <StackPane>
+      <children>
+        <HBox alignment="TOP_RIGHT" styleClass="onEdge">
+          <Button fx:id="helpButton" onMouseClicked="#showHelpScene" text="?" />
+        </HBox>
+      </children>
+    </StackPane>
+    <StackPane fx:id="vContainer">
+      <children>
+        <StackPane fx:id="header">
+          <children>
+            <Text fx:id="title" styleClass="whiteText, shadow" text="Rummikub"/>
+          </children>
+        </StackPane>
+        <VBox fx:id="content" styleClass="shadow"
+              pickOnBounds="false"> <!-- TODO: Make shadow work! -->
+          <children>
 
-                       <Text fx:id="title" styleClass="whiteText" text="Rummikub" />
-                   </children>
-               </StackPane>
-               <VBox fx:id="content">
-                   <children>
-                       <HBox alignment="TOP_RIGHT">
-                           <Button fx:id="helpButton" mnemonicParsing="false" onMouseClicked="#showHelpScene" text="?" />
-                       </HBox>
-                       <VBox styleClass="inputArea">
-                           <children>
-                               <Text text="Name:" styleClass="whiteText" />
-                               <TextField fx:id="nameField" />
-                               <Text fx:id="nameERROR" style="-fx-background-color: #ff0022;" text="Error! You must choose a username" visible="false"/>
-                           </children>
-                       </VBox>
-                       <VBox styleClass="inputArea">
-                           <children>
-                               <Text text="Age:" styleClass="whiteText" />
-                               <TextField fx:id="ageField" />
-                               <Text fx:id="ageERROR" style="-fx-background-color: #ff0022;" text="Invalid age! age must be: 6 - 150" visible="false"/>
-                           </children>
-                       </VBox>
-                       <HBox styleClass="buttonArea">
-                           <children>
-                               <Button text="Host" onMouseClicked="#hostGame" />
-                               <Text text="or" styleClass="whiteText" />
-                           </children>
-                       </HBox>
-                       <VBox styleClass="inputArea">
-                           <children>
-                               <Text text="IP address:" styleClass="whiteText"/>
-                               <TextField fx:id="ipField" text="localhost" />
-                               <Text fx:id="ipERROR" style="-fx-background-color: #ff0022;" text="Error! Wrong IP Address" visible="false"/>
-                           </children>
-                       </VBox>
-                       <HBox styleClass="buttonArea">
-                           <children>
-                               <Button text="Join" onMouseClicked="#joinGame" />
-                           </children>
-                       </HBox>
-                   </children>
-               </VBox>
-               <StackPane fx:id="footer" pickOnBounds="false">
-                   <children>
-                       <Text text="brought to you by the Curry Gang" styleClass="whiteText" />
-                   </children>
-               </StackPane>
-           </children>
-       </StackPane>
-   </children>
+            <VBox styleClass="inputArea">
+              <children>
+                <Text text="Name:" styleClass="whiteText"/>
+                <TextField fx:id="nameField"/>
+                <Text fx:id="nameERROR" style="-fx-background-color: #ff0022;"
+                      text="Error! You must choose a username" visible="false"/>
+              </children>
+            </VBox>
+            <VBox styleClass="inputArea">
+              <children>
+                <Text text="Age:" styleClass="whiteText"/>
+                <TextField fx:id="ageField"/>
+                <Text fx:id="ageERROR" style="-fx-background-color: #ff0022;"
+                      text="Invalid age! age must be: 6 - 150" visible="false"/>
+              </children>
+            </VBox>
+            <HBox styleClass="buttonArea">
+              <children>
+                <Button text="Host" onMouseClicked="#hostGame"/>
+                <Text text="or" styleClass="whiteText"/>
+              </children>
+            </HBox>
+            <VBox styleClass="inputArea">
+              <children>
+                <Text text="IP address:" styleClass="whiteText"/>
+                <TextField fx:id="ipField" text="localhost"/>
+                <Text fx:id="ipERROR" style="-fx-background-color: #ff0022;"
+                      text="Error! Wrong IP Address" visible="false"/>
+              </children>
+            </VBox>
+            <HBox styleClass="buttonArea">
+              <children>
+                <Button text="Join" onMouseClicked="#joinGame"/>
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+        <StackPane fx:id="footer" pickOnBounds="false">
+          <children>
+            <Text text="brought to you by the Curry Gang"
+                  styleClass="whiteText"/>
+          </children>
+        </StackPane>
+      </children>
+    </StackPane>
+  </children>
 </StackPane>

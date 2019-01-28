@@ -21,7 +21,7 @@ public class WaitController implements Initializable {
 //  private ClientModel model;
 
   @FXML
-  private Label waitingState;
+  private Text waitingState;
 
   @FXML
   private Text ipAddress;

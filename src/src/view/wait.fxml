@@ -2,25 +2,85 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="root" prefHeight="909.0" prefWidth="999.0" stylesheets="@/view/waitStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WaitController">
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.layout.StackPane?>
+
+<?import javafx.scene.layout.HBox?>
+<StackPane fx:id="root"
+           xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="view.WaitController"
+           stylesheets="@/view/waitStyle.css">
+  <children>
+    <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
+      <children>
+        <HBox styleClass="onEdge" alignment="TOP_RIGHT" spacing="5">
+          <Button fx:id="notMuteButton" onMouseClicked="#unMute" visible="true" />
+          <Button fx:id="muteButton" onMouseClicked="#mute" visible="true" />
+          <Button onMouseClicked="#quitWating" text="Quit" />
+        </HBox>
+      </children>
+    </StackPane>
+
+    <StackPane fx:id="vContainer">
+      <children>
+        <StackPane alignment="TOP_CENTER">
+          <children>
+            <Text fx:id="title" styleClass="whiteText, shadow" text="Rummikub" />
+          </children>
+        </StackPane>
+
+        <VBox fx:id="content" alignment="TOP_CENTER">
+          <children>
+            <Text fx:id="waitingState" styleClass="whiteText" text="Waiting for opponents..." />
+            <HBox alignment="CENTER_LEFT">
+              <Text text="Game IP: " />
+              <Text fx:id="ipAddress" />
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Text text="Player 1: " />
+              <Text fx:id="player0" text="Not connected" />
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Text text="Player 2: " />
+              <Text fx:id="player1" text="Not connected" />
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Text text="Player 3: " />
+              <Text fx:id="player2" text="Not connected" />
+            </HBox>
+            <HBox alignment="CENTER_LEFT">
+              <Text text="Player 4: " />
+              <Text fx:id="player3" text="Not connected" />
+            </HBox>
+
+            <HBox styleClass="buttonArea">
+              <children>
+                <Button fx:id="startGameButton" onMouseClicked="#startGame" text="StartGame" />
+              </children>
+            </HBox>
+          </children>
+        </VBox>
+      </children>
+    </StackPane>
+  </children>
+</StackPane>
+
+<!--
+<AnchorPane fx:id="root" prefHeight="909.0" prefWidth="999.0" stylesheets="@/view/waitStyle.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WaitController">
    <children>
-       <HBox alignment="TOP_RIGHT" layoutX="89.0" layoutY="12.0" spacing="10" styleClass="onEdge" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="831.0" AnchorPane.topAnchor="12.0" />
       <Label fx:id="waitingState" layoutX="196.0" layoutY="52.0" text="Waiting for Game Start...">
          <font>
             <Font size="36.0" />
          </font>
-          <!--<graphic>
+          <graphic>
               <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                   <Image url="@/view/testHOST.png" />
               </ImageView>
-          </graphic>-->
+          </graphic>
       </Label>
       <Label layoutX="73.0" layoutY="138.0" text="Game IP:" />
       <Text fx:id="ipAddress" layoutX="139.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="160.2060546875" />
@@ -68,3 +128,4 @@
       </HBox>
    </children>
 </AnchorPane>
+-->

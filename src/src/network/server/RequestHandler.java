@@ -122,24 +122,24 @@ class RequestHandler {
       return;
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
+          if (game.isConsistent()) {
           checkWinner();
           notifyTurnToPlayer();
-//          if (game.isConsistent()) {host
-//          /*// send the changed table first
-//          sendTableToALl();*/
-//            // then notify the turn to the next player
-//            // sendNewTimer();
-//          } else {
-//            // send the original table to all players
-//            sendTableToALl();
-//            // send the original hand to the current player
-//            sendHandToPlayer(playerID);
-//            // send the original hand sizes to all players
-//            sendHandSizesToAll();
-//            // notify wrong move
-//            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
-//          }
-//          sendHandSizesToAll();
+          /*// send the changed table first
+          sendTableToALl();*/
+            // then notify the turn to the next player
+            // sendNewTimer();
+          } else {
+            // send the original table to all players
+            sendTableToALl();
+            // send the original hand to the current player
+            sendHandToPlayer(playerID);
+            // send the original hand sizes to all players
+            sendHandSizesToAll();
+            // notify wrong move
+            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
+          }
+          sendHandSizesToAll();
         }
         return;
       case RESET:

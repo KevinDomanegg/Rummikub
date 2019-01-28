@@ -5,8 +5,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.text.Font?>
 
 <VBox fx:id="root"
            xmlns="http://javafx.com/javafx"
@@ -101,20 +99,32 @@
       <children>
         <StackPane pickOnBounds="false">
           <children>
-            <VBox alignment="BOTTOM_RIGHT" styleClass="onEdge" spacing="25">
+            <StackPane alignment="BOTTOM_LEFT">
               <children>
-                <HBox alignment="BOTTOM_RIGHT" spacing="10">
+                <HBox styleClass="onEdge" alignment="BOTTOM_LEFT" spacing="5">
+                  <Text fx:id="bagSize" />
+                  <Text styleClass="whiteText" text="stones in bag" />
+                </HBox>
+              </children>
+            </StackPane>
+            <VBox alignment="BOTTOM_RIGHT" styleClass="onEdge" spacing="25">
+              <!-- drawStone buttons etc. -->
+              <children>
+                <HBox fx:id="moveButtons" alignment="CENTER_RIGHT" spacing="10">
                   <children>
                     <Button fx:id="drawButton" text="Draw stone"
                             onMouseClicked="#drawStone"/>
-                    <Button fx:id="resetButton" text="Reset"
-                            onMouseClicked="#sendResetRequest"/>
                     <Button fx:id="checkButton" text="Check"
                             onMouseClicked="#sendConfirmMoveRequest"/>
                   </children>
                 </HBox>
-                <HBox alignment="BOTTOM_RIGHT" spacing="10">
-                  <!-- drawStone buttons etc. -->
+                <HBox fx:id="backButtons" alignment="CENTER_RIGHT" spacing="10">
+                  <children>
+                    <Button fx:id="undoButton" text="Undo" onMouseClicked="#sendUndoRequest"/>
+                    <Button fx:id="resetButton" text="Reset" onMouseClicked="#sendResetRequest"/>
+                  </children>
+                </HBox>
+                <HBox alignment="CENTER_RIGHT" spacing="10">
                   <children>
                     <Button fx:id="sortHandByGroupButton" text="Group"
                             onMouseClicked="#sendSortHandByGroupRequest"/>
@@ -129,8 +139,12 @@
             <VBox fx:id="ownBoard" styleClass="shadow" alignment="TOP_CENTER">
               <!-- hand of executing player -->
               <children>
-                <Text fx:id="ownName" styleClass="whiteText" text="x"/>
-                <Text fx:id="ownHand" styleClass="whiteText" text="x"/>
+                <HBox fx:id="playerInfo" alignment="CENTER">
+                  <children>
+                    <Text fx:id="ownName" styleClass="whiteText" text="x"/>
+                    <Text fx:id="ownHand" styleClass="whiteText" text="x"/>
+                  </children>
+                </HBox>
                 <GridPane fx:id="handGrid" styleClass="hand"
                           alignment="CENTER">
                   <!-- Own hand -->
