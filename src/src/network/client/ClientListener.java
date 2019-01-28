@@ -1,11 +1,11 @@
 package network.client;
 
+import communication.Deserializer;
 import communication.gameinfo.GameInfo;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.Stack;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 
 class ClientListener extends Thread {
@@ -13,50 +13,53 @@ class ClientListener extends Thread {
   //THE CLIENT THAT THE LISTENER LISTENS FOR..
   private Socket server;
   private RummiClient myClient;
-  private Stack<GameInfo> infos = new Stack<>();
   private boolean connected;
+  private Scanner receiveMessage;
+  private Deserializer deserializer;
 
   //CREATES A LISTENER FOR ONLY ONE CLIENT
   ClientListener(Socket server, RummiClient myClient) {
     this.server = server;
     this.myClient = myClient;
     connected = true;
+    deserializer = new Deserializer();
   }
 
   @Override
   public void run() {
     try {
-      ObjectInputStream recieveMessage = new ObjectInputStream(server.getInputStream());
+      receiveMessage = new Scanner(server.getInputStream());
+    } catch (IOException e) {
+      myClient.disconnect();
+    }
       while (connected) {
+        String json = null;
         try {
-          System.out.println("Client listener is waiting for a message...");
-          this.infos.push((GameInfo) recieveMessage.readObject());
-
-          while (recieveMessage.available() > 0) {
-            this.infos.push((GameInfo) recieveMessage.readObject());
+          json = receiveMessage.nextLine();
+        } catch (NoSuchElementException e) {
+          myClient.disconnect();
+        }
+        if (json != null) {
+          GameInfo info = deserializer.deserializeInfo(json);
+          if (info != null) {
+            myClient.applyGameInfoHandler(info);
           }
-          applyInfos();
-        } catch (ClassNotFoundException e) {
-          connected = false;
         }
       }
+
+  }
+
+   void disconnect() {
+    System.out.println("Called disconnect in ClientListener");
+    connected = false;
+    try {
+      server.close();
+      receiveMessage.close();
+      //server.close();
     } catch (IOException e) {
-      connected = false;
+      System.out.println("exception while closing the listener");
+      e.printStackTrace();
     }
   }
-
-  /**
-   * Applies all saved GameInfo's to the GamrInfoHandler
-   */
-  private void applyInfos() {
-    GameInfo info;
-    while (!infos.empty()) {
-      info = infos.pop();
-      myClient.applyGameInfoHandler(info);
-      System.out.println("Client Listener applied this gameinfo " + info);
-    }
-
-  }
-
 
 }

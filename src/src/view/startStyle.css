@@ -1,0 +1,55 @@
+.inputArea {
+    -fx-spacing: 7;
+}
+
+.buttonArea {
+    -fx-alignment: CENTER;
+    -fx-spacing: 10;
+}
+
+.onEdge {
+    -fx-padding: 20;
+}
+
+#vContainer {
+    -fx-max-width: 600;
+}
+
+#root {
+    -fx-background-image: url("images/backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
+}
+
+#header {
+    -fx-alignment: TOP_CENTER;
+}
+
+#content {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 15;
+    -fx-max-height: 400;
+    -fx-max-width: 600;
+
+    -fx-border-color: white;
+    -fx-border-radius: 5;
+    -fx-background-color: #095F94;
+    -fx-padding: 20;
+}
+
+.shadow {
+    -fx-effect: dropshadow(gaussian, #00000066, 20, 0.1, 0, 0);
+    -fx-background-radius: 5;
+}
+
+#footer {
+    -fx-alignment: BOTTOM_CENTER;
+}
+
+#title {
+    -fx-font-size: 80;
+    -fx-font-weight: 700;
+}
+
+.whiteText {
+    -fx-fill: white;
+}

@@ -1,11 +1,13 @@
 package game;
 
+import game.Stone.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
 public class RummiBag {
-  private ArrayList<Stone> stones = new ArrayList<>();
+  private static final int MAX_BAG_SIZE = 106;
+  private ArrayList<Stone> stones;
   private Random randomGenerator;
   private final static int STONESOFEACHCOLOR = 13;
 
@@ -13,26 +15,24 @@ public class RummiBag {
   //The bag is initially filled with 13 Numbers of each
   //color and two Jokers.
   RummiBag() {
-    for (int i = 1; i <= STONESOFEACHCOLOR; i++) {
-      for (Stone.Color dir : Stone.Color.values()) {
-        if (dir != Stone.Color.JOKER){
-          stones.add(new Stone(dir, i));
-          stones.add(new Stone(dir, i));
+    stones = new ArrayList<>(MAX_BAG_SIZE);
+    for (Color color : Color.values()) {
+      if (color != Color.JOKER) {
+        for (int i = 1; i <= STONESOFEACHCOLOR; i++) {
+          stones.add(new Stone(color, i));
+          stones.add(new Stone(color, i));
         }
       }
     }
-    stones.add(new Stone(Stone.Color.JOKER, 0));
-    stones.add(new Stone(Stone.Color.JOKER, 0));
+    stones.add(new Stone());
+    stones.add(new Stone());
 
     randomGenerator = new Random();
   }
 
   //Returns a random Stone.
   Stone removeStone(){
-    int index = randomGenerator.nextInt(stones.size());
-    Stone stone = stones.get(index);
-    stones.remove(index);
-    return stone;
+    return stones.remove(randomGenerator.nextInt(size()));
   }
 
   int size() {
