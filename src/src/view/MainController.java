@@ -314,7 +314,10 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    primaryStage.setOnCloseRequest(event -> client.disconnect());
+    primaryStage.setOnCloseRequest(event -> {
+      gameController.stopTimer();
+      client.disconnect();
+    });
     requestBuilder.sendSetPlayerRequest(name, age);
   }
 
