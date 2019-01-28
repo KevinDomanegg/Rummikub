@@ -113,7 +113,7 @@ public class GameController {
   public void returnToStart(boolean noServerAvailable) {
     if (noServerAvailable) {
       serverNotAvailable = true;
-      showErrorView("THE HOST HAS LEFT THE GAME!");
+//      showError("THE HOST HAS LEFT THE GAME!");
     } else {
       quitGame();
     }
@@ -122,7 +122,6 @@ public class GameController {
   public void quitGame() {
     mainController.quit();
   }
-
 
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: green ; -fx-border-width: 2px ;");
