@@ -200,6 +200,8 @@ public class MainController implements Controller {
   @Override
   public void notifyTurn() {
     gameController.yourTurn();
+    //needed for the styling of the opponents
+    gameController.notifyCurrentPlayer(0);
   }
 
   /**

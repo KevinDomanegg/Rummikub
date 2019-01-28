@@ -20,44 +20,46 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
     switch (((GameInfo)gameInfo).getGameInfoID()) {
       // case CURRENT_PLAYER:
       case HAND:
-        System.out.println("handling hand");
+        //System.out.println("handling hand");
         controller.setPlayerHand(((GridInfo) gameInfo).getGrid());
         return;
       case TABLE:
-        System.out.println("handling table");
+        //System.out.println("handling table");
         controller.setTable(((GridInfo) gameInfo).getGrid());
         return;
       case ERROR:
-        System.out.println("handling error");
+        //System.out.println("handling error");
         controller.showError(((ErrorInfo) gameInfo).getErrorMessage());
 //        controller.notifyInvalidMove();
 //        controller.notifyTurn();
         return;
       case BAG:
-        System.out.println("handling bag");
+        //System.out.println("handling bag");
         controller.setBagSize(((BagInfo) gameInfo).getSize());
         return;
       case YOUR_TURN:
-        System.out.println("handling youruturn");
+        System.out.println("handling yourturn");
         controller.notifyTurn();
+        //controller.notifyCurrentPlayer(0);
         return;
       case HAND_SIZES:
-        System.out.println("handling handsizes");
+        //System.out.println("handling handsizes");
         controller.setHandSizes(((HandSizesInfo) gameInfo).getHandSizes());
         return;
       case PLAYER_NAMES:
-        System.out.println("handling names");
+        //System.out.println("handling names");
         controller.setPlayerNames(((PlayerNamesInfo) gameInfo).getNames());
         return;
       case DRAW:
-        System.out.println("handling draw");
+        //System.out.println("handling draw");
         break;
       case CURRENT_PLAYER:
         System.out.println("handling currentplayer");
+        System.out.println("received " + ((CurrentPlayerInfo) gameInfo).getPlayerID() + " as current player");
         controller.notifyCurrentPlayer(((CurrentPlayerInfo) gameInfo).getPlayerID());
         return;
       case GAME_START:
-        System.out.println("handling gamestart");
+        //System.out.println("handling gamestart");
         controller.notifyGameStart();
         return;
       case SERVER_NOT_AVAILABLE:
