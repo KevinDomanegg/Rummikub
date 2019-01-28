@@ -84,8 +84,10 @@ public class RummiGame implements Game {
   /** the youngest player will be the first to play. */
   private void setStartPlayer() {
     int minAge = Integer.MAX_VALUE;
+    int age;
     for (Entry<Integer, Player> entry : players.entrySet()) {
-      if (entry.getValue().getAge() < minAge) {
+      if ((age = entry.getValue().getAge()) < minAge) {
+        minAge = age;
         currentPlayerID = entry.getKey();
       }
     }
