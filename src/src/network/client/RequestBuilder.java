@@ -22,16 +22,24 @@ public class RequestBuilder {
     client.sendRequest(new SimpleRequest(RequestID.RESET));
   }
 
-  public void sendMoveStoneOnTable(int initCol, int initRow, int targetCol, int targetRow) {
-      client.sendRequest(new ConcreteMove(RequestID.TABLE_MOVE, initCol, initRow, targetCol, targetRow));
+  public void sendMoveStoneOnTable(int srcCol, int srcRow, int targetCol, int targetRow) {
+      client.sendRequest(new ConcreteMove(RequestID.TABLE_MOVE, srcCol, srcRow, targetCol, targetRow));
   }
 
-  public void sendPutStoneRequest(int initCol, int initRow, int targetCol, int targetRow) {
-      client.sendRequest(new ConcreteMove(RequestID.PUT_STONE, initCol, initRow, targetCol, targetRow));
+  public void sendPutStoneRequest(int srcCol, int srcRow, int targetCol, int targetRow) {
+      client.sendRequest(new ConcreteMove(RequestID.PUT_STONE, srcCol, srcRow, targetCol, targetRow));
   }
 
-  public void moveStoneOnHand(int initCol, int initRow, int targetCol, int targetRow) {
-    client.sendRequest(new ConcreteMove(RequestID.HAND_MOVE, initCol, initRow, targetCol, targetRow));
+  public void moveStoneOnHand(int srcCol, int srcRow, int targetCol, int targetRow) {
+    client.sendRequest(new ConcreteMove(RequestID.HAND_MOVE, srcCol, srcRow, targetCol, targetRow));
+  }
+
+  public void sendMoveSetOnHand(int srcCol, int srcRow, int targetCol, int targetRow) {
+    client.sendRequest(new ConcreteMove(RequestID.HAND_SET_MOVE, srcCol, srcRow, targetCol, targetRow));
+  }
+
+  public void sendPutSetRequest(int srcCol, int srcRow, int targetCol, int targetRow) {
+    client.sendRequest(new ConcreteMove(RequestID.PUT_SET, srcCol, srcRow, targetCol, targetRow));
   }
 
   public void sendConfirmMoveRequest() {

@@ -67,7 +67,7 @@ public class MainController implements Controller {
     });
   }
 
-  private void switchToWaitScene() throws IOException {
+  void switchToWaitScene() throws IOException {
     switchScene("wait.fxml");
     waitController.setServerIP(serverIP);
   }
@@ -164,14 +164,6 @@ public class MainController implements Controller {
 //  void stopMusicInWaiting() {
 //    startController.stopMusic();
 //  }
-
-  void killThreads() {
-    if (gameController != null) {
-      gameController.stopTimer();
-    }
-    client.disconnect();
-    System.out.println("kill client thread was pressed");
-  }
 
 
 //  public void setUsername(String username, int username_id) {
@@ -293,7 +285,7 @@ public class MainController implements Controller {
   }
 
   void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    client.sendRequest(new ConcreteMove(RequestID.WHOLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
+    client.sendRequest(new ConcreteMove(RequestID.TABLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
   }
 
   void initPlayer(String serverIP, String name, int age) {
@@ -338,6 +330,14 @@ public class MainController implements Controller {
 
   void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
     requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+  }
+
+  void sendMoveSetOnHand(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    requestBuilder.sendMoveSetOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+  }
+
+  void sendPutSetRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    requestBuilder.sendPutSetRequest(sourceColumn, sourceRow, thisColumn, thisRow);
   }
 
   void sendConfirmMoveRequest() {

@@ -75,12 +75,19 @@ class RequestHandler {
 //        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
         return;
       case HAND_MOVE:
-      ConcreteMove handMove = (ConcreteMove) request;
-      game.moveStoneOnHand(playerID,
+        ConcreteMove handMove = (ConcreteMove) request;
+        game.moveStoneOnHand(playerID,
             new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
             new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
-      sendHandToPlayer(playerID);
+        sendHandToPlayer(playerID);
       return;
+      case HAND_SET_MOVE:
+        ConcreteMove handSetMove = (ConcreteMove) request;
+        game.moveSetOnHand(playerID,
+            new Coordinate(handSetMove.getInitCol(), handSetMove.getInitRow()),
+            new Coordinate(handSetMove.getTargetCol(), handSetMove.getTargetRow()));
+        sendHandToPlayer(playerID);
+        return;
       case TABLE_MOVE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
@@ -89,7 +96,7 @@ class RequestHandler {
         }
         sendTableToALl();
         return;
-      case WHOLE_SET_MOVE:
+      case TABLE_SET_MOVE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
           game.moveSetOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
@@ -106,6 +113,16 @@ class RequestHandler {
         sendTableToALl();
         sendHandToPlayer(playerID);
       return;
+      case PUT_SET:
+        if (isCurrentPlayer(playerID)) {
+          ConcreteMove putSet = (ConcreteMove) request;
+          game.putSet(new Coordinate(putSet.getInitCol(), putSet.getInitRow()),
+              new Coordinate(putSet.getTargetCol(), putSet.getTargetRow()));
+          sendHandSizesToAll();
+        }
+        sendTableToALl();
+        sendHandToPlayer(playerID);
+        return;
       case DRAW:
         if (isCurrentPlayer(playerID)) {
           game.reset();

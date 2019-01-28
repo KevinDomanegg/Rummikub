@@ -48,14 +48,14 @@ public class RummiTable implements Grid {
     return stones.size();
   }
 
-  Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
-    int col = coordinate.getCol();
-    // find the first stone for a potential set
-    while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
-      col--;
-    }
-    return new Coordinate(col, coordinate.getRow());
-  }
+//  public Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
+//    int col = coordinate.getCol();
+//    // find the first stone for a potential set
+//    while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
+//      col--;
+//    }
+//    return new Coordinate(col, coordinate.getRow());
+//  }
 
   /**
    * checks if all horizontally grouped stones on the table are valid sets.

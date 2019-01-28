@@ -97,6 +97,75 @@ public class RummiGame implements Game {
   }
 
   /**
+   * moves neighbor stones at the given sourcePosition on the given sourceGrid
+   * to the given targetPosition on the given targetGrid with the method of the given StoneMove.
+   * If there are other (not neighbor) stones around the given targetPosition,
+   * targetGrid stays unchanged. The positions of the subject stone and its neighbors after moving
+   * them will be automatically suited on the given targetGrid if their positions are acceptable.
+   *
+   * @param sourcePosition the position of the subject stone before moving it with neighbors
+   * @param targetPosition the position of the subject stone after moving it with neighbors
+   * @param sourceGrid the grid where the subject stone and its neighbors come from
+   * @param targetGrid the grid where the subject stone and its neighbors move to
+   * @param stoneMove the container of a method to be used for moving
+   */
+  private static void moveSet(Coordinate sourcePosition, Coordinate targetPosition, Grid sourceGrid, Grid targetGrid, StoneMove stoneMove) {
+    Map<Coordinate, Stone>  sourceStones = sourceGrid.getStones();
+    // check if there is a stone on the table at the given sourcePosition
+    if (!sourceStones.containsKey(sourcePosition)) {
+      return;
+    }
+    Coordinate coordinate = sourceGrid.getFirstCoordOfSetAt(sourcePosition);
+    int srcCol = coordinate.getCol();
+    int srcRow = coordinate.getRow();
+    int trgCol = targetPosition.getCol() - (sourcePosition.getCol() - srcCol);
+    int trgRow = targetPosition.getRow();
+    HashSet<Coordinate> neighborCoordinates = new HashSet<>(); // coordinates of stones to be moved
+    // save all coordinates of neighbor stones at the sourcePosition
+    for (int i = 0; sourceStones.containsKey(coordinate); i++) {
+      neighborCoordinates.add(coordinate);
+      coordinate = new Coordinate(srcCol + i, srcRow);
+    }
+    int setSize = neighborCoordinates.size();
+    // make trgCol suitable on targetGrid
+    trgCol = Math.min(Math.max(0, trgCol), targetGrid.getWidth() - setSize);
+    Map<Coordinate, Stone> targetStones = targetGrid.getStones();
+    // check if it is safe to move stones on targetGrid
+    for (int i = 0; i < setSize; i++) {
+      coordinate = new Coordinate(trgCol + i, trgRow);
+      // check if the coordinate on target grid is clear or the source- and targetGrid are the same
+      if (targetStones.containsKey(coordinate)
+          // and the coordinate is a part of neighborCoordinates of moving stones
+          && !(sourceGrid.equals(targetGrid) && neighborCoordinates.contains(coordinate))) {
+        return;
+      }
+    }
+    // check if targetPosition was at the right side of the sourcePosition
+    if (trgCol > srcCol) {
+      // move stones starting from right
+      for (int i = setSize - 1; i >= 0; i--) {
+        stoneMove.moveStone(new Coordinate(srcCol + i, srcRow), new Coordinate(trgCol + i, trgRow));
+      }
+    } else {
+      // move stones starting from left
+      for (int i = 0; i < setSize; i++) {
+        stoneMove.moveStone(new Coordinate(srcCol + i, srcRow), new Coordinate(trgCol + i, trgRow));
+      }
+    }
+  }
+
+  /**
+   * moves a stone with its neighbor stones from the given sourcePosition at this table
+   * to the given targetPosition at this table.
+   *
+   * @param sourcePosition the position of the subject stone before moving it with its neighbors
+   * @param targetPosition the position of the subject stone after moving it with its neighbors
+   */
+  @Override public void moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
+    moveSet(sourcePosition, targetPosition, table, table, this::moveStoneOnTable);
+  }
+
+  /**
    * moves stone from the given sourcePosition to the given targetPosition on the table.
    * If a stone at the targetPosition already exist, it will be swapped.
    * Hereby, this move will be stored in the trace for reset.
@@ -108,56 +177,6 @@ public class RummiGame implements Game {
     swapStoneOnTable(sourcePosition, targetPosition);
     // store this move.
     trace.push(new MoveTrace("MOVESTONEONTABLE", sourcePosition, targetPosition));
-  }
-
-  /**
-   * moves the stone at the given sourcePosition to the given targetPosition with its
-   * neighbor stones. If there are other (not neighbor) stones around the given targetPosition,
-   * table stays unchanged. Hereby, the positions of the subject stone and its neighbors
-   * after being moved will be automatically suit on the table if their positions are acceptable.
-   *
-   * @param sourcePosition the position of the subject stone before moving it
-   * @param targetPosition the wanted position of the subject stone after moving it
-   */
-  @Override public void moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
-    Map<Coordinate, Stone > tableStones = table.getStones();
-    // check if there is a stone on the table at the given sourcePosition
-    if (!tableStones.containsKey(sourcePosition)) {
-      return;
-    }
-    Coordinate coordinate = table.getFirstCoordOfSetAt(sourcePosition);
-    int srcCol = coordinate.getCol();
-    int srcRow = coordinate.getRow();
-    int trgCol = targetPosition.getCol() - (sourcePosition.getCol() - srcCol);
-    int trgRow = targetPosition.getRow();
-    HashSet<Coordinate> selectedCoordinates = new HashSet<>(); // coordinates of stones to be moved
-    for (int i = 0; tableStones.containsKey(coordinate); i++) {
-      selectedCoordinates.add(coordinate);
-      coordinate = new Coordinate(srcCol + i, srcRow);
-    }
-    int setSize = selectedCoordinates.size();
-    // make trgCol suitable on the table
-    trgCol = Math.min(Math.max(0, trgCol), table.getWidth() - setSize - 1);
-    // check if it is safe to move stones
-    for (int i = 0; i < setSize; i++) {
-      coordinate = new Coordinate(trgCol + i, trgRow);
-      // check if coordinate is clear or is a part of selectedCoordinates of moving stones
-      if (tableStones.containsKey(coordinate) && !selectedCoordinates.contains(coordinate)) {
-        return;
-      }
-    }
-    // check if targetPosition was at the right side of the sourcePosition
-    if (trgCol > srcCol) {
-      // move stones starting from right
-      for (int i = setSize - 1; i >= 0; i--) {
-        moveStoneOnTable(new Coordinate(srcCol + i, srcRow), new Coordinate(trgCol + i, trgRow));
-      }
-    } else {
-      // move stones starting from left
-      for (int i = 0; i < setSize; i++) {
-        moveStoneOnTable(new Coordinate(srcCol + i, srcRow), new Coordinate(trgCol + i, trgRow));
-      }
-    }
   }
 
   /**
@@ -175,6 +194,17 @@ public class RummiGame implements Game {
     table.setStone(targetPosition, chosenStone);
     // it seems like maps are not deleting value pairs. The just overwrite the value with null.
     table.getStones().values().removeIf(Objects::isNull);
+  }
+
+  /**
+   * puts a stone with its neighbor stones from the given sourcePosition at this table
+   * to the given targetPosition at this hand.
+   *
+   * @param sourcePosition the position of the subject stone before moving it with its neighbors
+   * @param targetPosition the position of the subject stone after moving it with its neighbors
+   */
+  @Override public void putSet(Coordinate sourcePosition, Coordinate targetPosition) {
+    moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
   }
 
   /**
@@ -197,6 +227,19 @@ public class RummiGame implements Game {
       // store this move
       trace.push(new MoveTrace("MOVESTONEFROMHAND", sourcePosition, targetPosition));
     }
+  }
+
+  /**
+   * moves a stone with its neighbor stones from the given sourcePosition at this Hand
+   * to the given targetPosition at this Hand.
+   *
+   * @param sourcePosition the position of the subject stone before moving it with its neighbors
+   * @param targetPosition the position of the subject stone after moving it with its neighbors
+   */
+  @Override public void moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
+    Grid hand = players.get(playerID).getHand();
+    moveSet(sourcePosition, targetPosition, hand, hand,
+        (srcPos, trgPos) -> moveStoneOnHand(playerID, srcPos, trgPos));
   }
 
   /**
@@ -402,5 +445,65 @@ public class RummiGame implements Game {
         .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
         .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
     return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+  }
+
+  // for test
+  public static void main(String[] args) {
+    RummiGame game = new RummiGame();
+    game.setPlayer(0, "player1", 0);
+    game.setPlayer(1, "player2", 3);
+    game.start();
+
+    String firstTable = game.table.toString();
+    String firstHand = game.currentPlayer().getHand().toString();
+    System.out.println("---first table");
+    System.out.println(firstTable);
+    System.out.println("---first hand");
+    System.out.println(firstHand);
+
+
+    System.out.println("---putStone (3, 0) to (0, 0)");
+    game.putStone(new Coordinate(3, 0), new Coordinate(0, 0));
+
+    System.out.println("---putSet (4, 0) to (3, 2)");
+    game.putSet(new Coordinate(4, 0), new Coordinate(3, 2));
+    System.out.println("---table:");
+    System.out.println(game.table.toString());
+    System.out.println("---hand:");
+    System.out.println(game.currentPlayer().getHand().toString());
+
+//    game.putStone(new Coordinate(5, 0), new Coordinate(4, 2));
+//    game.putStone(new Coordinate(6, 0), new Coordinate(5, 2));
+//    game.putStone(new Coordinate(7, 0), new Coordinate(6, 2));
+//
+//    game.putStone(new Coordinate(0, 0), new Coordinate(3, 3));
+//    game.putStone(new Coordinate(1, 0), new Coordinate(4, 3));
+//    game.putStone(new Coordinate(2, 0), new Coordinate(5, 3));
+//    game.putStone(new Coordinate(3, 0), new Coordinate(6, 3));
+
+    game.getTrace().clear();
+
+//    String firstTable = game.getTrace().toString();
+//    game.moveSetOnTable(new Coordinate(6, 2), new Coordinate(0, 0));
+//    System.out.println("---moving set (6, 2) to (0, 0)");
+//    System.out.println(game.getTrace());
+//    game.moveSetOnTable(new Coordinate(3, 0), new Coordinate(10, 3));
+//    System.out.println("---moving set (3, 0) to (10, 3)");
+//    System.out.println(game.getTrace());
+//    game.moveSetOnTable(new Coordinate(8, 3), new Coordinate(4, 3));
+//    System.out.println("---moving set (8, 3) to (4, 3)");
+//    System.out.println(game.getTrace());
+//    game.moveStoneOnTable(new Coordinate(5, 3), new Coordinate(0, 0));
+//    System.out.println("---moving stone (5, 3) to (0, 0)");
+//    System.out.println(game.getTrace());
+//    game.moveSetOnTable(new Coordinate(3, 3), new Coordinate(20, 1));
+//    System.out.println("---moving set (3, 3) to (20, 1)");
+//    System.out.println(game.getTrace());
+
+    game.reset();
+    System.out.println("---reset");
+
+//    System.out.println("---check if reset worked");
+//    System.out.println(game.getTrace().toString().equals());
   }
 }

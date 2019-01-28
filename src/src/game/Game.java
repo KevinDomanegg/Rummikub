@@ -13,7 +13,11 @@ public interface Game {
 
   void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
+  void putSet(Coordinate sourcePosition, Coordinate targetPosition);
+
   void putStone(Coordinate sourcePosition, Coordinate targetPosition);
+
+  void moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 

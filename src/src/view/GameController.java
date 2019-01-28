@@ -7,20 +7,24 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -267,19 +271,27 @@ public class GameController {
         Parent targetParent = cell.getParent();
       if (sourceParent.getId().equals("handGrid")) {
         if (targetParent.getId().equals("handGrid")) {
-          mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+          if (ctrl) {
+            mainController.sendMoveSetOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+          } else {
+            mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+          }
         } else {
-          mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          if (ctrl) {
+            mainController.sendPutSetRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          } else {
+            mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          }
         }
       } else {
         System.out.println("control pressed is: ------- " + ctrl);
         if (ctrl) {
           mainController.sendMoveSetOnTableRequest(sourceColumn, sourceRow, thisColumn, thisRow);
-          ctrl = false;
         } else {
           mainController.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
       }
+      ctrl = false;
       event.consume();
     });
   }
@@ -455,7 +467,6 @@ public class GameController {
   @FXML
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
-    endOfYourTurn();
   }
 
   //TODO
