@@ -83,32 +83,30 @@ public class GameController {
 //    this.requestBuilder = requestBuilder;
 //  }
 
-//  void setTimer() {
-//    int delay = 1000;
-//    int period = 1000;
-//    timer_countDown = new Timer();
-//    timer_countDown.scheduleAtFixedRate(
-//        timer_task =
-//            new TimerTask() {
-//              int interval = 60;
-//
-//              public void run() {
-//                if (interval == 0) {
-//                  if (model.yourTurn()) {
-//                    requestBuilder.sendTimeOutRequest();
-//                    model.finishTurn();
-//                  }
-//                  timer_countDown.cancel();
-//                  timer_task.cancel();
-//                  return;
-//                }
-//                timer.setText("" + interval);
-//                interval--;
-//              }
-//            },
-//        delay,
-//        period);
-//  }
+  private void setTimer() {
+    int delay = 1000;
+    int period = 1000;
+    timer_countDown = new Timer();
+    timer_countDown.scheduleAtFixedRate(
+        timer_task = new TimerTask() {
+              int interval = 10;
+              public void run() {
+                if (interval == 0) {
+                  if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
+                    stopTimer();
+                    sendTimeOutRequest();
+                    return;
+                  }
+                  stopTimer();
+                  return;
+                }
+                timer.setText("" + interval);
+                interval--;
+              }
+            },
+        delay,
+        period);
+  }
 
   void stopTimer() {
     timer_task.cancel();
@@ -135,7 +133,7 @@ public class GameController {
   }
 
   private void endOfYourTurn() {
-    ownBoard.setStyle("-fx-border-color: none;");
+    ownBoard.setStyle("-fx-border-color: black;");
     //moveButtons.setVisible(false);
     //backButtons.setVisible(false);
   }
@@ -364,7 +362,11 @@ public class GameController {
 
   @FXML
   void notifyCurrentPlayer(int relativeOpponentPosition) {
-
+    if (timer_countDown != null) {
+      timer_countDown.cancel();
+      timer_task.cancel();
+    }
+    setTimer();
     HBox[] opponents = new HBox[] {
             opponentLeft, opponentMid, opponentRight
     };
@@ -445,6 +447,12 @@ public class GameController {
     }
     System.out.println("OpponentPosition is " + opponentID);
     return opponentID;
+  }
+
+  private void sendTimeOutRequest() {
+    mainController.sendTimeOutRequest();
+    System.out.println("--------------------------TIME_OUT");
+    endOfYourTurn();
   }
 
   @FXML

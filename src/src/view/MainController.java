@@ -88,6 +88,9 @@ public class MainController implements Controller {
   }
 
   public void noServerAvailable() {
+    if (gameController != null) {
+      gameController.stopTimer();
+    }
     showError("Host is not connected");
     try {
       switchScene("start.fxml");
@@ -288,7 +291,7 @@ public class MainController implements Controller {
     client.sendRequest(new SimpleRequest(RequestID.DRAW));
   }
 
-  void sendTimerRequest() {
+  void sendTimeOutRequest() {
     client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
   }
 

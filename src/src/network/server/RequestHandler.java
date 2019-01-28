@@ -14,6 +14,7 @@ import communication.gameinfo.StoneInfo;
 import communication.request.ConcreteMove;
 import communication.request.ConcreteSetPlayer;
 import communication.request.Request;
+import communication.request.TimeOut;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -120,7 +121,7 @@ class RequestHandler {
         }
 //        server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
       //SEND NEW COUNTDOWN FOR 30 SECONDS
-      //sendNewTimer();
+//      sendNewTimer();
       return;
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
@@ -151,16 +152,14 @@ class RequestHandler {
 //      sendHandSizesToAll();
 //      return;
       case TIME_OUT:
-        if (game.isConsistent()) {
-          checkWinner();
-          /*// send the changed table first
-          sendTableToALl();*/
-          // then notify the turn to the next player
-          notifyTurnToPlayer();
-        } else {
+//        if (game.isConsistent()) {
+//          checkWinner();
+//          sendHandSizesToAll();
+//          notifyTurnToPlayer();
+//        } else {
           // sends original table
+          game.reset();
           sendTableToALl();
-
           sendHandToPlayer(playerID);
           // draw stone cause table not consistent and the time is out
           game.drawStone();
@@ -168,7 +167,7 @@ class RequestHandler {
           // send changed hand to player
           sendHandSizesToAll();
           notifyTurnToPlayer();
-        }
+//        }
         return;
       case SORT_HAND_BY_GROUP:
         game.sortPlayerHandByGroup(playerID);
