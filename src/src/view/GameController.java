@@ -93,7 +93,7 @@ public class GameController {
     timer_countDown = new Timer();
     timer_countDown.scheduleAtFixedRate(
         timer_task = new TimerTask() {
-              int interval = 10;
+              int interval = 60;
               public void run() {
                 if (interval == 0) {
                   if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
