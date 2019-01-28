@@ -1,8 +1,11 @@
 package network.server;
 
+import communication.Serializer;
 import communication.gameinfo.GameInfo;
 
+import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 public class ServerSender extends Thread {
@@ -12,6 +15,9 @@ public class ServerSender extends Thread {
   private boolean send = false;
   private boolean connected = true;
   private GameInfo info = null;
+  private Serializer serializer;
+
+  private PrintWriter out;
 
   /**
    * Constructor setting the necessary instance variables.
@@ -24,6 +30,12 @@ public class ServerSender extends Thread {
     this.clientOut = clientOut;
     this.server = server;
     this.id = id;
+    this.serializer = new Serializer();
+    try {
+      this.out = new PrintWriter(clientOut.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -32,9 +44,13 @@ public class ServerSender extends Thread {
    * @param info to be sent
    */
   synchronized void send(GameInfo info) {
-    this.info = info;
+    /*this.info = info;
     send = true;
-    notifyAll();
+    notifyAll();*/
+      String json = serializer.serialize(info);
+      out.println(json);
+      out.flush();
+
   }
 
   /**
@@ -54,26 +70,36 @@ public class ServerSender extends Thread {
 
     synchronized (this) {
       try {
-        ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
+        //ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
         while (connected) {
-          if (send) {
+          // IF WE DO SO, THEN WE HAVE A RACING CONDITION PROBLEM WITH SEND AND INFO, WHEN WE TRY TO SEND
+          // A LOT OF DIFFERENT OBJECTS AT ONE TIME
+          /*if (send) {
             out.writeObject(this.info);
             out.flush();
-          }
-          this.send = false;
+          }*/
+          //this.send = false;
           wait();
         }
       } catch (Exception e) {
         this.connected = false;
-        server.disconnectClient(this.id);
+//        server.disconnectClient(this.id);
       }
     }
+    System.out.println("ServerSender terminated");
   }
 
-  /**
-   * Disconnects from the client.
-   */
-  void disconnect(){
+    /**
+     * Disconnects from the client.
+     */
+  synchronized void disconnect(){
     this.connected = false;
+    try{
+      this.clientOut.close();
+      out.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    notifyAll();
   }
 }

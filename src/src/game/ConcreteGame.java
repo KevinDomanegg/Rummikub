@@ -1,6 +1,6 @@
 //package game;
 //
-//import communication.gameinfo.InfoID;
+//import communication.gameinfo.GameInfoID;
 //import communication.gameinfo.Timer;
 //import network.server.RummiServer;
 //
@@ -27,27 +27,27 @@
 //
 //  @Override
 //  public void start() {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
 //  public void moveStoneOnTable(Coordinate currentCoord, Coordinate nextCoord) {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
 //  public void moveStoneFromHand(Coordinate currentCoord, Coordinate nextCoord) {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
 //  public void moveStoneOnHand(int pos, Coordinate currentCoord, Coordinate nextCoord) {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
 //  public void undo() {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
@@ -57,7 +57,7 @@
 //
 //  @Override
 //  public void drawStone() {
-//    server.sendToAll(new Timer(InfoID.DRAW));
+//    server.sendToAll(new Timer(GameInfoID.DRAW));
 //  }
 //
 //  @Override
