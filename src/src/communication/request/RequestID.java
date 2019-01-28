@@ -19,5 +19,6 @@ public enum RequestID {
   SORT_HAND_BY_RUN,
   TABLE_SET_MOVE,
   HAND_SET_MOVE,
-  PUT_SET
+  PUT_SET,
+  UNDO
 }
