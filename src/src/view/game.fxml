@@ -39,12 +39,14 @@
             </HBox>
 
             <!-- Menu buttons -->
-            <StackPane alignment="TOP_RIGHT" styleClass="onEdge">
+            <HBox alignment="TOP_RIGHT" styleClass="onEdge" spacing="10">
               <children>
+                <Button fx:id="helpButton" mnemonicParsing="false"
+                        text="?" onMouseClicked="#showHelpScene"/>
                 <Button fx:id="quitGame" mnemonicParsing="false"
                         text="Quit" onMouseClicked="#quitGame"/>
               </children>
-            </StackPane>
+            </HBox>
           </children>
         </StackPane>
       </children>

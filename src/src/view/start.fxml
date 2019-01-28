@@ -20,11 +20,15 @@
            <children>
                <StackPane fx:id="header">
                    <children>
+
                        <Text fx:id="title" styleClass="whiteText" text="Rummikub" />
                    </children>
                </StackPane>
                <VBox fx:id="content">
                    <children>
+                       <HBox alignment="TOP_RIGHT">
+                           <Button fx:id="helpButton" mnemonicParsing="false" onMouseClicked="#showHelpScene" text="?" />
+                       </HBox>
                        <VBox styleClass="inputArea">
                            <children>
                                <Text text="Name:" styleClass="whiteText" />

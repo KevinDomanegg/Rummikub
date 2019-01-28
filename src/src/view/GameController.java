@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -479,5 +480,10 @@ public class GameController {
     rank.put(1, 0);
     rank.put(0, -30);
     mainController.showRank(rank);
+  }
+
+  @FXML
+  private void showHelpScene() {
+    mainController.showHelpScene();
   }
 }

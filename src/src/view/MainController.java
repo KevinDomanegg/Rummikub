@@ -136,6 +136,23 @@ public class MainController implements Controller {
     });
   }
 
+  void showHelpScene() {
+    Platform.runLater(() -> {
+      Stage stage = new Stage();
+      Parent root;
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("help.fxml"));
+        root = loader.load();
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(primaryStage);
+        stage.showAndWait();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
 //  void mute() {
 //    startController.muteMusic();
 //  }

@@ -3,6 +3,7 @@ package view;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -142,4 +143,9 @@ public class StartController {
       ageField.setStyle(null);
       ageERROR.setVisible(false);
     }
+
+  @FXML
+  private void showHelpScene() {
+      mainController.showHelpScene();
+  }
 }
