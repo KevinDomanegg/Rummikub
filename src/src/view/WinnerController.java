@@ -1,7 +1,6 @@
 package view;
 
-import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -11,15 +10,21 @@ public class WinnerController {
 
   @FXML private ListView rankList;
   @FXML private Button quitButton;
+  private MainController mainController;
 
-  @FXML void restartGame() {
+  void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
-  @FXML void quitGame() {
+  @FXML private void restartGame() {
+    mainController.sendStartRequest();
+  }
+
+  @FXML private void quitGame() {
     ((Stage) quitButton.getScene().getWindow()).close();
   }
 
-  void setRank(List<Entry<Integer, Integer>> finalRank) {
+  void setRank(Map<Integer, Integer> finalRank) {
     rankList.getItems().addAll(finalRank);
   }
 }

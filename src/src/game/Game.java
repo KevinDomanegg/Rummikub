@@ -2,11 +2,10 @@ package game;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public interface Game {
 
-  void setPlayer(String name, int age);
+  void setPlayer(int playerID, String name, int age);
 
   void start();
 
@@ -50,7 +49,7 @@ public interface Game {
 
   int getNumberOfPlayers();
 
-  List<Entry<Integer, Integer>> getFinalRank();
+  Map<Integer, Integer> getFinalRank();
 
   List<String> getPlayerNames();
 

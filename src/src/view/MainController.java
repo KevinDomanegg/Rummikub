@@ -1,9 +1,14 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
+import communication.request.ConcreteMove;
 import communication.request.RequestID;
 import communication.request.SimpleRequest;
-import java.util.Map.Entry;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,11 +20,6 @@ import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
 import view.music.Music;
-
-import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.util.List;
 
 public class MainController implements Controller {
 
@@ -97,21 +97,24 @@ public class MainController implements Controller {
     // switchToError
   }
 
-  @Override public void showRank(List<Entry<Integer, Integer>> finalRank) {
-    Stage stage = new Stage();
-    Parent root;
-    try {
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("winner.fxml"));
-      root = loader.load();
-      winnerController = loader.getController();
-      winnerController.setRank(finalRank);
-      stage.setScene(new Scene(root));
-      stage.initModality(Modality.APPLICATION_MODAL);
-      stage.initOwner(primaryStage);
-      stage.showAndWait();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  @Override public void showRank(Map<Integer, Integer> finalRank) {
+    Platform.runLater(() -> {
+      Stage stage = new Stage();
+      Parent root;
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("winner.fxml"));
+        root = loader.load();
+        winnerController = loader.getController();
+        winnerController.setMainController(this);
+        winnerController.setRank(finalRank);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(primaryStage);
+        stage.showAndWait();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
   }
 
 //  void mute() {
@@ -196,7 +199,7 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyTurn() {
-//      gameController.notifyTurn();
+    gameController.yourTurn();
   }
 
   /**
@@ -249,6 +252,10 @@ public class MainController implements Controller {
 
   void sendTimerRequest() {
     client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+  }
+
+  void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
+    client.sendRequest(new ConcreteMove(RequestID.WHOLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
   }
 
   void initPlayer(String serverIP, String name, int age) {

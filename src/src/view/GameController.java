@@ -1,55 +1,58 @@
 package view;
 
 import communication.gameinfo.StoneInfo;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.*;
-import javafx.scene.media.Media;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.music.Music;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class GameController {
 
-  @FXML private Text player0Name;
-  @FXML private Text player0Hand;
-  @FXML private Text player1Name;
-  @FXML private Text player2Name;
-  @FXML private Text player3Name;
-  @FXML private Text player1Hand;
-  @FXML private Text player2Hand;
-  @FXML private Text player3Hand;
+  @FXML private HBox opponentRight;
+  @FXML private HBox opponentMid;
+  @FXML private HBox opponentLeft;
 
-  @FXML Text timer;
+  @FXML private Text ownName;
+  @FXML private Text ownHand;
+  @FXML private Text leftPlayerName;
+  @FXML private Text midPlayerName;
+  @FXML private Text rightPlayerName;
+  @FXML private Text leftPlayerHand;
+  @FXML private Text midPlayerHand;
+  @FXML private Text rightPlayerHand;
+
+  @FXML private Text timer;
   @FXML private GridPane tableGrid;
   @FXML private GridPane handGrid;
   @FXML private VBox errorPane;
   @FXML private Text errorMessage;
+  @FXML private VBox ownBoard;
 
 //  private NetworkController networkController;
   private MainController mainController;
 //  private ClientModel model;
 //  private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
-
-  // MUSIC
-  private Media sound_pickupStone;
-  private Media sound_dropStone;
-  private Media sound_drawStone;
 
   // TIMER
   private Timer timer_countDown;
@@ -58,7 +61,8 @@ public class GameController {
   // NO HOST AVAILABLE
   private boolean serverNotAvailable;
 
-
+  // Cntrl + Drag and Drop
+  private boolean ctrl;
 
 
 //  void setNetworkController(NetworkController networkcontroller) {
@@ -85,7 +89,7 @@ public class GameController {
 //
 //              public void run() {
 //                if (interval == 0) {
-//                  if (model.isMyTurn()) {
+//                  if (model.yourTurn()) {
 //                    requestBuilder.sendTimeOutRequest();
 //                    model.finishTurn();
 //                  }
@@ -119,6 +123,15 @@ public class GameController {
     mainController.quit();
   }
 
+
+  void yourTurn() {
+    ownBoard.setStyle("-fx-border-color: green ; -fx-border-width: 2px ;");
+  }
+
+  private void endOfYourTurn() {
+    ownBoard.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+  }
+
   /**
    * This method is automatically called after the FXMLLoader loaded all FXML content.
    */
@@ -142,13 +155,14 @@ public class GameController {
   public void drawStone() {
     Music.playSoundOf("draw stone");
     mainController.sendDrawRequest();
+    endOfYourTurn();
   }
 
   /**
    * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-   * @param grid    The FXML GridPane where the cells shall be constructed in
-   * @param isTable Indicator where a cell shall source its data from in case of drag and drop event
+   * @param stoneGrid    The FXML GridPane where the cells shall be constructed in
+   * @param pane Indicator where a cell shall source its data from in case of drag and drop event
    */
   @FXML
   void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
@@ -183,7 +197,7 @@ public class GameController {
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
    * @param cell    Pane where the event shall be registered
-   * @param isTable Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+   * @param stoneInfo Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
     // Get cell coordinates
@@ -192,9 +206,17 @@ public class GameController {
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
-//      if (!model.isMyTurn()) {
-//        return;
-//      }
+      System.out.println(stoneInfo);
+      if (stoneInfo == null) {
+        return;
+      }
+
+      if (event.isControlDown()) {
+        System.out.println("----------------------------control pushed");
+        ctrl = true;
+      }
+
+
       Music.playSoundOf("pick up stone");
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
       Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null);
@@ -228,7 +250,6 @@ public class GameController {
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
       Music.playSoundOf("drop stone");
-
       Pane sourceCell = (Pane) event.getGestureSource();
       sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
@@ -236,16 +257,21 @@ public class GameController {
 
         Parent sourceParent = sourceCell.getParent();
         Parent targetParent = cell.getParent();
-
-        if (sourceParent.getId().equals("handGrid")) {
-          if (targetParent.getId().equals("handGrid")) {
-            mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
-          } else {
-            mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
-          }
+      if (sourceParent.getId().equals("handGrid")) {
+        if (targetParent.getId().equals("handGrid")) {
+          mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+        } else {
+          mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+        }
+      } else {
+        System.out.println("control pressed is: ------- " + ctrl);
+        if (ctrl) {
+          mainController.sendMoveSetOnTableRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+          ctrl = false;
         } else {
           mainController.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
+      }
       event.consume();
     });
   }
@@ -287,41 +313,61 @@ public class GameController {
 //  }
 
   void setHandSizes(List<Integer> sizes) {
+    ownHand.setText(String.valueOf(sizes.get(0)));
     switch (sizes.size()) {
       case 4:
-        player3Hand.setText(sizes.get(3).toString());
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
+        midPlayerHand.setText(String.valueOf(sizes.get(2)));
+        rightPlayerHand.setText(String.valueOf(sizes.get(3)));
+        return;
       case 3:
-        player2Hand.setText(sizes.get(2).toString());
+        leftPlayerHand.setText(String.valueOf(sizes.get(1)));
+        rightPlayerHand.setText(String.valueOf(sizes.get(2)));
+        return;
       case 2:
-        player1Hand.setText(sizes.get(1).toString());
-      case 1:
-        player0Hand.setText(sizes.get(0).toString());
+        midPlayerHand.setText(String.valueOf(sizes.get(1)));
       default:
     }
   }
 
   void setPlayerNames(List<String> names) {
+    ownName.setText(names.get(0));
     switch (names.size()) {
       case 4:
-        player3Name.setText(names.get(3));
+        leftPlayerName.setText(names.get(1));
+        midPlayerName.setText(names.get(2));
+        rightPlayerName.setText(names.get(3));
+        return;
       case 3:
-        player2Name.setText(names.get(2));
+        opponentMid.setVisible(false);
+        leftPlayerName.setText(names.get(1));
+        rightPlayerName.setText(names.get(2));
+        return;
       case 2:
-        player1Name.setText(names.get(1));
-      case 1:
-        player0Name.setText(names.get(0));
+      opponentMid.setVisible(true);
+      opponentLeft.setVisible(false);
+      opponentRight.setVisible(false);
+      midPlayerName.setText(names.get(1));
       default:
     }
   }
 
   void notifyCurrentPlayer(int playerID) {
+//    switch (playerID) {
+//      case 1:
+//        if (opponentMid.isVisible()) {
+//          opponentMid.blinkblink();
+//        } else {
+//          opponentLeft.blinkblink();
+//        }
+    }
 //    model.setCurrentPlayer(playerID);
 //    // set up the timer
 //    timer_countDown.cancel();
 //    timer_task.cancel();
 //    setTimer();
 //    // show current player on view
-  }
+//  }
 
   @FXML
   private void sendResetRequest() {
@@ -331,6 +377,7 @@ public class GameController {
   @FXML
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
+    endOfYourTurn();
   }
 
   //TODO
@@ -363,9 +410,9 @@ public class GameController {
   }
 
   public void showRank() {
-    List<Entry<Integer, Integer>> rank = new ArrayList<>();
-    rank.add(new SimpleEntry<>(1, 0));
-    rank.add(new SimpleEntry<>(0, -30));
+    Map<Integer, Integer> rank = new HashMap<>();
+    rank.put(1, 0);
+    rank.put(0, -30);
     mainController.showRank(rank);
   }
 }

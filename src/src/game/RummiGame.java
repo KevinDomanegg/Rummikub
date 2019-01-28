@@ -2,6 +2,11 @@ package game;
 
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
@@ -15,7 +20,8 @@ public class RummiGame implements Game {
   private static final int MIN_FIRST_MOVE_POINTS = 30;
 
   private RummiTable table; // table of the game
-  private ArrayList<Player> players; // list of players
+//  private ArrayList<Player> players; // list of players
+  private HashMap<Integer, Player> players;
   private RummiBag bag; // bag where all stones are filled
   private Stack<MoveTrace> trace; // history of the current players each move
   private boolean isGameOn;
@@ -24,8 +30,7 @@ public class RummiGame implements Game {
 
   public RummiGame() {
     table = new RummiTable();
-    players = new ArrayList<>(MAX_PLAYERS);
-    bag = new RummiBag();
+    players = new HashMap<>(MAX_PLAYERS);
     trace = new Stack<>();
   }
 
@@ -39,21 +44,24 @@ public class RummiGame implements Game {
     // reset currentPoints
     currentPoints = 0;
     // the ID of the current player will be updated
-    currentPlayerID = (currentPlayerID + 1) % players.size();
+    do {
+      currentPlayerID = (currentPlayerID + 1) % MAX_PLAYERS;
+    } while (!players.containsKey(currentPlayerID));
   }
 
   /** adds a new player with name and age in this game before the game start. */
-  @Override public void setPlayer(String name, int age) {
-    players.add(new Player(name, age));
-    System.out.println("---number of players: " + players.size());
+  @Override public void setPlayer(int playerID, String name, int age) {
+    players.put(playerID, new Player(name, age));
   }
 
   /** starts the game by handing out stones and determining the start player. */
   @Override public void start() {
     if (players.size() >= MIN_PLAYERS) {
-      isGameOn = true;
+      bag = new RummiBag();
+      table.clear();
       handOutStones();
       setStartPlayer();
+      isGameOn = true;
     }
     // ?? error?
     // throw new IllegalStateException("not enough players to start the game.");
@@ -61,6 +69,11 @@ public class RummiGame implements Game {
 
   /** first stones will be handed out randomly to each player. */
   private void handOutStones() {
+    // clear players' hands first
+    for (Player player : players.values()) {
+      player.clearHand();
+    }
+    // hand out stones
     for (int i = 0; i < FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
         drawStone();
@@ -70,11 +83,10 @@ public class RummiGame implements Game {
 
   /** the youngest player will be the first to play. */
   private void setStartPlayer() {
-    // currentPlayerID is with 0 automatically initialized
-    for (int playerID = 1; playerID < players.size(); playerID++) {
-      Player player = players.get(playerID);
-      if (player.getAge() < currentPlayer().getAge()) {
-        currentPlayerID = playerID;
+    int minAge = Integer.MAX_VALUE;
+    for (Entry<Integer, Player> entry : players.entrySet()) {
+      if (entry.getValue().getAge() < minAge) {
+        currentPlayerID = entry.getKey();
       }
     }
   }
@@ -171,6 +183,9 @@ public class RummiGame implements Game {
     // check if target position is empty
     if (!table.getStones().containsKey(targetPosition)) {
       Stone movingStone = currentPlayer().popStone(sourcePosition);
+      if (movingStone == null) {
+        return;
+      }
       // add up the currentPoints
       currentPoints += movingStone.getNumber();
       table.setStone(targetPosition, movingStone);
@@ -221,14 +236,8 @@ public class RummiGame implements Game {
       isGameOn = false;
       return;
     }
-    // count down the currentPlayerID if the left players ID smaller than the currents
-    if (playerID < currentPlayerID) {
-      currentPlayerID--;
-      return;
-    }
-    // reset the currentPlayerID to 0 (first) if the left player had the last ID
-    if (playerID == players.size()) {
-      currentPlayerID = 0;
+    if (currentPlayerID == playerID) {
+      nextTurn();
     }
   }
 
@@ -237,6 +246,7 @@ public class RummiGame implements Game {
     while (!trace.empty()) {
       undo();
     }
+//    currentPoints = 0;
   }
 
   /** undoes the last move of the current player. */
@@ -259,7 +269,9 @@ public class RummiGame implements Game {
         return;
       case "MOVESTONEFROMHAND":
         // get back stone from the table to the player hand
-        currentPlayer().pushStone(table.removeStone(targetPosition));
+        Stone stone = table.removeStone(targetPosition);
+        currentPoints -= stone.getNumber();
+        currentPlayer().pushStone(stone);
         return;
 //      case "MOVESTONEONHAND":
 //        // swap back stones on the player hand
@@ -319,11 +331,11 @@ public class RummiGame implements Game {
   }
 
   @Override public List<Integer> getPlayerHandSizes() {
-    return players.stream().map(Player::getHandSize).collect(Collectors.toList());
+    return players.values().stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
   @Override public List<String> getPlayerNames() {
-    return players.stream().map(Player::getName).collect(Collectors.toList());
+    return players.values().stream().map(Player::getName).collect(Collectors.toList());
   }
 
   /**
@@ -378,12 +390,10 @@ public class RummiGame implements Game {
    *
    * @return the sorted (by values (points) list
    */
-  @Override public List<Entry<Integer, Integer>> getFinalRank() {
-    List<Entry<Integer, Integer>> rank = new ArrayList<>(players.size());
-    for (int playerID = 0; playerID < players.size(); playerID++) {
-      rank.add(new SimpleEntry<>(playerID, players.get(playerID).getPoints()));
-    }
-    rank.sort(Comparator.comparing(Entry::getValue));
-    return rank;
+  @Override public Map<Integer, Integer> getFinalRank() {
+    List<Entry<Integer, Integer>> rank = players.entrySet().stream()
+        .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
+        .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
+    return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 }

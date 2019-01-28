@@ -173,7 +173,7 @@ Text {
     -fx-rotate: 90;
 }
 
-#ownHand {
+#ownBoard {
     -fx-padding: 0 0 20 0;
     -fx-background-color: black;
     -fx-pref-width: 750;
