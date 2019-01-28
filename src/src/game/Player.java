@@ -91,6 +91,10 @@ class Player {
     return hand.getHeight();
   }
 
+  RummiHand getHand() {
+    return hand;
+  }
+
   /** changes this player's state to hasPlayedFirstMove. */
   void playedFirstMove() {
     hasPlayedFirstMove = true;
@@ -113,6 +117,7 @@ class Player {
   int getPoints() {
     // all points of stones represent a negative number
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
+    //how do I change the negative points for the Joker?
   }
 
   void sortHandByGroup() {
@@ -127,21 +132,4 @@ class Player {
     hand.clear();
   }
 
-  // tests sortHandByGroup and sortHandByRun
-  public static void main(String[] args) {
-    Player player = new Player("name1", 0);
-    RummiBag bag = new RummiBag();
-    for (int i = 0; i < 20; i++) {
-      player.pushStone(bag.removeStone());
-    }
-    player.moveStone(new Coordinate(0, 0), new Coordinate(19, 1));
-    player.moveStone(new Coordinate(3, 0), new Coordinate(3, 1));
-    System.out.println("Normal: \n" + player.hand);
-    player.sortHandByGroup();
-    System.out.println("Group: \n" + player.hand);
-    player.sortHandByRun();
-    System.out.println("Run: \n" + player.hand);
-    player.sortHandByGroup();
-    System.out.println("Group: \n" + player.hand);
-  }
 }
