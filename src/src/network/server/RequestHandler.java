@@ -49,21 +49,22 @@ class RequestHandler {
     return grid;
   }
 
-  void applyRequest(Object request, int playerID){
+  void applyRequest(Object request, int playerID) {
+    // for test
     System.out.println("-----------------------" +request);
-    switch (((Request) request).getRequestID()){
+    switch (((Request) request).getRequestID()) {
       case START:
-        // check the minimum
+        // check if the player is the host (host id is always 0)
         if (playerID != 0) {
-          server.sendToPlayer(playerID, new ErrorInfo("only host can start the game."));
+          sendErrorToPlayer(playerID, "only host can start the game.");
           return;
         }
+        // check if there are at least 2 players
         if (game.getNumberOfPlayers() < 2) {
-          server.sendToPlayer(playerID, new ErrorInfo("wait for other players to join."));
+          sendErrorToPlayer(playerID, "wait for other players to join.");
           return;
         }
         //starts the game
-        notifyGameStartToAll();
         startGame();
         return;
       case SET_PLAYER:
@@ -122,24 +123,15 @@ class RequestHandler {
       return;
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
-          checkWinner();
-          notifyTurnToPlayer();
-//          if (game.isConsistent()) {host
-//          /*// send the changed table first
-//          sendTableToALl();*/
-//            // then notify the turn to the next player
-//            // sendNewTimer();
-//          } else {
-//            // send the original table to all players
-//            sendTableToALl();
-//            // send the original hand to the current player
-//            sendHandToPlayer(playerID);
-//            // send the original hand sizes to all players
-//            sendHandSizesToAll();
-//            // notify wrong move
-//            server.sendToPlayer(playerID, new ErrorInfo("invalid move!"));
-//          }
-//          sendHandSizesToAll();
+          if (game.isConsistent()) {
+            checkWinner();
+            notifyTurnToPlayer();
+            sendHandSizesToAll();
+          } else {
+            sendErrorToPlayer(playerID, (game.hasPlayerPlayedFirstMove(playerID))
+                ? "invalid move!"
+                : "sum of stone-values at the first move must be at least 30 points!");
+          }
         }
         return;
       case RESET:
@@ -152,11 +144,11 @@ class RequestHandler {
 //        sendHandSizesToPlayer(playerID);
         }
       return;
-      case GIVE_UP:
-      game.playerHasLeft(playerID);
-      sendBagSizeToAll();
-      sendHandSizesToAll();
-      return;
+//      case GIVE_UP:
+//      game.playerHasLeft(playerID);
+//      sendBagSizeToAll();
+//      sendHandSizesToAll();
+//      return;
       case TIME_OUT:
         if (game.isConsistent()) {
           checkWinner();
@@ -190,7 +182,7 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-      server.sendToPlayer(playID, new ErrorInfo("not your turn!"));
+      sendErrorToPlayer(playID, "not your turn!");
       return false;
     }
     return true;
@@ -254,6 +246,7 @@ class RequestHandler {
   private void startGame() {
     // START THE GAME
     game.start();
+    notifyGameStartToAll();
     // send table first to all
     sendTableToALl();
     // send to each player their hand
@@ -314,5 +307,9 @@ class RequestHandler {
     if (game.hasWinner()) {
       server.sendToAll(new RankInfo(game.getFinalRank()));
     }
+  }
+
+  private void sendErrorToPlayer(int playerID, String message) {
+    server.sendToPlayer(playerID, new ErrorInfo(message));
   }
 }

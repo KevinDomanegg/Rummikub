@@ -2,14 +2,7 @@ package network.client;
 
 import communication.Deserializer;
 import communication.gameinfo.GameInfo;
-import communication.gameinfo.GameInfoID;
-import communication.gameinfo.SimpleGameInfo;
-import communication.request.RequestID;
-import communication.request.SimpleRequest;
-
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -36,7 +29,9 @@ class ClientListener extends Thread {
   public void run() {
     try {
       receiveMessage = new Scanner(server.getInputStream());
-
+    } catch (IOException e) {
+      myClient.disconnect();
+    }
       while (connected) {
         String json = null;
         try {
@@ -51,10 +46,6 @@ class ClientListener extends Thread {
           }
         }
       }
-
-    } catch (IOException e) {
-      myClient.disconnect();
-    }
 
   }
 

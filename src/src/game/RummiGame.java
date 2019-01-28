@@ -41,6 +41,9 @@ public class RummiGame implements Game {
 
   /** shifts the currentPlayerID depending on the number of players in this game. */
   private void nextTurn() {
+    if (currentPlayer().getHandSize() == 0) {
+      return;
+    }
     // reset currentPoints
     currentPoints = 0;
     // the ID of the current player will be updated
@@ -309,8 +312,6 @@ public class RummiGame implements Game {
     //}
     // check if the current player has played their (first) turn in this game
     if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
-      currentPoints = 0;
-      reset();
       return false;
     }
     // clear the trace for the next turn
@@ -356,6 +357,10 @@ public class RummiGame implements Game {
    */
   @Override public void sortPlayerHandByRun(int playerID) {
     players.get(playerID).sortHandByRun();
+  }
+
+  @Override public boolean hasPlayerPlayedFirstMove(int playerID) {
+    return players.get(playerID).hasPlayedFirstMove();
   }
 
   @Override public int getCurrentPlayerID() {

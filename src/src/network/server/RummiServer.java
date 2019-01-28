@@ -2,12 +2,10 @@ package network.server;
 
 import communication.gameinfo.GameIPAddress;
 import communication.gameinfo.GameInfo;
-import communication.request.Request;
-
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
-import network.client.RummiClient;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -128,8 +126,8 @@ public class RummiServer extends Thread implements Server {
 
     //When the client who has hosted the game disconnects, terminate the server
     if (id == 0) {
+      sendToAll(new SimpleGameInfo(GameInfoID.SERVER_NOT_AVAILABLE));
       suicide();
-      return;
     }
 
     //notifyAll();
