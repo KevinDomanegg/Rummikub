@@ -32,14 +32,4 @@ public class StoneTest {
     assertEquals(stone5.getNumber(), 20);
   }
 
-  @Test
-  public void printTest() {
-    Stone stone1 = new Stone(Stone.Color.RED, 1);
-    Stone stone5 = new Stone();
-
-    assertTrue(stone1.toString().equals("(Color: " + stone1.getColor() + "," + "Number: " + " " + stone1.getNumber() +")"));
-    assertTrue(stone5.toString().equals("(Color: " + stone5.getColor() + "," + "Number: " + " " + stone5.getNumber() +")"));
-  }
-
-
 }
