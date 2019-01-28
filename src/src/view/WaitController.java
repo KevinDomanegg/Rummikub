@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.music.Music;
@@ -20,7 +21,7 @@ public class WaitController implements Initializable {
 //  private ClientModel model;
 
   @FXML
-  private Label waitingState;
+  private Text waitingState;
 
   @FXML
   private Text ipAddress;
@@ -189,5 +190,10 @@ public class WaitController implements Initializable {
 
   void setServerIP(String serverIP) {
     ipAddress.setText(serverIP);
+  }
+
+  @FXML
+  private void showHelpScene() {
+    mainController.showHelpScene();
   }
 }

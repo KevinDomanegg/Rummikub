@@ -60,7 +60,7 @@ public class MainController implements Controller {
         gameController.setMainController(this);
         break;
     }
-    Scene scene = new Scene(root, 1024, 768);
+    Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
       primaryStage.setScene(scene);
       primaryStage.show();
@@ -126,6 +126,23 @@ public class MainController implements Controller {
         winnerController = loader.getController();
         winnerController.setMainController(this);
         winnerController.setRank(finalRank);
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initOwner(primaryStage);
+        stage.showAndWait();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  void showHelpScene() {
+    Platform.runLater(() -> {
+      Stage stage = new Stage();
+      Parent root;
+      try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("help.fxml"));
+        root = loader.load();
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
@@ -264,7 +281,7 @@ public class MainController implements Controller {
    */
   @Override
   public void setBagSize(int bagSize) {
-//      gameController.setBagSize(bagSize);
+    gameController.setBagSize(bagSize);
   }
 
   void sendDrawRequest() {

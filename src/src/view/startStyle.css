@@ -7,14 +7,15 @@
     -fx-spacing: 10;
 }
 
+.onEdge {
+    -fx-padding: 20;
+}
+
 #vContainer {
     -fx-max-width: 600;
 }
 
 #root {
-    -fx-pref-width: 1024;
-    -fx-pref-height: 768;
-    -fx-background-color: #095F94;
     -fx-background-image: url("images/backgroundTileBlue.png");
     -fx-background-repeat: repeat;
 }
@@ -33,7 +34,11 @@
     -fx-border-radius: 5;
     -fx-background-color: #095F94;
     -fx-padding: 20;
+}
+
+.shadow {
     -fx-effect: dropshadow(gaussian, #00000066, 20, 0.1, 0, 0);
+    -fx-background-radius: 5;
 }
 
 #footer {

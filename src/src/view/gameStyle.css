@@ -91,6 +91,7 @@ Text {
 
 .YELLOW {
     -fx-fill: yellow;
+    -fx-stroke: black;
 }
 
 .BLUE {
@@ -146,7 +147,7 @@ Text {
     -fx-background-repeat: repeat;
 }
 
-#timer {
+#timer, #bagSize {
     -fx-font-size: 40;
     -fx-fill: white;
     -fx-font-weight: 700;
@@ -184,7 +185,7 @@ Text {
 }
 
 #playerInfo {
-    -fx-fill: white;
+    -fx-padding: 10;
 }
 
 #table {
@@ -195,10 +196,6 @@ Text {
 
 #tableContainer {
     -fx-padding: 50;
-}
-
-#timer {
-    -fx-font-weight: 700;
 }
 
 #leftContainer {

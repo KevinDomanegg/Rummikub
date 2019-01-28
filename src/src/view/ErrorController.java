@@ -11,6 +11,7 @@ public class ErrorController {
 
   @FXML
   private Text errorMessage;
+
   @FXML
   private Button okButton;
 
