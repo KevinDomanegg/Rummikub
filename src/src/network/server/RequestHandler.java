@@ -115,6 +115,7 @@ class RequestHandler {
           // send the original table to all
           sendTableToALl();
           sendHandSizesToAll();
+          sendBagSizeToAll();
           notifyTurnToPlayer();
         }
 //        server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
@@ -176,6 +177,12 @@ class RequestHandler {
       case SORT_HAND_BY_RUN:
         game.sortPlayerHandByRun(playerID);
         sendHandToPlayer(playerID);
+        return;
+      case UNDO:
+        game.undo();
+        sendTableToALl();
+        sendHandToPlayer(playerID);
+        return;
       default:
     }
   }

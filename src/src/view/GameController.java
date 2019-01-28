@@ -312,9 +312,9 @@ public class GameController {
 
   }
 
-//  void setBagSize(int bagSize) {
-//    model.setBagSize(bagSize);
-//  }
+  void setBagSize(int bagSize) {
+    this.bagSize.setText(Integer.toString(bagSize));
+  }
 
 //  void notifyTurn() {
 //    model.notifyTurn();
@@ -501,10 +501,6 @@ public class GameController {
 
   @FXML
   private void sendUndoRequest() {
-    //TODO: Undo functionality here
-  }
-
-  public void setBagSize(int bagSize) {
-    this.bagSize.setText(Integer.toString(bagSize));
+    mainController.sendUndoRequest();
   }
 }

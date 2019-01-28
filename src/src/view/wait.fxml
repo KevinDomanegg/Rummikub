@@ -18,9 +18,15 @@
     <StackPane alignment="TOP_RIGHT" pickOnBounds="false">
       <children>
         <HBox styleClass="onEdge" alignment="TOP_RIGHT" spacing="5">
-          <Button fx:id="notMuteButton" onMouseClicked="#unMute" visible="true" />
-          <Button fx:id="muteButton" onMouseClicked="#mute" visible="true" />
-          <Button onMouseClicked="#quitWating" text="Quit" />
+          <children>
+            <StackPane alignment="TOP_RIGHT">
+              <children>
+                <Button fx:id="notMuteButton" onMouseClicked="#unMute" visible="false" text="Unmute"/>
+                <Button fx:id="muteButton" onMouseClicked="#mute" visible="true" text="Mute" />
+              </children>
+            </StackPane>
+            <Button onMouseClicked="#quitWating" text="Quit" />
+          </children>
         </HBox>
       </children>
     </StackPane>
@@ -33,7 +39,7 @@
           </children>
         </StackPane>
 
-        <VBox fx:id="content" alignment="TOP_CENTER">
+        <VBox fx:id="content" alignment="TOP_CENTER" styleClass="shadow">
           <children>
             <Text fx:id="waitingState" styleClass="whiteText" text="Waiting for opponents..." />
             <HBox alignment="CENTER_LEFT">

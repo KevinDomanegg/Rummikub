@@ -18,5 +18,6 @@ public enum RequestID {
   TIME_OUT,
   SORT_HAND_BY_GROUP,
   SORT_HAND_BY_RUN,
-  WHOLE_SET_MOVE
+  WHOLE_SET_MOVE,
+  UNDO
 }

@@ -365,4 +365,8 @@ public class MainController implements Controller {
   void sendResetRequest() {
     requestBuilder.sendResetRequest();
   }
+
+  void sendUndoRequest() {
+    requestBuilder.sendUndoRequest();
+  }
 }

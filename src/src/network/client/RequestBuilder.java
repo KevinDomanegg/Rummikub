@@ -54,4 +54,8 @@ public class RequestBuilder {
   public void sendSortHandByRunRequest() {
     client.sendRequest(new SimpleRequest(RequestID.SORT_HAND_BY_RUN));
   }
+
+  public void sendUndoRequest() {
+    client.sendRequest(new SimpleRequest(RequestID.UNDO));
+  }
 }
