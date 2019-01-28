@@ -1,5 +1,6 @@
 package game;
 
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -7,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 /** Model for the board game Rummikub. */
@@ -170,6 +170,8 @@ public class RummiGame implements Game {
     table.setStone(sourcePosition, table.removeStone(targetPosition));
     // move the chosen stone to targetPosition
     table.setStone(targetPosition, chosenStone);
+    // it seems like maps are not deleting value pairs. The just overwrite the value with null.
+    table.getStones().values().removeIf(Objects::isNull);
   }
 
   /**
@@ -302,9 +304,9 @@ public class RummiGame implements Game {
    */
   @Override public boolean isConsistent() {
     // check if the current player has played something yet
-    if (currentPoints == 0) {
-      return false;
-    }
+    //if (currentPoints == 0) {
+    //  return false;
+    //}
     // check if the current player has played their (first) turn in this game
     if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
       currentPoints = 0;
@@ -395,48 +397,5 @@ public class RummiGame implements Game {
         .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
         .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
     return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-  }
-
-  public static void main(String[] args) {
-    RummiGame game = new RummiGame();
-    game.setPlayer(0, "player1", 0);
-    game.setPlayer(1, "player2", 3);
-    game.start();
-
-    game.putStone(new Coordinate(4, 0), new Coordinate(3, 2));
-    game.putStone(new Coordinate(5, 0), new Coordinate(4, 2));
-    game.putStone(new Coordinate(6, 0), new Coordinate(5, 2));
-    game.putStone(new Coordinate(7, 0), new Coordinate(6, 2));
-
-    game.putStone(new Coordinate(0, 0), new Coordinate(3, 3));
-    game.putStone(new Coordinate(1, 0), new Coordinate(4, 3));
-    game.putStone(new Coordinate(2, 0), new Coordinate(5, 3));
-    game.putStone(new Coordinate(3, 0), new Coordinate(6, 3));
-
-    game.trace.clear();
-    String firstTable = game.table.toString();
-    System.out.println("---first table");
-    System.out.println(firstTable);
-    game.moveSetOnTable(new Coordinate(6, 2), new Coordinate(0, 0));
-    System.out.println("---moving set (6, 2) to (0, 0)");
-    System.out.println(game.table);
-    game.moveSetOnTable(new Coordinate(3, 0), new Coordinate(10, 3));
-    System.out.println("---moving set (3, 0) to (10, 3)");
-    System.out.println(game.table);
-    game.moveSetOnTable(new Coordinate(8, 3), new Coordinate(4, 3));
-    System.out.println("---moving set (8, 3) to (4, 3)");
-    System.out.println(game.table);
-    game.moveStoneOnTable(new Coordinate(5, 3), new Coordinate(0, 0));
-    System.out.println("---moving stone (5, 3) to (0, 0)");
-    System.out.println(game.table);
-    game.moveSetOnTable(new Coordinate(3, 3), new Coordinate(20, 1));
-    System.out.println("---moving set (3, 3) to (20, 1)");
-    System.out.println(game.table);
-
-    game.reset();
-    System.out.println("---reset");
-    System.out.println(game.table);
-    System.out.println("---check if reset worked");
-    System.out.println(game.table.toString().equals(firstTable));
   }
 }

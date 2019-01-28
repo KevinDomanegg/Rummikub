@@ -5,6 +5,7 @@ import game.Stone.Color;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 
 public class RummiTable implements Grid {
   private static final int WIDTH = 26;
@@ -29,7 +30,7 @@ public class RummiTable implements Grid {
   }
 
   @Override public Stone removeStone(Coordinate coordinate) {
-    return stones.remove(coordinate);
+    return  stones.remove(coordinate);
   }
 
   @Override public int getWidth() {
@@ -42,6 +43,10 @@ public class RummiTable implements Grid {
 
   @Override public void clear() {
     stones.clear();
+  }
+
+  public int size() {
+    return stones.size();
   }
 
   Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
@@ -179,14 +184,5 @@ public class RummiTable implements Grid {
     }
     stringBuilder.append(stones.size());
     return stringBuilder.toString();
-  }
-
-  // for test
-  public static void main(String[] args) {
-    RummiTable table = new RummiTable();
-    table.setStone(new Coordinate(0, 0), new Stone(Color.YELLOW, 5));
-    table.setStone(new Coordinate(1, 0), new Stone(Color.BLUE, 5));
-    table.setStone(new Coordinate(2, 0), new Stone());
-    System.out.println(table.isConsistent());
   }
 }
