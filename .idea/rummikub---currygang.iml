@@ -24,5 +24,6 @@
     <orderEntry type="library" name="junit:junit:4.0" level="project" />
     <orderEntry type="library" name="GSON" level="project" />
     <orderEntry type="library" name="JUnit" level="project" />
+    <orderEntry type="library" name="com.google.code.gson:gson:2.8.5" level="application" />
   </component>
 </module>
