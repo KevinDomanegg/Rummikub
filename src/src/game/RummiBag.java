@@ -9,7 +9,6 @@ public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
   private ArrayList<Stone> stones;
   private Random randomGenerator;
-  private final static int STONESOFEACHCOLOR = 13;
 
 
   //The bag is initially filled with 13 Numbers of each
@@ -18,7 +17,7 @@ public class RummiBag {
     stones = new ArrayList<>(MAX_BAG_SIZE);
     for (Color color : Color.values()) {
       if (color != Color.JOKER) {
-        for (int i = 1; i <= STONESOFEACHCOLOR; i++) {
+        for (int i = Stone.MIN_VALUE; i <= Stone.MAX_VALUE; i++) {
           stones.add(new Stone(color, i));
           stones.add(new Stone(color, i));
         }

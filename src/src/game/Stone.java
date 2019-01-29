@@ -2,6 +2,8 @@ package game;
 
 public class Stone {
   public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
+  public static final int MAX_VALUE = 13;
+  public static final int MIN_VALUE = 1;
 
   private final int JOKER_POINTS = 20;
   private final Color color;
