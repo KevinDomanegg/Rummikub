@@ -14,7 +14,6 @@ import communication.gameinfo.StoneInfo;
 import communication.request.ConcreteMove;
 import communication.request.ConcreteSetPlayer;
 import communication.request.Request;
-import communication.request.TimeOut;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
@@ -126,6 +125,10 @@ class RequestHandler {
         return;
       case DRAW:
         if (isCurrentPlayer(playerID)) {
+          if (game.getBagSize() == 0) {
+            sendErrorToPlayer(playerID, "Bag is empty!");
+            return;
+          }
           game.reset();
           game.drawStone();
           // send the player new hand with a drawn stone
