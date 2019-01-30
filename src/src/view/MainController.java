@@ -147,7 +147,6 @@ public class MainController implements Controller {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("help.fxml"));
         root = loader.load();
         stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
         stage.showAndWait();
       } catch (IOException e) {
@@ -230,9 +229,9 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyTurn() {
-    gameController.yourTurn();
     //needed for the styling of the opponents
     gameController.notifyCurrentPlayer(0);
+    gameController.yourTurn();
   }
 
   /**
@@ -244,9 +243,6 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-//    Platform.runLater(() -> {
-//    });
-
   }
 
   /**
@@ -256,6 +252,7 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
+//    gameController
     gameController.notifyCurrentPlayer(playerID);
 //    Platform.runLater(() ->);
   }

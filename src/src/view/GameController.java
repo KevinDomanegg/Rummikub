@@ -132,14 +132,10 @@ public class GameController {
 
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
-    //moveButtons.setVisible(true);
-    //backButtons.setVisible(true);
   }
 
   private void endOfYourTurn() {
     ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
-    //moveButtons.setVisible(false);
-    //backButtons.setVisible(false);
   }
 
   /**
@@ -378,6 +374,7 @@ public class GameController {
       timer_countDown.cancel();
       timer_task.cancel();
     }
+    endOfYourTurn();
     setTimer();
     HBox[] opponents = new HBox[] {
             opponentLeft, opponentMid, opponentRight
@@ -476,23 +473,7 @@ public class GameController {
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
   }
-
-  //TODO
-  private void showErrorView(String message) {
-    errorMessage.setText(message);
-    errorPane.setVisible(true);
-    tableGrid.setVisible(false);
-  }
-
-  @FXML private void handleOkButton() {
-    if (serverNotAvailable) {
-      returnToStart(false);
-    } else {
-      errorPane.setVisible(false);
-      tableGrid.setVisible(true);
-    }
-  }
-
+  
   @FXML
   private void sendSortHandByGroupRequest() {
     mainController.sendSortHandByGroupRequest();
