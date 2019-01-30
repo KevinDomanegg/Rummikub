@@ -66,4 +66,6 @@ public interface Controller {
   void showError(String errorMessage);
 
   void showRank(Map<Integer, Integer> finalRank);
+
+  void connectionRejected();
 }

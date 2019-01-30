@@ -6,6 +6,8 @@ import communication.gameinfo.GameInfoID;
 import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
+import network.client.RummiClient;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -13,12 +15,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class RummiServer extends Thread implements Server {
-
-
-  public static void main(String[] args) {
-//    RummiServer s = new RummiServer();
-//    s.start();
-  }
 
 
   private static final int MAX_CLIENTS = 4;
@@ -53,20 +49,25 @@ public class RummiServer extends Thread implements Server {
       while (running) {
         synchronized (this) {
 
-          if (numOfClients >= MAX_CLIENTS) {
-            try {
-              wait();
-            } catch (InterruptedException e) {
-              running = false;
-            }
-          }
-          // find next free position of clients
+//          if (numOfClients >= MAX_CLIENTS) {
+//            try {
+//              wait();
+//            } catch (InterruptedException e) {
+//              running = false;
+//            }
+//          }
           client = server.accept();
-          for (int i = 0; i < MAX_CLIENTS; i++) {
-            if (clients[i] == null) {
-              connectClient(client, i);
-              numOfClients++;
-              break;
+
+          if (numOfClients >= MAX_CLIENTS) {
+            rejectClient(client);
+          } else {
+            // find next free position of clients
+            for (int i = 0; i < MAX_CLIENTS; i++) {
+              if (clients[i] == null) {
+                connectClient(client, i);
+                numOfClients++;
+                break;
+              }
             }
           }
           // for test
@@ -78,6 +79,17 @@ public class RummiServer extends Thread implements Server {
       this.running = false;
     }
     System.out.println("Server terminated");
+  }
+
+  /**
+   * Notifies a client that it has been rejected.
+   * @param client to be rejected
+   */
+  private void rejectClient(Socket client) {
+    ServerSender sender = new ServerSender(client, this, (MAX_CLIENTS + 1));
+    sender.start();
+    sender.send(new SimpleGameInfo(GameInfoID.TOO_MANY_CLIENTS));
+    sender.disconnect();
   }
 
   /**

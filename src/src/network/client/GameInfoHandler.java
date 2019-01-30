@@ -67,6 +67,7 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         return;
       case RANK:
         controller.showRank(((RankInfo) gameInfo).getFinalRank());
+        return;
 //      case IP_ADDRESS:
 //        System.out.println("handling ip");
 //        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
@@ -74,6 +75,9 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
 //      case USERNAME:
 //        System.out.println("handling username");
 //          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
+      case TOO_MANY_CLIENTS:
+        controller.connectionRejected();
+
       default:
     }
     System.out.println("Info handled");

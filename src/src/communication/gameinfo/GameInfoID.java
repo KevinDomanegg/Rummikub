@@ -20,5 +20,6 @@ public enum GameInfoID {
   IP_ADDRESS,
   USERNAME,
   SERVER_NOT_AVAILABLE,
-  RANK
+  RANK,
+  TOO_MANY_CLIENTS
 }

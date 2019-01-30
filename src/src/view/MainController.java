@@ -88,10 +88,19 @@ public class MainController implements Controller {
   }
 
   public void noServerAvailable() {
+    showErrorGotToStart("Host is not connected");
+  }
+
+  public void connectionRejected() {
+    showErrorGotToStart("The Host has rejected the connection.\n" +
+            "There might be no spot left in the game!");
+  }
+
+  private void showErrorGotToStart(String errorMessage) {
     if (gameController != null) {
       gameController.stopTimer();
     }
-    showError("Host is not connected");
+    showError(errorMessage);
     try {
       switchScene("start.fxml");
     } catch (IOException e) {
