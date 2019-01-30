@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ErrorController">
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ErrorController">
    <children>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="336.0" spacing="20.0" style="-fx-background-color: BLUE;">
               <children>
