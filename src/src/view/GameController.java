@@ -132,14 +132,10 @@ public class GameController {
 
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
-    //moveButtons.setVisible(true);
-    //backButtons.setVisible(true);
   }
 
   private void endOfYourTurn() {
     ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
-    //moveButtons.setVisible(false);
-    //backButtons.setVisible(false);
   }
 
   /**
@@ -378,6 +374,7 @@ public class GameController {
       timer_countDown.cancel();
       timer_task.cancel();
     }
+    endOfYourTurn();
     setTimer();
     HBox[] opponents = new HBox[] {
             opponentLeft, opponentMid, opponentRight
