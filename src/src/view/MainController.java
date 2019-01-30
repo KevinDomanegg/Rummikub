@@ -105,7 +105,7 @@ public class MainController implements Controller {
       Stage stage = new Stage();
       Parent root;
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("error1.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("error.fxml"));
         root = loader.load();
         errorController = loader.getController();
         errorController.setErrorMessage(errorMessage);
