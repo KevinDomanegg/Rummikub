@@ -476,23 +476,7 @@ public class GameController {
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
   }
-
-  //TODO
-  private void showErrorView(String message) {
-    errorMessage.setText(message);
-    errorPane.setVisible(true);
-    tableGrid.setVisible(false);
-  }
-
-  @FXML private void handleOkButton() {
-    if (serverNotAvailable) {
-      returnToStart(false);
-    } else {
-      errorPane.setVisible(false);
-      tableGrid.setVisible(true);
-    }
-  }
-
+  
   @FXML
   private void sendSortHandByGroupRequest() {
     mainController.sendSortHandByGroupRequest();

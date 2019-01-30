@@ -147,7 +147,6 @@ public class MainController implements Controller {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("help.fxml"));
         root = loader.load();
         stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);
         stage.showAndWait();
       } catch (IOException e) {
@@ -244,9 +243,6 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-//    Platform.runLater(() -> {
-//    });
-
   }
 
   /**
