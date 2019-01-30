@@ -26,7 +26,7 @@ public class Coordinate {
 
   @Override
   public String toString(){
-    return "(Col: " + col + ",Row: " + row + ")";
+    return "(" + col + ", " + row + ")";
   }
 
   int getCol() {

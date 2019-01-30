@@ -2,10 +2,15 @@ package communication.gameinfo;
 
 import java.io.Serializable;
 
-public abstract class GridInfo implements Serializable {
-  StoneInfo[][] grid;
+/**
+ * Info for Game Table or Player Hand.
+ */
+public final class GridInfo implements GameInfo, Serializable {
+  private final StoneInfo[][] grid;
+  private final GameInfoID gameInfoID;
 
-  GridInfo(StoneInfo[][] grid) {
+  public GridInfo(GameInfoID gameInfoID, StoneInfo[][] grid) {
+    this.gameInfoID = gameInfoID;
     this.grid = grid;
   }
 
@@ -13,4 +18,7 @@ public abstract class GridInfo implements Serializable {
     return grid;
   }
 
+  @Override public GameInfoID getGameInfoID() {
+    return gameInfoID;
+  }
 }

@@ -2,19 +2,21 @@ package game;
 
 public class Stone {
   public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
+  public static final int MAX_VALUE = 13;
+  public static final int MIN_VALUE = 1;
 
-  private Color color;
-  private int number;
+  private final int JOKER_POINTS = 20;
+  private final Color color;
+  private final int number;
 
   public Stone(Color color, int number) {
-    //  Stone(Color.JOKER, 0) <=> Stone()
     this.color = color;
     this.number = number;
   }
 
-
   public Stone() {
     color = Color.JOKER;
+    number = JOKER_POINTS;
   }
 
   public Color getColor() {
@@ -25,11 +27,9 @@ public class Stone {
     return number;
   }
 
-
-  //Testmethods
-
+  // Testmethods
   @Override
   public String toString() {
-    return "(Color: " + color + "," + "Number: " + " " + number +")";
+    return "(Color: " + color + ", " + "Number: " + " " + number +")";
   }
 }

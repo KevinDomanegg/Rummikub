@@ -1,10 +1,9 @@
 package network.server;
 
+import communication.gameinfo.GameIPAddress;
 import communication.gameinfo.GameInfo;
-import communication.gameinfo.HandInfo;
-import communication.gameinfo.TableInfo;
-import communication.request.Request;
-
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
 import java.io.IOException;
@@ -27,6 +26,7 @@ public class RummiServer extends Thread implements Server {
   private static Socket[] clients = new Socket[MAX_CLIENTS];
   private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
   private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
+  private ServerSocket server;
   private int numOfClients;
   private boolean running = true;
   private RequestHandler requestHandler;
@@ -48,7 +48,7 @@ public class RummiServer extends Thread implements Server {
   @Override
   public void run() {
     try {
-      ServerSocket server = new ServerSocket(PORT);
+      server = new ServerSocket(PORT);
       Socket client;
       while (running) {
         synchronized (this) {
@@ -73,9 +73,11 @@ public class RummiServer extends Thread implements Server {
           System.out.println("number of clients: " + numOfClients);
         }
       }
+      //cleanup();
     } catch (IOException e) {
       this.running = false;
     }
+    System.out.println("Server terminated");
   }
 
   /**
@@ -92,6 +94,12 @@ public class RummiServer extends Thread implements Server {
     senders[id] = new ServerSender(clients[id], this, id);
     senders[id].start();
     System.out.println("RummiServer: connected to " + id);
+    // SENDS THE IP ADDRESS OF THE SERVER
+    try {
+      sendToPlayer(id, new GameIPAddress(getIP()));
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -99,15 +107,38 @@ public class RummiServer extends Thread implements Server {
    *
    * @param id of the client
    */
-  synchronized void disconnectClient(int id) {
+  void disconnectClient(int id) {
+
+    System.out.println("-----client disconnected: "+ id);
+    System.out.println("-----player numbers: "+ game.getNumberOfPlayers());
+    game.playerHasLeft(id);
     clients[id] = null;
-    listeners[id].disconnect();
+    if (listeners[id] != null) {
+      listeners[id].disconnect();
+    }
     listeners[id] = null;
-    senders[id].disconnect();
+    if (senders[id] !=  null) {
+      senders[id].disconnect();
+    }
     senders[id] = null;
     this.numOfClients--;
     System.out.println("RummiServer: disconnected from " + id);
-    notifyAll();
+
+    //When the client who has hosted the game disconnects, terminate the server
+    if (id == 0) {
+      sendToAll(new SimpleGameInfo(GameInfoID.SERVER_NOT_AVAILABLE));
+      suicide();
+    }
+
+    //notifyAll();
+  }
+
+  private void cleanup() {
+    for (int i = 0; i < clients.length; i++) {
+      if (clients[i] != null) {
+        disconnectClient(i);
+      }
+    }
   }
 
   /**
@@ -115,7 +146,7 @@ public class RummiServer extends Thread implements Server {
    *
    * @param request to be applied
    */
-  void applyRequest(Request request, int socketID) {
+  void applyRequest(Object request, int socketID) {
     requestHandler.applyRequest(request, socketID);
   }
 
@@ -133,13 +164,15 @@ public class RummiServer extends Thread implements Server {
   }
 
   /**
-   * Sends a GameInfo to a player specied player.
+   * Sends a GameInfo to a player specified player.
    *
    * @param playerID id of the player (0-n)
    * @param info     GameInfo getting sent to the player
    */
   @Override public void sendToPlayer(int playerID, GameInfo info) {
-    senders[playerID].send(info);
+    if (senders[playerID] != null) {
+      senders[playerID].send(info);
+    }
   }
 
 
@@ -152,6 +185,16 @@ public class RummiServer extends Thread implements Server {
   @Override
   public String getIP() throws UnknownHostException{
     return InetAddress.getLocalHost().getHostAddress();
+  }
+
+  public void suicide() {
+    cleanup();
+    running = false;
+    try {
+      server.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
 }

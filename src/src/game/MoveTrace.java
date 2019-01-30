@@ -19,40 +19,20 @@ public class MoveTrace {
     this.targetPosition = targetPosition;
   }
 
-
   public String getCommand() {
     return command;
-  }
-
-  public void setCommand(String command) {
-    this.command = command;
   }
 
   public Coordinate getInitialPosition() {
     return initialPosition;
   }
 
-  public void setInitialPosition(Coordinate initialPosition) {
-    this.initialPosition = initialPosition;
-  }
-
   public Coordinate getTargetPosition() {
     return targetPosition;
-  }
-
-  public void setTargetPosition(Coordinate targetPosition) {
-    this.targetPosition = targetPosition;
   }
 
   public int getPlayerID() {
     return playerID;
   }
-
-  public void setPlayerPosition(int playerID) {
-    this.playerID = playerID;
-  }
-
-
-
 
 }

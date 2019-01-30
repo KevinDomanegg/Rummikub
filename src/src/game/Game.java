@@ -5,19 +5,25 @@ import java.util.Map;
 
 public interface Game {
 
-  void setPlayer(int age);
+  void setPlayer(int playerID, String name, int age);
 
   void start();
 
-  void moveStoneOnTable(Coordinate initialPosition, Coordinate targetPosition);
+  void moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void moveStoneFromHand(Coordinate initialPosition, Coordinate targetPosition);
+  void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void moveStoneOnHand(int playerID, Coordinate initialPosition, Coordinate targetPosition);
+  void putSet(Coordinate sourcePosition, Coordinate targetPosition);
+
+  void putStone(Coordinate sourcePosition, Coordinate targetPosition);
+
+  void moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
+
+  void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   void drawStone();
 
-  void playerHasLeft(int playerPosition);
+  void playerHasLeft(int playerID);
 
   void reset();
 
@@ -46,6 +52,16 @@ public interface Game {
   int getPlayerHandHeight(int playerID);
 
   int getNumberOfPlayers();
+
+  Map<Integer, Integer> getFinalRank();
+
+  List<String> getPlayerNames();
+
+  void sortPlayerHandByGroup(int playerID);
+
+  void sortPlayerHandByRun(int playerID);
+
+  boolean hasPlayerPlayedFirstMove(int playerID);
 
   // ? int getTime();
 }

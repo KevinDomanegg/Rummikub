@@ -49,13 +49,13 @@ public class TestShell {
 
   public static void testGame(){
     RummiGame game = new RummiGame();
-    game.setPlayer(17);
-    game.setPlayer(19);
+    game.setPlayer(0, "player1",17);
+    game.setPlayer(1, "player2", 19);
     game.start();
     System.out.println("Initial Game:");
     System.out.println(game.getPlayerStones(game.getCurrentPlayerID()));
     System.out.println(game.getTableStones());
-    game.moveStoneFromHand(new Coordinate(0, 0), new Coordinate(0,0));
+    game.putStone(new Coordinate(0, 0), new Coordinate(0,0));
     System.out.println("One Stone was put donw");
     System.out.println(game.getPlayerStones(game.getCurrentPlayerID()));
     System.out.println(game.getTableStones());
@@ -65,8 +65,8 @@ public class TestShell {
     System.out.println("Pick up Stone again");
     System.out.println(game.getPlayerStones(game.getCurrentPlayerID()));
     System.out.println(game.getTableStones());
-    game.moveStoneFromHand(new Coordinate(0, 0), new Coordinate(0,0));
-    game.moveStoneFromHand(new Coordinate(0, 1), new Coordinate(0,1));
+    game.putStone(new Coordinate(0, 0), new Coordinate(0,0));
+    game.putStone(new Coordinate(0, 1), new Coordinate(0,1));
     game.moveStoneOnTable(new Coordinate(0,0), new Coordinate(0,2));
     System.out.println("Moved Stone on Table");
     System.out.println(game.getPlayerStones(game.getCurrentPlayerID()));
