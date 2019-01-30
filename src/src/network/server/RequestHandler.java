@@ -27,6 +27,7 @@ class RequestHandler {
    * Acts as a Link between RummiServer and Game.
    */
 
+  private static final String NOT_YOUR_TURN = "not your turn!";
 
   private Game game;
   private Server server;
@@ -198,6 +199,10 @@ class RequestHandler {
         sendHandToPlayer(playerID);
         return;
       case UNDO:
+        if (game.getCurrentPlayerID() == playerID) {
+          sendErrorToPlayer(playerID, NOT_YOUR_TURN);
+          return;
+        }
         game.undo();
         sendTableToALl();
         sendHandToPlayer(playerID);
@@ -208,7 +213,7 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-      sendErrorToPlayer(playID, "not your turn!");
+      sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;
