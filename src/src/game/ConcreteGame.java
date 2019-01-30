@@ -61,7 +61,7 @@
 //  }
 //
 //  @Override
-//  public void playerHasLeft(int playerPosition) {
+//  public void kickPlayer(int playerPosition) {
 //
 //  }
 //
