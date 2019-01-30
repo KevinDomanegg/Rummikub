@@ -27,6 +27,8 @@ class RequestHandler {
    * Acts as a Link between RummiServer and Game.
    */
 
+  private static final String NOT_YOUR_TURN = "not your turn!";
+  private static final String NOT_ALLOWED_MOVE = "not allowed to move stones like that!";
 
   private Game game;
   private Server server;
@@ -64,15 +66,20 @@ class RequestHandler {
           sendErrorToPlayer(playerID, "wait for other players to join.");
           return;
         }
-        //starts the game
-        startGame();
+        // check if the game is already on
+        if (!game.start()) {
+          sendErrorToPlayer(playerID, "game is already on.");
+          return;
+        }
+        notifyGameStartToAll();
         return;
       case SET_PLAYER:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-        game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge());
-//        sendPlayerNamesToAll();
+        if (!game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge())) {
+          sendErrorToPlayer(playerID, "the game is already full");
+          return;
+        }
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
-//        sendUsernames(playerID, ((ConcreteSetPlayer) request).getName());
         return;
       case HAND_MOVE:
         ConcreteMove handMove = (ConcreteMove) request;
@@ -83,9 +90,11 @@ class RequestHandler {
       return;
       case HAND_SET_MOVE:
         ConcreteMove handSetMove = (ConcreteMove) request;
-        game.moveSetOnHand(playerID,
+        if (!game.moveSetOnHand(playerID,
             new Coordinate(handSetMove.getInitCol(), handSetMove.getInitRow()),
-            new Coordinate(handSetMove.getTargetCol(), handSetMove.getTargetRow()));
+            new Coordinate(handSetMove.getTargetCol(), handSetMove.getTargetRow()))) {
+          sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
+        }
         sendHandToPlayer(playerID);
         return;
       case TABLE_MOVE:
@@ -99,25 +108,32 @@ class RequestHandler {
       case TABLE_SET_MOVE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
-          game.moveSetOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
-              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
+          if (!game.moveSetOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
+              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()))) {
+            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
+          }
         }
         sendTableToALl();
+        return;
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
-          game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
-              new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+          if (!game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
+              new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()))) {
+            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
+          }
           sendHandSizesToAll();
         }
         sendTableToALl();
         sendHandToPlayer(playerID);
-      return;
+        return;
       case PUT_SET:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putSet = (ConcreteMove) request;
-          game.putSet(new Coordinate(putSet.getInitCol(), putSet.getInitRow()),
-              new Coordinate(putSet.getTargetCol(), putSet.getTargetRow()));
+          if (!game.putSet(new Coordinate(putSet.getInitCol(), putSet.getInitRow()),
+              new Coordinate(putSet.getTargetCol(), putSet.getTargetRow()))) {
+            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
+          }
           sendHandSizesToAll();
         }
         sendTableToALl();
@@ -139,9 +155,6 @@ class RequestHandler {
           sendBagSizeToAll();
           notifyTurnToPlayer();
         }
-//        server.sendToAll(new SimpleGameInfo(GameInfoID.DRAW));
-      //SEND NEW COUNTDOWN FOR 30 SECONDS
-//      sendNewTimer();
       return;
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
@@ -167,7 +180,7 @@ class RequestHandler {
         }
       return;
 //      case GIVE_UP:
-//      game.playerHasLeft(playerID);
+//      game.kickPlayer(playerID);
 //      sendBagSizeToAll();
 //      sendHandSizesToAll();
 //      return;
@@ -198,9 +211,11 @@ class RequestHandler {
         sendHandToPlayer(playerID);
         return;
       case UNDO:
-        game.undo();
-        sendTableToALl();
-        sendHandToPlayer(playerID);
+        if (isCurrentPlayer(playerID)) {
+          game.undo();
+          sendTableToALl();
+          sendHandToPlayer(playerID);
+        }
         return;
       default:
     }
@@ -208,7 +223,7 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-      sendErrorToPlayer(playID, "not your turn!");
+      sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;
@@ -269,10 +284,8 @@ class RequestHandler {
 
   }
 
-  private void startGame() {
-    // START THE GAME
-    game.start();
-    notifyGameStartToAll();
+  private void notifyGameStartToAll() {
+    server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
     // send table first to all
     sendTableToALl();
     // send to each player their hand
@@ -323,10 +336,6 @@ class RequestHandler {
     List<Integer> handSizes = game.getPlayerHandSizes();
     Collections.rotate(handSizes, -playerID);
     server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
-  }
-
-  private void notifyGameStartToAll() {
-    server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
   }
 
   private void checkWinner() {

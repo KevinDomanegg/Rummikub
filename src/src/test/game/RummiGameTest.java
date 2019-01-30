@@ -1,10 +1,11 @@
 package game;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
+import org.junit.Test;
 
 
 public class RummiGameTest {
@@ -82,10 +83,10 @@ public class RummiGameTest {
     game3.start();
 
     assertEquals(game3.getBagSize(), (106 - 42));
-    game3.playerHasLeft(1);
+    game3.kickPlayer(1);
     assertEquals(game3.getBagSize(), 106 - 28);
-    game3.playerHasLeft(0);
-    game3.playerHasLeft(0);
+    game3.kickPlayer(0);
+    game3.kickPlayer(0);
 
   }
 

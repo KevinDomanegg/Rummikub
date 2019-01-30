@@ -111,7 +111,7 @@ public class RummiServer extends Thread implements Server {
 
     System.out.println("-----client disconnected: "+ id);
     System.out.println("-----player numbers: "+ game.getNumberOfPlayers());
-    game.playerHasLeft(id);
+    game.kickPlayer(id);
     clients[id] = null;
     if (listeners[id] != null) {
       listeners[id].disconnect();

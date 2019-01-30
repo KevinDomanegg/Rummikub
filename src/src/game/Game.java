@@ -5,25 +5,25 @@ import java.util.Map;
 
 public interface Game {
 
-  void setPlayer(int playerID, String name, int age);
+  boolean setPlayer(int playerID, String name, int age);
 
-  void start();
+  boolean start();
 
-  void moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition);
+  boolean moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
   void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void putSet(Coordinate sourcePosition, Coordinate targetPosition);
+  boolean putSet(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void putStone(Coordinate sourcePosition, Coordinate targetPosition);
+  boolean putStone(Coordinate sourcePosition, Coordinate targetPosition);
 
-  void moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
+  boolean moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   void drawStone();
 
-  void playerHasLeft(int playerID);
+  void kickPlayer(int playerID);
 
   void reset();
 
