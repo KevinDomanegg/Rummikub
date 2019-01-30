@@ -362,6 +362,9 @@ public class MainController implements Controller {
   }
 
   void quit() {
+    // delete winner- and gameController
+    winnerController = null;
+    gameController = null;
     client.disconnect();
     try {
       //switchToStartScene();
