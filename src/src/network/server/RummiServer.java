@@ -121,30 +121,23 @@ public class RummiServer extends Thread implements Server {
     senders[id] = null;
     this.numOfClients--;
     System.out.println("RummiServer: disconnected from " + id);
-    //When the client who has hosted the game disconnects, sends a GameInfo to notify
-    // the other clients in the server that the server is down and the other clients
-    // close automatically their inputs
     if (id == 0) {
-      sendToAll(new SimpleGameInfo(GameInfoID.SERVER_NOT_AVAILABLE));
+      cleanup();
     }
-    // Checks to see if other clients are connected to the server
-    // if so then the server remains open
-    for (Socket client : clients) {
-      if (client != null) {
-        System.out.println("There still exists in server client number: " + client);
-        return;
-      }
-    }
-    // No client is connected to the server anymore
-    // so the server closes automatically
-    suicide();
+
   }
 
   private void cleanup() {
+    running = false;
     for (int i = 1; i < clients.length; i++) {
       if (clients[i] != null) {
         disconnectClient(i);
       }
+    }
+    try {
+      server.close();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
@@ -192,16 +185,6 @@ public class RummiServer extends Thread implements Server {
   @Override
   public String getIP() throws UnknownHostException{
     return InetAddress.getLocalHost().getHostAddress();
-  }
-
-  private void suicide() {
-//    cleanup();
-    running = false;
-    try {
-      server.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
 }

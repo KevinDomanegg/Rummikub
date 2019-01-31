@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 public class RummiClient extends Thread {
 
   //Connection variables
@@ -16,10 +15,8 @@ public class RummiClient extends Thread {
   ClientListener listener;
   private boolean serverOK = true;
   private Serializer serializer;
-
   //GameInfoHandler
   private GameInfoHandler gameInfoHandler;
-
 
   //CREATE A NEW CLIENT WITH USERNAME, AGE AND IP ADDRESS OF THE SERVER("localhost" or ip)
   public RummiClient(String serverIPAddress) {
@@ -44,44 +41,46 @@ public class RummiClient extends Thread {
 
   @Override
   public void run() {
-      //serverSocket = new Socket(serverIPAddress, 48410);
-      // Add a listener to this Client
-      listener = new ClientListener(serverSocket, this);
-      listener.start();
-      synchronized (this) {
+    //serverSocket = new Socket(serverIPAddress, 48410);
+    // Add a listener to this Client
+    listener = new ClientListener(serverSocket, this);
+    listener.start();
+    synchronized (this) {
+      while (connected) {
         try {
-        //As long as the Client is connected to the Server
-        while (connected) {
-          try {
-            wait();
-          } catch (InterruptedException e) {
-            disconnect();
-          }
-        }
-        //NOT CONNECTED ANYMORE
-        outToServer.close();
-        serverSocket.close();
-        } catch (IOException e) {
-          e.printStackTrace();
+          wait();
+        } catch (InterruptedException e) {
+          disconnect();
         }
       }
-      System.out.println("Client terminated");
+    }
+    System.out.println("Client terminated");
   }
 
   void applyGameInfoHandler(Object gameInfo) {
     gameInfoHandler.applyGameInfo(gameInfo);
   }
 
-  public synchronized void sendRequest(Object request) {
-
+  public void sendRequest(Object request) {
       String json = serializer.serialize((Request) request);
       outToServer.println(json);
       outToServer.flush();
   }
 
   public synchronized void disconnect() {
+    connected = false;
+    outToServer.close();
+    System.out.println("after disconnect irgend eine scheisseflj;sdkfal;sfd");
     listener.disconnect();
-    this.connected = false;
+    try {
+      serverSocket.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     notifyAll();
+  }
+
+  void notifyServerCLose() {
+    gameInfoHandler.notifyServerClose();
   }
 }

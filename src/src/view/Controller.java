@@ -61,7 +61,7 @@ public interface Controller {
    */
   void setBagSize(int bagSize);
 
-  void noServerAvailable();
+  void notifyServerClose();
 
   void showError(String errorMessage);
 

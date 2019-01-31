@@ -36,6 +36,16 @@ public class MainController implements Controller {
 
   MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
+    primaryStage.setOnCloseRequest(event -> {
+      // check if the current scene is the start scene
+      if (waitController != null) {
+        if (gameController != null) {
+          gameController.stopTimer();
+        }
+        client.disconnect();
+      }
+      Platform.exit();
+    });
   }
 
   private void switchScene(String fxml) throws IOException {
@@ -94,7 +104,7 @@ public class MainController implements Controller {
     startController.returnToStart(primaryStage);
   }
 
-  public void noServerAvailable() {
+  public void notifyServerClose() {
     showErrorGotToStart("Host is not connected");
   }
 
@@ -113,7 +123,7 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    client.disconnect();
+//    client.disconnect();
   }
 
   @Override
@@ -171,27 +181,6 @@ public class MainController implements Controller {
       }
     });
   }
-
-//  void mute() {
-//    startController.muteMusic();
-//  }
-
-//  void unMute() {
-//    startController.unMuteMusic();
-//  }
-//
-//  void stopMusicInWaiting() {
-//    startController.stopMusic();
-//  }
-
-
-//  public void setUsername(String username, int username_id) {
-//    startController.setUsername(username, username_id);
-//  }
-
-//  public void setIPAddress(String ip) {
-//    startController.setIpAddress(ip);
-//  }
 
   /**
    * Sets the names of all the players in the game.
@@ -318,13 +307,6 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    primaryStage.setOnCloseRequest(event -> {
-      if (gameController != null) {
-        gameController.stopTimer();
-      }
-      client.disconnect();
-      Platform.exit();
-    });
     requestBuilder.sendSetPlayerRequest(name, age);
   }
 

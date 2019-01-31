@@ -29,6 +29,7 @@ public class ServerListener extends Thread {
     this.clientIn = clientIn;
     this.server = server;
     this.id = id;
+    this.connected = true;
   }
 
   /**
@@ -45,21 +46,23 @@ public class ServerListener extends Thread {
     String json;
     // While Loop is going to break if the client on the other side
     // ends the connection with the Server
-    while (true) {
-      try {
+    try {
+      while (connected) {
         json = in.nextLine();
-      } catch (NoSuchElementException e) {
-        break;
+        request = deserializer.deserializeRequest(json);
+        System.out.println("Listener: Received " + request.toString());
+        server.applyRequest(request, id);
       }
-      request = deserializer.deserializeRequest(json);
-      System.out.println("Listener: Received " + request.toString());
-      server.applyRequest(request, id);
+    } catch (NoSuchElementException e) {
+      if (connected) {
+        server.disconnectClient(id);
+      }
     }
-    server.disconnectClient(id);
     System.out.println("ServerListener terminated");
   }
 
   void disconnect() {
+    connected = false;
     try {
       this.clientIn.close();
       in.close();

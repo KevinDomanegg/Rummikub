@@ -28,10 +28,7 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         controller.setTable(((GridInfo) gameInfo).getGrid());
         return;
       case ERROR:
-        //System.out.println("handling error");
         controller.showError(((ErrorInfo) gameInfo).getErrorMessage());
-//        controller.notifyInvalidMove();
-//        controller.notifyTurn();
         return;
       case BAG:
         //System.out.println("handling bag");
@@ -62,19 +59,9 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         //System.out.println("handling gamestart");
         controller.notifyGameStart();
         return;
-      case SERVER_NOT_AVAILABLE:
-        controller.noServerAvailable();
-        return;
       case RANK:
         controller.showRank(((RankInfo) gameInfo).getFinalRank());
         return;
-//      case IP_ADDRESS:
-//        System.out.println("handling ip");
-//        controller.setIPAddress(((GameIPAddress) gameInfo).getIpAddress());
-//        return;
-//      case USERNAME:
-//        System.out.println("handling username");
-//          controller.setUsername(((GameUsernames) gameInfo).getUsername(), ((GameUsernames) gameInfo).getId());
       case TOO_MANY_CLIENTS:
         controller.connectionRejected();
 
@@ -84,4 +71,7 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
   }
 
 
+  void notifyServerClose() {
+    controller.notifyServerClose();
+  }
 }

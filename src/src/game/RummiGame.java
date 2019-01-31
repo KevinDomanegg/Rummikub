@@ -50,7 +50,6 @@ public class RummiGame implements Game {
     do {
       currentPlayerID = (currentPlayerID + 1) % MAX_PLAYERS;
     } while (!players.containsKey(currentPlayerID));
-    System.out.println("CURRENT PLAYER: " + currentPlayerID);
   }
 
   /**
