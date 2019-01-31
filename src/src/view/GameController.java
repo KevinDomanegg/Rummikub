@@ -13,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -26,9 +27,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.music.Music;
+
+import static game.Stone.Color.JOKER;
 
 public class GameController {
 
@@ -139,21 +143,6 @@ public class GameController {
   }
 
   /**
-   * This method is automatically called after the FXMLLoader loaded all FXML content.
-   */
-  @FXML
-  public void initialize() {
-  }
-
-  /**
-   * Updates FXML with data from model.
-   */
-  public void updateView() {
-//    constructGrid(table, true);
-//    constructGrid(handGrid, false);
-  }
-
-  /**
    * Method to request stone from server and place it in player's hand
    * event: User clicks draw button
    */
@@ -225,7 +214,11 @@ public class GameController {
 
       Music.playSoundOf("pick up stone");
       Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
-      Image cellSnapshot = cell.snapshot(new SnapshotParameters(), null);
+      cell.getStyleClass().remove("cell");
+      SnapshotParameters snapshotParameters = new SnapshotParameters();
+      snapshotParameters.setFill(Color.TRANSPARENT);
+      Image cellSnapshot = cell.snapshot(snapshotParameters, null);
+      cell.getStyleClass().add("cell");
       dragBoard.setDragView(cellSnapshot, cell.getWidth()*0.5, cell.getHeight()*0.9); //TODO: Remove magic numbers? Only for cursor pos tho
       ClipboardContent content = new ClipboardContent();
 
@@ -296,13 +289,30 @@ public class GameController {
    * @param cell  Cell in which the stone shall be displayed
    * @param stone Properties (color, value) of the stone which shall be displayed
    */
-  private void putStoneInCell(Pane cell, StoneInfo stone) {
+  private void putStoneInCell(StackPane cell, StoneInfo stone) {
     cell.getChildren().clear();
-    Rectangle stoneBackground = new Rectangle(20, 40);
-    stoneBackground.getStyleClass().add("stone");
-    Text stoneValue = new Text(Integer.toString(stone.getNumber()));
-    stoneValue.getStyleClass().addAll("stoneValue", stone.getColor());
-    cell.getChildren().addAll(stoneBackground, stoneValue);
+
+    ImageView stoneBackground = new ImageView(getClass().getResource("images/StoneBackground.png").toString());
+    stoneBackground.getStyleClass().add("shadow");
+    cell.getChildren().add(stoneBackground);
+
+    String stoneColor = stone.getColor();
+    Text stoneText = new Text();
+    if (stoneColor.equals(JOKER.toString())) {
+      Circle jokerBackground = new Circle(10);
+      jokerBackground.getStyleClass().add("jokerBackground");
+      cell.getChildren().add(jokerBackground);
+
+      stoneText.setText("J");
+    } else {
+      String stoneValue = Integer.toString(stone.getNumber());
+      stoneText.setText(stoneValue);
+    }
+
+    stoneText.getStyleClass().addAll("stoneValue", stoneColor);
+
+    cell.getChildren().addAll(stoneText);
+
     //STOP MUSIC
   }
 

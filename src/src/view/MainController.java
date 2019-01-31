@@ -62,6 +62,10 @@ public class MainController implements Controller {
     }
     Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
+      primaryStage.setMaxWidth(1500);
+      primaryStage.setMaxHeight(900);
+      primaryStage.setResizable(false);
+
       primaryStage.setScene(scene);
       primaryStage.show();
     });

@@ -28,7 +28,7 @@
           </children>
         </StackPane>
         <VBox fx:id="content" styleClass="shadow"
-              pickOnBounds="false"> <!-- TODO: Make shadow work! -->
+              pickOnBounds="false">
           <children>
 
             <VBox styleClass="inputArea">

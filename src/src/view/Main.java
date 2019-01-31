@@ -59,9 +59,6 @@ public class Main extends Application {
     primaryStage.setTitle("Rummikub");
     Scene scene = new Scene(root, 1500, 900);
     primaryStage.setScene(scene);
-    // MINIMUM WINDOW SIZE
-    primaryStage.setMinHeight(650.0); //TODO: Do we need this? And why it's 650X600?
-    primaryStage.setMinWidth(600.0);
     primaryStage.show();
     //mediaPlayer_video.play();
 //    startController.setMain(this);
@@ -71,8 +68,6 @@ public class Main extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     primaryStage.setTitle(GAME_NAME);
-    primaryStage.setMinHeight(650.0);
-    primaryStage.setMinWidth(600.0);
     new MainController(primaryStage).switchToStartScene();
   }
 
