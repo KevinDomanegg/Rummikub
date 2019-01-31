@@ -266,9 +266,7 @@ public class MainController implements Controller {
    */
   @Override
   public void notifyCurrentPlayer(int playerID) {
-//    gameController
     gameController.notifyCurrentPlayer(playerID);
-//    Platform.runLater(() ->);
   }
 
   /**

@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.music.Music;
@@ -47,6 +48,9 @@ public class WaitController implements Initializable {
   @FXML
   private Button muteButton;
 
+  @FXML
+  private HBox ipArea;
+
   private Stage stage;
 
   @FXML
@@ -73,7 +77,7 @@ public class WaitController implements Initializable {
   void setPlayerNames(List<String> names) {
     System.out.println(names);
 //    model.setPlayerNames(names);
-    switch (names.size()) {
+    switch (names.size()) { //TODO: Make readable
       case 4:
         player3.setText(names.get(3));
       case 3:
@@ -189,6 +193,7 @@ public class WaitController implements Initializable {
   }
 
   void setServerIP(String serverIP) {
+    ipArea.setVisible(true);
     ipAddress.setText(serverIP);
   }
 
