@@ -6,8 +6,6 @@ import communication.gameinfo.GameInfoID;
 import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
-import network.client.RummiClient;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -115,7 +113,7 @@ public class RummiServer extends Thread implements Server {
   void disconnectClient(int id) {
     System.out.println("-----client disconnected: "+ id);
     System.out.println("-----player numbers: "+ game.getNumberOfPlayers());
-    game.kickPlayer(id);
+    game.removePlayer(id);
     clients[id] = null;
     listeners[id].disconnect();
     listeners[id] = null;
