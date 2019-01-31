@@ -1,37 +1,38 @@
 package game;
 
-public class MoveTrace {
+class MoveTrace {
+  enum Move {PUT_STONE, TABLE_MOVE }
   private String command;
   private int playerID;
-  private Coordinate initialPosition;
+  private Coordinate sourcePosition;
   private Coordinate targetPosition;
 
-  public MoveTrace(String command, int playerID, Coordinate initialPosition, Coordinate targetPosition) {
+  MoveTrace(String command, int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
     this.command = command;
-    this.initialPosition = initialPosition;
+    this.sourcePosition = sourcePosition;
     this.targetPosition = targetPosition;
     this.playerID = playerID;
   }
 
-  public MoveTrace(String command, Coordinate initialPosition, Coordinate targetPosition) {
+  MoveTrace(String command, Coordinate sourcePosition, Coordinate targetPosition) {
     this.command = command;
-    this.initialPosition = initialPosition;
+    this.sourcePosition = sourcePosition;
     this.targetPosition = targetPosition;
   }
 
-  public String getCommand() {
+  String getCommand() {
     return command;
   }
 
-  public Coordinate getInitialPosition() {
-    return initialPosition;
+  Coordinate getInitialPosition() {
+    return sourcePosition;
   }
 
-  public Coordinate getTargetPosition() {
+  Coordinate getTargetPosition() {
     return targetPosition;
   }
 
-  public int getPlayerID() {
+  int getPlayerID() {
     return playerID;
   }
 

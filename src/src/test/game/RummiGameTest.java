@@ -83,10 +83,10 @@ public class RummiGameTest {
     game3.start();
 
     assertEquals(game3.getBagSize(), (106 - 42));
-    game3.kickPlayer(1);
+    game3.removePlayer(1);
     assertEquals(game3.getBagSize(), 106 - 28);
-    game3.kickPlayer(0);
-    game3.kickPlayer(0);
+    game3.removePlayer(0);
+    game3.removePlayer(0);
 
   }
 

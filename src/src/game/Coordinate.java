@@ -3,9 +3,9 @@ package game;
 import java.util.Objects;
 
 /** coordinate for a stone on game table or player hand. */
-public class Coordinate {
-  private int col;
-  private int row;
+public final class Coordinate {
+  private final int col;
+  private final int row;
 
   public Coordinate(int col, int row) {
     this.col = col;
@@ -22,11 +22,6 @@ public class Coordinate {
 
   @Override public int hashCode() {
     return Objects.hash(col, row);
-  }
-
-  @Override
-  public String toString(){
-    return "(" + col + ", " + row + ")";
   }
 
   int getCol() {

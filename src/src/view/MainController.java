@@ -77,6 +77,9 @@ public class MainController implements Controller {
   }
 
   void switchToStartScene() throws IOException {
+    // delete winner- and gameController
+    winnerController = null;
+    gameController = null;
     switchScene("start.fxml");
   }
 
@@ -371,13 +374,9 @@ public class MainController implements Controller {
   }
 
   void quit() {
-    // delete winner- and gameController
-    winnerController = null;
-    gameController = null;
     client.disconnect();
     try {
-      //switchToStartScene();
-      switchScene("start.fxml");
+      switchToStartScene();
     } catch (IOException e) {
       e.printStackTrace();
     }

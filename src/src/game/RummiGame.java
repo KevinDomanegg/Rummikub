@@ -299,7 +299,7 @@ public class RummiGame implements Game {
    *
    * @param playerID the ID of the player who left
    */
-  @Override public void kickPlayer(int playerID) {
+  @Override public void removePlayer(int playerID) {
     System.out.println("---number of players: " + players.size());
     if (!isGameOn) {
       players.remove(playerID);
@@ -369,9 +369,9 @@ public class RummiGame implements Game {
    */
   @Override public boolean isConsistent() {
     // check if the current player has played something yet
-    //if (currentPoints == 0) {
-    //  return false;
-    //}
+    if (currentPoints == 0) {
+      return false;
+    }
     // check if the current player has played their (first) turn in this game
     if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
       return false;

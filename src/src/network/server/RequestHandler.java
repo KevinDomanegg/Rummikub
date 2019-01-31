@@ -190,17 +190,7 @@ class RequestHandler {
 //        sendHandSizesToPlayer(playerID);
         }
       return;
-//      case GIVE_UP:
-//      game.kickPlayer(playerID);
-//      sendBagSizeToAll();
-//      sendHandSizesToAll();
-//      return;
       case TIME_OUT:
-//        if (game.isConsistent()) {
-//          checkWinner();
-//          sendHandSizesToAll();
-//          notifyTurnToPlayer();
-//        } else {
           // sends original table
           game.reset();
           sendTableToALl();
@@ -211,7 +201,6 @@ class RequestHandler {
           // send changed hand to player
           sendHandSizesToAll();
           notifyTurnToPlayer();
-//        }
         return;
 
       case SORT_HAND_BY_GROUP:
