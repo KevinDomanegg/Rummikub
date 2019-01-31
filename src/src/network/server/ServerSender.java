@@ -44,13 +44,9 @@ public class ServerSender extends Thread {
    * @param info to be sent
    */
   synchronized void send(GameInfo info) {
-    /*this.info = info;
-    send = true;
-    notifyAll();*/
       String json = serializer.serialize(info);
       out.println(json);
       out.flush();
-
   }
 
   /**
@@ -70,20 +66,11 @@ public class ServerSender extends Thread {
 
     synchronized (this) {
       try {
-        //ObjectOutputStream out = new ObjectOutputStream(clientOut.getOutputStream());
         while (connected) {
-          // IF WE DO SO, THEN WE HAVE A RACING CONDITION PROBLEM WITH SEND AND INFO, WHEN WE TRY TO SEND
-          // A LOT OF DIFFERENT OBJECTS AT ONE TIME
-          /*if (send) {
-            out.writeObject(this.info);
-            out.flush();
-          }*/
-          //this.send = false;
           wait();
         }
       } catch (Exception e) {
         this.connected = false;
-//        server.disconnectClient(this.id);
       }
     }
     System.out.println("ServerSender terminated");

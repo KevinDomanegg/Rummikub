@@ -13,7 +13,7 @@ public class ServerListener extends Thread {
   private RummiServer server;
   private Socket clientIn;
   private int id;
-  private boolean connected = false;
+  private boolean connected;
   private Request request;
   private Scanner in;
   private Deserializer deserializer;
@@ -36,44 +36,30 @@ public class ServerListener extends Thread {
    */
   @Override
   public void run() {
-
     try {
-
-      deserializer = new Deserializer();
       in = new Scanner(clientIn.getInputStream());
-      this.connected = true;
-
-      while (connected) {
-        String json = null;
-        try {
-          json = in.nextLine();
-          request = deserializer.deserializeRequest(json);
-        } catch (ClassCastException  | NoSuchElementException e) {
-          //disconnect();
-          server.disconnectClient(id);
-        }
-
-        if (json == null) {
-          System.out.println("Client " + id + " not connected");
-          System.out.println("ServerListener just got a NULL value");
-          this.connected = false;
-          server.disconnectClient(id);
-          break;
-        }
-
-        System.out.println("Listener: Received " + request.toString());
-        server.applyRequest(request, id);
-
-      }
     } catch (IOException e) {
-      this.connected = false;
-      //server.disconnectClient(id);
+      return;
     }
+    deserializer = new Deserializer();
+    String json;
+    // While Loop is going to break if the client on the other side
+    // ends the connection with the Server
+    while (true) {
+      try {
+        json = in.nextLine();
+      } catch (NoSuchElementException e) {
+        break;
+      }
+      request = deserializer.deserializeRequest(json);
+      System.out.println("Listener: Received " + request.toString());
+      server.applyRequest(request, id);
+    }
+    server.disconnectClient(id);
     System.out.println("ServerListener terminated");
   }
 
   void disconnect() {
-    this.connected = false;
     try {
       this.clientIn.close();
       in.close();

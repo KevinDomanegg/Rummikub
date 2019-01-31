@@ -322,9 +322,6 @@ public class GameController {
     this.bagSize.setText(Integer.toString(bagSize));
   }
 
-//  void notifyTurn() {
-//    model.notifyTurn();
-//  }
 
   void setHandSizes(List<Integer> sizes) {
     String handComplement = " Stones";

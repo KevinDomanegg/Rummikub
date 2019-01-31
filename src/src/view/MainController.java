@@ -106,6 +106,7 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    client.disconnect();
   }
 
   @Override

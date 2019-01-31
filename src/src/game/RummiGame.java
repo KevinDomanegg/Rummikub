@@ -40,7 +40,7 @@ public class RummiGame implements Game {
 
   /** Updates the currentPlayerID. */
   private void nextTurn() {
-    if (currentPlayer().getHandSize() == 0) {
+    if (!isGameOn) {
       return;
     }
     // reset currentPoints
@@ -77,11 +77,11 @@ public class RummiGame implements Game {
       return false;
     }
     if (players.size() >= MIN_PLAYERS) {
+      isGameOn = true;
       bag = new RummiBag();
       table.clear();
       handOutStones();
       setStartPlayer();
-      isGameOn = true;
     }
     return true;
   }
@@ -377,6 +377,10 @@ public class RummiGame implements Game {
     // clear the trace for the next turn
     trace.clear();
     currentPlayer().playedFirstMove();
+    // check if this player has won
+    if (currentPlayer().getHandSize() != 0) {
+      isGameOn = false;
+    }
     nextTurn();
     return true;
   }
