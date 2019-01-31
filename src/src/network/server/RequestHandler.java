@@ -55,6 +55,7 @@ class RequestHandler {
     // for test
     System.out.println("-----------------------" +request);
     switch (((Request) request).getRequestID()) {
+
       case START:
         // check if the player is the host (host id is always 0)
         if (playerID != 0) {
@@ -73,6 +74,7 @@ class RequestHandler {
         }
         notifyGameStartToAll();
         return;
+
       case SET_PLAYER:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
         if (!game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge())) {
@@ -81,6 +83,7 @@ class RequestHandler {
         }
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
         return;
+
       case HAND_MOVE:
         ConcreteMove handMove = (ConcreteMove) request;
         game.moveStoneOnHand(playerID,
@@ -88,6 +91,7 @@ class RequestHandler {
             new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
         sendHandToPlayer(playerID);
       return;
+
       case HAND_SET_MOVE:
         ConcreteMove handSetMove = (ConcreteMove) request;
         if (!game.moveSetOnHand(playerID,
@@ -97,6 +101,7 @@ class RequestHandler {
         }
         sendHandToPlayer(playerID);
         return;
+
       case TABLE_MOVE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
@@ -105,6 +110,7 @@ class RequestHandler {
         }
         sendTableToALl();
         return;
+
       case TABLE_SET_MOVE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
@@ -115,6 +121,7 @@ class RequestHandler {
         }
         sendTableToALl();
         return;
+
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
@@ -127,6 +134,7 @@ class RequestHandler {
         sendTableToALl();
         sendHandToPlayer(playerID);
         return;
+
       case PUT_SET:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putSet = (ConcreteMove) request;
@@ -139,6 +147,7 @@ class RequestHandler {
         sendTableToALl();
         sendHandToPlayer(playerID);
         return;
+
       case DRAW:
         if (isCurrentPlayer(playerID)) {
           if (game.getBagSize() == 0) {
@@ -156,6 +165,7 @@ class RequestHandler {
           notifyTurnToPlayer();
         }
       return;
+
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
           if (game.isConsistent()) {
@@ -169,6 +179,7 @@ class RequestHandler {
           }
         }
         return;
+
       case RESET:
         if (isCurrentPlayer(playerID)) {
           game.reset();
@@ -202,14 +213,17 @@ class RequestHandler {
           notifyTurnToPlayer();
 //        }
         return;
+
       case SORT_HAND_BY_GROUP:
         game.sortPlayerHandByGroup(playerID);
         sendHandToPlayer(playerID);
         return;
+
       case SORT_HAND_BY_RUN:
         game.sortPlayerHandByRun(playerID);
         sendHandToPlayer(playerID);
         return;
+
       case UNDO:
         if (isCurrentPlayer(playerID)) {
           game.undo();
