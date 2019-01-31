@@ -415,13 +415,12 @@ public class GameController {
 
     //initialize with 1 (the client himself)
     int numOfPlayers = 1;
+    //calculating the number of visible players
     for (HBox opponent : opponents) {
       if (opponent.isVisible()) {
         numOfPlayers++;
       }
     }
-    System.out.println("num of player is " + numOfPlayers);
-    System.out.println("relative position is  " + relativeOpponentPosition);
 
     int opponentID = 0;
     switch (numOfPlayers) {

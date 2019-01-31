@@ -41,6 +41,7 @@ public class RummiGame implements Game {
   /** Updates the currentPlayerID. */
   private void nextTurn() {
     if (!isGameOn) {
+      System.out.println("GAME NOT ON!");
       return;
     }
     // reset currentPoints
@@ -49,6 +50,7 @@ public class RummiGame implements Game {
     do {
       currentPlayerID = (currentPlayerID + 1) % MAX_PLAYERS;
     } while (!players.containsKey(currentPlayerID));
+    System.out.println("CURRENT PLAYER: " + currentPlayerID);
   }
 
   /**
@@ -378,7 +380,7 @@ public class RummiGame implements Game {
     trace.clear();
     currentPlayer().playedFirstMove();
     // check if this player has won
-    if (currentPlayer().getHandSize() != 0) {
+    if (currentPlayer().getHandSize() == 0) {
       isGameOn = false;
     }
     nextTurn();
