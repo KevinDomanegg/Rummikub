@@ -100,7 +100,7 @@ public class WaitController implements Initializable {
 
   @FXML private void quitWaiting() {
     System.out.println("From QUIT in WaitCtrl.: disconnect client!");
-    mainController.quit();
+    mainController.handleQuitPressed();
   }
 
   void setServerIP(String serverIP) {

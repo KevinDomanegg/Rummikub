@@ -107,7 +107,7 @@ public class GameController {
 
   public void quitGame() {
     System.out.println("From QUIT in GameCtrl.: disconnect client!");
-    mainController.quit();
+    mainController.handleQuitPressed();
   }
 
   void yourTurn() {
