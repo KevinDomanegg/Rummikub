@@ -30,6 +30,10 @@ class ClientListener extends Thread {
     deserializer = new Deserializer();
   }
 
+  /**Main method of ClientListener Class, waits
+   * until it receives an object from the server
+   * and then forward it to RummiClient
+   */
   @Override
   public void run() {
     try (Scanner scanner = new Scanner(serverIn)) {
@@ -54,6 +58,9 @@ class ClientListener extends Thread {
     System.out.println("From Run scanner Listener: scanner closed");
   }
 
+  /**In case the server-senders port is closed
+   * it terminates the thread, hence the RummiClient
+   */
   void disconnect() {
     if (connected) {
       System.out.println("From ClientListener: disconnecting Listener...");
