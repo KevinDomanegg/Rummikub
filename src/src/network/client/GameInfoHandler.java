@@ -47,16 +47,13 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         //System.out.println("handling names");
         controller.setPlayerNames(((PlayerNamesInfo) gameInfo).getNames());
         return;
-      case DRAW:
-        //System.out.println("handling draw");
-        break;
       case CURRENT_PLAYER:
         System.out.println("handling currentplayer");
         System.out.println("received " + ((CurrentPlayerInfo) gameInfo).getPlayerID() + " as current player");
         controller.notifyCurrentPlayer(((CurrentPlayerInfo) gameInfo).getPlayerID());
         return;
       case GAME_START:
-        //System.out.println("handling gamestart");
+        System.out.println("handling gamestart");
         controller.notifyGameStart();
         return;
       case RANK:
@@ -65,7 +62,6 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
       case TOO_MANY_CLIENTS:
         controller.connectionRejected();
         break;
-
       default:
     }
     System.out.println("Info handled");

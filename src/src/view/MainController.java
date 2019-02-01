@@ -37,8 +37,8 @@ public class MainController implements Controller {
   MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest(event -> {
-      System.out.println("From in MainCtrl.: disconnect client!");
       if (client != null) {
+        System.out.println("From in MainCtrl.: disconnect client!");
         quit();
       }
       Platform.exit();
@@ -182,7 +182,7 @@ public class MainController implements Controller {
       waitController.setPlayerNames(names);
       return;
     }
-      gameController.setPlayerNames(names);
+    gameController.setPlayerNames(names);
   }
 
   /**

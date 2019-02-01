@@ -65,7 +65,7 @@ public class WaitController implements Initializable {
   }
 
   void setPlayerNames(List<String> names) {
-    System.out.println(names);
+    System.out.println("From WaitCtrl.: setting names.. " + names);
     switch (names.size()) { //TODO: Make readable
       case 4:
         player3.setText(names.get(3));

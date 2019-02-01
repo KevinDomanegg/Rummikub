@@ -2,9 +2,7 @@ package network.server;
 
 import communication.Deserializer;
 import communication.request.Request;
-
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -38,17 +36,14 @@ public class ServerListener extends Thread {
    */
   @Override
   public void run() {
-
     try {
       in = new Scanner(clientIn.getInputStream());
     } catch (IOException e) {
       return;
     }
-
     while (connected) {
       connected = processMessages();
     }
-
     server.disconnectClient(id);
   }
 
@@ -62,6 +57,8 @@ public class ServerListener extends Thread {
     try {
       json = in.nextLine();
     } catch (NoSuchElementException e) {
+      in.close();
+      System.out.println("From ServerListener: Scanner in closed.. id: " + id);
       return false;
     }
     request = deserializer.deserializeRequest(json);
