@@ -200,6 +200,7 @@ class RequestHandler {
           sendHandToPlayer(playerID);
           // send changed hand to player
           sendHandSizesToAll();
+          sendBagSizeToAll();
           notifyTurnToPlayer();
         return;
 
@@ -220,6 +221,12 @@ class RequestHandler {
           sendHandToPlayer(playerID);
         }
         return;
+
+      case UPDATE_PLAYERS:
+        sendPlayerNamesToAll();
+        notifyTurnToPlayer();
+        break;
+
       default:
     }
   }

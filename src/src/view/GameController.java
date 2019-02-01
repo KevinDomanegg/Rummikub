@@ -81,6 +81,10 @@ public class GameController {
               int interval = 60;
               public void run() {
                 if (interval == 0) {
+
+                  //@ToDo
+                  // Determining if the player is currently playing via gui-properties is very bad style!
+                  // We should consider a global variable boolean currentlyPlaying or similar
                   if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
                     stopTimer();
                     sendTimeOutRequest();
@@ -377,6 +381,17 @@ public class GameController {
     }
   }
 
+
+  private int getNumOfVisibliPlayers(HBox[] opponents) {
+    int numOfPlayers = 1;
+    for (HBox opponent : opponents) {
+      if (opponent.isVisible()) {
+        numOfPlayers++;
+      }
+    }
+    return numOfPlayers;
+  }
+
   /**
    * Calculates the id of an opponent based on his relative postion to the player.
    *
@@ -389,14 +404,8 @@ public class GameController {
    */
   private int toOpponentID(int relativeOpponentPosition, HBox[] opponents) {
 
-    //initialize with 1 (the client himself)
-    int numOfPlayers = 1;
-    //calculating the number of visible players
-    for (HBox opponent : opponents) {
-      if (opponent.isVisible()) {
-        numOfPlayers++;
-      }
-    }
+    int numOfPlayers = getNumOfVisibliPlayers(opponents);
+    System.out.println(numOfPlayers);
 
     int opponentID;
     switch (numOfPlayers) {
@@ -442,6 +451,7 @@ public class GameController {
     System.out.println("--------------------------TIME_OUT");
     endOfYourTurn();
   }
+
 
   @FXML
   private void sendResetRequest() {

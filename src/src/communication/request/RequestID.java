@@ -20,5 +20,6 @@ public enum RequestID {
   TABLE_SET_MOVE,
   HAND_SET_MOVE,
   PUT_SET,
-  UNDO
+  UNDO,
+  UPDATE_PLAYERS
 }

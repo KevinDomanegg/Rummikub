@@ -67,5 +67,9 @@ public interface Controller {
 
   void showRank(Map<Integer, Integer> finalRank);
 
+  /**
+   * Notifies the controller that the connection to the server has been rejected.
+   */
   void connectionRejected();
+
 }

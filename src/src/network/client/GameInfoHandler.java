@@ -64,6 +64,7 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
         return;
       case TOO_MANY_CLIENTS:
         controller.connectionRejected();
+        break;
 
       default:
     }

@@ -326,6 +326,7 @@ public class RummiGame implements Game {
     if (currentPlayerID == playerID) {
       nextTurn();
     }
+
   }
 
   /** Resets all moves of the current player on this table and from their hand. */

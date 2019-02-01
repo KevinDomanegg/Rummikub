@@ -1,9 +1,7 @@
 package network.server;
 
-import communication.gameinfo.GameIPAddress;
-import communication.gameinfo.GameInfo;
-import communication.gameinfo.GameInfoID;
-import communication.gameinfo.SimpleGameInfo;
+import communication.gameinfo.*;
+import communication.request.UpdatePlayersRequest;
 import game.Game;
 import game.RummiGame;
 import network.client.RummiClient;
@@ -117,7 +115,10 @@ public class RummiServer extends Thread implements Server {
    */
   void disconnectClient(int id) {
 
+    //Remove player and notify clients about it
     game.removePlayer(id);
+    requestHandler.applyRequest(new UpdatePlayersRequest(), id);
+
     clients[id] = null;
     listeners[id].disconnect();
     listeners[id] = null;
