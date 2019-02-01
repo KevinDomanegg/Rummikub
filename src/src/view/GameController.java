@@ -366,10 +366,13 @@ public class GameController {
     for (int i = 1; i < opponents.length + 1; i++) {
       if (i != opponentID) {
         //styling non-playing opponents
-        opponents[i - 1].setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        opponents[i - 1].setBackground(new Background(new BackgroundFill(
+                Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
       } else {
         //styling currently playing opponent
-        opponents[i - 1].setBackground(new Background((new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY))));
+        opponents[i - 1].setBackground(new Background((new BackgroundFill(
+                Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY))));
+        System.out.println("");
       }
     }
   }
@@ -395,7 +398,7 @@ public class GameController {
       }
     }
 
-    int opponentID = 0;
+    int opponentID;
     switch (numOfPlayers) {
       case 0:
         opponentID = 0;
@@ -413,12 +416,9 @@ public class GameController {
         break;
 
       case 3:
-
         if (relativeOpponentPosition == 3) {
           opponentID = 0;
-        }
-
-        else if (relativeOpponentPosition == 2) {
+        } else if (relativeOpponentPosition == 2) {
           opponentID = 3;
         } else {
           opponentID = relativeOpponentPosition;
@@ -462,12 +462,9 @@ public class GameController {
     mainController.sendSortHandByRunRequest();
   }
 
-  void showRanke(List<Entry<Integer, Integer>> finalRank) {
-
-  }
-
   public void showRank() {
     Map<Integer, Integer> rank = new HashMap<>();
+    //@ToDo Magic numbers!
     rank.put(1, 0);
     rank.put(0, -30);
     mainController.showRank(rank);

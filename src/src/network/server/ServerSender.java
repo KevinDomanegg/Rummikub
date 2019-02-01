@@ -12,11 +12,8 @@ public class ServerSender extends Thread {
   private Socket clientOut;
   private RummiServer server;
   private int id;
-  private boolean send = false;
   private boolean connected = true;
-  private GameInfo info = null;
   private Serializer serializer;
-
   private PrintWriter out;
 
   /**
@@ -39,7 +36,7 @@ public class ServerSender extends Thread {
   }
 
   /**
-   * Notifies the run()-Method to send the info.
+   * Sends a GameInfo to the client.
    *
    * @param info to be sent
    */
@@ -73,7 +70,6 @@ public class ServerSender extends Thread {
         this.connected = false;
       }
     }
-    System.out.println("ServerSender terminated");
   }
 
     /**

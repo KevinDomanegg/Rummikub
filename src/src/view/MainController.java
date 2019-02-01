@@ -225,6 +225,7 @@ public class MainController implements Controller {
   public void notifyTurn() {
     //needed for the styling of the opponents
     gameController.notifyCurrentPlayer(0);
+
     gameController.yourTurn();
   }
 

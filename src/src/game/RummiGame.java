@@ -10,9 +10,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-/** Model for the board game Rummikub. */
+/**
+ * Model for the board game Rummikub.
+ */
 public class RummiGame implements Game {
-  private static final  int MIN_PLAYERS = 2;
+  private static final int MIN_PLAYERS = 2;
   private static final int MAX_PLAYERS = 4;
   // the number of stones players receive at the beginning
   private static final int FIRST_STONES = 14;
@@ -56,11 +58,12 @@ public class RummiGame implements Game {
    * Adds a new player with the given playerID, name and age in this game before the game start.
    *
    * @param playerID the id of the player
-   * @param name the name of the player
-   * @param age the age of the player
+   * @param name     the name of the player
+   * @param age      the age of the player
    * @return false if only if there are already 4 players or the game is on
    */
-  @Override public boolean setPlayer(int playerID, String name, int age) {
+  @Override
+  public boolean setPlayer(int playerID, String name, int age) {
     if (players.size() > MAX_PLAYERS || isGameOn) {
       return false;
     }
@@ -73,7 +76,8 @@ public class RummiGame implements Game {
    *
    * @return false if only if this game has already started
    */
-  @Override public boolean start() {
+  @Override
+  public boolean start() {
     if (isGameOn) {
       return false;
     }
@@ -122,9 +126,9 @@ public class RummiGame implements Game {
    *
    * @param sourcePosition the position of the subject stone before moving it with neighbors
    * @param targetPosition the position of the subject stone after moving it with neighbors
-   * @param sourceGrid the grid where the subject stone and its neighbors come from
-   * @param targetGrid the grid where the subject stone and its neighbors move to
-   * @param stoneMove the container of a method to be used for moving
+   * @param sourceGrid     the grid where the subject stone and its neighbors come from
+   * @param targetGrid     the grid where the subject stone and its neighbors move to
+   * @param stoneMove      the container of a method to be used for moving
    * @return true if only if the set (neighbored stones) is successfully moved
    */
   private static boolean moveSet(Coordinate sourcePosition, Coordinate targetPosition, Grid sourceGrid, Grid targetGrid, StoneMove stoneMove) {
@@ -181,7 +185,8 @@ public class RummiGame implements Game {
    * @param targetPosition the position of the subject stone after moving it with its neighbors
    * @return true if only if the set (neighbored stones) is successfully moved
    */
-  @Override public boolean moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
     return moveSet(sourcePosition, targetPosition, table, table, this::moveStoneOnTable);
   }
 
@@ -193,7 +198,8 @@ public class RummiGame implements Game {
    * @param sourcePosition the position of the subject stone before moving
    * @param targetPosition the position of the subject stone after moving
    */
-  @Override public void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition){
+  @Override
+  public void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
     swapStoneOnTable(sourcePosition, targetPosition);
     // store this move.
     trace.push(new MoveTrace("MOVESTONEONTABLE", sourcePosition, targetPosition));
@@ -224,7 +230,8 @@ public class RummiGame implements Game {
    * @param targetPosition the position of the subject stone after moving it with its neighbors
    * @return true if only if the set (neighbored stones) is successfully moved
    */
-  @Override public boolean putSet(Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean putSet(Coordinate sourcePosition, Coordinate targetPosition) {
     return
         moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
   }
@@ -237,7 +244,8 @@ public class RummiGame implements Game {
    * @param targetPosition the position of the subject stone after putting
    * @return true if only if a stone from sourcePosition is to targetPosition moved
    */
-  @Override public boolean putStone(Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean putStone(Coordinate sourcePosition, Coordinate targetPosition) {
     // check if target position is empty
     if (table.getStones().containsKey(targetPosition)) {
       return false;
@@ -262,7 +270,8 @@ public class RummiGame implements Game {
    * @param targetPosition the position of the subject stone after moving it with its neighbors
    * @return true if only if the set (neighbored stones) is successfully moved
    */
-  @Override public boolean moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
     Grid hand = players.get(playerID).getHand();
     return moveSet(sourcePosition, targetPosition, hand, hand,
         (srcPos, trgPos) -> moveStoneOnHand(playerID, srcPos, trgPos));
@@ -274,11 +283,12 @@ public class RummiGame implements Game {
    * If the player with the given playerID is the current player ID,
    * this move will be stored in the trace for reset.
    *
-   * @param playerID the ID of the player who moves the stone on their hand
+   * @param playerID       the ID of the player who moves the stone on their hand
    * @param sourcePosition the position of the subject stone before moving
    * @param targetPosition the position of the subject stone after moving
    */
-  @Override public void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
     players.get(playerID).moveStone(sourcePosition, targetPosition);
 //    if (playerID == currentPlayerID){
 //      // store this move
@@ -286,8 +296,11 @@ public class RummiGame implements Game {
 //    }
   }
 
-  /** Makes the current player draw a stone from the bag and finish their turn. */
-  @Override public void drawStone() {
+  /**
+   * Makes the current player draw a stone from the bag and finish their turn.
+   */
+  @Override
+  public void drawStone() {
     currentPlayer().pushStone(bag.removeStone());
     nextTurn();
   }
@@ -354,7 +367,8 @@ public class RummiGame implements Game {
    *
    * @return true if only if the current player has won this game
    */
-  @Override public boolean hasWinner() {
+  @Override
+  public boolean hasWinner() {
     return currentPlayer().getHandSize() == 0;
   }
 
@@ -366,7 +380,8 @@ public class RummiGame implements Game {
    * @return false if only if the current player's move is first but points are lower than 30
    * or the played table is not consistent
    */
-  @Override public boolean isConsistent() {
+  @Override
+  public boolean isConsistent() {
     // check if the current player has played something yet
     if (currentPoints == 0) {
       return false;
