@@ -25,12 +25,15 @@ public class RummiBag {
     }
     stones.add(new Stone());
     stones.add(new Stone());
-
     randomGenerator = new Random();
   }
 
-  //Returns a random Stone.
-  Stone removeStone(){
+  /**
+   * Removes a stone in this RummiBag randomly.
+   *
+   * @return the removed stone
+   */
+  Stone removeStone() {
     return stones.remove(randomGenerator.nextInt(size()));
   }
 

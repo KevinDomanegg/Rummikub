@@ -6,81 +6,55 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class RummiClient extends Thread {
+public class RummiClient {
+  private static final int port = 48410;
 
   //Connection variables
-  private boolean connected;
   private Socket serverSocket;
   private PrintWriter outToServer;
-  ClientListener listener;
-  private boolean serverOK = true;
+  private ClientListener listener;
   private Serializer serializer;
-  //GameInfoHandler
   private GameInfoHandler gameInfoHandler;
 
   //CREATE A NEW CLIENT WITH USERNAME, AGE AND IP ADDRESS OF THE SERVER("localhost" or ip)
-  public RummiClient(String serverIPAddress) {
-    connected = true;
+  public RummiClient(String serverIPAddress) throws IOException {
     serializer = new Serializer();
-    try {
-      serverSocket = new Socket(serverIPAddress, 48410);
-      outToServer = new PrintWriter(serverSocket.getOutputStream());
-    } catch (IOException e) {
-      System.out.println("There is no server in this ip address!");
-      serverOK = false;
-    }
-  }
-
-  public boolean isServerOK() {
-    return serverOK;
+    serverSocket = new Socket(serverIPAddress, port);
+    outToServer = new PrintWriter(serverSocket.getOutputStream());
   }
 
   public void setGameInfoHandler(GameInfoHandler gameInfoHandler) {
     this.gameInfoHandler = gameInfoHandler;
   }
 
-  @Override
-  public void run() {
-    //serverSocket = new Socket(serverIPAddress, 48410);
+  public void start() throws IOException {
     // Add a listener to this Client
-    listener = new ClientListener(serverSocket, this);
+    listener = new ClientListener(serverSocket.getInputStream(), this);
     listener.start();
-    synchronized (this) {
-      while (connected) {
-        try {
-          wait();
-        } catch (InterruptedException e) {
-          disconnect();
-        }
-      }
-    }
-    System.out.println("Client terminated");
   }
 
-  void applyGameInfoHandler(Object gameInfo) {
-    gameInfoHandler.applyGameInfo(gameInfo);
-  }
-
-  public void sendRequest(Object request) {
-      String json = serializer.serialize((Request) request);
-      outToServer.println(json);
-      outToServer.flush();
-  }
-
-  public synchronized void disconnect() {
-    connected = false;
-    outToServer.close();
-    System.out.println("after disconnect irgend eine scheisseflj;sdkfal;sfd");
+  public void disconnect() {
+    System.out.println("From RummiClient: disconnecting client...");
+    // notify listener that this client closes it instead of the server
     listener.disconnect();
     try {
       serverSocket.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    notifyAll();
+    System.out.println("From RummiClient: client closed");
   }
 
-  void notifyServerCLose() {
+  public void sendRequest(Object request) {
+    outToServer.println(serializer.serialize((Request) request));
+    outToServer.flush();
+  }
+
+  void applyGameInfoHandler(Object gameInfo) {
+    gameInfoHandler.applyGameInfo(gameInfo);
+  }
+
+  void notifyServerClose() {
     gameInfoHandler.notifyServerClose();
   }
 }

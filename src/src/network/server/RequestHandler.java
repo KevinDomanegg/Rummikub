@@ -53,7 +53,7 @@ class RequestHandler {
 
   void applyRequest(Object request, int playerID) {
     // for test
-    System.out.println("-----------------------" +request);
+    System.out.println("From RequestHandler: applying " +request);
     switch (((Request) request).getRequestID()) {
 
       case START:

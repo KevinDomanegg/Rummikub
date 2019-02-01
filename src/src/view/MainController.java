@@ -37,12 +37,9 @@ public class MainController implements Controller {
   MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest(event -> {
-      // check if the current scene is the start scene
-      if (waitController != null) {
-        if (gameController != null) {
-          gameController.stopTimer();
-        }
-        client.disconnect();
+      System.out.println("From in MainCtrl.: disconnect client!");
+      if (client != null) {
+        quit();
       }
       Platform.exit();
     });
@@ -87,21 +84,12 @@ public class MainController implements Controller {
   }
 
   void switchToStartScene() throws IOException {
-    // delete winner- and gameController
-    winnerController = null;
-    gameController = null;
     switchScene("start.fxml");
   }
 
   private void switchToGameScene() throws IOException{
      switchScene("game.fxml");
 
-  }
-
-  void returnToStartView() {
-    gameController.stopTimer();
-    Stage primaryStage = waitController.getStage();
-    startController.returnToStart(primaryStage);
   }
 
   public void notifyServerClose() {
@@ -293,14 +281,14 @@ public class MainController implements Controller {
   }
 
   void initPlayer(String serverIP, String name, int age) {
-    client = new RummiClient(serverIP);
-    if (!client.isServerOK()) {
-      //showError("WRONG ADDRESS YOU JACKASS");
-      startController.setError("ip");
+    try {
+      client = new RummiClient(serverIP);
+      client.setGameInfoHandler(new GameInfoHandler(this));
+      client.start();
+    } catch (IOException e) {
+      startController.showNoServerError();
       return;
     }
-    client.setGameInfoHandler(new GameInfoHandler(this));
-    client.start();
     requestBuilder = new RequestBuilder(client);
     try{
       switchToWaitScene();
@@ -356,7 +344,14 @@ public class MainController implements Controller {
   }
 
   void quit() {
+    // delete winner- and gameController
+    winnerController = null;
+    if (gameController != null) {
+      gameController.stopTimer();
+      gameController = null;
+    }
     client.disconnect();
+    client = null;
     try {
       switchToStartScene();
     } catch (IOException e) {

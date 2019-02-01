@@ -2,11 +2,7 @@ package network.client;
 
 import communication.Deserializer;
 import communication.gameinfo.GameInfo;
-import communication.gameinfo.GameInfoID;
-import communication.gameinfo.SimpleGameInfo;
-
-import java.io.IOException;
-import java.net.Socket;
+import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -17,58 +13,51 @@ import java.util.Scanner;
  */
 class ClientListener extends Thread {
   //THE CLIENT THAT THE LISTENER LISTENS FOR..
-  private Socket server;
-  private RummiClient myClient;
+  private InputStream serverIn;
+  private RummiClient client;
   private boolean connected;
-  private Scanner receiveMessage;
   private Deserializer deserializer;
 
   /**Creates a Listener that listens to a certain port
    * and communicates with only one client
-   * @param server the port that listens to
-   * @param myClient the client that reports the receiving objects to
+   * @param serverIn the port that listens to
+   * @param client the client that reports the receiving objects to
    */
-  ClientListener(Socket server, RummiClient myClient) {
-    this.server = server;
-    this.myClient = myClient;
+  ClientListener(InputStream serverIn, RummiClient client) {
+    this.serverIn = serverIn;
+    this.client = client;
     connected = true;
     deserializer = new Deserializer();
   }
 
   @Override
   public void run() {
-    try {
-      receiveMessage = new Scanner(server.getInputStream());
-    } catch (IOException e) {
-      myClient.disconnect();
-    }
-    String json;
-    try {
+    try (Scanner scanner = new Scanner(serverIn)) {
+      String json;
       while (connected) {
-        json = receiveMessage.nextLine();
+        json = scanner.nextLine();
         if (json != null) {
           GameInfo info = deserializer.deserializeInfo(json);
           if (info != null) {
-            myClient.applyGameInfoHandler(info);
+            client.applyGameInfoHandler(info);
           }
         }
       }
     } catch (NoSuchElementException e) {
       if (connected) {
-        myClient.notifyServerCLose();
+        System.out.println("*****-----***** Sever closed ******------*******");
+        client.notifyServerClose();
+        System.out.println("From Run scanner Listener: disconnect Client");
+        client.disconnect();
       }
     }
+    System.out.println("From Run scanner Listener: scanner closed");
   }
 
   void disconnect() {
-    System.out.println("Called disconnect in ClientListener");
-    connected = false;
-    try {
-      server.close();
-      receiveMessage.close();
-    } catch (IOException e) {
-      System.out.println("exception while closing the listener");
-      e.printStackTrace();
+    if (connected) {
+      System.out.println("From ClientListener: disconnecting Listener...");
+      connected = false;
     }
   }
 }
