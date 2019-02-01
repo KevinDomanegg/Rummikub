@@ -33,15 +33,15 @@
         <VBox styleClass="inputArea">
           <Text text="Name:" styleClass="whiteText"/>
           <TextField fx:id="nameField"/>
-          <Text fx:id="nameERROR" styleClass="errorText"
-                text="Error! You must choose a username"
+          <Text fx:id="nameError" styleClass="errorText"
+                text="You must choose a username"
                 visible="false"/>
         </VBox>
 
         <VBox styleClass="inputArea">
           <Text text="Age:" styleClass="whiteText"/>
           <TextField fx:id="ageField"/>
-          <Text fx:id="ageERROR" styleClass="errorText"
+          <Text fx:id="ageError" styleClass="errorText"
                 text="Invalid age! age must be: 6 - 150"
                 visible="false"/>
         </VBox>
@@ -64,8 +64,8 @@
         <VBox styleClass="inputArea">
           <Text text="IP address:" styleClass="whiteText"/>
           <TextField fx:id="ipField" text="localhost"/>
-          <Text fx:id="ipERROR" styleClass="errorText"
-                text="Error! Wrong IP Address" visible="false"/>
+          <Text fx:id="ipError" styleClass="errorText"
+                text="No Server Found With This IP Address!" visible="false"/>
         </VBox>
         <HBox styleClass="buttonArea">
           <Button text="Join" onMouseClicked="#joinGame"/>

@@ -21,7 +21,7 @@
         <Button fx:id="muteButton" onMouseClicked="#mute" visible="true"
                 text="Mute"/>
       </StackPane>
-      <Button onMouseClicked="#quitWating" text="Quit"/>
+      <Button onMouseClicked="#quitWaiting" text="Quit"/>
     </HBox>
   </StackPane>
 

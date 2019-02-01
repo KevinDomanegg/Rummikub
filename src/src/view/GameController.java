@@ -1,5 +1,7 @@
 package view;
 
+import static game.Stone.Color.JOKER;
+
 import communication.gameinfo.StoneInfo;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +30,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import view.music.Music;
-
-import static game.Stone.Color.JOKER;
 
 public class GameController {
 
@@ -53,12 +52,7 @@ public class GameController {
   @FXML private Text timer;
   @FXML private GridPane tableGrid;
   @FXML private GridPane handGrid;
-  @FXML private VBox errorPane;
-  @FXML private Text errorMessage;
   @FXML private VBox ownBoard;
-
-  @FXML private HBox moveButtons;
-  @FXML private HBox backButtons;
 
 
 //  private NetworkController networkController;
@@ -71,25 +65,12 @@ public class GameController {
   private Timer timer_countDown;
   private TimerTask timer_task;
 
-  // NO HOST AVAILABLE
-  private boolean serverNotAvailable;
-
   // Cntrl + Drag and Drop
   private boolean ctrl;
-
-
-//  void setNetworkController(NetworkController networkcontroller) {
-//    this.networkController = networkcontroller;
-//  }
 
   void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
-
-
-//  void setRequestBuilder(RequestBuilder requestBuilder) {
-//    this.requestBuilder = requestBuilder;
-//  }
 
   private void setTimer() {
     int delay = 1000;
@@ -121,16 +102,8 @@ public class GameController {
     timer_countDown.cancel();
   }
 
-  public void returnToStart(boolean noServerAvailable) {
-    if (noServerAvailable) {
-      serverNotAvailable = true;
-//      showError("THE HOST HAS LEFT THE GAME!");
-    } else {
-      quitGame();
-    }
-  }
-
   public void quitGame() {
+    System.out.println("From QUIT in GameCtrl.: disconnect client!");
     mainController.quit();
   }
 
