@@ -63,6 +63,10 @@ public class RummiGameTest {
     game2.getTableStones().put(new Coordinate(1, 0), new Stone(Stone.Color.BLACK, 2));
     game2.getTableStones().put(new Coordinate(2, 0), new Stone(Stone.Color.BLACK, 3));
     game2.getTableStones().put(new Coordinate(3, 0), new Stone(Stone.Color.BLACK, 4));
+    game2.getTableStones().put(new Coordinate(4, 0), new Stone(Stone.Color.BLACK, 5));
+    game2.getTableStones().put(new Coordinate(5, 0), new Stone(Stone.Color.BLACK, 6));
+    game2.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
+    game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
 
     assertTrue(game2.isConsistent());
 

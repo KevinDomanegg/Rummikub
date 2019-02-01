@@ -380,12 +380,14 @@ public class RummiGame implements Game {
    * @return false if only if the current player's move is first but points are lower than 30
    * or the played table is not consistent
    */
+
+
   @Override
   public boolean isConsistent() {
     // check if the current player has played something yet
-    if (currentPoints == 0) {
-      return false;
-    }
+    //if (currentPoints == 0) {
+    //  return false;
+    //}
     // check if the current player has played their (first) turn in this game
     if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
       return false;

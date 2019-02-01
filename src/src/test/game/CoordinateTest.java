@@ -38,12 +38,7 @@ public class CoordinateTest {
 
   }
 
-  @Test
-  public void printTest() {
-    Coordinate coordinate1 = new Coordinate(1, 4);
 
-    assertEquals(coordinate1.toString(), ("(" + coordinate1.getCol() + ", " + coordinate1.getRow() + ")"));
-  }
 
   @Test
   public void hashTest() {
