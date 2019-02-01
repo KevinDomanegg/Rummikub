@@ -123,8 +123,8 @@ public class RummiServer extends Thread implements Server {
       } catch (IOException e) {
         e.printStackTrace();
       }
-      clients[id] = null;
       listeners[id] = null;
+      clients[id] = null;
       senders[id].disconnect();
       senders[id] = null;
       numOfClients--;
@@ -186,10 +186,10 @@ public class RummiServer extends Thread implements Server {
     try {
       for (int id = 0; id < clients.length; id++) {
         if (clients[id] != null) {
+          // notify listener that server closes it
+          listeners[id].notifyServerClose();
           clients[id].close();
-          clients[id] = null;
           senders[id].disconnect();
-          senders[id] = null;
         }
       }
       server.close();

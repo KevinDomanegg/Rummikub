@@ -44,7 +44,8 @@ public class ServerListener extends Thread {
     while (connected) {
       connected = processMessages();
     }
-    server.disconnectClient(id);
+    System.out.println("From ServerListener: Scanner in closed.. id: " + id);
+    in.close();
   }
 
   /**
@@ -57,8 +58,9 @@ public class ServerListener extends Thread {
     try {
       json = in.nextLine();
     } catch (NoSuchElementException e) {
-      in.close();
-      System.out.println("From ServerListener: Scanner in closed.. id: " + id);
+      if (connected) {
+        server.disconnectClient(id);
+      }
       return false;
     }
     request = deserializer.deserializeRequest(json);
@@ -66,15 +68,8 @@ public class ServerListener extends Thread {
     return true;
   }
 
-  /**
-   * Closes all Closables.
-   */
-  void disconnect() {
-    try {
-      this.clientIn.close();
-      in.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  /** Sets the disconnection before server closes, so that it ignores the Exception. */
+  void notifyServerClose() {
+    connected = false;
   }
 }
