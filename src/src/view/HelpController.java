@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+/**
+ * Controller responsible for the display of the help-message.
+ */
 public class HelpController {
 
   @FXML

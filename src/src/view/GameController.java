@@ -32,6 +32,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import view.music.Music;
 
+/**
+ * Controller responsible for the display of the game-view.
+ * Handles all update of the GUI while the game is ongoing.
+ */
 public class GameController {
 
   @FXML private HBox opponentRight;
@@ -67,6 +71,11 @@ public class GameController {
   // Cntrl + Drag and Drop
   private boolean ctrl;
 
+  /**
+   * Connects the GameController to a MainController.
+   *
+   * @param mainController to be connected to
+   */
   void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
@@ -100,20 +109,32 @@ public class GameController {
         period);
   }
 
+  /**
+   * Stops the game-clock.
+   */
   void stopTimer() {
     timer_task.cancel();
     timer_countDown.cancel();
   }
 
+  /**
+   * Quits the game.
+   */
   public void quitGame() {
     System.out.println("From QUIT in GameCtrl.: disconnect client!");
     mainController.handleQuitPressed();
   }
 
+  /**
+   * Signals that the player can now play.
+   */
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
   }
 
+  /**
+   * Signals that the player can't play anymore until it's his turn again.
+   */
   private void endOfYourTurn() {
     ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
   }
@@ -292,10 +313,20 @@ public class GameController {
     //STOP MUSIC
   }
 
+  /**
+   * Updates the table that the player sees.
+   *
+   * @param table to be displayed.
+   */
   void setTable(StoneInfo[][] table) {
     constructGrid(table, tableGrid);
   }
 
+  /**
+   * Updates the hand that the player sees.
+   *
+   * @param hand to be hand.
+   */
   void setPlayerHand(StoneInfo[][] hand) {
     constructGrid(hand, handGrid);
   }
@@ -304,11 +335,21 @@ public class GameController {
 
   }
 
+  /**
+   * Updates the number of stones available in the bag.
+   *
+   * @param bagSize number of stones available
+   */
   void setBagSize(int bagSize) {
     this.bagSize.setText(Integer.toString(bagSize));
   }
 
 
+  /**
+   * Updates the number of stones each opponent has on his hand.
+   *
+   * @param sizes number of stones on the hands.
+   */
   void setHandSizes(List<Integer> sizes) {
     String handComplement = " Stones";
     ownHand.setText(String.valueOf(sizes.get(0)) + handComplement);
@@ -328,6 +369,11 @@ public class GameController {
     }
   }
 
+  /**
+   * Updates the names of the opponents.
+   *
+   * @param names of the opponents
+   */
   void setPlayerNames(List<String> names) {
     System.out.println("From GameCtrl.: setting names.. " + names);
     String nameComplement = ": ";
@@ -352,6 +398,11 @@ public class GameController {
     }
   }
 
+  /**
+   * Updates whose opponent turn it is.
+   *
+   * @param relativeOpponentPosition number of steps (clockwise) until you reach the opponent
+   */
   @FXML
   void notifyCurrentPlayer(int relativeOpponentPosition) {
     if (timer_countDown != null) {
@@ -382,6 +433,12 @@ public class GameController {
   }
 
 
+  /**
+   * Determines how many players are getting displayed.
+   *
+   * @param opponents possibly displayed opponents
+   * @return number of currently displayed players
+   */
   private int getNumOfVisibliPlayers(HBox[] opponents) {
     int numOfPlayers = 1;
     for (HBox opponent : opponents) {

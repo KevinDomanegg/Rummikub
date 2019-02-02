@@ -21,6 +21,14 @@ import network.client.RummiClient;
 import network.server.RummiServer;
 import view.music.Music;
 
+/**
+ * Main controller for Rummikub.
+ *
+ * Connects the game to the network.
+ *
+ * Connects to and organizes all other sub-controllers.
+ * Delegates direct control of the different views to those controllers.
+ */
 public class MainController implements Controller {
 
   private GameController gameController;
@@ -33,7 +41,11 @@ public class MainController implements Controller {
   private RequestBuilder requestBuilder;
   private String serverIP;
 
-
+  /**
+   * Constructor setting up the primary Stage.
+   *
+   * @param primaryStage of the game.
+   */
   MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest(event -> {
@@ -45,6 +57,12 @@ public class MainController implements Controller {
     });
   }
 
+  /**
+   * Switches between different scenes based on what screen the user is supposed to see.
+   *
+   * @param fxml same of the fxml-file to be displayed
+   * @throws IOException if the scene can't be loaded
+   */
   private void switchScene(String fxml) throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
     Parent root = loader.load();
@@ -76,24 +94,48 @@ public class MainController implements Controller {
     });
   }
 
+  /**
+   * Switches to the wait-view.
+   * Is supposed to be called when waiting for other players to join.
+   *
+   * @throws IOException if scene cant' be loaded
+   */
   void switchToWaitScene() throws IOException {
     switchScene("wait.fxml");
     waitController.setServerIP(serverIP);
   }
 
+  /**
+   * Switches to start-view.
+   * Is supposed to be called befor joining/hosting a game.
+   *
+   * @throws IOException when scene can`t be loaded.
+   */
   void switchToStartScene() throws IOException {
     switchScene("start.fxml");
   }
 
+  /**
+   * Switches to the game-view.
+   * Should be called when the game starts.
+   *
+   * @throws IOException if the scene can't be loaded
+   */
   private void switchToGameScene() throws IOException{
      switchScene("game.fxml");
 
   }
 
+  /**
+   * Displays an error-message indicating that there is no connection to the host.
+   */
   public void notifyServerClose() {
     showErrorGotToStart("Host is not connected");
   }
 
+  /**
+   * Displays an error-message indicating that connecting to the host is impossible.
+   */
   public void connectionRejected() {
     showErrorGotToStart("The Host has rejected the connection.\n" +
             "There might be no spot left in the game!");
@@ -109,9 +151,13 @@ public class MainController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-//    client.disconnect();
   }
 
+  /**
+   * Shows a generic error-message.
+   *
+   * @param errorMessage text of the error-message.
+   */
   @Override
   public void showError(String errorMessage) {
     Platform.runLater(() -> {
@@ -132,6 +178,12 @@ public class MainController implements Controller {
     });
   }
 
+  /**
+   * Displays the final ranking of the game.
+   * @ToDo
+   * complete javadoc
+   * @param finalRank
+   */
   @Override public void showRank(Map<Integer, Integer> finalRank) {
     Platform.runLater(() -> {
       Stage stage = new Stage();
@@ -152,6 +204,10 @@ public class MainController implements Controller {
     });
   }
 
+  /**
+   * @ToDo
+   * javadoc
+   */
   void showHelpScene() {
     Platform.runLater(() -> {
       Stage stage = new Stage();
@@ -267,18 +323,43 @@ public class MainController implements Controller {
     gameController.setBagSize(bagSize);
   }
 
+  /**
+   * Sends a request to draw a stone from the bag to the server.
+   */
   void sendDrawRequest() {
     client.sendRequest(new SimpleRequest(RequestID.DRAW));
   }
 
+  /**
+   * Informs the server that the game-clock has run out of time.
+   */
   void sendTimeOutRequest() {
     client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
   }
 
+  /**
+   * @ToDo
+   * Complete javadoc!!!
+   *
+   * Sends a request to move a stone from the hand to the table to the server.
+   *
+   * @param sourceColumn x-coordinate of the Stone on the hand
+   * @param sourceRow y-coordinate of the Stone on the hand
+   * @param thisColumn
+   * @param thisRow
+   */
   void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
     client.sendRequest(new ConcreteMove(RequestID.TABLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
   }
 
+  /**
+   * Creates a player for the game.
+   * Including the infrastructure to communicate with the host.
+   *
+   * @param serverIP ip-address of the host
+   * @param name of the player
+   * @param age of the player
+   */
   void initPlayer(String serverIP, String name, int age) {
     try {
       client = new RummiClient(serverIP);
@@ -297,6 +378,9 @@ public class MainController implements Controller {
     requestBuilder.sendSetPlayerRequest(name, age);
   }
 
+  /**
+   * Starts the server.
+   */
   void startServer() {
     new RummiServer().start();
     try{
@@ -306,10 +390,24 @@ public class MainController implements Controller {
     }
   }
 
+  /**
+   * Sends request to start the game to the server.
+   */
   void sendStartRequest() {
     requestBuilder.sendStartRequest();
   }
 
+  /**
+   * @ToDo
+   * Why thisColumn/thisRow? Weird names..
+   *
+   * Sends request to move a stone on the hand to the server.
+   *
+   * @param sourceColumn
+   * @param sourceRow
+   * @param thisColumn
+   * @param thisRow
+   */
   void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
     requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
   }
@@ -342,6 +440,9 @@ public class MainController implements Controller {
     requestBuilder.sendSortHandByRunRequest();
   }
 
+  /**
+   * Quits the game and goes back to the start-view.
+   */
   void handleQuitPressed() {
     killThreads();
     try {

@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 
+/**
+ * Controller responsible fot the display of error-messages.
+ */
 public class ErrorController {
 
   @FXML
@@ -15,6 +18,10 @@ public class ErrorController {
   @FXML
   private Button okButton;
 
+  /**
+   * Displays an error-message with custom text.
+   * @param message text of the error-message
+   */
   @FXML
   void setErrorMessage(String message) {
     errorMessage.setText(message);
