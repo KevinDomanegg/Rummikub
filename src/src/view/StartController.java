@@ -90,8 +90,9 @@ public class StartController {
       return;
     }
     ipField.setText("localhost");
-    mainController.startServer();
-    joinGame();
+    if (mainController.startServer()) {
+      joinGame();
+    }
   }
 
   private void clearErrors() {

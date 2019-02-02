@@ -13,7 +13,6 @@ import java.net.UnknownHostException;
 
 public class RummiServer extends Thread implements Server {
 
-
   private static final int MAX_CLIENTS = 4;
   private static final int PORT = 48410;
   private static Socket[] clients = new Socket[MAX_CLIENTS];
@@ -29,7 +28,8 @@ public class RummiServer extends Thread implements Server {
    * Constructor creating a new Server, including all other classes needed
    * server-side to play the game.
    */
-  public RummiServer() {
+  public RummiServer() throws IOException {
+    server = new ServerSocket(PORT);
     game = new RummiGame();
     requestHandler = new RequestHandler(this, game);
   }
@@ -41,17 +41,14 @@ public class RummiServer extends Thread implements Server {
   @Override
   public void run() {
     try {
-      server = new ServerSocket(PORT);
-      Socket client;
       while (running) {
         synchronized (this) {
-          client = server.accept();
-          tryToConnect(client);
+          tryToConnect(server.accept());
         }
       }
     } catch (IOException e) {
-      System.out.println("From run in RummiServer: IOException");
-      this.running = false;
+      System.out.println("From run in RummiServer: ServerSocket");
+      running = false;
     }
     System.out.println("From run in RummiServer: server terminates");
   }
@@ -97,13 +94,6 @@ public class RummiServer extends Thread implements Server {
     senders[id] = new ServerSender(clients[id], this, id);
     senders[id].start();
     numOfClients++;
-
-    // SENDS THE IP ADDRESS OF THE SERVER
-//    try {
-//      sendToPlayer(id, new GameIPAddress(getIP()));
-//    } catch (UnknownHostException e) {
-//      e.printStackTrace();
-//    }
   }
 
   /**
@@ -182,7 +172,6 @@ public class RummiServer extends Thread implements Server {
    * Stops the thread and closes the closables.
    */
   private void suicide() {
-    running = false;
     try {
       for (int id = 0; id < clients.length; id++) {
         if (clients[id] != null) {
@@ -196,6 +185,6 @@ public class RummiServer extends Thread implements Server {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    running = false;
   }
-
 }

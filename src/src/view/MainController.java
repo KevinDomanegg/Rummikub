@@ -345,11 +345,11 @@ public class MainController implements Controller {
    *
    * @param sourceColumn x-coordinate of the Stone on the hand
    * @param sourceRow y-coordinate of the Stone on the hand
-   * @param thisColumn
-   * @param thisRow
+   * @param targetColumn
+   * @param targetRow
    */
-  void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    client.sendRequest(new ConcreteMove(RequestID.TABLE_SET_MOVE, sourceColumn, sourceRow, thisColumn, thisRow));
+  void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    client.sendRequest(new ConcreteMove(RequestID.TABLE_SET_MOVE, sourceColumn, sourceRow, targetColumn, targetRow));
   }
 
   /**
@@ -381,13 +381,20 @@ public class MainController implements Controller {
   /**
    * Starts the server.
    */
-  void startServer() {
-    new RummiServer().start();
+  boolean startServer() {
+    try {
+      new RummiServer().start();
+    } catch (IOException e) {
+      showError("You are already hosting a Server!");
+      return false;
+    }
     try{
       serverIP = Inet4Address.getLocalHost().getHostAddress();
     } catch (UnknownHostException e) {
-      e.printStackTrace();
+      showError("The IP address of a host could not be determined.");
+      return false;
     }
+    return true;
   }
 
   /**
@@ -399,33 +406,33 @@ public class MainController implements Controller {
 
   /**
    * @ToDo
-   * Why thisColumn/thisRow? Weird names..
+   * Why targetColumn/targetRow? Weird names..
    *
    * Sends request to move a stone on the hand to the server.
    *
    * @param sourceColumn
    * @param sourceRow
-   * @param thisColumn
-   * @param thisRow
+   * @param targetColumn
+   * @param targetRow
    */
-  void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+  void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
-  void sendPutStoneRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+  void sendPutStoneRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
-  void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
+  void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
-  void sendMoveSetOnHand(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    requestBuilder.sendMoveSetOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
+  void sendMoveSetOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    requestBuilder.sendMoveSetOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
-  void sendPutSetRequest(int sourceColumn, int sourceRow, int thisColumn, int thisRow) {
-    requestBuilder.sendPutSetRequest(sourceColumn, sourceRow, thisColumn, thisRow);
+  void sendPutSetRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
+    requestBuilder.sendPutSetRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
   void sendConfirmMoveRequest() {
