@@ -114,7 +114,6 @@
                           onMouseClicked="#sendSortHandByGroupRequest"/>
                   <Button fx:id="sortHandByRunButton" text="Run"
                           onMouseClicked="#sendSortHandByRunRequest"/>
-                  <!--<Button fx:id="testRankButton" text="testRank" onMouseClicked="#showRank"/>-->
                 </children>
               </HBox>
             </children>
@@ -132,12 +131,6 @@
               <GridPane fx:id="handGrid" styleClass="hand"
                         alignment="CENTER">
                 <!-- Own hand -->
-                <columnConstraints>
-                  <!-- Add columns via Java with tag=ColumnConstraints -->
-                </columnConstraints>
-                <rowConstraints>
-                  <!-- Add row via Java with tag=RowConstraints -->
-                </rowConstraints>
                 <children>
 
                 </children>

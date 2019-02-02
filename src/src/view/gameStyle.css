@@ -106,6 +106,10 @@
 
 /* ID selectors */
 
+#bottom {
+    -fx-translate-y: -100;
+}
+
 #root {
     -fx-background-image: url("images/backgroundTileBlue.png");
     -fx-background-repeat: repeat;
@@ -170,4 +174,8 @@
 
 #rightContainer {
     -fx-padding: 0 -270 0 0;
+}
+
+#tableGrid {
+    -fx-translate-y: -150;
 }
