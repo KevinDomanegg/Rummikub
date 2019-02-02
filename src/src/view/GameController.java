@@ -4,15 +4,12 @@ import static game.Stone.Color.JOKER;
 
 import communication.gameinfo.StoneInfo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
@@ -75,14 +72,13 @@ public class GameController {
   private GridPane handGrid;
   @FXML
   private VBox ownBoard;
-  //  private NetworkController networkController;
   private MainController mainController;
   // TIMER
   private Timer timer_countDown;
   private TimerTask timer_task;
 
-  // Cntrl + Drag and Drop
-  private boolean ctrl;
+  // Ctrl + Drag and Drop
+  private boolean isMultiMove;
 
   /**
    * Connects the GameController to a MainController.
@@ -167,75 +163,90 @@ public class GameController {
   /**
    * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-   * @param stoneGrid The FXML GridPane where the cells shall be constructed in
-   * @param pane      Indicator where a cell shall source its data from in case of drag and drop event
+   * @param stoneGrid Matrix array with StoneInfo data as source for view
+   * @param grid      FXML GridPane to display the stone data in
    */
   @FXML
-  private void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
-    Platform.runLater(() -> pane.getChildren().clear());
+  private void constructGrid(StoneInfo[][] stoneGrid, GridPane grid) {
+    Platform.runLater(() -> {
+      List<Node> gridCells = grid.getChildren();
 
-    int width = stoneGrid.length;
-    int height = stoneGrid[0].length;
+      if (gridCells.isEmpty()) {
+        // Build grid cells when game is started
+        int width = stoneGrid.length;
+        int height = stoneGrid[0].length;
 
-    StoneInfo stoneInfo = null;
-    for (int x = 0; x < width; x++) {
-      for (int y = 0; y < height; y++) {
-        StackPane cell = new StackPane();
+        for (int x = 0; x < width; x++) {
+          for (int y = 0; y < height; y++) {
 
-        if (stoneGrid[x][y] != null) {
-          stoneInfo = stoneGrid[x][y];
-          putStoneInCell(cell, stoneInfo);
+            StackPane cell = new StackPane();
+            StoneInfo stoneInfo;
+
+            if (stoneGrid[x][y] != null) {
+              stoneInfo = stoneGrid[x][y];
+              putStoneInCell(cell, stoneInfo);
+            }
+
+            cell.getStyleClass().add("cell");
+            grid.add(cell, x, y);
+            setupDragAndDrop(cell);
+          }
         }
-
-        int finalX = x;
-        int finalY = y;
-        StoneInfo finalStoneInfo = stoneInfo;
-        Platform.runLater(() -> {
-          cell.getStyleClass().add("cell");
-          pane.add(cell, finalX, finalY);
-          setupDragAndDrop(cell, finalStoneInfo);
-        });
+      } else {
+        // Use existing cells to display the stones in
+        for (Node cell : gridCells) {
+          if (cell instanceof Pane) {
+            ((Pane) cell).getChildren().clear();
+            setupDragAndDrop((Pane) cell);
+            int x = GridPane.getColumnIndex(cell);
+            int y = GridPane.getRowIndex(cell);
+            if (stoneGrid[x][y] != null) {
+              StoneInfo stoneInfo = stoneGrid[x][y];
+              putStoneInCell((Pane) cell, stoneInfo);
+            } else {
+              ((Pane) cell).getChildren().clear();
+            }
+          }
+        }
       }
-    }
+    });
   }
 
   /**
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
-   * @param cell      Pane where the event shall be registered
-   * @param stoneInfo Indicator for whether the cells data source is the table grid - if not, it's the hand grid
+   * @param cell Pane where the event shall be registered
    */
-  private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
+  private void setupDragAndDrop(Pane cell) {
     // Get cell coordinates
     int thisColumn = GridPane.getColumnIndex(cell);
     int thisRow = GridPane.getRowIndex(cell);
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
-      System.out.println(stoneInfo);
-      if (stoneInfo == null) {
-        return;
-      }
-
       if (event.isControlDown()) {
-        System.out.println("----------------------------control pushed");
-        ctrl = true;
+        System.out.println("----------------------------control pushed"); //TODO: Remove
+        isMultiMove = true;
       }
 
+      if (!cell.getChildren().isEmpty()) {
+        Music.playSoundOf("pick up stone");
 
-      Music.playSoundOf("pick up stone");
-      Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
-      cell.getStyleClass().remove("cell");
-      SnapshotParameters snapshotParameters = new SnapshotParameters();
-      snapshotParameters.setFill(Color.TRANSPARENT);
-      Image cellSnapshot = cell.snapshot(snapshotParameters, null);
-      cell.getStyleClass().add("cell");
-      dragBoard.setDragView(cellSnapshot, cell.getWidth() * 0.5, cell.getHeight() * 0.9); //TODO: Remove magic numbers? Only for cursor pos tho
-      ClipboardContent content = new ClipboardContent();
+        Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
 
-      if (stoneInfo != null) {
+        // Create drag view without cell styling
+        cell.getStyleClass().remove("cell");
+        SnapshotParameters snapshotParameters = new SnapshotParameters();
+        snapshotParameters.setFill(Color.TRANSPARENT);
+        Image cellSnapshot = cell.snapshot(snapshotParameters, null);
+
+        cell.getStyleClass().add("cell");
+        dragBoard.setDragView(cellSnapshot, cell.getWidth() * 0.5, cell.getHeight() * 0.9); //TODO: Remove magic numbers? Only for cursor pos tho
+        ClipboardContent content = new ClipboardContent();
+
         // Put stone on clipboard
-        content.put(stoneFormat, stoneInfo);
+        StoneInfo dummyStone = new StoneInfo(null, 0);
+        content.put(stoneFormat, dummyStone);
         dragBoard.setContent(content);
       }
       event.consume();
@@ -277,27 +288,27 @@ public class GameController {
       Parent targetParent = cell.getParent();
       if (sourceParent.getId().equals("handGrid")) {
         if (targetParent.getId().equals("handGrid")) {
-          if (ctrl) {
+          if (isMultiMove) {
             mainController.sendMoveSetOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
           } else {
             mainController.sendMoveStoneOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
           }
         } else {
-          if (ctrl) {
+          if (isMultiMove) {
             mainController.sendPutSetRequest(sourceColumn, sourceRow, thisColumn, thisRow);
           } else {
             mainController.sendPutStoneRequest(sourceColumn, sourceRow, thisColumn, thisRow);
           }
         }
       } else {
-        System.out.println("control pressed is: ------- " + ctrl);
-        if (ctrl) {
+        System.out.println("control pressed is: ------- " + isMultiMove); //TODO: Remove
+        if (isMultiMove) {
           mainController.sendMoveSetOnTableRequest(sourceColumn, sourceRow, thisColumn, thisRow);
         } else {
           mainController.sendMoveStoneOnTable(sourceColumn, sourceRow, thisColumn, thisRow);
         }
       }
-      ctrl = false;
+      isMultiMove = false;
       event.consume();
     });
   }
@@ -308,31 +319,29 @@ public class GameController {
    * @param cell  Cell in which the stone shall be displayed
    * @param stone Properties (color, value) of the stone which shall be displayed
    */
-  private void putStoneInCell(StackPane cell, StoneInfo stone) {
-    cell.getChildren().clear();
+  private void putStoneInCell(Pane cell, StoneInfo stone) {
+    Platform.runLater(() -> {
+      ImageView stoneBackground = new ImageView(getClass().getResource("images/StoneBackground.png").toString());
+      stoneBackground.getStyleClass().add("shadow");
+      cell.getChildren().add(stoneBackground);
 
-    ImageView stoneBackground = new ImageView(getClass().getResource("images/StoneBackground.png").toString());
-    stoneBackground.getStyleClass().add("shadow");
-    cell.getChildren().add(stoneBackground);
+      String stoneColor = stone.getColor();
+      Text stoneText = new Text();
+      if (stoneColor.equals(JOKER.toString())) {
+        Circle jokerBackground = new Circle(10);
+        jokerBackground.getStyleClass().add("jokerBackground");
+        cell.getChildren().add(jokerBackground);
 
-    String stoneColor = stone.getColor();
-    Text stoneText = new Text();
-    if (stoneColor.equals(JOKER.toString())) {
-      Circle jokerBackground = new Circle(10);
-      jokerBackground.getStyleClass().add("jokerBackground");
-      cell.getChildren().add(jokerBackground);
+        stoneText.setText("J");
+      } else {
+        String stoneValue = Integer.toString(stone.getNumber());
+        stoneText.setText(stoneValue);
+      }
 
-      stoneText.setText("J");
-    } else {
-      String stoneValue = Integer.toString(stone.getNumber());
-      stoneText.setText(stoneValue);
-    }
+      stoneText.getStyleClass().addAll("stoneValue", stoneColor);
 
-    stoneText.getStyleClass().addAll("stoneValue", stoneColor);
-
-    cell.getChildren().addAll(stoneText);
-
-    //STOP MUSIC
+      cell.getChildren().addAll(stoneText);
+    });
   }
 
   /**
@@ -449,7 +458,6 @@ public class GameController {
         //styling currently playing opponent
         opponents[i - 1].setBackground(new Background((new BackgroundFill(
                 Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY))));
-        System.out.println("");
       }
     }
   }
