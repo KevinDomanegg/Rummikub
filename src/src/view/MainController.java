@@ -131,7 +131,7 @@ public class MainController implements Controller {
    */
   public void notifyServerClose() {
     client = null;
-    showErrorGotToStart("Host is not connected");
+    showErrorGotToStart("Error! Server is not available due to lack of host or not enough players in the game");
   }
 
   /**
