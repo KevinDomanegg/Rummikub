@@ -3,11 +3,13 @@ package view;
 import static game.Stone.Color.JOKER;
 
 import communication.gameinfo.StoneInfo;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -32,34 +34,49 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import view.music.Music;
 
+/**
+ * Controller responsible for the display of the game-view.
+ * Handles all update of the GUI while the game is ongoing.
+ */
 public class GameController {
 
-  @FXML private HBox opponentRight;
-  @FXML private HBox opponentMid;
-  @FXML private HBox opponentLeft;
-
-  @FXML private Text ownName;
-  @FXML private Text ownHand;
-  @FXML private Text leftPlayerName;
-  @FXML private Text midPlayerName;
-  @FXML private Text rightPlayerName;
-  @FXML private Text leftPlayerHand;
-  @FXML private Text midPlayerHand;
-  @FXML private Text rightPlayerHand;
-  @FXML private Text bagSize;
-
-  @FXML private Text timer;
-  @FXML private GridPane tableGrid;
-  @FXML private GridPane handGrid;
-  @FXML private VBox ownBoard;
-
-
-//  private NetworkController networkController;
-  private MainController mainController;
-//  private ClientModel model;
+  //  private ClientModel model;
 //  private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
-
+  @FXML
+  private HBox opponentRight;
+  @FXML
+  private HBox opponentMid;
+  @FXML
+  private HBox opponentLeft;
+  @FXML
+  private Text ownName;
+  @FXML
+  private Text ownHand;
+  @FXML
+  private Text leftPlayerName;
+  @FXML
+  private Text midPlayerName;
+  @FXML
+  private Text rightPlayerName;
+  @FXML
+  private Text leftPlayerHand;
+  @FXML
+  private Text midPlayerHand;
+  @FXML
+  private Text rightPlayerHand;
+  @FXML
+  private Text bagSize;
+  @FXML
+  private Text timer;
+  @FXML
+  private GridPane tableGrid;
+  @FXML
+  private GridPane handGrid;
+  @FXML
+  private VBox ownBoard;
+  //  private NetworkController networkController;
+  private MainController mainController;
   // TIMER
   private Timer timer_countDown;
   private TimerTask timer_task;
@@ -67,6 +84,11 @@ public class GameController {
   // Cntrl + Drag and Drop
   private boolean ctrl;
 
+  /**
+   * Connects the GameController to a MainController.
+   *
+   * @param mainController to be connected to
+   */
   void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
@@ -76,8 +98,9 @@ public class GameController {
     int period = 1000;
     timer_countDown = new Timer();
     timer_countDown.scheduleAtFixedRate(
-        timer_task = new TimerTask() {
+            timer_task = new TimerTask() {
               int interval = 60;
+
               public void run() {
                 if (interval == 0) {
 
@@ -96,24 +119,36 @@ public class GameController {
                 interval--;
               }
             },
-        delay,
-        period);
+            delay,
+            period);
   }
 
+  /**
+   * Stops the game-clock.
+   */
   void stopTimer() {
     timer_task.cancel();
     timer_countDown.cancel();
   }
 
+  /**
+   * Quits the game.
+   */
   public void quitGame() {
     System.out.println("From QUIT in GameCtrl.: disconnect client!");
     mainController.handleQuitPressed();
   }
 
+  /**
+   * Signals that the player can now play.
+   */
   void yourTurn() {
     ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
   }
 
+  /**
+   * Signals that the player can't play anymore until it's his turn again.
+   */
   private void endOfYourTurn() {
     ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
   }
@@ -132,8 +167,8 @@ public class GameController {
   /**
    * Method to automatically construct columns, rows, and cells with StackPane in it.
    *
-   * @param stoneGrid    The FXML GridPane where the cells shall be constructed in
-   * @param pane Indicator where a cell shall source its data from in case of drag and drop event
+   * @param stoneGrid The FXML GridPane where the cells shall be constructed in
+   * @param pane      Indicator where a cell shall source its data from in case of drag and drop event
    */
   @FXML
   private void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
@@ -167,7 +202,7 @@ public class GameController {
   /**
    * Method to setup drag event, content to copy on clipboard, and drop event for a cell
    *
-   * @param cell    Pane where the event shall be registered
+   * @param cell      Pane where the event shall be registered
    * @param stoneInfo Indicator for whether the cells data source is the table grid - if not, it's the hand grid
    */
   private void setupDragAndDrop(Pane cell, StoneInfo stoneInfo) {
@@ -195,7 +230,7 @@ public class GameController {
       snapshotParameters.setFill(Color.TRANSPARENT);
       Image cellSnapshot = cell.snapshot(snapshotParameters, null);
       cell.getStyleClass().add("cell");
-      dragBoard.setDragView(cellSnapshot, cell.getWidth()*0.5, cell.getHeight()*0.9); //TODO: Remove magic numbers? Only for cursor pos tho
+      dragBoard.setDragView(cellSnapshot, cell.getWidth() * 0.5, cell.getHeight() * 0.9); //TODO: Remove magic numbers? Only for cursor pos tho
       ClipboardContent content = new ClipboardContent();
 
       if (stoneInfo != null) {
@@ -209,7 +244,15 @@ public class GameController {
     // Enable cell to accept drop
     cell.setOnDragOver(event -> {
       if (event.getDragboard().hasContent(stoneFormat)) {
-        event.acceptTransferModes(TransferMode.ANY);
+        Object sourceCell = event.getGestureSource();
+        if (sourceCell instanceof StackPane) {
+          String targetParentId = cell.getParent().getId();
+          String sourceParentId = ((StackPane) sourceCell).getParent().getId();
+          if (sourceParentId.equals("handGrid") ||
+                  (sourceParentId.equals("tableGrid") && !(targetParentId.equals("handGrid")))) {
+            event.acceptTransferModes(TransferMode.ANY);
+          }
+        }
       }
       event.consume();
     });
@@ -230,8 +273,8 @@ public class GameController {
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
       int sourceRow = GridPane.getRowIndex(sourceCell);
 
-        Parent sourceParent = sourceCell.getParent();
-        Parent targetParent = cell.getParent();
+      Parent sourceParent = sourceCell.getParent();
+      Parent targetParent = cell.getParent();
       if (sourceParent.getId().equals("handGrid")) {
         if (targetParent.getId().equals("handGrid")) {
           if (ctrl) {
@@ -292,10 +335,20 @@ public class GameController {
     //STOP MUSIC
   }
 
+  /**
+   * Updates the table that the player sees.
+   *
+   * @param table to be displayed.
+   */
   void setTable(StoneInfo[][] table) {
     constructGrid(table, tableGrid);
   }
 
+  /**
+   * Updates the hand that the player sees.
+   *
+   * @param hand to be hand.
+   */
   void setPlayerHand(StoneInfo[][] hand) {
     constructGrid(hand, handGrid);
   }
@@ -304,11 +357,21 @@ public class GameController {
 
   }
 
+  /**
+   * Updates the number of stones available in the bag.
+   *
+   * @param bagSize number of stones available
+   */
   void setBagSize(int bagSize) {
     this.bagSize.setText(Integer.toString(bagSize));
   }
 
 
+  /**
+   * Updates the number of stones each opponent has on his hand.
+   *
+   * @param sizes number of stones on the hands.
+   */
   void setHandSizes(List<Integer> sizes) {
     String handComplement = " Stones";
     ownHand.setText(String.valueOf(sizes.get(0)) + handComplement);
@@ -328,6 +391,11 @@ public class GameController {
     }
   }
 
+  /**
+   * Updates the names of the opponents.
+   *
+   * @param names of the opponents
+   */
   void setPlayerNames(List<String> names) {
     System.out.println("From GameCtrl.: setting names.. " + names);
     String nameComplement = ": ";
@@ -344,14 +412,19 @@ public class GameController {
         rightPlayerName.setText(names.get(2) + nameComplement);
         return;
       case 2:
-      opponentMid.setVisible(true);
-      opponentLeft.setVisible(false);
-      opponentRight.setVisible(false);
-      midPlayerName.setText(names.get(1) + nameComplement);
+        opponentMid.setVisible(true);
+        opponentLeft.setVisible(false);
+        opponentRight.setVisible(false);
+        midPlayerName.setText(names.get(1) + nameComplement);
       default:
     }
   }
 
+  /**
+   * Updates whose opponent turn it is.
+   *
+   * @param relativeOpponentPosition number of steps (clockwise) until you reach the opponent
+   */
   @FXML
   void notifyCurrentPlayer(int relativeOpponentPosition) {
     if (timer_countDown != null) {
@@ -360,7 +433,7 @@ public class GameController {
     }
     endOfYourTurn();
     setTimer();
-    HBox[] opponents = new HBox[] {
+    HBox[] opponents = new HBox[]{
             opponentLeft, opponentMid, opponentRight
     };
 
@@ -382,6 +455,12 @@ public class GameController {
   }
 
 
+  /**
+   * Determines how many players are getting displayed.
+   *
+   * @param opponents possibly displayed opponents
+   * @return number of currently displayed players
+   */
   private int getNumOfVisibliPlayers(HBox[] opponents) {
     int numOfPlayers = 1;
     for (HBox opponent : opponents) {
@@ -397,10 +476,10 @@ public class GameController {
    *
    * @param relativeOpponentPosition number of steps (clockwise) until you reach the opponent
    * @return position of the opponent
-   *          0 -> self
-   *          1 -> left
-   *          2 -> middle/top
-   *          3 -> right
+   * 0 -> self
+   * 1 -> left
+   * 2 -> middle/top
+   * 3 -> right
    */
   private int toOpponentID(int relativeOpponentPosition, HBox[] opponents) {
 
@@ -462,11 +541,12 @@ public class GameController {
   private void sendConfirmMoveRequest() {
     mainController.sendConfirmMoveRequest();
   }
-  
+
   @FXML
   private void sendSortHandByGroupRequest() {
     mainController.sendSortHandByGroupRequest();
   }
+
   @FXML
   private void sendSortHandByRunRequest() {
     mainController.sendSortHandByRunRequest();
