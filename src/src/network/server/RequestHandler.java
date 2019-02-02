@@ -362,7 +362,7 @@ class RequestHandler {
   }
 
   void notifyClientClose() {
-    if (game.hasStarted()) {
+    if (game.isGameOn()) {
       sendBagSizeToAll();
       sendHandSizesToAll();
       notifyTurnToPlayer();

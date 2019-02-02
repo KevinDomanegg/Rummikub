@@ -163,5 +163,5 @@ public interface Game {
 
   boolean hasPlayerPlayedFirstMove(int playerID);
 
-  boolean hasStarted();
+  boolean isGameOn();
 }
