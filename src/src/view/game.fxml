@@ -6,12 +6,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root"
-      xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="view.GameController"
-      stylesheets="@/view/style.css, @/view/gameStyle.css"
-      alignment="TOP_CENTER">
+<StackPane fx:id="root"
+           xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="view.GameController"
+           stylesheets="@/view/style.css, @/view/gameStyle.css"
+           alignment="TOP_CENTER">
 
   <!-- Top area: Timer and menu buttons -->
   <StackPane fx:id="top" alignment="TOP_CENTER" pickOnBounds="false">
@@ -79,66 +79,61 @@
   <!-- Bottom area: ownHand, drawStone button etc. -->
   <StackPane fx:id="bottom" alignment="BOTTOM_CENTER">
     <children>
-      <StackPane pickOnBounds="false">
+      <StackPane alignment="BOTTOM_LEFT">
         <children>
-          <StackPane alignment="BOTTOM_LEFT">
-            <children>
-              <HBox styleClass="onEdge" alignment="BOTTOM_LEFT" spacing="5">
-                <Text fx:id="bagSize"/>
-                <Text styleClass="whiteText" text="stones in bag"/>
-              </HBox>
-            </children>
-          </StackPane>
-          <VBox alignment="BOTTOM_RIGHT" styleClass="onEdge" spacing="25">
-            <!-- drawStone buttons etc. -->
-            <children>
-              <HBox fx:id="moveButtons" alignment="CENTER_RIGHT" spacing="10">
-                <children>
-                  <Button fx:id="drawButton" text="Draw stone"
-                          onMouseClicked="#drawStone"/>
-                  <Button fx:id="checkButton" text="Check"
-                          onMouseClicked="#sendConfirmMoveRequest"/>
-                </children>
-              </HBox>
-              <HBox fx:id="backButtons" alignment="CENTER_RIGHT" spacing="10">
-                <children>
-                  <Button fx:id="undoButton" text="Undo"
-                          onMouseClicked="#sendUndoRequest"/>
-                  <Button fx:id="resetButton" text="Reset"
-                          onMouseClicked="#sendResetRequest"/>
-                </children>
-              </HBox>
-              <HBox alignment="CENTER_RIGHT" spacing="10">
-                <children>
-                  <Button fx:id="sortHandByGroupButton" text="Group"
-                          onMouseClicked="#sendSortHandByGroupRequest"/>
-                  <Button fx:id="sortHandByRunButton" text="Run"
-                          onMouseClicked="#sendSortHandByRunRequest"/>
-                </children>
-              </HBox>
-            </children>
-          </VBox>
-
-          <VBox fx:id="ownBoard" styleClass="shadow" alignment="TOP_CENTER">
-            <!-- hand of executing player -->
-            <children>
-              <HBox fx:id="playerInfo" alignment="CENTER">
-                <children>
-                  <Text fx:id="ownName" styleClass="whiteText" text="x"/>
-                  <Text fx:id="ownHand" styleClass="whiteText" text="x"/>
-                </children>
-              </HBox>
-              <GridPane fx:id="handGrid" styleClass="hand"
-                        alignment="CENTER">
-                <!-- Own hand -->
-                <children>
-
-                </children>
-              </GridPane>
-            </children>
-          </VBox>
+          <HBox styleClass="onEdge" alignment="BOTTOM_LEFT" spacing="5">
+            <Text fx:id="bagSize"/>
+            <Text styleClass="whiteText" text="stones in bag"/>
+          </HBox>
         </children>
       </StackPane>
+      <VBox alignment="BOTTOM_RIGHT" styleClass="onEdge" spacing="25">
+        <!-- drawStone buttons etc. -->
+        <children>
+          <HBox fx:id="moveButtons" alignment="CENTER_RIGHT" spacing="10">
+            <children>
+              <Button fx:id="drawButton" text="Draw stone"
+                      onMouseClicked="#drawStone"/>
+              <Button fx:id="checkButton" text="Check"
+                      onMouseClicked="#sendConfirmMoveRequest"/>
+            </children>
+          </HBox>
+          <HBox fx:id="backButtons" alignment="CENTER_RIGHT" spacing="10">
+            <children>
+              <Button fx:id="undoButton" text="Undo"
+                      onMouseClicked="#sendUndoRequest"/>
+              <Button fx:id="resetButton" text="Reset"
+                      onMouseClicked="#sendResetRequest"/>
+            </children>
+          </HBox>
+          <HBox alignment="CENTER_RIGHT" spacing="10">
+            <children>
+              <Button fx:id="sortHandByGroupButton" text="Group"
+                      onMouseClicked="#sendSortHandByGroupRequest"/>
+              <Button fx:id="sortHandByRunButton" text="Run"
+                      onMouseClicked="#sendSortHandByRunRequest"/>
+            </children>
+          </HBox>
+        </children>
+      </VBox>
+
+      <VBox fx:id="ownBoard" styleClass="shadow" alignment="TOP_CENTER">
+        <!-- hand of executing player -->
+        <children>
+          <HBox fx:id="playerInfo" alignment="CENTER">
+            <children>
+              <Text fx:id="ownName" styleClass="whiteText" text="x"/>
+              <Text fx:id="ownHand" styleClass="whiteText" text="x"/>
+            </children>
+          </HBox>
+          <GridPane fx:id="handGrid" styleClass="hand"
+                    alignment="CENTER">
+            <!-- Own hand -->
+            <children>
+            </children>
+          </GridPane>
+        </children>
+      </VBox>
     </children>
   </StackPane>
-</VBox>
+</StackPane>

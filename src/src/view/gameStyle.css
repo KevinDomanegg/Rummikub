@@ -106,9 +106,10 @@
 
 /* ID selectors */
 
+/*
 #bottom {
     -fx-translate-y: -100;
-}
+}*/
 
 #root {
     -fx-background-image: url("images/backgroundTileBlue.png");
@@ -155,7 +156,7 @@
 #table {
     -fx-border-color: white;
     -fx-border-width: 2;
-    -fx-max-width: 100; /* increased by cells */
+    -fx-max-width: 100; /* width dynamically increased by cells */
 }
 
 #tableContainer {
@@ -177,5 +178,9 @@
 }
 
 #tableGrid {
-    -fx-translate-y: -150;
+    -fx-translate-y: -85;
+}
+
+#ownBoard {
+    -fx-max-height: 100; /* height dynamically increased */
 }
