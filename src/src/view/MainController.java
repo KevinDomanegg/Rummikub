@@ -130,6 +130,7 @@ public class MainController implements Controller {
    * Displays an error-message indicating that there is no connection to the host.
    */
   public void notifyServerClose() {
+    client = null;
     showErrorGotToStart("Host is not connected");
   }
 
@@ -460,8 +461,8 @@ public class MainController implements Controller {
   }
 
   private void killThreads() {
-    // delete winner- and gameController
-    winnerController = null;
+    // delete wait- and gameController
+    waitController = null;
     if (gameController != null) {
       gameController.stopTimer();
       gameController = null;

@@ -67,7 +67,7 @@ public class ServerSender extends Thread {
         this.connected = false;
       }
     }
-    System.out.println("From ServerSender: closing... id: " + id);
+    System.out.println("From ServerSender: Sender terminates.. id: " + id);
   }
 
     /**

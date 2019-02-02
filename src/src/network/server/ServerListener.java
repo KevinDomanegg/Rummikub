@@ -44,8 +44,8 @@ public class ServerListener extends Thread {
     while (connected) {
       connected = processMessages();
     }
-    System.out.println("From ServerListener: Scanner in closed.. id: " + id);
     in.close();
+    System.out.println("From ServerListener: Listener terminates.. id: " + id);
   }
 
   /**
@@ -69,7 +69,7 @@ public class ServerListener extends Thread {
   }
 
   /** Sets the disconnection before server closes, so that it ignores the Exception. */
-  void notifyServerClose() {
+  void notifyDisconnection() {
     connected = false;
   }
 }

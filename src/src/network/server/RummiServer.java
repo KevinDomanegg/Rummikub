@@ -15,9 +15,9 @@ public class RummiServer extends Thread implements Server {
 
   private static final int MAX_CLIENTS = 4;
   private static final int PORT = 48410;
-  private static Socket[] clients = new Socket[MAX_CLIENTS];
-  private static ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
-  private static ServerSender[] senders = new ServerSender[MAX_CLIENTS];
+  private Socket[] clients = new Socket[MAX_CLIENTS];
+  private ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
+  private ServerSender[] senders = new ServerSender[MAX_CLIENTS];
   private ServerSocket server;
   private int numOfClients;
   private boolean running = true;
@@ -47,7 +47,7 @@ public class RummiServer extends Thread implements Server {
         }
       }
     } catch (IOException e) {
-      System.out.println("From run in RummiServer: ServerSocket");
+//      System.out.println("From run in RummiServer: ServerSocket");
       running = false;
     }
     System.out.println("From run in RummiServer: server terminates");
@@ -176,7 +176,7 @@ public class RummiServer extends Thread implements Server {
       for (int id = 0; id < clients.length; id++) {
         if (clients[id] != null) {
           // notify listener that server closes it
-          listeners[id].notifyServerClose();
+          listeners[id].notifyDisconnection();
           clients[id].close();
           senders[id].disconnect();
         }
