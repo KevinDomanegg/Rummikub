@@ -1,11 +1,10 @@
 package network.server;
 
-import communication.gameinfo.*;
-import communication.request.UpdatePlayersRequest;
+import communication.gameinfo.GameInfo;
+import communication.gameinfo.GameInfoID;
+import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
-import network.client.RummiClient;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -44,7 +43,6 @@ public class RummiServer extends Thread implements Server {
     try {
       server = new ServerSocket(PORT);
       Socket client;
-
       while (running) {
         synchronized (this) {
           client = server.accept();
@@ -52,17 +50,17 @@ public class RummiServer extends Thread implements Server {
         }
       }
     } catch (IOException e) {
+      System.out.println("From run in RummiServer: IOException");
       this.running = false;
     }
+    System.out.println("From run in RummiServer: server terminates");
   }
 
-  private synchronized void tryToConnect(Socket client) {
-
+  private synchronized void tryToConnect(Socket client) throws IOException {
     if (numOfClients >= MAX_CLIENTS) {
       rejectClient(client);
       return;
     }
-
     // find next free position of clients
     for (int i = 0; i < MAX_CLIENTS; i++) {
       if (clients[i] == null) {
@@ -70,7 +68,6 @@ public class RummiServer extends Thread implements Server {
         break;
       }
     }
-
   }
 
 
@@ -78,11 +75,12 @@ public class RummiServer extends Thread implements Server {
    * Notifies a client that it has been rejected.
    * @param client to be rejected
    */
-  private void rejectClient(Socket client) {
+  private void rejectClient(Socket client) throws IOException {
     ServerSender sender = new ServerSender(client, this, (MAX_CLIENTS + 1));
     sender.start();
     sender.send(new SimpleGameInfo(GameInfoID.TOO_MANY_CLIENTS));
     sender.disconnect();
+    client.close();
   }
 
   /**
@@ -101,11 +99,11 @@ public class RummiServer extends Thread implements Server {
     numOfClients++;
 
     // SENDS THE IP ADDRESS OF THE SERVER
-    try {
-      sendToPlayer(id, new GameIPAddress(getIP()));
-    } catch (UnknownHostException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      sendToPlayer(id, new GameIPAddress(getIP()));
+//    } catch (UnknownHostException e) {
+//      e.printStackTrace();
+//    }
   }
 
   /**
@@ -114,38 +112,24 @@ public class RummiServer extends Thread implements Server {
    * @param id of the client
    */
   void disconnectClient(int id) {
-
-    //Remove player and notify clients about it
-    game.removePlayer(id);
-    requestHandler.applyRequest(new UpdatePlayersRequest(), id);
-
-    clients[id] = null;
-    listeners[id].disconnect();
-    listeners[id] = null;
-    senders[id].disconnect();
-    senders[id] = null;
-    this.numOfClients--;
-
-    //Notify all clients if the host is the one disconnecting.
     if (id == 0) {
-      sendToAll(new SimpleGameInfo(GameInfoID.SERVER_NOT_AVAILABLE));
-    }
-
-    if (noClientConnected()) {
+      //Notify all clients if the host is the one disconnecting.
       suicide();
-    }
-  }
-
-  private boolean noClientConnected() {
-    boolean noClient = true;
-
-    for (Socket client : clients) {
-      if (client != null) {
-        noClient = false;
+    } else {
+      //Remove player and notify clients about it
+      game.removePlayer(id);
+      try {
+        clients[id].close();
+      } catch (IOException e) {
+        e.printStackTrace();
       }
+      listeners[id] = null;
+      clients[id] = null;
+      senders[id].disconnect();
+      senders[id] = null;
+      numOfClients--;
+      requestHandler.notifyClientClose();
     }
-
-    return noClient;
   }
 
   /**
@@ -190,7 +174,7 @@ public class RummiServer extends Thread implements Server {
    * @throws UnknownHostException whenever the IP-address could not be determined
    */
   @Override
-  public String getIP() throws UnknownHostException{
+  public String getIP() throws UnknownHostException {
     return InetAddress.getLocalHost().getHostAddress();
   }
 
@@ -198,9 +182,16 @@ public class RummiServer extends Thread implements Server {
    * Stops the thread and closes the closables.
    */
   private void suicide() {
-
     running = false;
     try {
+      for (int id = 0; id < clients.length; id++) {
+        if (clients[id] != null) {
+          // notify listener that server closes it
+          listeners[id].notifyServerClose();
+          clients[id].close();
+          senders[id].disconnect();
+        }
+      }
       server.close();
     } catch (IOException e) {
       e.printStackTrace();

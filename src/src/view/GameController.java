@@ -6,7 +6,6 @@ import communication.gameinfo.StoneInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
@@ -108,7 +107,7 @@ public class GameController {
 
   public void quitGame() {
     System.out.println("From QUIT in GameCtrl.: disconnect client!");
-    mainController.quit();
+    mainController.handleQuitPressed();
   }
 
   void yourTurn() {
@@ -137,7 +136,7 @@ public class GameController {
    * @param pane Indicator where a cell shall source its data from in case of drag and drop event
    */
   @FXML
-  void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
+  private void constructGrid(StoneInfo[][] stoneGrid, GridPane pane) {
     Platform.runLater(() -> pane.getChildren().clear());
 
     int width = stoneGrid.length;
@@ -330,6 +329,7 @@ public class GameController {
   }
 
   void setPlayerNames(List<String> names) {
+    System.out.println("From GameCtrl.: setting names.. " + names);
     String nameComplement = ": ";
     ownName.setText(names.get(0) + nameComplement);
     switch (names.size()) {

@@ -37,9 +37,9 @@ public class MainController implements Controller {
   MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest(event -> {
-      System.out.println("From in MainCtrl.: disconnect client!");
       if (client != null) {
-        quit();
+        System.out.println("From in MainCtrl.: disconnect client!");
+        killThreads();
       }
       Platform.exit();
     });
@@ -69,10 +69,8 @@ public class MainController implements Controller {
     }
     Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
-      primaryStage.setMaxWidth(1500);
-      primaryStage.setMaxHeight(900);
-      primaryStage.setResizable(false);
-
+      primaryStage.setMinWidth(1500);
+      primaryStage.setMinHeight(900);
       primaryStage.setScene(scene);
       primaryStage.show();
     });
@@ -182,7 +180,7 @@ public class MainController implements Controller {
       waitController.setPlayerNames(names);
       return;
     }
-      gameController.setPlayerNames(names);
+    gameController.setPlayerNames(names);
   }
 
   /**
@@ -344,7 +342,16 @@ public class MainController implements Controller {
     requestBuilder.sendSortHandByRunRequest();
   }
 
-  void quit() {
+  void handleQuitPressed() {
+    killThreads();
+    try {
+      switchToStartScene();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private void killThreads() {
     // delete winner- and gameController
     winnerController = null;
     if (gameController != null) {
@@ -353,11 +360,6 @@ public class MainController implements Controller {
     }
     client.disconnect();
     client = null;
-    try {
-      switchToStartScene();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
   void sendResetRequest() {

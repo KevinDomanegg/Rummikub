@@ -162,4 +162,6 @@ public interface Game {
   void sortPlayerHandByRun(int playerID);
 
   boolean hasPlayerPlayedFirstMove(int playerID);
+
+  boolean hasStarted();
 }

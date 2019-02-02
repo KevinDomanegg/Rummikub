@@ -74,7 +74,6 @@ class RequestHandler {
         }
         notifyGameStartToAll();
         return;
-
       case SET_PLAYER:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
         if (!game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge())) {
@@ -222,11 +221,6 @@ class RequestHandler {
         }
         return;
 
-      case UPDATE_PLAYERS:
-        sendPlayerNamesToAll();
-        notifyTurnToPlayer();
-        break;
-
       default:
     }
   }
@@ -356,5 +350,16 @@ class RequestHandler {
 
   private void sendErrorToPlayer(int playerID, String message) {
     server.sendToPlayer(playerID, new ErrorInfo(message));
+  }
+
+  void notifyClientClose() {
+    if (game.hasStarted()) {
+      sendBagSizeToAll();
+      sendHandSizesToAll();
+      notifyTurnToPlayer();
+      server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
+    } else {
+      sendPlayerNamesToAll();
+    }
   }
 }

@@ -2,9 +2,7 @@ package network.server;
 
 import communication.Serializer;
 import communication.gameinfo.GameInfo;
-
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -60,7 +58,6 @@ public class ServerSender extends Thread {
    */
   @Override
   public void run() {
-
     synchronized (this) {
       try {
         while (connected) {
@@ -70,12 +67,13 @@ public class ServerSender extends Thread {
         this.connected = false;
       }
     }
+    System.out.println("From ServerSender: closing... id: " + id);
   }
 
     /**
      * Disconnects from the client.
      */
-  synchronized void disconnect(){
+  synchronized void disconnect() {
     this.connected = false;
     try{
       this.clientOut.close();
