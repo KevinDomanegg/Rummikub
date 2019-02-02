@@ -21,11 +21,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class that can take Request-Objects and transform the into method-calls for a Game.
+ * Acts as a Link between RummiServer and Game.
+ * Notifies all clients about changes to the game.
+ */
 class RequestHandler {
-  /**
-   * Class that can take Request-Objects and transform the into method-calls for a Game.
-   * Acts as a Link between RummiServer and Game.
-   */
 
   private static final String NOT_YOUR_TURN = "not your turn!";
   private static final String NOT_ALLOWED_MOVE = "not allowed to move stones like that!";
@@ -33,6 +34,12 @@ class RequestHandler {
   private Game game;
   private Server server;
 
+  /**
+   * Constructor establishing the connection server-requesthandler-game.
+   *
+   * @param server to be connected to
+   * @param game to be connected to
+   */
   RequestHandler(Server server, Game game) {
     this.server = server;
     this.game = game;
@@ -51,6 +58,12 @@ class RequestHandler {
     return grid;
   }
 
+  /**
+   * Applies a Request to the game and generates responses to all clients.
+   *
+   * @param request being issued by a client
+   * @param playerID identifier of the specific client issuing the request.
+   */
   void applyRequest(Object request, int playerID) {
     // for test
     System.out.println("From RequestHandler: applying " +request);
@@ -237,6 +250,9 @@ class RequestHandler {
     server.sendToPlayer(playerID, new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 
+  /**
+   * Notifies the currently playing player that it is his turn.
+   */
   private void notifyTurnToPlayer() {
 
     int currentPlayerID = game.getCurrentPlayerID();
@@ -253,6 +269,18 @@ class RequestHandler {
     }
   }
 
+  /**
+   * Calculates the relative position between the currently playing client
+   * and a client who is to receive a GameInfo.
+   *
+   * Used when telling all the clients who - relative to them - is currently
+   * playing.
+   *
+   * @param recipientID ID of the player who is supposed to receive the GameInfo
+   * @param currentPlayerID ID of the player who is currently playing
+   * @return int representing number of steps (clockwise) the recipient has to
+   *          perform in order to find the currently playing opponent
+   */
   private int calculateRelativeID(int recipientID, int currentPlayerID) {
 
     int relativeID;
@@ -264,30 +292,11 @@ class RequestHandler {
     }
 
     return relativeID;
-//    if (numOfPlayers == 4) {
-//      return relativeID;
-//    }
-//
-//    if (numOfPlayers == 3) {
-//      if (relativeID == 2) {
-//        relativeID = 3;
-//        return relativeID;
-//      } else {
-//        return relativeID;
-//      }
-//    }
-//
-//    if (numOfPlayers == 2) {
-//      if (relativeID == 0) {
-//        return relativeID;
-//      } else {
-//        return 2;
-//      }
-//    }
-    //relativeID = relativeID % game.getNumberOfPlayers();
-
   }
 
+  /**
+   * Notifies all clients that the game has started.
+   */
   private void notifyGameStartToAll() {
     server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
     // send table first to all
