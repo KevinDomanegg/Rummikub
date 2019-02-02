@@ -106,29 +106,16 @@
 
 /* ID selectors */
 
-/*
 #bottom {
-    -fx-translate-y: -100;
-}*/
-
-#root {
-    -fx-background-image: url("images/backgroundTileBlue.png");
-    -fx-background-repeat: repeat;
-}
-
-#timer, #bagSize {
-    -fx-font-size: 40;
-    -fx-fill: white;
-    -fx-font-weight: 700;
-}
-
-#timerDescription {
-    -fx-font-size: 25;
-    -fx-fill: white;
+    -fx-translate-y: 20;
 }
 
 #errorPane {
     -fx-alignment: CENTER;
+}
+
+#leftContainer {
+    -fx-padding: 0 0 0 -270;
 }
 
 #opponentLeft {
@@ -145,12 +132,24 @@
     -fx-pref-width: 750;
     -fx-max-width: 750;
     -fx-min-width: 750;
+    -fx-max-height: 100; /* height dynamically increased */
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
+    -fx-border-color: black;
+    -fx-border-width: 2 2 0 2;
 }
 
 #playerInfo {
     -fx-padding: 10;
+}
+
+#rightContainer {
+    -fx-padding: 0 -270 0 0;
+}
+
+#root {
+    -fx-background-image: url("images/backgroundTileBlue.png");
+    -fx-background-repeat: repeat;
 }
 
 #table {
@@ -163,24 +162,19 @@
     -fx-padding: 50;
 }
 
+#timer, #bagSize {
+    -fx-font-size: 40;
+    -fx-fill: white;
+    -fx-font-weight: 700;
+}
+
+#timerDescription {
+    -fx-font-size: 25;
+    -fx-fill: white;
+}
+
 #top {
   -fx-max-height: 100;
   -fx-pref-height: 100;
   -fx-min-height: 100;
-}
-
-#leftContainer {
-    -fx-padding: 0 0 0 -270;
-}
-
-#rightContainer {
-    -fx-padding: 0 -270 0 0;
-}
-
-#tableGrid {
-    -fx-translate-y: -85;
-}
-
-#ownBoard {
-    -fx-max-height: 100; /* height dynamically increased */
 }
