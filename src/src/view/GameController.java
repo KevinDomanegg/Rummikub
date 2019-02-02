@@ -224,27 +224,27 @@ public class GameController {
 
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
-      if (event.isControlDown()) {
-        System.out.println("----------------------------control pushed"); //TODO: Remove
-        isMultiMove = true;
-      }
-
       if (!cell.getChildren().isEmpty()) {
         Music.playSoundOf("pick up stone");
 
         Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
-
-        // Create drag view without cell styling
-        cell.getStyleClass().remove("cell");
-        SnapshotParameters snapshotParameters = new SnapshotParameters();
-        snapshotParameters.setFill(Color.TRANSPARENT);
-        Image cellSnapshot = cell.snapshot(snapshotParameters, null);
-
-        cell.getStyleClass().add("cell");
-        dragBoard.setDragView(cellSnapshot, cell.getWidth() * 0.5, cell.getHeight() * 0.9); //TODO: Remove magic numbers? Only for cursor pos tho
+        Image dragGraphic;
+        if (event.isControlDown()) {
+          isMultiMove = true;
+          dragGraphic = new Image(getClass().getResource("images/MultiStoneDragView.png").toString());
+          System.out.println("----------------------------control pushed"); // TODO: Remove
+        } else {
+          // Create drag view without cell styling
+          SnapshotParameters snapshotParameters = new SnapshotParameters();
+          snapshotParameters.setFill(Color.TRANSPARENT);
+          cell.getStyleClass().remove("cell");
+          dragGraphic = cell.snapshot(snapshotParameters, null);
+          cell.getStyleClass().add("cell");
+        }
+        dragBoard.setDragView(dragGraphic, dragGraphic.getWidth()*0.5, dragGraphic.getHeight()*0.7);
         ClipboardContent content = new ClipboardContent();
 
-        // Put stone on clipboard
+        // Put dummy stone on clipboard
         StoneInfo dummyStone = new StoneInfo(null, 0);
         content.put(stoneFormat, dummyStone);
         dragBoard.setContent(content);
