@@ -8,5 +8,6 @@ public class ErrorMessages {
     public static final String BAG_IS_EMPTY_ERROR = "You cannot draw another Stone from the Bag since its empty.";
     public static final String HAND_IS_FULL_ERROR = "You cannot draw another Stone since your hand is full";
     public static final String NOT_YOUR_TURN_ERROR = "You cannot make this move since its not your turn";
+    public static final String GAME_IS_FULL_ERROR = "You cannot join the game anymore. Wait for someone to leave.";
 
 }

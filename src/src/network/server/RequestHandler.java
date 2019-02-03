@@ -89,12 +89,15 @@ class RequestHandler {
         }
         notifyGameStartToAll();
         return;
-      case SET_PLAYER:
+      case JOIN:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-        if (!game.setPlayer(playerID, setPlayer.getName(), setPlayer.getAge())) {
-          sendErrorToPlayer(playerID, "the game is already full");
-          return;
+
+        try {
+          game.join(playerID, setPlayer.getName(), setPlayer.getAge());
+        } catch (UnsupportedOperationException e){
+          sendErrorToPlayer(playerID, e.getMessage());
         }
+
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
         return;
 

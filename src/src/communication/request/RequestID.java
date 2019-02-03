@@ -7,7 +7,7 @@ public enum RequestID {
    * Every implementation of Request should have an RequestID associated with it.
    */
   START,
-  SET_PLAYER,
+  JOIN,
   HAND_MOVE,
   TABLE_MOVE,
   PUT_STONE,

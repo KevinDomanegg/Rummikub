@@ -14,8 +14,8 @@ public class RummiGameTest {
   @Test
   public void initTestWithoutMoveOnHand() {
     RummiGame game1 = new RummiGame();
-    game1.setPlayer(0, "Cedrik", 25);
-    game1.setPlayer(1, "Hyunsung", 21);
+    game1.join(0, "Cedrik", 25);
+    game1.join(1, "Hyunsung", 21);
     game1.start();
 
     assertTrue(game1.getPlayerNames().get(1) == "Hyunsung");
@@ -56,8 +56,8 @@ public class RummiGameTest {
   @Test
   public void consistencyTest() {
     RummiGame game2 = new RummiGame();
-    game2.setPlayer(0, "Cedrik", 25);
-    game2.setPlayer(1, "Hyunsung", 21);
+    game2.join(0, "Cedrik", 25);
+    game2.join(1, "Hyunsung", 21);
     game2.start();
 
     game2.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
@@ -83,9 +83,9 @@ public class RummiGameTest {
   @Test
   public void playerHasLeftTest() {
     RummiGame game3 = new RummiGame();
-    game3.setPlayer(0, "Peter", 25);
-    game3.setPlayer(1, "Helga", 21);
-    game3.setPlayer(2, "Helga2", 20);
+    game3.join(0, "Peter", 25);
+    game3.join(1, "Helga", 21);
+    game3.join(2, "Helga2", 20);
     game3.start();
 
     assertEquals(game3.getBagSize(), (106 - 42));
@@ -99,8 +99,8 @@ public class RummiGameTest {
   @Test
   public void rankingTest() {
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     game4.getPlayerStones(1).clear();
@@ -117,8 +117,8 @@ public class RummiGameTest {
   @Test
   public void sortHandByRunTest() {
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     boolean sortedByRun = true;
@@ -148,8 +148,8 @@ public class RummiGameTest {
   public void sortedHandByGroupTest() {
 
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     boolean sortedByGroup = true;
@@ -178,8 +178,8 @@ public class RummiGameTest {
   @Test
   public void yetAnotherTest() {
     RummiGame game = new RummiGame();
-    game.setPlayer(0, "player1", 0);
-    game.setPlayer(1, "player2", 3);
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
     game.start();
 
     game.putStone(new Coordinate(4, 0), new Coordinate(3, 2));
@@ -227,8 +227,8 @@ public class RummiGameTest {
   @Test
   public void drawStonesTest(){
     RummiGame game = new RummiGame();
-    game.setPlayer(0, "player1", 0);
-    game.setPlayer(1, "player2", 3);
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
     game.start();
 
     System.out.println(game.getPlayerStones(0));

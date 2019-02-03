@@ -14,7 +14,7 @@ public interface Game {
    * @param age the age of the new Player
    * @return true if a new Player is added in this Game
    */
-  boolean setPlayer(int playerID, String name, int age);
+  void join(int playerID, String name, int age);
 
   /**
    * Attempts to start this Game.

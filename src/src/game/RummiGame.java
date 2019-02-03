@@ -48,9 +48,19 @@ public class RummiGame implements Game {
     player.pushStone(bag.removeStone());
 
   }
+  
+  /**
+   * Updates the currentPlayerID.
+   */
+  private void nextTurn() throws UnsupportedOperationException {
+    if (isGameOn == false) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
+    }
 
-  public Player getCurrentPlayer() {
-    return players.get(currentPlayerID);
+    // the ID of the current player will be updated (0 follows after 3)
+    do {
+      currentPlayerID = (currentPlayerID + 1) % Constants.MAX_PLAYERS;
+    } while (!players.containsKey(currentPlayerID));
   }
 
   /**
@@ -73,18 +83,8 @@ public class RummiGame implements Game {
     }
   }
 
-  /**
-   * Updates the currentPlayerID.
-   */
-  private void nextTurn() throws UnsupportedOperationException {
-    if (isGameOn == false) {
-      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
-    }
-
-    // the ID of the current player will be updated (0 follows after 3)
-    do {
-      currentPlayerID = (currentPlayerID + 1) % Constants.MAX_PLAYERS;
-    } while (!players.containsKey(currentPlayerID));
+  private void addPlayer(int playerID, String name, int age){
+    players.put(playerID, new Player(name, age));
   }
 
   /**
@@ -96,12 +96,14 @@ public class RummiGame implements Game {
    * @return false if only if there are already 4 players or the game is on
    */
   @Override
-  public boolean setPlayer(int playerID, String name, int age) {
-    if (players.size() > Constants.MAX_PLAYERS || isGameOn) {
-      return false;
+  public void join(int playerID, String name, int age) {
+    if (players.size() > Constants.MAX_PLAYERS) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_IS_FULL_ERROR);
+    } else if (isGameOn){
+      throw new UnsupportedOperationException(ErrorMessages.GAME_HAS_ALREADY_STARTED_ERROR);
+    } else {
+      addPlayer(playerID, name, age);
     }
-    players.put(playerID, new Player(name, age));
-    return true;
   }
 
   /**
@@ -527,6 +529,10 @@ public class RummiGame implements Game {
 
   Stack<MoveTrace> getTrace() {
     return trace;
+  }
+
+  public Player getCurrentPlayer() {
+    return players.get(currentPlayerID);
   }
 
   /**
