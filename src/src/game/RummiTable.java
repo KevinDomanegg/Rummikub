@@ -177,6 +177,8 @@ public class RummiTable implements Grid {
       number = stone.getNumber();
       // skip it if it's a Joker
       if (color == Color.JOKER) {
+        // count up the expectedNumber, 1 (min value) should be followed after 13 (max value)
+        expectedNumber = (++expectedNumber > Stone.MAX_VALUE) ? Stone.MIN_VALUE : expectedNumber;
         continue;
       }
       // check if it's the first to be checked or its number matches the expected (previous) number
