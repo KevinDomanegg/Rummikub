@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import view.music.Music;
+import view.music.Audio;
 
 public class WaitController implements Initializable {
 
@@ -77,19 +77,19 @@ public class WaitController implements Initializable {
         player0.setText(names.get(0));
         player1.setText(names.get(1));
         player2.setText(names.get(2));
-        player3.setText("?");
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       case 2:
         player0.setText(names.get(0));
         player1.setText(names.get(1));
-        player2.setText("?");
-        player3.setText("?");
+        player2.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       case 1:
         player0.setText(names.get(0));
-        player1.setText("?");
-        player2.setText("?");
-        player3.setText("?");
+        player1.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player2.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       default:
         break;
@@ -103,14 +103,14 @@ public class WaitController implements Initializable {
 
   @FXML
   private void mute() {
-    Music.muteSoundOfWait();
+    Audio.muteSoundOfWait();
     muteButton.setVisible(false);
     notMuteButton.setVisible(true);
   }
 
   @FXML
   private void unMute() {
-    Music.playMusicNow();
+    Audio.playMusicNow();
     notMuteButton.setVisible(false);
     muteButton.setVisible(true);
   }
