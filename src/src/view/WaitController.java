@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import view.music.Music;
+import view.music.Audio;
 
 public class WaitController implements Initializable {
 
@@ -103,14 +103,14 @@ public class WaitController implements Initializable {
 
   @FXML
   private void mute() {
-    Music.muteSoundOfWait();
+    Audio.muteSoundOfWait();
     muteButton.setVisible(false);
     notMuteButton.setVisible(true);
   }
 
   @FXML
   private void unMute() {
-    Music.playMusicNow();
+    Audio.playMusicNow();
     notMuteButton.setVisible(false);
     muteButton.setVisible(true);
   }

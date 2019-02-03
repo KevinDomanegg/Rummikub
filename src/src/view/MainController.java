@@ -3,7 +3,7 @@ package view;
 import communication.gameinfo.StoneInfo;
 import communication.request.ConcreteMove;
 import communication.request.RequestID;
-import communication.request.SimpleRequest;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -19,6 +19,7 @@ import network.client.GameInfoHandler;
 import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
+import view.music.Audio;
 import view.music.Music;
 
 /**
@@ -67,20 +68,20 @@ public class MainController implements Controller {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(fxml));
     Parent root = loader.load();
     switch (fxml) {
-      case "start.fxml":
-        Music.selectMusic("start");
-        Music.playMusicNow();
+      case ViewConstants.START_FXML:
+        Audio.selectMusic(Music.START);
+        Audio.playMusicNow();
         startController = loader.getController();
         startController.setMainController(this);
         break;
-      case "wait.fxml":
-        Music.selectMusic("wait");
-        Music.playMusicNow();
+      case ViewConstants.WAIT_FXML:
+        Audio.selectMusic(Music.WAIT);
+        Audio.playMusicNow();
         waitController = loader.getController();
         waitController.setMainController(this);
         break;
-      case "game.fxml":
-        Music.selectMusic("game");
+      case ViewConstants.GAME_FXML:
+        Audio.selectMusic(Music.GAME);
         gameController = loader.getController();
         gameController.setMainController(this);
         break;
@@ -101,7 +102,7 @@ public class MainController implements Controller {
    * @throws IOException if scene cant' be loaded
    */
   void switchToWaitScene() throws IOException {
-    switchScene("wait.fxml");
+    switchScene(ViewConstants.WAIT_FXML);
     waitController.setServerIP(serverIP);
   }
 
@@ -112,7 +113,7 @@ public class MainController implements Controller {
    * @throws IOException when scene can`t be loaded.
    */
   void switchToStartScene() throws IOException {
-    switchScene("start.fxml");
+    switchScene(ViewConstants.START_FXML);
   }
 
   /**
@@ -122,7 +123,7 @@ public class MainController implements Controller {
    * @throws IOException if the scene can't be loaded
    */
   private void switchToGameScene() throws IOException{
-     switchScene("game.fxml");
+     switchScene(ViewConstants.GAME_FXML);
 
   }
 
@@ -131,15 +132,14 @@ public class MainController implements Controller {
    */
   public void notifyServerClose() {
     client = null;
-    showErrorGotToStart("Error! Server is not available due to lack of host or not enough players in the game");
+    showErrorGotToStart(ViewConstants.SERVER_NOT_AVAILABLE_ERROR);
   }
 
   /**
    * Displays an error-message indicating that connecting to the host is impossible.
    */
   public void connectionRejected() {
-    showErrorGotToStart("The Host has rejected the connection.\n" +
-            "There might be no spot left in the game!");
+    showErrorGotToStart(ViewConstants.CONNECTION_REJECTED_ERROR);
   }
 
   private void showErrorGotToStart(String errorMessage) {
@@ -148,7 +148,7 @@ public class MainController implements Controller {
     }
     showError(errorMessage);
     try {
-      switchScene("start.fxml");
+      switchScene(ViewConstants.START_FXML);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -165,7 +165,7 @@ public class MainController implements Controller {
       Stage stage = new Stage();
       Parent root;
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("error.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewConstants.ERROR_FXML));
         root = loader.load();
         errorController = loader.getController();
         errorController.setErrorMessage(errorMessage);
@@ -189,7 +189,7 @@ public class MainController implements Controller {
       Stage stage = new Stage();
       Parent root;
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("winner.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewConstants.WINNER_FXML));
         root = loader.load();
         winnerController = loader.getController();
         winnerController.setMainController(this);
@@ -212,7 +212,7 @@ public class MainController implements Controller {
       Stage stage = new Stage();
       Parent root;
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("help.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewConstants.HELP_FXML));
         root = loader.load();
         stage.setScene(new Scene(root));
         stage.initOwner(primaryStage);
@@ -383,13 +383,13 @@ public class MainController implements Controller {
     try {
       new RummiServer().start();
     } catch (IOException e) {
-      showError("You are already hosting a Server!");
+      showError(ViewConstants.MULTIPLE_HOSTS_ON_SINGLE_MACHINE_ERROR);
       return false;
     }
     try{
       serverIP = Inet4Address.getLocalHost().getHostAddress();
     } catch (UnknownHostException e) {
-      showError("The IP address of a host could not be determined.");
+      showError(ViewConstants.IP_NOT_DETERMINED_ERROR);
       return false;
     }
     return true;

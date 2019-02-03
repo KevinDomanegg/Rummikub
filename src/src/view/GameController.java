@@ -30,7 +30,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import view.music.Music;
+import view.music.Audio;
 import view.music.Sound;
 
 /**
@@ -142,7 +142,7 @@ public class GameController {
    */
   @FXML
   public void drawStone() {
-    Music.playSoundOf(Sound.DRAW_STONE);
+    Audio.playSoundOf(Sound.DRAW_STONE);
     mainController.sendDrawRequest();
   }
 
@@ -211,7 +211,7 @@ public class GameController {
     // Start drag and drop, copy stone to clipboard, delete stone in view
     cell.setOnDragDetected(event -> {
       if (!cell.getChildren().isEmpty()) {
-        Music.playSoundOf(Sound.PICK_UP_STONE);
+        Audio.playSoundOf(Sound.PICK_UP_STONE);
 
         Dragboard dragBoard = cell.startDragAndDrop(TransferMode.ANY);
         Image dragGraphic;
@@ -265,7 +265,7 @@ public class GameController {
 
     // Put stone in target cell, notify server
     cell.setOnDragDropped(event -> {
-      Music.playSoundOf(Sound.DROP_STONE);
+      Audio.playSoundOf(Sound.DROP_STONE);
       Pane sourceCell = (Pane) event.getGestureSource();
       sourceCell.getChildren().clear();
       int sourceColumn = GridPane.getColumnIndex(sourceCell);
