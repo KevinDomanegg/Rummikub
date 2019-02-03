@@ -84,7 +84,7 @@ public interface Game {
   void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
   /** Makes the current Player of this Game to draw a stone. */
-  void draw();
+  void draw(int playerID);
 
   /**
    * Removes a Player with the given playerID out of this Game.
@@ -167,6 +167,6 @@ public interface Game {
    * Draws a Stone when if there are Stones available.
    * Switches to the next player if not.
    */
-  void timeOut();
+  void timeOut(int playeID);
   boolean isGameOn();
 }

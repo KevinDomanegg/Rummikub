@@ -163,22 +163,20 @@ class RequestHandler {
         return;
 
       case DRAW:
-        if (isCurrentPlayer(playerID)) {
-          if (game.getBagSize() == 0) {
-            sendErrorToPlayer(playerID, "Bag is empty!");
-            return;
-          }
-          game.reset();
-          game.draw();
-          // send the player new hand with a drawn stone
-          sendHandToPlayer(playerID);
-          // send the original table to all
-          sendTableToALl();
-          sendHandSizesToAll();
-          sendBagSizeToAll();
-          notifyTurnToPlayer();
+
+        try {
+          game.draw(playerID);
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
+          break;
         }
-        return;
+
+        sendHandToPlayer(playerID);
+        sendTableToALl();
+        sendHandSizesToAll();
+        sendBagSizeToAll();
+        notifyTurnToPlayer();
+        break;
 
       case CONFIRM_MOVE:
         if (isCurrentPlayer(playerID)) {
@@ -210,7 +208,7 @@ class RequestHandler {
         sendTableToALl();
         sendHandToPlayer(playerID);
         // draw stone cause table not consistent and the time is out
-        game.timeOut();
+        game.timeOut(playerID);
         sendHandToPlayer(playerID);
         // send changed hand to player
         sendHandSizesToAll();

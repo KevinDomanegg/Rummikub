@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import com.sun.org.apache.bcel.internal.classfile.ConstantNameAndType;
 import globalconstants.Constants;
 import globalconstants.ErrorMessages;
 
@@ -28,7 +27,9 @@ public class RummiGame implements Game {
     trace = new Stack<>();
   }
 
-  /** Gives a current player. */
+  /**
+   * Gives a current player.
+   */
   private Player currentPlayer() {
     return players.get(currentPlayerID);
   }
@@ -36,17 +37,19 @@ public class RummiGame implements Game {
 
   /**
    * Takes a Stone from the Bag and gives it to the current Player.
+   *
    * @throws UnsupportedOperationException If the Bag is empty or the Hand is full.
    */
-  private void giveStoneToPlayer() throws UnsupportedOperationException {
-    if (getCurrentPlayer().getHandSize() >= Constants.MAX_HAND_SIZE){
+  private void giveStoneToPlayer(int playerID) throws UnsupportedOperationException {
+    Player player = players.get(playerID);
+    if (player.getHandSize() >= Constants.MAX_HAND_SIZE) {
       throw new UnsupportedOperationException(ErrorMessages.HAND_IS_FULL_ERROR);
     }
-    if (bag.size() < 1){
+    if (bag.size() < 1) {
       throw new UnsupportedOperationException(ErrorMessages.BAG_IS_EMPTY_ERROR);
     }
 
-    currentPlayer().pushStone(bag.removeStone());
+    player.pushStone(bag.removeStone());
 
   }
 
@@ -56,13 +59,14 @@ public class RummiGame implements Game {
 
   /**
    * Draws a Stone and selects the next player.
+   *
    * @param playerID of the Player who wants to make this move
    * @throws UnsupportedOperationException if the Hand is full, the bag is empty or its not the players turn.
    */
 
   public void draw(int playerID) throws UnsupportedOperationException {
-    if (playerID == currentPlayerID){
-      giveStoneToPlayer();
+    if (playerID == currentPlayerID) {
+      giveStoneToPlayer(playerID);
       nextTurn();
     } else {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
@@ -70,7 +74,9 @@ public class RummiGame implements Game {
   }
 
 
-  /** Updates the currentPlayerID. */
+  /**
+   * Updates the currentPlayerID.
+   */
   private void nextTurn() {
     System.out.println("next-turning");
     if (!isGameOn) {
@@ -121,7 +127,9 @@ public class RummiGame implements Game {
     return true;
   }
 
-  /** Hand out first stones randomly to each player. */
+  /**
+   * Hand out first stones randomly to each player.
+   */
   private void handOutStones() {
     // clear players' hands first
     for (Player player : players.values()) {
@@ -130,12 +138,14 @@ public class RummiGame implements Game {
     // hand out stones
     for (int i = 0; i < Constants.FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
-        draw();
+        giveStoneToPlayer(j);
       }
     }
   }
 
-  /** Sets the youngest player as starter. */
+  /**
+   * Sets the youngest player as starter.
+   */
   private void setStartPlayer() {
     int minAge = Integer.MAX_VALUE;
     int age;
@@ -162,7 +172,7 @@ public class RummiGame implements Game {
    * @return true if only if the set (neighbored stones) is successfully moved
    */
   private static boolean moveSet(Coordinate sourcePosition, Coordinate targetPosition, Grid sourceGrid, Grid targetGrid, StoneMove stoneMove) {
-    Map<Coordinate, Stone>  sourceStones = sourceGrid.getStones();
+    Map<Coordinate, Stone> sourceStones = sourceGrid.getStones();
     // check if there is a stone on the sourceGrid at the given sourcePosition
     if (!sourceStones.containsKey(sourcePosition)) {
       return false;
@@ -187,8 +197,8 @@ public class RummiGame implements Game {
       coordinate = new Coordinate(trgCol + i, trgRow);
       // check if the coordinate on target grid is clear or the source- and targetGrid are the same
       if (targetStones.containsKey(coordinate)
-          // and the coordinate is a part of neighborCoordinates of moving stones
-          && !(sourceGrid.equals(targetGrid) && neighborCoordinates.contains(coordinate))) {
+              // and the coordinate is a part of neighborCoordinates of moving stones
+              && !(sourceGrid.equals(targetGrid) && neighborCoordinates.contains(coordinate))) {
         return false;
       }
     }
@@ -263,7 +273,7 @@ public class RummiGame implements Game {
   @Override
   public boolean putSet(Coordinate sourcePosition, Coordinate targetPosition) {
     return
-        moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
+            moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
   }
 
   /**
@@ -304,7 +314,7 @@ public class RummiGame implements Game {
   public boolean moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
     Grid hand = players.get(playerID).getHand();
     return moveSet(sourcePosition, targetPosition, hand, hand,
-        (srcPos, trgPos) -> moveStoneOnHand(playerID, srcPos, trgPos));
+            (srcPos, trgPos) -> moveStoneOnHand(playerID, srcPos, trgPos));
   }
 
   /**
@@ -326,22 +336,14 @@ public class RummiGame implements Game {
 //    }
   }
 
-  /**
-   * Makes the current player draw a stone from the bag and finish their turn.
-   */
-  @Override
-  public void draw() {
-    currentPlayer().pushStone(bag.removeStone());
-    nextTurn();
-  }
-
 
   /**
    * Kicks the player with the given playerID out of this game and reset their stones into the bag.
    *
    * @param playerID the ID of the player who left
    */
-  @Override public void removePlayer(int playerID) {
+  @Override
+  public void removePlayer(int playerID) {
     System.out.println("---number of players: " + players.size());
     if (!isGameOn) {
       players.remove(playerID);
@@ -358,17 +360,23 @@ public class RummiGame implements Game {
     }
   }
 
-  /** Resets all moves of the current player on this table and from their hand. */
-  @Override public void reset() {
+  /**
+   * Resets all moves of the current player on this table and from their hand.
+   */
+  @Override
+  public void reset() {
     while (!trace.empty()) {
       undo();
     }
 //    currentPoints = 0;
   }
 
-  /** Undoes the last move of the current player. */
-  @Override public void undo() {
-    if (trace.empty()){
+  /**
+   * Undoes the last move of the current player.
+   */
+  @Override
+  public void undo() {
+    if (trace.empty()) {
       return;
     }
 
@@ -433,23 +441,28 @@ public class RummiGame implements Game {
     return true;
   }
 
-  @Override public Map<Coordinate, Stone> getTableStones() {
+  @Override
+  public Map<Coordinate, Stone> getTableStones() {
     return table.getStones();
   }
 
-  @Override public Map<Coordinate, Stone> getPlayerStones(int playerID) {
+  @Override
+  public Map<Coordinate, Stone> getPlayerStones(int playerID) {
     return players.get(playerID).getStones();
   }
 
-  @Override public int getBagSize() {
+  @Override
+  public int getBagSize() {
     return bag.size();
   }
 
-  @Override public List<Integer> getPlayerHandSizes() {
+  @Override
+  public List<Integer> getPlayerHandSizes() {
     return players.values().stream().map(Player::getHandSize).collect(Collectors.toList());
   }
 
-  @Override public List<String> getPlayerNames() {
+  @Override
+  public List<String> getPlayerNames() {
     return players.values().stream().map(Player::getName).collect(Collectors.toList());
   }
 
@@ -458,7 +471,8 @@ public class RummiGame implements Game {
    *
    * @param playerID the id of the player whose hand will be sorted
    */
-  @Override public void sortPlayerHandByGroup(int playerID) {
+  @Override
+  public void sortPlayerHandByGroup(int playerID) {
     players.get(playerID).sortHandByGroup();
   }
 
@@ -467,39 +481,48 @@ public class RummiGame implements Game {
    *
    * @param playerID the id of the player whose hand will be sorted
    */
-  @Override public void sortPlayerHandByRun(int playerID) {
+  @Override
+  public void sortPlayerHandByRun(int playerID) {
     players.get(playerID).sortHandByRun();
   }
 
-  @Override public boolean hasPlayerPlayedFirstMove(int playerID) {
+  @Override
+  public boolean hasPlayerPlayedFirstMove(int playerID) {
     return players.get(playerID).hasPlayedFirstMove();
   }
 
-  @Override public boolean isGameOn() {
+  @Override
+  public boolean isGameOn() {
     return isGameOn;
   }
 
-  @Override public int getCurrentPlayerID() {
+  @Override
+  public int getCurrentPlayerID() {
     return currentPlayerID;
   }
 
-  @Override public int getTableWidth() {
+  @Override
+  public int getTableWidth() {
     return table.getWidth();
   }
 
-  @Override public int getTableHeight() {
+  @Override
+  public int getTableHeight() {
     return table.getHeight();
   }
 
-  @Override public int getPlayerHandWidth(int playerID) {
+  @Override
+  public int getPlayerHandWidth(int playerID) {
     return players.get(playerID).getHandWidth();
   }
 
-  @Override public int getPlayerHandHeight(int playerID) {
+  @Override
+  public int getPlayerHandHeight(int playerID) {
     return players.get(playerID).getHandHeight();
   }
 
-  @Override public int getNumberOfPlayers() {
+  @Override
+  public int getNumberOfPlayers() {
     return players.size();
   }
   // for test
@@ -513,10 +536,11 @@ public class RummiGame implements Game {
    *
    * @return the sorted (by values (points) list
    */
-  @Override public Map<Integer, Integer> getFinalRank() {
+  @Override
+  public Map<Integer, Integer> getFinalRank() {
     List<Entry<Integer, Integer>> rank = players.entrySet().stream()
-        .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
-        .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
+            .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
+            .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
     return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
@@ -525,9 +549,9 @@ public class RummiGame implements Game {
    * Switches to the next player if not.
    */
   @Override
-  public void timeOut() {
+  public void timeOut(int playerID) {
     if (this.getBagSize() > 0) {
-      this.draw();
+      this.draw(playerID);
     } else {
       this.nextTurn();
     }
