@@ -150,7 +150,7 @@
 }
 
 #root {
-    -fx-background-image: url("images/backgroundTileBlue.png");
+    -fx-background-image: url("../images/backgroundTileBlue.png");
     -fx-background-repeat: repeat;
 }
 

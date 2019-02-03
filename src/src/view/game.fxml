@@ -10,7 +10,7 @@
       xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="view.GameController"
-      stylesheets="@/view/style.css, @/view/gameStyle.css"
+      stylesheets="@/view/styling/style.css, @/view/styling/gameStyle.css"
       alignment="TOP_CENTER" pickOnBounds="false">
 
   <!-- Top area: Timer and menu buttons -->

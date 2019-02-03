@@ -10,7 +10,7 @@
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.WaitController"
-           stylesheets="@/view/style.css, @/view/waitStyle.css">
+           stylesheets="@/view/styling/style.css, @/view/styling/waitStyle.css">
 
   <!-- Buttons in top right corner -->
   <StackPane alignment="TOP_RIGHT" pickOnBounds="false">

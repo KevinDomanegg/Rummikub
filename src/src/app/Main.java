@@ -1,7 +1,8 @@
-package view;
+package app;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.MainController;
 
 public class Main extends Application {
 
