@@ -181,7 +181,6 @@ public class MainController implements Controller {
 
   /**
    * Displays the final ranking of the game.
-   * @ToDo
    * complete javadoc
    * @param finalRank
    */
@@ -206,8 +205,7 @@ public class MainController implements Controller {
   }
 
   /**
-   * @ToDo
-   * javadoc
+   * Displays the game instruction
    */
   void showHelpScene() {
     Platform.runLater(() -> {
