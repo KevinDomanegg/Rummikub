@@ -107,7 +107,7 @@
 /* ID selectors */
 
 #bottom {
-    -fx-translate-y: 20;
+    -fx-translate-y: -12;
 }
 
 #errorPane {
@@ -139,6 +139,10 @@
     -fx-border-width: 2 2 0 2;
 }
 
+#ownName, #ownHand {
+    -fx-font-size: 28;
+}
+
 #playerInfo {
     -fx-padding: 10;
 }
@@ -162,14 +166,18 @@
     -fx-padding: 50;
 }
 
-#timer, #bagSize {
+#tableGrid {
+    -fx-translate-y: -25;
+}
+
+#timer {
     -fx-font-size: 40;
     -fx-fill: white;
     -fx-font-weight: 700;
 }
 
 #timerDescription {
-    -fx-font-size: 25;
+    -fx-font-size: 24;
     -fx-fill: white;
 }
 
