@@ -445,7 +445,7 @@ public class RummiGame implements Game {
     return players.get(playerID).hasPlayedFirstMove();
   }
 
-  @Override public boolean hasStarted() {
+  @Override public boolean isGameOn() {
     return isGameOn;
   }
 

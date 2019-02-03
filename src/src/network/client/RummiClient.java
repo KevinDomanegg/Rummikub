@@ -54,15 +54,13 @@ public class RummiClient {
    * the RummiClient class
    */
   public void disconnect() {
-    System.out.println("From RummiClient: disconnecting client...");
     // notify listener that this client closes it instead of the server
-    listener.disconnect();
+    listener.notifyDisconnection();
     try {
       serverSocket.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    System.out.println("From RummiClient: client closed");
   }
 
   /**Used from MainController to send a Request Object

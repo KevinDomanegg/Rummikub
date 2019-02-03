@@ -51,20 +51,15 @@ class ClientListener extends Thread {
       if (connected) {
         System.out.println("*****-----***** Sever closed ******------*******");
         client.notifyServerClose();
-        System.out.println("From Run scanner Listener: disconnect Client");
+        System.out.println("From Run scanner ClientListener: notifyDisconnection Client");
         client.disconnect();
       }
     }
-    System.out.println("From Run scanner Listener: scanner closed");
+    System.out.println("From ClientListener: ClientListener terminates..");
   }
 
-  /**In case the server-senders port is closed
-   * it terminates the thread, hence the RummiClient
-   */
-  void disconnect() {
-    if (connected) {
-      System.out.println("From ClientListener: disconnecting Listener...");
-      connected = false;
-    }
+
+  void notifyDisconnection() {
+    connected = false;
   }
 }
