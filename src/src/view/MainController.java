@@ -311,7 +311,6 @@ public class MainController implements Controller {
   @Override
   public void notifyInvalidMove() {
     gameController.notifyInvalidMove();
-//    Platform.runLater(() -> gameController.notifyInvalidMove());
   }
 
   /**
@@ -328,14 +327,14 @@ public class MainController implements Controller {
    * Sends a request to draw a stone from the bag to the server.
    */
   void sendDrawRequest() {
-    client.sendRequest(new SimpleRequest(RequestID.DRAW));
+    requestBuilder.sendDrawRequest();
   }
 
   /**
    * Informs the server that the game-clock has run out of time.
    */
   void sendTimeOutRequest() {
-    client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+    requestBuilder.sendTimeOutRequest();
   }
 
   /**

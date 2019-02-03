@@ -3,19 +3,24 @@ package network.client;
 import communication.gameinfo.*;
 import view.Controller;
 
-public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM: CLIENT-NETWORKCONTROLLER-GAMEINFOHANDLER
+/**GameInfoHandler handles the received from the ClientListener gameinfos
+ * and chooses where each should go.
+ */
+ public class GameInfoHandler {
 
   private Controller controller;
-//  private RummiController controller;
 
-//  public GameInfoHandler(RummiController controller) {
-//    this.controller = controller;
-//  }
-
+  /**Creates a new GameInfoHandler that contains a controller.
+   * @param controller an object of a class that implements the interface Controller
+   */
   public GameInfoHandler(Controller controller) {
     this.controller = controller;
   }
 
+  /**Main method of the class: forwards the received information to the controller
+   * accordingly it's GameInfoID.
+   * @param gameInfo the received Object that the Server sent.
+   */
   void applyGameInfo(Object gameInfo) {
     switch (((GameInfo)gameInfo).getGameInfoID()) {
       // case CURRENT_PLAYER:
@@ -67,7 +72,8 @@ public class GameInfoHandler { //TODO FIGURE OUT A WAY TO BE NOT PUBLIC: PROBLEM
     System.out.println("Info handled");
   }
 
-
+  /**Notify the user that the Server is not available anymore.
+   */
   void notifyServerClose() {
     controller.notifyServerClose();
   }
