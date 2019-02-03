@@ -387,6 +387,12 @@ public class RummiGame implements Game {
    */
 
 
+  /**
+   * Determines if a move can be confirmed.
+   * If so, it confirms the move and advances the game to the next player.
+   *
+   * @return boolean indicating whether the move was consistent or not.
+   */
   @Override
   public boolean isConsistent() {
     // check if the current player has played something yet
@@ -394,7 +400,7 @@ public class RummiGame implements Game {
       return false;
     }
     // check if the current player has played their (first) turn in this game
-    if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
+    if (!table.isConsistent()) {
       return false;
     }
     // clear the trace for the next turn
