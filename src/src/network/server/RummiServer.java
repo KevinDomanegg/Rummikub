@@ -102,13 +102,13 @@ public class RummiServer extends Thread implements Server {
    * @param id of the client
    */
   void disconnectClient(int id) {
-    game.removePlayer(id);
-    if (id == 0 || numOfClients == 2) {
+    if (id == 0 || game.isGameOn() && numOfClients == 2) {
       //Notify all clients if the host is the one disconnecting
       // or that there is not enough players in the game
       suicide();
       System.out.println("From disconnectClient in RummiServer: suicide");
     } else {
+      game.removePlayer(id);
       //Remove player and notify clients about it
       try {
         clients[id].close();
