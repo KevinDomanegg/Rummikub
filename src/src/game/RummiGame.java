@@ -35,6 +35,10 @@ public class RummiGame implements Game {
     trace = new Stack<>();
   }
 
+  public RummiTable getTable() {
+    return table;
+  }
+
   /** Gives a current player. */
   private Player currentPlayer() {
     return players.get(currentPlayerID);
