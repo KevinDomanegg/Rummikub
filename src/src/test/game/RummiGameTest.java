@@ -240,4 +240,19 @@ public class RummiGameTest {
 
     assertTrue(game2.getTable().isConsistent());
   }
+
+  @Test
+  public void testRestartGame() {
+    RummiGame game2 = new RummiGame();
+    game2.setPlayer(0, "Cedrik", 25);
+    game2.setPlayer(1, "Hyunsung", 21);
+    game2.start();
+
+    game2.getPlayerStones(1).clear();
+    assertTrue(game2.hasWinner());
+
+    game2.start();
+    assertEquals(game2.getPlayerStones(0).size(), 14);
+
+  }
 }
