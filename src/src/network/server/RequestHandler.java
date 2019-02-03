@@ -363,14 +363,15 @@ class RequestHandler {
     server.sendToPlayer(playerID, new ErrorInfo(message));
   }
 
+  /**
+   * Notifies all the clients that one og the client has left the game.
+   */
   void notifyClientClose() {
     if (game.isGameOn()) {
       sendBagSizeToAll();
       sendHandSizesToAll();
       notifyTurnToPlayer();
-      server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
-    } else {
-      sendPlayerNamesToAll();
     }
+    server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
   }
 }
