@@ -16,10 +16,12 @@ public class RummiGame implements Game {
   private RummiTable table;
   private HashMap<Integer, Player> players;
   private RummiBag bag;
-  private Stack<MoveTrace> trace;
+  private Stack<Trace> trace;
   private boolean isGameOn;
   private int currentPlayerID;
-  private int currentPoints;
+  private int pointsBeforeTurn;
+  private int pointsAfterTurn;
+
 
   public RummiGame() {
     table = new RummiTable();
@@ -61,6 +63,10 @@ public class RummiGame implements Game {
     do {
       currentPlayerID = (currentPlayerID + 1) % Constants.MAX_PLAYERS;
     } while (!players.containsKey(currentPlayerID));
+
+    pointsBeforeTurn = getCurrentPlayer().points();
+    System.out.println(getCurrentPlayer().getHand());
+
   }
 
   /**
@@ -71,13 +77,11 @@ public class RummiGame implements Game {
    */
 
   public void draw(int playerID) throws UnsupportedOperationException {
-
-    if (playerID == currentPlayerID) {
-      giveStoneToPlayer(playerID);
-      nextTurn();
-    } else {
+    if (playerID != currentPlayerID) {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
+      giveStoneToPlayer(playerID);
+      nextTurn();
   }
 
   /**
@@ -121,6 +125,8 @@ public class RummiGame implements Game {
     table.clear();
     handOutStones();
     setStartPlayer();
+
+    pointsBeforeTurn = getCurrentPlayer().points();
   }
 
   /**
@@ -238,7 +244,7 @@ public class RummiGame implements Game {
   public void moveStoneOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
     swapStoneOnTable(sourcePosition, targetPosition);
     // store this move.
-    trace.push(new MoveTrace("MOVESTONEONTABLE", sourcePosition, targetPosition));
+    trace.push(new Trace(TraceMove.MOVE_STONE_ON_TABLE, sourcePosition, targetPosition));
   }
 
   /**
@@ -268,8 +274,16 @@ public class RummiGame implements Game {
    */
   @Override
   public boolean putSet(Coordinate sourcePosition, Coordinate targetPosition) {
-    return
-            moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
+    return moveSet(sourcePosition, targetPosition, currentPlayer().getHand(), table, this::putStone);
+  }
+
+
+  private void moveStoneToTable(Coordinate sourcePosition, Coordinate targetPosition) throws UnsupportedOperationException{
+    if (table.getStones().containsKey(targetPosition)) {
+      throw new UnsupportedOperationException(ErrorMessages.SPOT_ALREADY_TAKEN_ERROR);
+    }
+    Stone movingStone = currentPlayer().popStone(sourcePosition);
+    table.setStone(targetPosition, movingStone);
   }
 
   /**
@@ -281,21 +295,12 @@ public class RummiGame implements Game {
    * @return true if only if a stone from sourcePosition is to targetPosition moved
    */
   @Override
-  public boolean putStone(Coordinate sourcePosition, Coordinate targetPosition) {
+  public void putStone(Coordinate sourcePosition, Coordinate targetPosition) throws UnsupportedOperationException {
     // check if target position is empty
-    if (table.getStones().containsKey(targetPosition)) {
-      return false;
-    }
-    Stone movingStone = currentPlayer().popStone(sourcePosition);
-    if (movingStone == null) {
-      return false;
-    }
-    // add up the currentPoints
-    currentPoints += movingStone.getNumber();
-    table.setStone(targetPosition, movingStone);
-    // store this move
-    trace.push(new MoveTrace("MOVESTONEFROMHAND", sourcePosition, targetPosition));
-    return true;
+
+    moveStoneToTable(sourcePosition, targetPosition);
+
+    trace.push(new Trace(TraceMove.MOVE_STONE_FROM_HAND, sourcePosition, targetPosition));
   }
 
   /**
@@ -326,11 +331,9 @@ public class RummiGame implements Game {
   @Override
   public void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition) {
     players.get(playerID).moveStone(sourcePosition, targetPosition);
-//    if (playerID == currentPlayerID){
-//      // store this move
-//      trace.push(new MoveTrace("MOVESTONEONHAND", sourcePosition, targetPosition));
-//    }
   }
+
+
 
 
   /**
@@ -339,9 +342,9 @@ public class RummiGame implements Game {
    * @param playerID the ID of the player who left
    */
   @Override
-  public void removePlayer(int playerID) {
+  public void removePlayer(int playerID) throws UnsupportedOperationException {
     System.out.println("---number of players: " + players.size());
-    if (!isGameOn) {
+    if (isGameOn == false) {
       players.remove(playerID);
       return;
     }
@@ -364,7 +367,6 @@ public class RummiGame implements Game {
     while (!trace.empty()) {
       undo();
     }
-//    currentPoints = 0;
   }
 
   /**
@@ -376,23 +378,22 @@ public class RummiGame implements Game {
       return;
     }
 
-    MoveTrace lastCommand = trace.pop();
+    Trace lastCommand = trace.pop();
     Coordinate sourcePosition = lastCommand.getInitialPosition();
     Coordinate targetPosition = lastCommand.getTargetPosition();
-    String command = lastCommand.getCommand();
+    TraceMove command = lastCommand.getCommand();
 
     switch (command) {
-      case "MOVESTONEONTABLE":
+      case MOVE_STONE_ON_TABLE:
         // swap back stones on the table
         swapStoneOnTable(targetPosition, sourcePosition);
         return;
-      case "MOVESTONEFROMHAND":
+      case MOVE_STONE_FROM_HAND:
         // get back stone from the table to the player hand
         Stone stone = table.removeStone(targetPosition);
-        currentPoints -= stone.getNumber();
+        //currentPoints -= stone.getNumber();
         currentPlayer().pushStone(stone);
         return;
-      default:
     }
   }
 
@@ -406,6 +407,19 @@ public class RummiGame implements Game {
     return currentPlayer().getHandSize() == 0;
   }
 
+  private void setPlayerFree() {
+    pointsAfterTurn = getCurrentPlayer().points();
+    System.out.println(getCurrentPlayer().getHand());
+
+    System.out.println("PointsAfterTurn" + pointsAfterTurn);
+    System.out.println("PointsBeforeTurn " + pointsBeforeTurn);
+    System.out.println("Points " + (pointsBeforeTurn - pointsAfterTurn));
+    if( (pointsBeforeTurn - pointsAfterTurn) >= Constants.MIN_FIRST_MOVE_POINTS){
+      getCurrentPlayer().playedFirstMove();
+    }
+  }
+
+
   /**
    * checks if the current player has already played their first move with points of 30
    * and then the consistency of the played table.
@@ -415,26 +429,34 @@ public class RummiGame implements Game {
    * or the played table is not consistent
    */
 
-
-  @Override
-  public boolean isConsistent() {
-    // check if the current player has played something yet
-    if (currentPoints == 0) {
-      return false;
+  public void confirmMove(int playerID) {
+    if (playerID != currentPlayerID) {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
-    // check if the current player has played their (first) turn in this game
-    if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */!table.isConsistent()) {
-      return false;
+    if(table.isConsistent() == false) {
+      throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
+    }
+
+    setPlayerFree();
+
+    if(getCurrentPlayer().hasPlayedFirstMove() == false){
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
     }
     // clear the trace for the next turn
     trace.clear();
-    currentPlayer().playedFirstMove();
     // check if this player has won
-    if (currentPlayer().getHandSize() == 0) {
+    if(hasWinner()){
       isGameOn = false;
+    } else {
+      nextTurn();
     }
-    nextTurn();
-    return true;
+  }
+
+
+
+  @Override
+  public boolean isConsistent() {
+    return table.isConsistent();
   }
 
   @Override
@@ -523,7 +545,7 @@ public class RummiGame implements Game {
   }
   // for test
 
-  Stack<MoveTrace> getTrace() {
+  Stack<Trace> getTrace() {
     return trace;
   }
 

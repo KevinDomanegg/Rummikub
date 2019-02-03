@@ -60,7 +60,7 @@ public interface Game {
    * @param targetPosition  the position of the stone after mvoing it
    * @return true if the subject stone is moved
    */
-  boolean putStone(Coordinate sourcePosition, Coordinate targetPosition);
+  void putStone(Coordinate sourcePosition, Coordinate targetPosition);
 
   /**
    * Moves a group of stones on the Hand of a Player with the given playerID
@@ -169,4 +169,5 @@ public interface Game {
    */
   void timeOut(int playerID);
   boolean isGameOn();
+  void confirmMove(int playerID);
 }

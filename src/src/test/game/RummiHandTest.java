@@ -1,16 +1,11 @@
 package game;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
 
 
 public class RummiHandTest {
-  static int countStones;
 
   @Test
   public void fillHandTest(){
@@ -42,6 +37,18 @@ public class RummiHandTest {
     rummiHand2.setStone(new Coordinate(1,1), new Stone(Stone.Color.JOKER, 1));
     rummiHand2.setStone(new Coordinate(1,1), new Stone(Stone.Color.JOKER, 2));
     assertTrue(rummiHand2.size() == 1);
+
+  }
+
+  @Test
+  public void test1() {
+    RummiHand rummiHand2 = new RummiHand();
+    rummiHand2.setStone(new Coordinate(1,1), new Stone(Stone.Color.JOKER, 1));
+    rummiHand2.setStone(new Coordinate(2,1), new Stone(Stone.Color.JOKER, 2));
+    assertEquals(rummiHand2.points(), 20);
+
+    rummiHand2.setStone(new Coordinate(3,1), new Stone(Stone.Color.BLUE, 2));
+    assertEquals(rummiHand2.points(), 22);
 
   }
 

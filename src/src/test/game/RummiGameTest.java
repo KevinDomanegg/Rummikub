@@ -39,12 +39,12 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerStones(1).get(new Coordinate(0, 0)) == null);
 
 
-    assertEquals(game1.getTrace().peek().getCommand(), "MOVESTONEONTABLE");
+    assertEquals(game1.getTrace().peek().getCommand(), TraceMove.MOVE_STONE_ON_TABLE);
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEONTABLE"));
+    assertEquals(game1.getTrace().peek().getCommand(), (TraceMove.MOVE_STONE_ON_TABLE));
     game1.undo();
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEFROMHAND"));
+    assertEquals(game1.getTrace().peek().getCommand(), (TraceMove.MOVE_STONE_FROM_HAND));
     game1.undo();
     game1.reset();
     game1.undo();
@@ -70,7 +70,7 @@ public class RummiGameTest {
     game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
 
 
-    //assertTrue(game2.isConsistent());
+    assertTrue(game2.isConsistent());
 
     game2.getTableStones().put(new Coordinate(0, 1), new Stone(Stone.Color.BLACK, 7));
     game2.getTableStones().put(new Coordinate(1, 1), new Stone(Stone.Color.BLACK, 2));
@@ -243,5 +243,39 @@ public class RummiGameTest {
     game.draw(0);
     game.draw(1);
     assertThrows(UnsupportedOperationException.class, () -> game.draw(1));
+  }
+
+  @Test
+  public void checkTest() {
+    RummiGame game = new RummiGame();
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
+    game.start();
+
+    game.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
+    game.getTableStones().put(new Coordinate(1, 0), new Stone(Stone.Color.BLACK, 2));
+    game.getTableStones().put(new Coordinate(2, 0), new Stone(Stone.Color.BLACK, 3));
+    game.getTableStones().put(new Coordinate(3, 0), new Stone(Stone.Color.BLACK, 4));
+    game.getTableStones().put(new Coordinate(4, 0), new Stone(Stone.Color.BLACK, 5));
+    game.getTableStones().put(new Coordinate(5, 0), new Stone(Stone.Color.BLACK, 6));
+    game.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
+    game.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
+
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(0,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(1,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(2,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(3,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(4,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(5,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(6,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(7,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(8,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(9,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(10,0));
+
+    game.confirmMove(game.getCurrentPlayerID());
+
+    game.getCurrentPlayer().hasPlayedFirstMove();
+
   }
 }

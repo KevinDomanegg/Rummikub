@@ -18,7 +18,6 @@ import communication.request.Request;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
-import globalconstants.Constants;
 import globalconstants.ErrorMessages;
 
 import java.util.Collections;
@@ -124,7 +123,7 @@ class RequestHandler {
           game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
                   new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
         }
-        sendTableToALl();
+        sendTableToAll();
         return;
 
       case TABLE_SET_MOVE:
@@ -135,19 +134,21 @@ class RequestHandler {
             sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
           }
         }
-        sendTableToALl();
+        sendTableToAll();
         return;
 
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
-          if (!game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
-                  new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()))) {
-            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
+          try{
+            game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
+                          new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+          } catch (UnsupportedOperationException e){
+            sendErrorToPlayer(playerID, e.getMessage());
           }
           sendHandSizesToAll();
         }
-        sendTableToALl();
+        sendTableToAll();
         sendHandToPlayer(playerID);
         return;
 
@@ -160,7 +161,7 @@ class RequestHandler {
           }
           sendHandSizesToAll();
         }
-        sendTableToALl();
+        sendTableToAll();
         sendHandToPlayer(playerID);
         return;
 
@@ -174,14 +175,26 @@ class RequestHandler {
         }
 
         sendHandToPlayer(playerID);
-        sendTableToALl();
+        sendTableToAll();
         sendHandSizesToAll();
         sendBagSizeToAll();
         notifyTurnToPlayer();
         break;
 
       case CONFIRM_MOVE:
-        if (isCurrentPlayer(playerID)) {
+
+        try{
+          game.confirmMove(playerID);
+        } catch (UnsupportedOperationException e){
+          sendErrorToPlayer(playerID, e.getMessage());
+        }
+
+        checkWinner();
+        notifyTurnToPlayer();
+        sendHandSizesToAll();
+
+
+        /*if (isCurrentPlayer(playerID)) {
           if (game.isConsistent()) {
             checkWinner();
             notifyTurnToPlayer();
@@ -192,13 +205,13 @@ class RequestHandler {
                     : "sum of stone-values at the first move must be at least 30 points!");
           }
         }
-        return;
+        return;*/
 
       case RESET:
         if (isCurrentPlayer(playerID)) {
           game.reset();
 //        sendTableToPlayer(playerID);
-          sendTableToALl();
+          sendTableToAll();
           sendHandToPlayer(playerID);
           sendHandSizesToAll();
 //        sendHandSizesToPlayer(playerID);
@@ -207,7 +220,7 @@ class RequestHandler {
       case TIME_OUT:
         // sends original table
         game.reset();
-        sendTableToALl();
+        sendTableToAll();
         sendHandToPlayer(playerID);
         // draw stone cause table not consistent and the time is out
         game.timeOut(playerID);
@@ -231,7 +244,7 @@ class RequestHandler {
       case UNDO:
         if (isCurrentPlayer(playerID)) {
           game.undo();
-          sendTableToALl();
+          sendTableToAll();
           sendHandToPlayer(playerID);
         }
         return;
@@ -302,7 +315,7 @@ class RequestHandler {
   private void notifyGameStartToAll() {
     server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
     // send table first to all
-    sendTableToALl();
+    sendTableToAll();
     // send to each player their hand
     for (int playerID = 0; playerID < game.getNumberOfPlayers(); playerID++) {
       sendHandToPlayer(playerID);
@@ -320,7 +333,7 @@ class RequestHandler {
     server.sendToAll(new BagInfo(game.getBagSize()));
   }
 
-  private void sendTableToALl() {
+  private void sendTableToAll() {
     server.sendToAll(new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 

@@ -11,5 +11,7 @@ public class ErrorMessages {
     public static final String GAME_IS_FULL_ERROR = "You cannot join the game anymore. Wait for someone to leave.";
     public static final String NOT_ENOUGH_PLAYERS_ERROR = "There have to be at least 2 players to start the game.";
     public static final String CLIENT_CANNOT_START_GAME_ERROR = "Clients cannot start the game. Please wait for the host to start the game.";
+    public static final String SPOT_ALREADY_TAKEN_ERROR = "You cannot put down two stones at the same spot.";
+    public static final String TABLE_NOT_CONSISTENT_ERROR = "You cannot go on because the table configuration is not valid.";
 
 }
