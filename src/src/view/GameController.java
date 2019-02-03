@@ -38,44 +38,24 @@ import view.music.Music;
  */
 public class GameController {
 
-  //  private ClientModel model;
-//  private RequestBuilder requestBuilder;
   private static DataFormat stoneFormat = new DataFormat("stoneFormat");
-  @FXML
-  private HBox opponentRight;
-  @FXML
-  private HBox opponentMid;
-  @FXML
-  private HBox opponentLeft;
-  @FXML
-  private Text ownName;
-  @FXML
-  private Text ownHand;
-  @FXML
-  private Text leftPlayerName;
-  @FXML
-  private Text midPlayerName;
-  @FXML
-  private Text rightPlayerName;
-  @FXML
-  private Text leftPlayerHand;
-  @FXML
-  private Text midPlayerHand;
-  @FXML
-  private Text rightPlayerHand;
-  @FXML
-  private Text bagSize;
-  @FXML
-  private Text timer;
-  @FXML
-  private GridPane tableGrid;
-  @FXML
-  private GridPane handGrid;
-  @FXML
-  private VBox ownBoard;
 
-  @FXML
-  private Button drawButton;
+  @FXML private HBox opponentRight;
+  @FXML private HBox opponentMid;
+  @FXML private HBox opponentLeft;
+  @FXML private Text ownName;
+  @FXML private Text ownHand;
+  @FXML private Text leftPlayerName;
+  @FXML private Text midPlayerName;
+  @FXML private Text rightPlayerName;
+  @FXML private Text leftPlayerHand;
+  @FXML private Text midPlayerHand;
+  @FXML private Text rightPlayerHand;
+  @FXML private Text timer;
+  @FXML private GridPane tableGrid;
+  @FXML private GridPane handGrid;
+  @FXML private VBox ownBoard;
+  @FXML private Button drawButton;
 
   private MainController mainController;
   // TIMER
@@ -94,34 +74,35 @@ public class GameController {
     this.mainController = mainController;
   }
 
+  //TODO: Clean up code
   private void setTimer() {
     int delay = 1000;
     int period = 1000;
     timer_countDown = new Timer();
     timer_countDown.scheduleAtFixedRate(
-            timer_task = new TimerTask() {
-              int interval = 60;
+      timer_task = new TimerTask() {
+        int remainingTime = 60;
 
-              public void run() {
-                if (interval == 0) {
+        public void run() {
+          if (remainingTime == 0) {
 
-                  //@ToDo
-                  // Determining if the player is currently playing via gui-properties is very bad style!
-                  // We should consider a global variable boolean currentlyPlaying or similar
-                  if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
-                    stopTimer();
-                    sendTimeOutRequest();
-                    return;
-                  }
-                  stopTimer();
-                  return;
-                }
-                timer.setText(Integer.toString(interval));
-                interval--;
-              }
-            },
-            delay,
-            period);
+            //@ToDo
+            // Determining if the player is currently playing via gui-properties is very bad style!
+            // We should consider a global variable boolean currentlyPlaying or similar
+            if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
+              stopTimer();
+              sendTimeOutRequest();
+              return;
+            }
+            stopTimer();
+            return;
+          }
+          timer.setText(Integer.toString(remainingTime));
+          remainingTime--;
+        }
+      },
+      delay,
+      period);
   }
 
   /**
@@ -273,6 +254,7 @@ public class GameController {
       event.consume();
     });
 
+    // TODO: In CSS if possible
     cell.setOnDragEntered(event -> {
       cell.setStyle("-fx-background-color: #FFFFFF44");
     });
@@ -394,17 +376,18 @@ public class GameController {
     String handComplement = " Stones";
     ownHand.setText(sizes.get(0) + handComplement);
     switch (sizes.size()) {
+      case 2:
+        midPlayerHand.setText(sizes.get(1) + handComplement);
+        break;
+      case 3:
+        leftPlayerHand.setText(sizes.get(1) + handComplement);
+        rightPlayerHand.setText(sizes.get(2) + handComplement);
+        break;
       case 4:
         leftPlayerHand.setText(sizes.get(1) + handComplement);
         midPlayerHand.setText(sizes.get(2) + handComplement);
         rightPlayerHand.setText(sizes.get(3) + handComplement);
-        return;
-      case 3:
-        leftPlayerHand.setText(sizes.get(1) + handComplement);
-        rightPlayerHand.setText(sizes.get(2) + handComplement);
-        return;
-      case 2:
-        midPlayerHand.setText(sizes.get(1) + handComplement);
+        break;
       default:
     }
   }
@@ -415,25 +398,25 @@ public class GameController {
    * @param names of the opponents
    */
   void setPlayerNames(List<String> names) {
-    System.out.println("From GameCtrl.: setting names.. " + names);
+    System.out.println("From GameCtrl.: setting names.. " + names); //TODO: Remove
     String nameComplement = ": ";
-    ownName.setText(names.get(0) + nameComplement);
     switch (names.size()) {
-      case 4:
-        leftPlayerName.setText(names.get(1) + nameComplement);
-        midPlayerName.setText(names.get(2) + nameComplement);
-        rightPlayerName.setText(names.get(3) + nameComplement);
-        return;
+      case 2:
+        opponentMid.setVisible(true); //TODO: Necessary?
+        opponentLeft.setVisible(false);
+        opponentRight.setVisible(false);
+        midPlayerName.setText(names.get(1) + nameComplement);
+        break;
       case 3:
         opponentMid.setVisible(false);
         leftPlayerName.setText(names.get(1) + nameComplement);
         rightPlayerName.setText(names.get(2) + nameComplement);
-        return;
-      case 2:
-        opponentMid.setVisible(true);
-        opponentLeft.setVisible(false);
-        opponentRight.setVisible(false);
-        midPlayerName.setText(names.get(1) + nameComplement);
+        break;
+      case 4:
+        leftPlayerName.setText(names.get(1) + nameComplement);
+        midPlayerName.setText(names.get(2) + nameComplement);
+        rightPlayerName.setText(names.get(3) + nameComplement);
+        break;
       default:
     }
   }

@@ -34,7 +34,7 @@
           <Text text="Name:" styleClass="whiteText"/>
           <TextField fx:id="nameField"/>
           <Text fx:id="nameError" styleClass="errorText"
-                text="You must choose a username"
+                text="Please choose an user name with up to 20 letters."
                 visible="false"/>
         </VBox>
 
@@ -42,7 +42,7 @@
           <Text text="Age:" styleClass="whiteText"/>
           <TextField fx:id="ageField"/>
           <Text fx:id="ageError" styleClass="errorText"
-                text="Invalid age! age must be: 6 - 150"
+                text="You have to be 6 to 150 years old to play this game."
                 visible="false"/>
         </VBox>
       </VBox>

@@ -114,6 +114,10 @@
     -fx-alignment: CENTER;
 }
 
+#handGrid {
+    -fx-padding: 0 20;
+}
+
 #leftContainer {
     -fx-padding: 0 0 0 -270;
 }
@@ -129,10 +133,8 @@
 #ownBoard {
     -fx-padding: 0 0 20 0;
     -fx-background-color: black;
-    -fx-pref-width: 750;
-    -fx-max-width: 750;
-    -fx-min-width: 750;
-    -fx-max-height: 100; /* height dynamically increased */
+    -fx-max-width: 10; /* width dynamically increased */
+    -fx-max-height: 10; /* height dynamically increased */
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
     -fx-border-color: black;
@@ -141,10 +143,6 @@
 
 #ownName, #ownHand {
     -fx-font-size: 28;
-}
-
-#playerInfo {
-    -fx-padding: 10;
 }
 
 #rightContainer {
