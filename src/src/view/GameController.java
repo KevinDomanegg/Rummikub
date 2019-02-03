@@ -39,7 +39,7 @@ import view.music.Sound;
  */
 public class GameController {
 
-  private static DataFormat stoneFormat = new DataFormat("stoneFormat");
+  private static DataFormat stoneFormat = new DataFormat(ViewConstants.STONE_FORMAT);
 
   @FXML private HBox opponentRight;
   @FXML private HBox opponentMid;
@@ -90,7 +90,7 @@ public class GameController {
             //@ToDo
             // Determining if the player is currently playing via gui-properties is very bad style!
             // We should consider a global variable boolean currentlyPlaying or similar
-            if (ownBoard.getStyle().equals("-fx-border-color: white; -fx-border-width: 4px ;")) {
+            if (ownBoard.getStyle().equals(ViewConstants.CURRENTLY_PLAYING_STYLE)) {
               stopTimer();
               sendTimeOutRequest();
               return;
@@ -126,14 +126,14 @@ public class GameController {
    * Signals that the player can now play.
    */
   void yourTurn() {
-    ownBoard.setStyle("-fx-border-color: white; -fx-border-width: 4px ;");
+    ownBoard.setStyle(ViewConstants.CURRENTLY_PLAYING_STYLE);
   }
 
   /**
    * Signals that the player can't play anymore until it's his turn again.
    */
   private void endOfYourTurn() {
-    ownBoard.setStyle("-fx-border-color: black; -fx-border-width: 4px ;");
+    ownBoard.setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_STYLE);
   }
 
   /**
@@ -173,7 +173,7 @@ public class GameController {
               putStoneInCell(cell, stoneInfo);
             }
 
-            cell.getStyleClass().add("cell");
+            cell.getStyleClass().add(ViewConstants.CELL_STYLE);
             grid.add(cell, x, y);
             setupDragAndDrop(cell);
           }
@@ -217,15 +217,15 @@ public class GameController {
         Image dragGraphic;
         if (event.isControlDown()) {
           isMultiMove = true;
-          dragGraphic = new Image(getClass().getResource("images/MultiStoneDragView.png").toString());
+          dragGraphic = new Image(getClass().getResource(ViewConstants.MULTIPLE_STONES_IMAGE).toString());
           System.out.println("----------------------------control pushed"); // TODO: Remove
         } else {
           // Create drag view without cell styling
           SnapshotParameters snapshotParameters = new SnapshotParameters();
           snapshotParameters.setFill(Color.TRANSPARENT);
-          cell.getStyleClass().remove("cell");
+          cell.getStyleClass().remove(ViewConstants.CELL_STYLE);
           dragGraphic = cell.snapshot(snapshotParameters, null);
-          cell.getStyleClass().add("cell");
+          cell.getStyleClass().add(ViewConstants.CELL_STYLE);
         }
         dragBoard.setDragView(dragGraphic, dragGraphic.getWidth() * 0.5, dragGraphic.getHeight() * 0.7);
         ClipboardContent content = new ClipboardContent();
@@ -245,8 +245,8 @@ public class GameController {
         if (sourceCell instanceof StackPane) {
           String targetParentId = cell.getParent().getId();
           String sourceParentId = ((StackPane) sourceCell).getParent().getId();
-          if (sourceParentId.equals("handGrid") ||
-                  (sourceParentId.equals("tableGrid") && !(targetParentId.equals("handGrid")))) {
+          if (sourceParentId.equals(ViewConstants.HAND_GRID_ID) ||
+                  (sourceParentId.equals(ViewConstants.TABLE_GRID_ID) && !(targetParentId.equals(ViewConstants.HAND_GRID_ID)))) {
             event.acceptTransferModes(TransferMode.ANY);
           }
         }
@@ -256,11 +256,11 @@ public class GameController {
 
     // TODO: In CSS if possible
     cell.setOnDragEntered(event -> {
-      cell.setStyle("-fx-background-color: #FFFFFF44");
+      cell.setStyle(ViewConstants.STONE_WHILE_DRAGGING_STYLE);
     });
 
     cell.setOnDragExited(event -> {
-      cell.setStyle("-fx-background-color: none");
+      cell.setStyle(ViewConstants.STONE_STYLE);
     });
 
     // Put stone in target cell, notify server
@@ -273,8 +273,8 @@ public class GameController {
 
       Parent sourceParent = sourceCell.getParent();
       Parent targetParent = cell.getParent();
-      if (sourceParent.getId().equals("handGrid")) {
-        if (targetParent.getId().equals("handGrid")) {
+      if (sourceParent.getId().equals(ViewConstants.HAND_GRID_ID)) {
+        if (targetParent.getId().equals(ViewConstants.HAND_GRID_ID)) {
           if (isMultiMove) {
             mainController.sendMoveSetOnHand(sourceColumn, sourceRow, thisColumn, thisRow);
           } else {
@@ -308,24 +308,24 @@ public class GameController {
    */
   private void putStoneInCell(Pane cell, StoneInfo stone) {
     Platform.runLater(() -> {
-      ImageView stoneBackground = new ImageView(getClass().getResource("images/StoneBackground.png").toString());
-      stoneBackground.getStyleClass().add("shadow");
+      ImageView stoneBackground = new ImageView(getClass().getResource(ViewConstants.STONE_BACKGROUND_IMAGE).toString());
+      stoneBackground.getStyleClass().add(ViewConstants.SHADOW_STYLE);
       cell.getChildren().add(stoneBackground);
 
       String stoneColor = stone.getColor();
       Text stoneText = new Text();
       if (stoneColor.equals(JOKER.toString())) {
         Circle jokerBackground = new Circle(10);
-        jokerBackground.getStyleClass().add("jokerBackground");
+        jokerBackground.getStyleClass().add(ViewConstants.JOKER_BACKGROUND_STYLE);
         cell.getChildren().add(jokerBackground);
 
-        stoneText.setText("J");
+        stoneText.setText(ViewConstants.JOKER_SYMBOL);
       } else {
         String stoneValue = Integer.toString(stone.getNumber());
         stoneText.setText(stoneValue);
       }
 
-      stoneText.getStyleClass().addAll("stoneValue", stoneColor);
+      stoneText.getStyleClass().addAll(ViewConstants.STONE_VALUE_STYLE, stoneColor);
 
       cell.getChildren().addAll(stoneText);
     });

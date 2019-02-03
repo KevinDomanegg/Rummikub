@@ -77,19 +77,19 @@ public class WaitController implements Initializable {
         player0.setText(names.get(0));
         player1.setText(names.get(1));
         player2.setText(names.get(2));
-        player3.setText("?");
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       case 2:
         player0.setText(names.get(0));
         player1.setText(names.get(1));
-        player2.setText("?");
-        player3.setText("?");
+        player2.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       case 1:
         player0.setText(names.get(0));
-        player1.setText("?");
-        player2.setText("?");
-        player3.setText("?");
+        player1.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player2.setText(ViewConstants.NO_PLAYER_SYMBOL);
+        player3.setText(ViewConstants.NO_PLAYER_SYMBOL);
         break;
       default:
         break;
