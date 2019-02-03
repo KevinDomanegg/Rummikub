@@ -11,9 +11,9 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="876.0" xmlns="http://javafx.com/javafx">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="886.0" xmlns="http://javafx.com/javafx">
    <children>
-      <ScrollPane prefHeight="683.0" prefWidth="884.0">
+      <ScrollPane prefHeight="683.0" prefWidth="884.0" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" vvalue="-Infinity">
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1704.0" prefWidth="881.0">
                <children>
@@ -35,7 +35,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The goal of the game is to put all tiles from your hand on the table.The goal of the game is to put all tiles from your hand on the table." wrappingWidth="862.2060546875" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="The goal of the game is to put all tiles from your hand on the table." wrappingWidth="862.2060546875" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Rules" wrappingWidth="221.669921875">
                            <font>
                               <Font size="18.0" />
