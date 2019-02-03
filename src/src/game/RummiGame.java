@@ -71,9 +71,6 @@ public class RummiGame implements Game {
    */
 
   public void draw(int playerID) throws UnsupportedOperationException {
-    if (isGameOn == false) {
-      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
-    }
 
     if (playerID == currentPlayerID) {
       giveStoneToPlayer(playerID);
@@ -81,10 +78,6 @@ public class RummiGame implements Game {
     } else {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
-  }
-
-  private void addPlayer(int playerID, String name, int age){
-    players.put(playerID, new Player(name, age));
   }
 
   /**
@@ -97,13 +90,14 @@ public class RummiGame implements Game {
    */
   @Override
   public void join(int playerID, String name, int age) {
-    if (players.size() > Constants.MAX_PLAYERS) {
-      throw new UnsupportedOperationException(ErrorMessages.GAME_IS_FULL_ERROR);
-    } else if (isGameOn){
+    if(isGameOn) {
       throw new UnsupportedOperationException(ErrorMessages.GAME_HAS_ALREADY_STARTED_ERROR);
-    } else {
-      addPlayer(playerID, name, age);
     }
+    if (players.size() >= Constants.MAX_PLAYERS) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_IS_FULL_ERROR);
+    }
+
+    players.put(playerID, new Player(name, age));
   }
 
   /**
@@ -112,19 +106,21 @@ public class RummiGame implements Game {
    * @return false if only if this game has already started
    */
   @Override
-  public boolean start() throws UnsupportedOperationException {
+  public void start() throws UnsupportedOperationException {
     if (isGameOn == true) {
       throw new UnsupportedOperationException(ErrorMessages.GAME_HAS_ALREADY_STARTED_ERROR);
     }
-
-    if (players.size() >= Constants.MIN_PLAYERS) {
-      isGameOn = true;
-      bag = new RummiBag();
-      table.clear();
-      handOutStones();
-      setStartPlayer();
+    if (players.size() < Constants.MIN_PLAYERS) {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_PLAYERS_ERROR);
     }
-    return true;
+    if (players.size() >= Constants.MAX_PLAYERS) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_IS_FULL_ERROR);
+    }
+    isGameOn = true;
+    bag = new RummiBag();
+    table.clear();
+    handOutStones();
+    setStartPlayer();
   }
 
   /**

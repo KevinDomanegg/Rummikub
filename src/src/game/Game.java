@@ -21,7 +21,7 @@ public interface Game {
    *
    * @return true if this Game has started
    */
-  boolean start();
+  void start();
 
   /**
    * Moves a group of stones on the Table of this Game from the given sourcePosition

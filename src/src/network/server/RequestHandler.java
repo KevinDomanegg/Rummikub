@@ -18,6 +18,8 @@ import communication.request.Request;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
+import globalconstants.Constants;
+import globalconstants.ErrorMessages;
 
 import java.util.Collections;
 import java.util.List;
@@ -72,21 +74,18 @@ class RequestHandler {
     switch (((Request) request).getRequestID()) {
 
       case START:
-        // check if the player is the host (host id is always 0)
+
         if (playerID != 0) {
-          sendErrorToPlayer(playerID, "only host can start the game.");
+          sendErrorToPlayer(playerID, ErrorMessages.CLIENT_CANNOT_START_GAME_ERROR);
           return;
         }
-        // check if there are at least 2 players
-        if (game.getNumberOfPlayers() < 2) {
-          sendErrorToPlayer(playerID, "wait for other players to join.");
-          return;
+
+        try {
+          game.start();
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
         }
-        // check if the game is already on
-        if (!game.start()) {
-          sendErrorToPlayer(playerID, "game is already on.");
-          return;
-        }
+
         notifyGameStartToAll();
         return;
       case JOIN:
