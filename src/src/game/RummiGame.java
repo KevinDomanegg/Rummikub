@@ -550,10 +550,10 @@ public class RummiGame implements Game {
    */
   @Override
   public void timeOut(int playerID) {
-    if (this.getBagSize() > 0) {
-      this.draw(playerID);
-    } else {
-      this.nextTurn();
+    try {
+      draw(playerID);
+    } catch (UnsupportedOperationException e) {
+      nextTurn();
     }
   }
 }
