@@ -72,6 +72,7 @@ public class RummiGame implements Game {
 
   /** Updates the currentPlayerID. */
   private void nextTurn() {
+    System.out.println("next-turning");
     if (!isGameOn) {
       System.out.println("GAME NOT ON!");
       return;
@@ -129,7 +130,7 @@ public class RummiGame implements Game {
     // hand out stones
     for (int i = 0; i < Constants.FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
-        drawStone();
+        draw();
       }
     }
   }
@@ -329,7 +330,7 @@ public class RummiGame implements Game {
    * Makes the current player draw a stone from the bag and finish their turn.
    */
   @Override
-  public void drawStone() {
+  public void draw() {
     currentPlayer().pushStone(bag.removeStone());
     nextTurn();
   }
@@ -517,5 +518,18 @@ public class RummiGame implements Game {
         .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
         .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
     return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+  }
+
+  /**
+   * Draws a Stone when if there are Stones available.
+   * Switches to the next player if not.
+   */
+  @Override
+  public void timeOut() {
+    if (this.getBagSize() > 0) {
+      this.draw();
+    } else {
+      this.nextTurn();
+    }
   }
 }

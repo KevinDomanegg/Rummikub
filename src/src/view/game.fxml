@@ -100,7 +100,7 @@
       </children>
     </StackPane>
 
-    <!-- Bottom area: ownHand, drawStone button etc. -->
+    <!-- Bottom area: ownHand, draw button etc. -->
     <StackPane fx:id="bottom" alignment="BOTTOM_CENTER" pickOnBounds="false">
       <children>
         <StackPane alignment="BOTTOM_LEFT" pickOnBounds="false">
@@ -116,7 +116,7 @@
         <VBox alignment="BOTTOM_RIGHT" styleClass="onEdge" spacing="25"
               pickOnBounds="false">
           <children>
-            <!-- drawStone buttons etc. -->
+            <!-- draw buttons etc. -->
             <HBox fx:id="moveButtons" alignment="CENTER_RIGHT" spacing="10"
                   pickOnBounds="false">
               <children>
