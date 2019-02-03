@@ -187,40 +187,24 @@ class RequestHandler {
         } catch (UnsupportedOperationException e){
           sendErrorToPlayer(playerID, e.getMessage());
         }
-
-        checkWinner();
+        if (!checkWinner()) {
         sendHandToPlayer(playerID);
         sendHandSizesToAll();
         sendBagSizeToAll();
-        notifyTurnToPlayer();
-
-
-        /*if (isCurrentPlayer(playerID)) {
-          if (game.isConsistent()) {
-            checkWinner();
-            notifyTurnToPlayer();
-            sendHandSizesToAll();
-          } else {
-            sendErrorToPlayer(playerID, (game.hasPlayerPlayedFirstMove(playerID))
-                    ? "invalid move!"
-                    : "sum of stone-values at the first move must be at least 30 points!");
-          }
+          notifyTurnToPlayer();
         }
-        return;*/
+        break;
 
       case RESET:
         if (isCurrentPlayer(playerID)) {
           game.reset();
-//        sendTableToPlayer(playerID);
           sendTableToAll();
           sendHandToPlayer(playerID);
           sendHandSizesToAll();
-//        sendHandSizesToPlayer(playerID);
         }
         return;
       case TIME_OUT:
         // sends original table
-        game.reset();
         sendTableToAll();
         sendHandToPlayer(playerID);
         // draw stone cause table not consistent and the time is out
@@ -367,10 +351,12 @@ class RequestHandler {
     server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
   }
 
-  private void checkWinner() {
+  private boolean checkWinner() {
     if (game.hasWinner()) {
       server.sendToAll(new RankInfo(game.getFinalRank()));
+      return true;
     }
+    return false;
   }
 
   private void sendErrorToPlayer(int playerID, String message) {
