@@ -66,9 +66,9 @@ public class RummiTable implements Grid {
    * @return true if only if all horizontally grouped stones are valid group or run
    */
   boolean isConsistent() {
-    // check the minimal Condition (:= a valid set has at least 3 stones)
-    if (stones.size() < MIN_SET_SIZE) {
-      return false;
+
+    if (stones.size() == 0){
+      return true;
     }
     // make a copy of all coordinates of stones, in order to remove checked coordinate safely
     HashSet<Coordinate> checkingList = new HashSet<>(stones.keySet());

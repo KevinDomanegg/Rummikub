@@ -190,8 +190,10 @@ class RequestHandler {
         }
 
         checkWinner();
-        notifyTurnToPlayer();
+        sendHandToPlayer(playerID);
         sendHandSizesToAll();
+        sendBagSizeToAll();
+        notifyTurnToPlayer();
 
 
         /*if (isCurrentPlayer(playerID)) {
@@ -255,7 +257,7 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-      sendErrorToPlayer(playID, NOT_YOUR_TURN);
+     // sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;

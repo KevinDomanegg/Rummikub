@@ -416,6 +416,10 @@ public class RummiGame implements Game {
     System.out.println("Points " + (pointsBeforeTurn - pointsAfterTurn));
     if( (pointsBeforeTurn - pointsAfterTurn) >= Constants.MIN_FIRST_MOVE_POINTS){
       getCurrentPlayer().playedFirstMove();
+    } else if((pointsBeforeTurn - pointsAfterTurn) == 0){
+      giveStoneToPlayer(currentPlayerID);
+    } else {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
     }
   }
 
@@ -434,22 +438,26 @@ public class RummiGame implements Game {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
     if(table.isConsistent() == false) {
+      reset();
       throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
     }
 
-    setPlayerFree();
+    pointsAfterTurn = getCurrentPlayer().points();
+    int pointsPlayed = (pointsBeforeTurn - pointsAfterTurn);
 
-    if(getCurrentPlayer().hasPlayedFirstMove() == false){
+    if( pointsPlayed >= Constants.MIN_FIRST_MOVE_POINTS) {
+      getCurrentPlayer().playedFirstMove();
+      if(hasWinner()){
+        isGameOn = false;
+      } else {
+        nextTurn();
+      }
+    } else if (pointsPlayed == 0){
+      draw(playerID);
+    } else {
       throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
     }
-    // clear the trace for the next turn
     trace.clear();
-    // check if this player has won
-    if(hasWinner()){
-      isGameOn = false;
-    } else {
-      nextTurn();
-    }
   }
 
 

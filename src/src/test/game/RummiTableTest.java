@@ -85,7 +85,7 @@ public class RummiTableTest {
 
     assertTrue(rummiTable5.size() == 2);
 
-    assertFalse(rummiTable6.isConsistent());
+    assertTrue(rummiTable6.isConsistent());
     assertFalse(rummiTable5.isConsistent());
   }
 
