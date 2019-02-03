@@ -40,6 +40,10 @@ public class RummiGame implements Game {
     trace = new Stack<>();
   }
 
+  public RummiTable getTable() {
+    return table;
+  }
+
   /** Gives a current player. */
   private Player currentPlayer() {
     return players.get(currentPlayerId);
@@ -212,14 +216,15 @@ public class RummiGame implements Game {
    * @param targetPosition the position of the subject stone after moving it with its neighbors
    * @return true if only if the set (neighbored stones) is successfully moved
    */
-  @Override public boolean moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean moveSetOnTable(Coordinate sourcePosition, Coordinate targetPosition) {
     return moveSet(sourcePosition, targetPosition, table, table, this::moveStoneOnTable);
   }
 
   /**
    * Moves stone from the given sourcePosition to the given targetPosition on the table.
    * If a stone at the targetPosition already exist, it will be swapped.
-   * Hereby, this move will be stored in the moveData for reset.
+   * Hereby, this move will be stored in the trace for reset.
    *
    * @param sourcePosition the position of the subject stone before moving
    * @param targetPosition the position of the subject stone after moving
@@ -264,13 +269,14 @@ public class RummiGame implements Game {
 
   /**
    * Puts a stone from the current player hand to the table if the target position is empty.
-   * Hereby, this move will be stored in the moveData for reset.
+   * Hereby, this move will be stored in the trace for reset.
    *
    * @param sourcePosition the position of the subject stone before putting
    * @param targetPosition the position of the subject stone after putting
    * @return true if only if a stone from sourcePosition is to targetPosition moved
    */
-  @Override public boolean putStone(Coordinate sourcePosition, Coordinate targetPosition) {
+  @Override
+  public boolean putStone(Coordinate sourcePosition, Coordinate targetPosition) {
     // check if target position is empty
     if (table.getStones().containsKey(targetPosition)) {
       return false;
@@ -502,7 +508,21 @@ public class RummiGame implements Game {
   }
 
   // for test
-  Stack<MoveTrace> getMoveData() {
+
+  Stack<MoveTrace> getTrace() {
     return trace;
+  }
+
+  /**
+   * Draws a Stone when if there are Stones available.
+   * Switches to the next player if not.
+   */
+  @Override
+  public void timeOut() {
+    if (this.getBagSize() > 0) {
+      this.drawStone();
+    } else {
+      this.nextTurn();
+    }
   }
 }

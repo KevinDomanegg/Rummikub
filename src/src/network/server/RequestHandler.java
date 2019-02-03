@@ -208,7 +208,7 @@ class RequestHandler {
           sendTableToALl();
           sendHandToPlayer(playerId);
           // draw stone cause table not consistent and the time is out
-          game.drawStone();
+          game.timeOut();
           sendHandToPlayer(playerId);
           // send changed hand to player
           sendHandSizesToAll();
@@ -272,7 +272,7 @@ class RequestHandler {
   /**
    * Calculates the relative position between the currently playing client
    * and a client who is to receive a GameInfo.
-   *
+   * <p>
    * Used when telling all the clients who - relative to them - is currently
    * playing.
    *
@@ -361,14 +361,15 @@ class RequestHandler {
     server.sendToPlayer(playerID, new ErrorInfo(message));
   }
 
+  /**
+   * Notifies all the clients that one og the client has left the game.
+   */
   void notifyClientClose() {
     if (game.isGameOn()) {
       sendBagSizeToAll();
       sendHandSizesToAll();
       notifyTurnToPlayer();
-      server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
-    } else {
-      sendPlayerNamesToAll();
     }
+    server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
   }
 }

@@ -107,11 +107,15 @@
 /* ID selectors */
 
 #bottom {
-    -fx-translate-y: 20;
+    -fx-translate-y: -12;
 }
 
 #errorPane {
     -fx-alignment: CENTER;
+}
+
+#handGrid {
+    -fx-padding: 0 20;
 }
 
 #leftContainer {
@@ -129,18 +133,16 @@
 #ownBoard {
     -fx-padding: 0 0 20 0;
     -fx-background-color: black;
-    -fx-pref-width: 750;
-    -fx-max-width: 750;
-    -fx-min-width: 750;
-    -fx-max-height: 100; /* height dynamically increased */
+    -fx-max-width: 10; /* width dynamically increased */
+    -fx-max-height: 10; /* height dynamically increased */
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
     -fx-border-color: black;
     -fx-border-width: 2 2 0 2;
 }
 
-#playerInfo {
-    -fx-padding: 10;
+#ownName, #ownHand {
+    -fx-font-size: 28;
 }
 
 #rightContainer {
@@ -162,14 +164,18 @@
     -fx-padding: 50;
 }
 
-#timer, #bagSize {
+#tableGrid {
+    -fx-translate-y: -25;
+}
+
+#timer {
     -fx-font-size: 40;
     -fx-fill: white;
     -fx-font-weight: 700;
 }
 
 #timerDescription {
-    -fx-font-size: 25;
+    -fx-font-size: 24;
     -fx-fill: white;
 }
 

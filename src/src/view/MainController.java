@@ -131,7 +131,7 @@ public class MainController implements Controller {
    */
   public void notifyServerClose() {
     client = null;
-    showErrorGotToStart("Host is not connected");
+    showErrorGotToStart("Error! Server is not available due to lack of host or not enough players in the game");
   }
 
   /**
@@ -181,7 +181,6 @@ public class MainController implements Controller {
 
   /**
    * Displays the final ranking of the game.
-   * @ToDo
    * complete javadoc
    * @param finalRank
    */
@@ -206,8 +205,7 @@ public class MainController implements Controller {
   }
 
   /**
-   * @ToDo
-   * javadoc
+   * Displays the game instruction
    */
   void showHelpScene() {
     Platform.runLater(() -> {
@@ -311,7 +309,6 @@ public class MainController implements Controller {
   @Override
   public void notifyInvalidMove() {
     gameController.notifyInvalidMove();
-//    Platform.runLater(() -> gameController.notifyInvalidMove());
   }
 
   /**
@@ -328,14 +325,14 @@ public class MainController implements Controller {
    * Sends a request to draw a stone from the bag to the server.
    */
   void sendDrawRequest() {
-    client.sendRequest(new SimpleRequest(RequestID.DRAW));
+    requestBuilder.sendDrawRequest();
   }
 
   /**
    * Informs the server that the game-clock has run out of time.
    */
   void sendTimeOutRequest() {
-    client.sendRequest(new SimpleRequest(RequestID.TIME_OUT));
+    requestBuilder.sendTimeOutRequest();
   }
 
   /**

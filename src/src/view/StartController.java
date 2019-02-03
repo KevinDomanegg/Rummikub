@@ -57,20 +57,9 @@ public class StartController {
   @FXML
   void joinGame() {
     clearErrors();
-    if (nameField.getText().equals("")) {
-      setError("name");
-      return;
+    if (isValidInput()) {
+      mainController.initPlayer(ipField.getText(), nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
     }
-    try {
-      int age = Integer.parseUnsignedInt(ageField.getText());
-      if (age < 6 || age > 150) {
-        throw new NumberFormatException();
-      }
-    } catch (NumberFormatException e) {
-      setError("age");
-      return;
-    }
-    mainController.initPlayer(ipField.getText(), nameField.getText(), Integer.parseUnsignedInt(ageField.getText()));
   }
 
   /**
@@ -79,19 +68,11 @@ public class StartController {
   @FXML
   private void hostGame() {
     clearErrors();
-    if (nameField.getText().equals("")) {
-      setError("name");
-      return;
-    }
-    try {
-      Integer.parseInt(ageField.getText());
-    } catch (NumberFormatException e) {
-      setError("age");
-      return;
-    }
-    ipField.setText("localhost");
-    if (mainController.startServer()) {
-      joinGame();
+    if (isValidInput()) {
+      ipField.setText("localhost");
+      if (mainController.startServer()) {
+        joinGame();
+      }
     }
   }
 
@@ -114,5 +95,29 @@ public class StartController {
    */
   void showNoServerError() {
     setError("ip");
+  }
+
+  private boolean isValidInput() {
+    String userName = nameField.getText();
+    boolean isValidInput = true;
+
+    // Test name input
+    if (userName.isEmpty() || userName.length() > 20) {
+      setError("name");
+      isValidInput = false;
+    }
+
+    // Test age input
+    try {
+      int age = Integer.parseInt(ageField.getText());
+      if (age < 6 || age > 150) {
+        setError("age");
+        isValidInput = false;
+      }
+    } catch (NumberFormatException e) {
+      setError("age");
+      isValidInput = false;
+    }
+    return isValidInput;
   }
 }

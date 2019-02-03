@@ -68,14 +68,31 @@ public class WaitController implements Initializable {
     System.out.println("From WaitCtrl.: setting names.. " + names);
     switch (names.size()) { //TODO: Make readable
       case 4:
-        player3.setText(names.get(3));
-      case 3:
-        player2.setText(names.get(2));
-      case 2:
+        player0.setText(names.get(0));
         player1.setText(names.get(1));
+        player2.setText(names.get(2));
+        player3.setText(names.get(3));
+        break;
+      case 3:
+        player0.setText(names.get(0));
+        player1.setText(names.get(1));
+        player2.setText(names.get(2));
+        player3.setText("?");
+        break;
+      case 2:
+        player0.setText(names.get(0));
+        player1.setText(names.get(1));
+        player2.setText("?");
+        player3.setText("?");
+        break;
       case 1:
         player0.setText(names.get(0));
+        player1.setText("?");
+        player2.setText("?");
+        player3.setText("?");
+        break;
       default:
+        break;
     }
   }
 

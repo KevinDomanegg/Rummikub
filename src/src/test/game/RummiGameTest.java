@@ -68,7 +68,7 @@ public class RummiGameTest {
     game2.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
     game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
 
-    assertTrue(game2.isConsistent());
+    assertTrue(game2.getTable().isConsistent());
 
     game2.getTableStones().put(new Coordinate(0, 1), new Stone(Stone.Color.BLACK, 7));
     game2.getTableStones().put(new Coordinate(1, 1), new Stone(Stone.Color.BLACK, 2));
@@ -220,5 +220,39 @@ public class RummiGameTest {
     System.out.println(game.getMoveData());
     System.out.println("---check if reset worked");
     System.out.println(game.getMoveData().toString().equals(firstTable));
+  }
+
+  @Test
+  public void testingMethod() {
+    RummiGame game2 = new RummiGame();
+    game2.setPlayer(0, "Cedrik", 25);
+    game2.setPlayer(1, "Hyunsung", 21);
+    game2.start();
+
+    game2.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
+    game2.getTableStones().put(new Coordinate(1, 0), new Stone(Stone.Color.BLACK, 2));
+    game2.getTableStones().put(new Coordinate(2, 0), new Stone(Stone.Color.BLACK, 3));
+    game2.getTableStones().put(new Coordinate(3, 0), new Stone(Stone.Color.JOKER, 0));
+    game2.getTableStones().put(new Coordinate(4, 0), new Stone(Stone.Color.BLACK, 5));
+    game2.getTableStones().put(new Coordinate(5, 0), new Stone(Stone.Color.BLACK, 6));
+    game2.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
+    game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
+
+    assertTrue(game2.getTable().isConsistent());
+  }
+
+  @Test
+  public void testRestartGame() {
+    RummiGame game2 = new RummiGame();
+    game2.setPlayer(0, "Cedrik", 25);
+    game2.setPlayer(1, "Hyunsung", 21);
+    game2.start();
+
+    game2.getPlayerStones(1).clear();
+    assertTrue(game2.hasWinner());
+
+    game2.start();
+    assertEquals(game2.getPlayerStones(0).size(), 14);
+
   }
 }

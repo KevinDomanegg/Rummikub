@@ -203,4 +203,9 @@ public interface Game {
    * @return true if this Game is on going
    */
   boolean isGameOn();
+  /**
+   * Draws a Stone when if there are Stones available.
+   * Switches to the next player if not.
+   */
+  void timeOut();
 }

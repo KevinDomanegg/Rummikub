@@ -132,9 +132,14 @@ public class RummiTableTest {
     table.setStone(new Coordinate(18, 7), new Stone(Color.YELLOW, 10));
     table.setStone(new Coordinate(19, 7), new Stone(Color.BLACK, 10 ));
 
+    assertTrue(table.isConsistent());
+
+
     table.setStone(new Coordinate(8, 6), new Stone(Color.RED, 5 ));
     table.setStone(new Coordinate(9, 6), new Stone(Color.RED, 6 ));
     table.setStone(new Coordinate(10, 6), new Stone(Color.RED, 7 ));
+
+    assertTrue(table.isConsistent());
 
     table.setStone(new Coordinate(14, 4), new Stone(Color.BLACK, 7));
     table.setStone(new Coordinate(15, 4), new Stone(Color.BLACK, 8));

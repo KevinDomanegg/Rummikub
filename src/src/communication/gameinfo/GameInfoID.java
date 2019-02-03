@@ -1,11 +1,10 @@
 package communication.gameinfo;
 
+/**
+ * Identifier for classes implementing the GameInfo-Interface.
+ * Every implementation of GameInfo should have an GameInfoID associated with it.
+ */
 public enum GameInfoID {
-
-  /**
-   * Identifier for classes implementing the GameInfo-Interface.
-   * Every implementation of GameInfo should have an GameInfoID associated with it.
-   */
 
   TABLE,
   HAND,
