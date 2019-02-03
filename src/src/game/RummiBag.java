@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+/**
+ * Class representing a bag of Stones.
+ * Used to randomly draw Stones from.
+ * Contains a fixed number of Stones.
+ */
 public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
   private ArrayList<Stone> stones;

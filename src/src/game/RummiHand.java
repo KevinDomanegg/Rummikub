@@ -6,6 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * Class representing the hand of a player.
+ * Contains all the Stones a player has received and not put down on the table.
+ */
 public class RummiHand implements Grid {
   private static final int HEIGHT = 3;
   private static final int WIDTH = 18;

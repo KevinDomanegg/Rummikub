@@ -14,8 +14,8 @@ public interface Game {
    * the given playerID.
    *
    * @param playerID the id the new Player associated to
-   * @param name the name of the new Player
-   * @param age the age of the new Player
+   * @param name     the name of the new Player
+   * @param age      the age of the new Player
    * @return true if a new Player is added in this Game
    */
   boolean setPlayer(int playerID, String name, int age);
@@ -61,7 +61,7 @@ public interface Game {
    * the Table of this Game at the given targetPosition.
    *
    * @param sourcePosition the position of a stone before moving it
-   * @param targetPosition  the position of the stone after mvoing it
+   * @param targetPosition the position of the stone after mvoing it
    * @return true if the subject stone is moved
    */
   boolean putStone(Coordinate sourcePosition, Coordinate targetPosition);
@@ -70,7 +70,7 @@ public interface Game {
    * Moves a group of stones on the Hand of a Player with the given playerID
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose Hand stones will be moved
+   * @param playerID       the id of the Player on whose Hand stones will be moved
    * @param sourcePosition the position of a stone of its group before moving them
    * @param targetPosition the position of the stone after moving it with its group
    * @return
@@ -81,13 +81,15 @@ public interface Game {
    * Moves a stone on the Hand of a Player with the given playerID
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose hand stones will be moved
+   * @param playerID       the id of the Player on whose hand stones will be moved
    * @param sourcePosition the position of a stone before moving it
    * @param targetPosition the position of the stone after moving it
    */
   void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
-  /** Makes the current Player of this Game to draw a stone. */
+  /**
+   * Makes the current Player of this Game to draw a stone.
+   */
   void drawStone();
 
   /**
@@ -97,10 +99,14 @@ public interface Game {
    */
   void removePlayer(int playerID);
 
-  /** Resets all moves of stones that had been done on and to the Table of this Game. */
+  /**
+   * Resets all moves of stones that had been done on and to the Table of this Game.
+   */
   void reset();
 
-  /** Undoes a move of a stone that had been done on and to the Table of this Game. */
+  /**
+   * Undoes a move of a stone that had been done on and to the Table of this Game.
+   */
   void undo();
 
   /**
@@ -172,5 +178,6 @@ public interface Game {
    * Switches to the next player if not.
    */
   void timeOut();
+
   boolean isGameOn();
 }

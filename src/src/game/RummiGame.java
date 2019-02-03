@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * Model for the board game Rummikub.
+ * Handles all the game-logic as well as the saving of all relevant data.
  */
 public class RummiGame implements Game {
   private static final int MIN_PLAYERS = 2;

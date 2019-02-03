@@ -2,6 +2,9 @@ package communication.gameinfo;
 
 import java.io.Serializable;
 
+/**
+ * GameInfo storing an IP-address.
+ */
 public class GameIPAddress implements GameInfo, Serializable {
 
   private String ip;

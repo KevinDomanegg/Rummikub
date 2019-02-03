@@ -2,6 +2,10 @@ package game;
 
 import java.util.Map;
 
+/**
+ * Class representing a player in the game.
+ * Stores a name, age and hand (with Stones) of the player.
+ */
 class Player {
   private final String name;
   private final int age;

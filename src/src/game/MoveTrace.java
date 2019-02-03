@@ -1,7 +1,12 @@
 package game;
 
+/**
+ * Class saving the history of moves a player has made during one turn.
+ * Used to reset his moves if needed.
+ */
 class MoveTrace {
-  enum Move {PUT_STONE, TABLE_MOVE }
+  enum Move {PUT_STONE, TABLE_MOVE}
+
   private String command;
   private int playerID;
   private Coordinate sourcePosition;
