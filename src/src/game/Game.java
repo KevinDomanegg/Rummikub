@@ -167,6 +167,6 @@ public interface Game {
    * Draws a Stone when if there are Stones available.
    * Switches to the next player if not.
    */
-  void timeOut(int playeID);
+  void timeOut(int playerID);
   boolean isGameOn();
 }

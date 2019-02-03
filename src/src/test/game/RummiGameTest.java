@@ -243,6 +243,5 @@ public class RummiGameTest {
     game.draw(0);
     game.draw(1);
     assertThrows(UnsupportedOperationException.class, () -> game.draw(1));
-
   }
 }

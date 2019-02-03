@@ -28,27 +28,23 @@ public class RummiGame implements Game {
   }
 
   /**
-   * Gives a current player.
-   */
-  private Player currentPlayer() {
-    return players.get(currentPlayerID);
-  }
-
-
-  /**
    * Takes a Stone from the Bag and gives it to the current Player.
    *
    * @throws UnsupportedOperationException If the Bag is empty or the Hand is full.
    */
   private void giveStoneToPlayer(int playerID) throws UnsupportedOperationException {
     Player player = players.get(playerID);
+
+    if (isGameOn == false) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
+    }
+
     if (player.getHandSize() >= Constants.MAX_HAND_SIZE) {
       throw new UnsupportedOperationException(ErrorMessages.HAND_IS_FULL_ERROR);
     }
     if (bag.size() < 1) {
       throw new UnsupportedOperationException(ErrorMessages.BAG_IS_EMPTY_ERROR);
     }
-
     player.pushStone(bag.removeStone());
 
   }
@@ -65,6 +61,10 @@ public class RummiGame implements Game {
    */
 
   public void draw(int playerID) throws UnsupportedOperationException {
+    if (isGameOn == false) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
+    }
+
     if (playerID == currentPlayerID) {
       giveStoneToPlayer(playerID);
       nextTurn();
@@ -73,15 +73,12 @@ public class RummiGame implements Game {
     }
   }
 
-
   /**
    * Updates the currentPlayerID.
    */
-  private void nextTurn() {
-    System.out.println("next-turning");
-    if (!isGameOn) {
-      System.out.println("GAME NOT ON!");
-      return;
+  private void nextTurn() throws UnsupportedOperationException {
+    if (isGameOn == false) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_DID_NOT_START_YET_ERROR);
     }
 
     // the ID of the current player will be updated (0 follows after 3)
@@ -113,10 +110,11 @@ public class RummiGame implements Game {
    * @return false if only if this game has already started
    */
   @Override
-  public boolean start() {
-    if (isGameOn) {
-      return false;
+  public boolean start() throws UnsupportedOperationException {
+    if (isGameOn == true) {
+      throw new UnsupportedOperationException(ErrorMessages.GAME_HAS_ALREADY_STARTED_ERROR);
     }
+
     if (players.size() >= Constants.MIN_PLAYERS) {
       isGameOn = true;
       bag = new RummiBag();
@@ -555,5 +553,12 @@ public class RummiGame implements Game {
     } catch (UnsupportedOperationException e) {
       nextTurn();
     }
+  }
+
+  /**
+   * Gives a current player.
+   */
+  private Player currentPlayer() {
+    return players.get(currentPlayerID);
   }
 }
