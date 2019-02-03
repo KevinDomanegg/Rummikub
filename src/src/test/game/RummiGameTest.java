@@ -1,11 +1,12 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 import org.junit.Test;
+
+import globalconstants.*;
+
+import static org.junit.Assert.*;
 
 
 public class RummiGameTest {
@@ -221,5 +222,27 @@ public class RummiGameTest {
     System.out.println(game.getTrace());
     System.out.println("---check if reset worked");
     System.out.println(game.getTrace().toString().equals(firstTable));
+  }
+
+  @Test
+  public void drawStonesTest(){
+    RummiGame game = new RummiGame();
+    game.setPlayer(0, "player1", 0);
+    game.setPlayer(1, "player2", 3);
+    game.start();
+
+    System.out.println(game.getPlayerStones(0));
+    System.out.println(game.getCurrentPlayer().getHandSize());
+    System.out.println(game.getPlayerStones(1));
+    System.out.println(game.getPlayerStones(1).size());
+
+    assertEquals(game.getPlayerStones(0).size(), Constants.FIRST_STONES);
+    assertEquals(game.getPlayerStones(1).size(), Constants.FIRST_STONES);
+    assertEquals(game.getBagSize(), Constants.MAX_BAG_SIZE - 2 * Constants.FIRST_STONES);
+
+    game.draw(0);
+    game.draw(1);
+    assertThrows(UnsupportedOperationException.class, () -> game.draw(1));
+
   }
 }

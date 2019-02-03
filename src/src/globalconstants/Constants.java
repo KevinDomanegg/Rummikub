@@ -7,6 +7,8 @@ public class Constants {
   public static final int FIRST_STONES = 14;
   public static final int MIN_FIRST_MOVE_POINTS = 30;
 
+  public static final int MAX_BAG_SIZE = 106;
+
   public static final int TABLE_HEIGHT = 8;
   public static final int TABLE_WIDTH = 26;
   public static final int MAX_TABLE_SIZE = TABLE_HEIGHT * TABLE_WIDTH;
