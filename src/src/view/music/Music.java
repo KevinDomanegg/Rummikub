@@ -60,17 +60,17 @@ public class Music {
     playing_now.play();
   }
 
-  public static void playSoundOf(String sound) {
+  public static void playSoundOf(Sound sound) {
     switch (sound) {
-      case "pick up stone":
+      case PICK_UP_STONE:
         play_pickupStone.stop();
         play_pickupStone.play();
-        return;
-      case "drop stone":
+        break;
+      case DROP_STONE:
         play_dropStone.stop();
         play_dropStone.play();
-        return;
-      case "draw stone":
+        break;
+      case DRAW_STONE:
         play_dropStone.stop();
         play_drawStone.play();
     }
