@@ -18,6 +18,9 @@ class ViewConstants {
   static final String WINNER_FXML = "winner.fxml";
   static final String HELP_FXML = "help.fxml";
 
+  //Styling of text-fields
+  static final String ERROR_STYLE = "-fx-border-color: red ; -fx-border-width: 2px ;";
+
   //Styling of the Player
   static final String CURRENTLY_PLAYING_STYLE = "-fx-border-color: white; -fx-border-width: 4px ;";
   static final String NOT_CURRENTLY_PLAYING_STYLE = "-fx-border-color: black; -fx-border-width: 4px ;";
@@ -41,4 +44,7 @@ class ViewConstants {
   //ID's
   static final String HAND_GRID_ID = "handGrid";
   static final String TABLE_GRID_ID = "tableGrid";
+
+  //Networking
+  static final String LOCAL_IP = "localhost";
 }

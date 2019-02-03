@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
  * Controlls the Start-View.
  */
 public class StartController {
+  enum ErrorType {IP, AGE, NAME}
   private MainController mainController;
 
   @FXML
@@ -35,18 +36,18 @@ public class StartController {
     this.mainController = mainController;
   }
 
-  private void setError(String error) {
+  private void setError(ErrorType error) {
     switch (error) {
-      case "ip":
-        ipField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+      case IP:
+        ipField.setStyle(ViewConstants.ERROR_STYLE);
         ipError.setVisible(true);
         return;
-      case "age":
-        ageField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+      case AGE:
+        ageField.setStyle(ViewConstants.ERROR_STYLE);
         ageError.setVisible(true);
         return;
-      case "name":
-        nameField.setStyle("-fx-border-color: red ; -fx-border-width: 2px ;");
+      case NAME:
+        nameField.setStyle(ViewConstants.ERROR_STYLE);
         nameError.setVisible(true);
     }
   }
@@ -69,7 +70,7 @@ public class StartController {
   private void hostGame() {
     clearErrors();
     if (isValidInput()) {
-      ipField.setText("localhost");
+      ipField.setText(ViewConstants.LOCAL_IP);
       if (mainController.startServer()) {
         joinGame();
       }
@@ -94,7 +95,7 @@ public class StartController {
    * Shows an error-message indicating that no server is available.
    */
   void showNoServerError() {
-    setError("ip");
+    setError(ErrorType.IP);
   }
 
   private boolean isValidInput() {
@@ -103,7 +104,7 @@ public class StartController {
 
     // Test name input
     if (userName.isEmpty() || userName.length() > 20) {
-      setError("name");
+      setError(ErrorType.NAME);
       isValidInput = false;
     }
 
@@ -111,11 +112,11 @@ public class StartController {
     try {
       int age = Integer.parseInt(ageField.getText());
       if (age < 6 || age > 150) {
-        setError("age");
+        setError(ErrorType.AGE);
         isValidInput = false;
       }
     } catch (NumberFormatException e) {
-      setError("age");
+      setError(ErrorType.AGE);
       isValidInput = false;
     }
     return isValidInput;
