@@ -13,7 +13,6 @@
 }
 
 #content {
-  -fx-alignment: CENTER_LEFT;
   -fx-spacing: 15;
 
   -fx-max-height: 200;
@@ -34,17 +33,8 @@
 }
 
 #root {
-  -fx-background-image: url("images/backgroundTileBlue.png");
+  -fx-background-image: url("../images/backgroundTileBlue.png");
   -fx-background-repeat: repeat;
-}
-
-#title {
-  -fx-font-size: 80;
-  -fx-font-weight: 700;
-}
-
-#vContainer {
-  -fx-max-width: 600;
 }
 
 #waitingState {
