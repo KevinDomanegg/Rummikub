@@ -553,10 +553,10 @@ public class GameController {
   }
 
   public void showRank() {
-    Map<Integer, Integer> rank = new HashMap<>();
+    Map<String, Integer> rank = new HashMap<>();
     //@ToDo Magic numbers!
-    rank.put(1, 0);
-    rank.put(0, -30);
+    rank.put("name1", 0);
+    rank.put("name2", -30);
     mainController.showRank(rank);
   }
 

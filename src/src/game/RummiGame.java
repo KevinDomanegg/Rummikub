@@ -502,7 +502,7 @@ public class RummiGame implements Game {
   @Override public Map<String, Integer> getFinalRank() {
     Map<String, Integer> rank = new HashMap<>(players.size());
     players.values().stream()
-        .sorted(Comparator.comparingInt(Player::getPoints))
+        .sorted(Comparator.comparingInt(Player::getPoints).reversed())
         .forEach((player) -> rank.put(player.getName(), player.getPoints()));
     return rank;
   }

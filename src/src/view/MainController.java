@@ -184,7 +184,7 @@ public class MainController implements Controller {
    * complete javadoc
    * @param finalRank
    */
-  @Override public void showRank(Map<Integer, Integer> finalRank) {
+  @Override public void showRank(Map<String, Integer> finalRank) {
     Platform.runLater(() -> {
       Stage stage = new Stage();
       Parent root;

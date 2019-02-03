@@ -42,7 +42,7 @@ public class WinnerController {
    * @ToDo
    * add javadoc; I don't understand the input, so I can't addd the javadoc
    */
-  void setRank(Map<Integer, Integer> finalRank) {
+  void setRank(Map<String, Integer> finalRank) {
     rankList.getItems().addAll(finalRank);
   }
 }

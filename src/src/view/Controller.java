@@ -65,7 +65,7 @@ public interface Controller {
 
   void showError(String errorMessage);
 
-  void showRank(Map<Integer, Integer> finalRank);
+  void showRank(Map<String, Integer> finalRank);
 
   /**
    * Notifies the controller that the connection to the server has been rejected.

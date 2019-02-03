@@ -1,18 +1,17 @@
 package communication.gameinfo;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class RankInfoTest {
 
   @Test
   public void initTest(){
-    Map<Integer, Integer> finalRank = new HashMap<>();
-    finalRank.put(1,1);
+    Map<String, Integer> finalRank = new HashMap<>();
+    finalRank.put("name",1);
 
     RankInfo info = new RankInfo(finalRank);
     assertEquals(info.getFinalRank(), finalRank);
