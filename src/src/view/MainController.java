@@ -20,7 +20,6 @@ import network.client.RequestBuilder;
 import network.client.RummiClient;
 import network.server.RummiServer;
 import view.music.Audio;
-import view.music.Music;
 
 /**
  * Main controller for Rummikub.
@@ -69,19 +68,19 @@ public class MainController implements Controller {
     Parent root = loader.load();
     switch (fxml) {
       case ViewConstants.START_FXML:
-        Audio.selectMusic(Music.START);
+        Audio.selectMusic(Audio.Music.START);
         Audio.playMusicNow();
         startController = loader.getController();
         startController.setMainController(this);
         break;
       case ViewConstants.WAIT_FXML:
-        Audio.selectMusic(Music.WAIT);
+        Audio.selectMusic(Audio.Music.WAIT);
         Audio.playMusicNow();
         waitController = loader.getController();
         waitController.setMainController(this);
         break;
       case ViewConstants.GAME_FXML:
-        Audio.selectMusic(Music.GAME);
+        Audio.selectMusic(Audio.Music.GAME);
         gameController = loader.getController();
         gameController.setMainController(this);
         break;

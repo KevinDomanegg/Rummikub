@@ -10,7 +10,12 @@ import javafx.scene.text.Text;
  * Controlls the Start-View.
  */
 public class StartController {
+
+  /**
+   * Enum for the different types of Errors that can occur.
+   */
   enum ErrorType {IP, AGE, NAME}
+
   private MainController mainController;
 
   @FXML

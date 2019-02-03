@@ -6,6 +6,25 @@ import javafx.scene.media.MediaPlayer;
 import java.net.URISyntaxException;
 
 public class Audio {
+
+  /**
+   * Enum for the different kinds of music.
+   */
+  public enum Music {
+    START,
+    WAIT,
+    GAME
+  }
+
+  /**
+   * Enum for the different types of sounds.
+   */
+  public enum Sound {
+    PICK_UP_STONE,
+    DROP_STONE,
+    DRAW_STONE
+  }
+
   // GAME VIEW MEDIA PLAYERS
   private static MediaPlayer play_pickupStone;
   private static MediaPlayer play_dropStone;
@@ -79,6 +98,5 @@ public class Audio {
   public static void muteSoundOfWait() {
     playing_now.pause();
   }
-
 
 }
