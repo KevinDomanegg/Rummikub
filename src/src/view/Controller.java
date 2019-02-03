@@ -72,11 +72,7 @@ public interface Controller {
    */
   void showError(String errorMessage);
 
-  /**
-   * Tells the Controller to display the final rank of the game.
-   * @param finalRank of the game
-   */
-  void showRank(Map<Integer, Integer> finalRank);
+  void showRank(Map<String, Integer> finalRank);
 
   /**
    * Notifies the controller that the connection to the server has been rejected.

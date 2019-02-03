@@ -3,7 +3,7 @@ package communication.request;
 import java.io.Serializable;
 
 /**
- * represents all movement in game.
+ * Represents all movement in game.
  */
 public final class ConcreteMove implements Request, Serializable {
   private final RequestID id;
@@ -20,12 +20,15 @@ public final class ConcreteMove implements Request, Serializable {
     this.targetRow = targetRow;
   }
 
+  //Columns/Rows the movement is starting from.
   public int getInitCol() {
     return initCol;
   }
   public int getInitRow() {
     return initRow;
   }
+
+  //Columns/Rows the movement is directed at.
   public int getTargetCol() {
     return targetCol;
   }

@@ -2,6 +2,9 @@ package communication.gameinfo;
 
 import java.io.Serializable;
 
+/**
+ * GameInfo containing the information that the game has started.
+ */
 public class GameStartInfo implements GameInfo, Serializable {
 
   private GameInfoID gameInfoID;

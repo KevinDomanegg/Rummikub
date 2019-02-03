@@ -18,6 +18,11 @@ public class RummiTable implements Grid {
     stones = new HashMap<>(WIDTH * HEIGHT);
   }
 
+  /**
+   * Returns all stones with their associated Coordinates on this Table.
+   *
+   * @return all stones with their associated Coordinates on this Table
+   */
   @Override public Map<Coordinate, Stone> getStones() {
     return stones;
   }
@@ -28,6 +33,12 @@ public class RummiTable implements Grid {
     }
   }
 
+  /**
+   * Removes a stone (if there is any) at the given coordinate on this Table and returns it.
+   *
+   * @param coordinate the coordinate of the removed stone
+   * @return the removed stone from the given coordinate
+   */
   @Override public Stone removeStone(Coordinate coordinate) {
     return  stones.remove(coordinate);
   }
@@ -48,7 +59,7 @@ public class RummiTable implements Grid {
     return stones.size();
   }
 
-//  public Coordinate getFirstCoordOfSetAt(Coordinate coordinate) {
+//  public Coordinate getFirstCoordOfStonesAt(Coordinate coordinate) {
 //    int col = coordinate.getCol();
 //    // find the first stone for a potential set
 //    while (stones.containsKey(new Coordinate(col - 1, coordinate.getRow()))) {
@@ -83,7 +94,7 @@ public class RummiTable implements Grid {
       // check if the first(current) coordinate of the potential set is already confirmed
       if (checkingList.contains(coordinate)) {
         // the coordinate of the first stone in a potential set
-        coordinate = getFirstCoordOfSetAt(coordinate);
+        coordinate = this.getFirstCoordOfStonesAt(coordinate);
         col = coordinate.getCol();
         // count the number of neighbors of the first stone of a potential set
         while (col < WIDTH && checkingList.remove(new Coordinate(col++, coordinate.getRow()))) {
@@ -208,13 +219,5 @@ public class RummiTable implements Grid {
     }
     stringBuilder.append(stones.size());
     return stringBuilder.toString();
-  }
-
-  public static void main(String[] args) {
-    RummiTable table = new RummiTable();
-    table.setStone(new Coordinate(3, 3), new Stone(Color.BLACK,12));
-    table.setStone(new Coordinate(4, 3), new Stone(Color.BLACK, 13));
-    table.setStone(new Coordinate(5, 3), new Stone(Color.BLACK, 1));
-    System.out.println(table.isConsistent());
   }
 }

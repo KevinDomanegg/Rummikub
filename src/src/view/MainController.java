@@ -46,7 +46,7 @@ public class MainController implements Controller {
    *
    * @param primaryStage of the game.
    */
-  MainController(Stage primaryStage) {
+  public MainController(Stage primaryStage) {
     this.primaryStage = primaryStage;
     primaryStage.setOnCloseRequest(event -> {
       if (client != null) {
@@ -100,7 +100,7 @@ public class MainController implements Controller {
    *
    * @throws IOException if scene cant' be loaded
    */
-  void switchToWaitScene() throws IOException {
+  private void switchToWaitScene() throws IOException {
     switchScene(ViewConstants.WAIT_FXML);
     waitController.setServerIP(serverIP);
   }
@@ -111,7 +111,7 @@ public class MainController implements Controller {
    *
    * @throws IOException when scene can`t be loaded.
    */
-  void switchToStartScene() throws IOException {
+  public void switchToStartScene() throws IOException {
     switchScene(ViewConstants.START_FXML);
   }
 
@@ -183,7 +183,7 @@ public class MainController implements Controller {
    * complete javadoc
    * @param finalRank
    */
-  @Override public void showRank(Map<Integer, Integer> finalRank) {
+  @Override public void showRank(Map<String, Integer> finalRank) {
     Platform.runLater(() -> {
       Stage stage = new Stage();
       Parent root;
@@ -193,6 +193,7 @@ public class MainController implements Controller {
         winnerController = loader.getController();
         winnerController.setMainController(this);
         winnerController.setRank(finalRank);
+        gameController.stopTimer();
         stage.setScene(new Scene(root));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(primaryStage);

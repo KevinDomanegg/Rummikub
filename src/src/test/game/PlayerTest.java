@@ -62,7 +62,7 @@ public class PlayerTest {
     player3.popStone(new Coordinate(0,0));
     assertTrue(player3.getHandSize() == player3.getHandHeight() * player3.getHandWidth() - 1);
 
-    player3.playedFirstMove();
+    player3.notifyEndOfFirstMove();
 
     assertTrue(player3.hasPlayedFirstMove() == true);
 

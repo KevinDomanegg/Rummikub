@@ -2,11 +2,12 @@ package game;
 
 import java.util.Map;
 
+/** Player of RummiGame. They have name, age and their RummiHands.*/
 class Player {
   private final String name;
   private final int age;
   private RummiHand hand;
-  private boolean hasPlayedFirstMove;
+  private boolean playedFirstMove; // it tells if this Player played their first move
 
   Player(String name, int age) {
     this.name = name;
@@ -18,23 +19,36 @@ class Player {
     return age;
   }
 
+  /**
+   * Returns all stones with their associated Coordinates on this Player's Hand.
+   *
+   * @return all stones with their associated Coordinates on this Player's Hand
+   */
   Map<Coordinate, Stone> getStones() {
     return hand.getStones();
   }
 
   /**
-   * pushes the given stone into the next free position of the player's hand.
+   * Pushes the given stone into the next free position of the player's hand.
    *
    * @param stone the new stone to be pushed on hand
    */
   void pushStone(Stone stone) {
-    hand.setStone(nextFreeCoordinate(hand.getStones()), stone);
+    hand.setStone(nextFreeCoordinate(), stone);
   }
 
-  private Coordinate nextFreeCoordinate(Map<Coordinate, Stone> stones){
+  /**
+   * Calculates horizontally the next free coordinate on this Player's Hand
+   * and returns the found.
+   *
+   * @return the next free coordinate on this Player's Hand
+   * @throws IndexOutOfBoundsException if this Player's Hand is full
+   */
+  private Coordinate nextFreeCoordinate() {
+    Map<Coordinate, Stone> stones = hand.getStones();
     Coordinate coordinate;
-    for (int row = 0; row < hand.getHeight(); row++){
-      for (int col = 0; col < hand.getWidth(); col++){
+    for (int row = 0; row < hand.getHeight(); row++) {
+      for (int col = 0; col < hand.getWidth(); col++) {
         coordinate = new Coordinate(col, row);
         if (!stones.containsKey(coordinate)) {
           return coordinate;
@@ -45,7 +59,7 @@ class Player {
   }
 
   /**
-   * moves stone from the given sourcePosition to the given targetPosition o.
+   * Moves stone from the given sourcePosition to the given targetPosition o.
    * If a stone at the targetPosition already exist, it will be swapped.
    *
    * @param sourcePosition the position of the subject stone before moving it
@@ -61,7 +75,7 @@ class Player {
   }
 
   /**
-   * pops the stone at the given sourcePosition.
+   * Pops the stone at the given sourcePosition.
    *
    * @param sourcePosition the position of the wanted stone
    * @return the wanted stone
@@ -70,17 +84,17 @@ class Player {
     return hand.getStones().remove(sourcePosition);
   }
 
+  /**
+   * Returns the Size of this Player's Hand.
+   *
+   * @return the Size of this Player's Hand
+   */
   int getHandSize() {
     return hand.size();
   }
 
   String getName() {
     return name;
-  }
-
-  // for test
-  @Override public String toString() {
-    return "Player(" + age + ")";
   }
 
   int getHandWidth() {
@@ -91,33 +105,38 @@ class Player {
     return hand.getHeight();
   }
 
+  /**
+   * Returns the Hand Grid of this Player.
+   * It will be only used in this package.
+   *
+   * @return the Hand Grid of this Player
+   */
   RummiHand getHand() {
     return hand;
   }
 
-  /** changes this player's state to hasPlayedFirstMove. */
-  void playedFirstMove() {
-    hasPlayedFirstMove = true;
+  /** Reminds this Player that they have played the first move. */
+  void notifyEndOfFirstMove() {
+    playedFirstMove = true;
   }
 
   /**
-   * gives the state if this player has played the first move.
+   * Returns if this Player has played their first move.
    *
    * @return true if only if this player has played the first move
    */
   boolean hasPlayedFirstMove() {
-    return hasPlayedFirstMove;
+    return playedFirstMove;
   }
 
   /**
-   * gives the sum of all of the points of stones on this player's hand.
+   * Gives the sum of all of the points of stones on this player's hand.
+   * Points of stones on this Player's Hand are negative at the end.
    *
    * @return the sum of the points of stones on this player's hand
    */
   int getPoints() {
-    // all points of stones represent a negative number
     return -hand.getStones().values().stream().mapToInt(Stone::getNumber).sum();
-    //how do I change the negative points for the Joker?
   }
 
   void sortHandByGroup() {
@@ -132,4 +151,8 @@ class Player {
     hand.clear();
   }
 
+  // for test
+  @Override public String toString() {
+    return "Player(" + age + ")";
+  }
 }

@@ -20,7 +20,7 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerNames().get(1) == "Hyunsung");
     assertTrue(game1.getNumberOfPlayers() == 2);
     assertTrue((game1.getBagSize() + game1.getPlayerHandSizes().get(0) + game1.getPlayerHandSizes().get(1)) == 106);
-    assertTrue(game1.getCurrentPlayerID() == 1);
+    assertTrue(game1.getCurrentPlayerId() == 1);
     assertEquals(game1.getTableHeight(), 8);
     assertEquals(game1.getTableWidth(), 26);
     assertEquals(game1.getPlayerHandHeight(1), 3);
@@ -38,12 +38,12 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerStones(1).get(new Coordinate(0, 0)) == null);
 
 
-    assertEquals(game1.getTrace().peek().getCommand(), "MOVESTONEONTABLE");
+    assertEquals(game1.getTrace().peek().getMove(), "MOVESTONEONTABLE");
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEONTABLE"));
+    assertEquals(game1.getTrace().peek().getMove(), ("MOVESTONEONTABLE"));
     game1.undo();
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEFROMHAND"));
+    assertEquals(game1.getTrace().peek().getMove(), ("MOVESTONEFROMHAND"));
     game1.undo();
     game1.reset();
     game1.undo();

@@ -5,14 +5,24 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+/**
+ * Class representing a bag of Stones.
+ * Used to randomly draw Stones from.
+ * Contains a fixed number (106) of Stones.
+ * Each type of Stone (defined by a color and a numerical value)
+ * is present twice.
+ * There are to Jokers in the bag.
+ */
 public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
   private ArrayList<Stone> stones;
   private Random randomGenerator;
 
 
-  //The bag is initially filled with 13 Numbers of each
-  //color and two Jokers.
+  /**
+   * Initializes all Stones (2 x all different type of stones)
+   * and a randomGenerator in order to remove stones randomly.
+   */
   RummiBag() {
     stones = new ArrayList<>(MAX_BAG_SIZE);
     for (Color color : Color.values()) {
@@ -41,13 +51,22 @@ public class RummiBag {
     return stones.size();
   }
 
-  void addStones(Collection<Stone> extraStones){
+  /**
+   * Adds the given extra stones into this Bag.
+   *
+   * @param extraStones the stones to be put into this Bag
+   */
+  void addStones(Collection<Stone> extraStones) {
     this.stones.addAll(extraStones);
+  }
+
+  ArrayList<Stone> getStones() {
+    return stones;
   }
 
   // for test
   @Override
-  public String toString(){
+  public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("bag size: ").append(size()).append('\n');
     for (Stone stone : stones) {
@@ -55,9 +74,5 @@ public class RummiBag {
           .append(")\n");
     }
     return stringBuilder.toString();
-  }
-
-  ArrayList<Stone> getStones(){
-    return stones;
   }
 }

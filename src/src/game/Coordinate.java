@@ -2,7 +2,9 @@ package game;
 
 import java.util.Objects;
 
-/** coordinate for a stone on game table or player hand. */
+/**
+ * coordinate for a stone on game table or player hand.
+ */
 public final class Coordinate {
   private final int col;
   private final int row;
@@ -12,7 +14,8 @@ public final class Coordinate {
     this.row = row;
   }
 
-  @Override public boolean equals(Object other) {
+  @Override
+  public boolean equals(Object other) {
     if (!(other instanceof Coordinate)) {
       return false;
     }
@@ -20,7 +23,8 @@ public final class Coordinate {
     return col == otherCoord.col && row == otherCoord.row;
   }
 
-  @Override public int hashCode() {
+  @Override
+  public int hashCode() {
     return Objects.hash(col, row);
   }
 

@@ -11,14 +11,14 @@ public interface Game {
 
   /**
    * Sets a new Player with the given name and age and tags them with
-   * the given playerID.
+   * the given playerId.
    *
-   * @param playerID the id the new Player associated to
+   * @param playerId the id the new Player associated to
    * @param name the name of the new Player
    * @param age the age of the new Player
    * @return true if a new Player is added in this Game
    */
-  boolean setPlayer(int playerID, String name, int age);
+  boolean setPlayer(int playerId, String name, int age);
 
   /**
    * Attempts to start this Game.
@@ -61,46 +61,52 @@ public interface Game {
    * the Table of this Game at the given targetPosition.
    *
    * @param sourcePosition the position of a stone before moving it
-   * @param targetPosition  the position of the stone after mvoing it
+   * @param targetPosition  the position of the stone after moving it
    * @return true if the subject stone is moved
    */
   boolean putStone(Coordinate sourcePosition, Coordinate targetPosition);
 
   /**
-   * Moves a group of stones on the Hand of a Player with the given playerID
+   * Moves a group of stones on the Hand of a Player with the given playerId
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose Hand stones will be moved
+   * @param playerId the id of the Player on whose Hand stones will be moved
    * @param sourcePosition the position of a stone of its group before moving them
    * @param targetPosition the position of the stone after moving it with its group
-   * @return
+   * @return true if only if the stones are moved
    */
-  boolean moveSetOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
+  boolean moveSetOnHand(int playerId, Coordinate sourcePosition, Coordinate targetPosition);
 
   /**
-   * Moves a stone on the Hand of a Player with the given playerID
+   * Moves a stone on the Hand of a Player with the given playerId
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose hand stones will be moved
+   * @param playerId the id of the Player on whose hand stones will be moved
    * @param sourcePosition the position of a stone before moving it
    * @param targetPosition the position of the stone after moving it
    */
-  void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
+  void moveStoneOnHand(int playerId, Coordinate sourcePosition, Coordinate targetPosition);
 
-  /** Makes the current Player of this Game to draw a stone. */
+  /**
+   * Makes the current Player of this Game to draw a stone.
+   */
   void drawStone();
 
   /**
-   * Removes a Player with the given playerID out of this Game.
+   * Removes a Player with the given playerId out of this Game.
    *
-   * @param playerID the id of the removed Player
+   * @param playerId the id of the removed Player
    */
-  void removePlayer(int playerID);
+  void removePlayer(int playerId);
 
-  /** Resets all moves of stones that had been done on and to the Table of this Game. */
+  /**
+   * Resets all moves of stones that had been done on and to the Table of this Game.
+   */
   void reset();
 
-  /** Undoes a move of a stone that had been done on and to the Table of this Game. */
+  /**
+   * Undoes a move of a stone that had been done on and to the Table of this Game.
+   */
   void undo();
 
   /**
@@ -127,13 +133,13 @@ public interface Game {
 
   /**
    * Gives all stones and their associated Coordinates
-   * on the Hand of a Player with the given playerID in this Game.
+   * on the Hand of a Player with the given playerId in this Game.
    *
-   * @param playerID the id of the subject Player
+   * @param playerId the id of the subject Player
    * @return all stones and their associated Coordinates
-   * on the Hand of a Player with the given playerID in this Game
+   *         on the Hand of a Player with the given playerId in this Game
    */
-  Map<Coordinate, Stone> getPlayerStones(int playerID);
+  Map<Coordinate, Stone> getPlayerStones(int playerId);
 
   /**
    * Gives all of Players' Hand-sizes in this Game.
@@ -142,35 +148,73 @@ public interface Game {
    */
   List<Integer> getPlayerHandSizes();
 
+  /**
+   * Returns the size of the Bag in this Game.
+   *
+   * @return the size of the Bag in this Game.
+   */
   int getBagSize();
 
-  int getCurrentPlayerID();
+  int getCurrentPlayerId();
 
   int getTableWidth();
 
   int getTableHeight();
 
-  int getPlayerHandWidth(int playerID);
+  int getPlayerHandWidth(int playerId);
 
-  int getPlayerHandHeight(int playerID);
+  int getPlayerHandHeight(int playerId);
 
   int getNumberOfPlayers();
 
-  // TODO: javadoc
-  Map<Integer, Integer> getFinalRank();
+  /**
+   * Returns all names of players with their points sorted by their points.
+   *
+   * @return all names of players with their points sorted by their points
+   */
+  Map<String, Integer> getFinalRank();
 
+  /**
+   * Returns names of players in this Game in order of their IDs.
+   *
+   * @return names of players in this Game
+   */
   List<String> getPlayerNames();
 
-  void sortPlayerHandByGroup(int playerID);
+  /**
+   * Sorts stones on the Hand of the Player with the given playerId for the Set type, the Group.
+   * Group is a group of (3 or 4) stones that have the same number but different colors.
+   *
+   * @param playerId the ID of the Player whose Hand will be sorted
+   */
+  void sortPlayerHandByGroup(int playerId);
 
-  void sortPlayerHandByRun(int playerID);
+  /**
+   * Sorts stones on the Hand of the Player with the given playerId for the Set type, the Run.
+   * Run is a group of at least 3 ordered stones by their number that have the same color.
+   * For example: (13, 1, 2) is considered an ordered sequence.
+   *
+   * @param playerId the ID of the Player whose Hand will be sorted
+   */
+  void sortPlayerHandByRun(int playerId);
 
-  boolean hasPlayerPlayedFirstMove(int playerID);
+  /**
+   * Returns true if only if the Player with the given playerId has played their first move.
+   *
+   * @param playerId the id of the subject Player
+   * @return true if only if the Player with the given playerId has played their first move
+   */
+  boolean hasPlayerPlayedFirstMove(int playerId);
 
+  /**
+   * Returns true if this Game is on going.
+   *
+   * @return true if this Game is on going
+   */
+  boolean isGameOn();
   /**
    * Draws a Stone when if there are Stones available.
    * Switches to the next player if not.
    */
   void timeOut();
-  boolean isGameOn();
 }
