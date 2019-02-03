@@ -16,7 +16,7 @@ public final class ConcreteSetPlayer implements Request, Serializable {
 
   @Override
   public RequestID getRequestID() {
-    return RequestID.SET_PLAYER;
+    return RequestID.JOIN;
   }
 
   public String getName() {

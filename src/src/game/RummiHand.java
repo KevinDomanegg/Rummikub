@@ -20,11 +20,22 @@ public class RummiHand implements Grid {
     stones = new HashMap<>();
   }
 
-  @Override public void setStone(Coordinate coordinate, Stone stone) {
+  @Override
+  public void setStone(Coordinate coordinate, Stone stone) {
     if (stone != null) {
       stones.put(coordinate, stone);
     }
   }
+
+  public int points(){
+    int points = 0;
+    for (Map.Entry<Coordinate, Stone> entry : stones.entrySet()) {
+      Stone stone = entry.getValue();
+      points += stone.getNumber();
+    }
+    return points;
+  }
+
 
   /**
    * Removes a stone (if there is any) at the given coordinate on this Hand and returns it.

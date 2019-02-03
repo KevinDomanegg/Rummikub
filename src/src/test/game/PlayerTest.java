@@ -20,7 +20,7 @@ public class PlayerTest {
     player1.pushStone(new Stone(Stone.Color.JOKER, 3));
 
     //A Joker counts as 20 negative points, extra rule!
-    assertTrue(player1.getPoints() == -23 || player1.getPoints() == -6);
+    assertTrue(player1.points() == 13);
 
     assertTrue(player1.getStones().size() == 3);
     player1.clearHand();
@@ -86,10 +86,20 @@ public class PlayerTest {
     System.out.println("Group: \n" + player.getHand());
   }
 
-  @Test
-  public void printTest() {
-    Player player4 = new Player("Emma", 19);
 
-    assertTrue(player4.toString().equals("Player(" + 19 + ")"));
+  @Test
+  public void pointsTest() {
+    Player player = new Player("name1", 0);
+    RummiBag bag = new RummiBag();
+    for (int i = 0; i < 20; i++) {
+      player.pushStone(bag.removeStone());
+    }
+    player.moveStone(new Coordinate(0, 0), new Coordinate(19, 1));
+    player.moveStone(new Coordinate(3, 0), new Coordinate(3, 1));
+
+
+
+    System.out.println(player.points());
   }
+
 }
