@@ -56,7 +56,7 @@
         </HBox>
       </VBox>
 
-      <HBox fx:id="ipArea" alignment="CENTER_LEFT" visible="false">
+      <HBox fx:id="ipArea" alignment="CENTER_LEFT">
         <Text text="IP address to join: " styleClass="subheadline, whiteText"/>
         <Text fx:id="ipAddress" styleClass="subheadline, whiteText"/>
       </HBox>

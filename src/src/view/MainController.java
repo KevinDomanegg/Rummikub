@@ -369,6 +369,11 @@ public class MainController implements Controller {
       return;
     }
     requestBuilder = new RequestBuilder(client);
+
+    // Set IP for displaying it in wait view
+    if (this.serverIP == null) {
+      this.serverIP = serverIP;
+    }
     try{
       switchToWaitScene();
     } catch (IOException e) {
