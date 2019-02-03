@@ -87,15 +87,14 @@ class RequestHandler {
 
         notifyGameStartToAll();
         return;
+
       case JOIN:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-
         try {
           game.join(playerID, setPlayer.getName(), setPlayer.getAge());
         } catch (UnsupportedOperationException e){
           sendErrorToPlayer(playerID, e.getMessage());
         }
-
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
         return;
 

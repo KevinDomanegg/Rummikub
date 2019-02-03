@@ -483,27 +483,27 @@ public class RummiGame implements Game {
     if (playerID != currentPlayerID) {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
-    if(table.isConsistent() == false) {
-      reset();
-      throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
-    }
-
     pointsAfterTurn = getCurrentPlayer().points();
     int pointsPlayed = (pointsBeforeTurn - pointsAfterTurn);
-
-    if( pointsPlayed >= Constants.MIN_FIRST_MOVE_POINTS) {
-      getCurrentPlayer().setPlayedFirstMove(true);
-      if(hasWinner()){
-        isGameOn = false;
-      } else {
-        nextTurn();
-      }
-    } else if (pointsPlayed == 0){
-      draw(playerID);
-    } else {
+    if (pointsPlayed == 0) {
+      //TODO: make new Exception for 0 points
       throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
     }
-    trace.clear();
+    if (!currentPlayer().hasPlayedFirstMove() && pointsPlayed < Constants.MIN_FIRST_MOVE_POINTS) {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
+    }
+    if(table.isConsistent() == false) {
+      throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
+    }
+    currentPlayer().setPlayedFirstMove(true);
+    if(hasWinner()){
+      isGameOn = false;
+    } else {
+      nextTurn();
+      trace.clear();
+    }
+
+
   }
 
 
