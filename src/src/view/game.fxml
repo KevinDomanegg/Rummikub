@@ -84,17 +84,20 @@
       <!-- drawStone buttons etc. -->
       <HBox fx:id="moveButtons" alignment="CENTER_RIGHT" spacing="10"
             pickOnBounds="false">
-        <Button fx:id="checkButton" text="Check"
-                onMouseClicked="#sendConfirmMoveRequest"/>
-        <Text text="or" styleClass="whiteText"/>
         <Button fx:id="drawButton" text="Draw stone"
                 onMouseClicked="#drawStone"/>
+        <Text text="or" styleClass="whiteText"/>
+        <Button fx:id="checkButton" text="Check"
+                onMouseClicked="#sendConfirmMoveRequest"/>
       </HBox>
-      <HBox fx:id="backButtons" alignment="CENTER_RIGHT" spacing="10"
+    </VBox>
+    <VBox alignment="BOTTOM_LEFT" styleClass="onEdge" pickOnBounds="false">
+      <HBox fx:id="backButtons" alignment="CENTER_LEFT" spacing="10"
             pickOnBounds="false">
-        <Button fx:id="undoButton" text="Undo last step"
+        <Text text="Undo: " styleClass="whiteText"/>
+        <Button fx:id="undoButton" text="Last step"
                 onMouseClicked="#sendUndoRequest"/>
-        <Button fx:id="resetButton" text="Reset"
+        <Button fx:id="resetButton" text="All steps"
                 onMouseClicked="#sendResetRequest"/>
       </HBox>
     </VBox>

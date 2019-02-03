@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.Map;
 
 public class RankInfo implements GameInfo, Serializable {
-  private final Map<Integer, Integer> finalRank;
+  private final Map<String, Integer> finalRank;
 
-  public RankInfo(Map<Integer, Integer> finalRank) {
+  public RankInfo(Map<String, Integer> finalRank) {
     this.finalRank = finalRank;
   }
 
@@ -14,7 +14,7 @@ public class RankInfo implements GameInfo, Serializable {
     return GameInfoID.RANK;
   }
 
-  public Map<Integer, Integer> getFinalRank() {
+  public Map<String, Integer> getFinalRank() {
     return finalRank;
   }
 }
