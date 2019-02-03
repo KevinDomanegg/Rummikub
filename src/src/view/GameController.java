@@ -143,7 +143,6 @@ public class GameController {
   public void drawStone() {
     Music.playSoundOf("draw stone");
     mainController.sendDrawRequest();
-    endOfYourTurn();
   }
 
   /**
