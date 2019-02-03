@@ -101,7 +101,7 @@ public class RummiGame implements Game {
     // hand out stones
     for (int i = 0; i < FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
-        drawStone();
+        draw();
       }
     }
   }
@@ -301,7 +301,7 @@ public class RummiGame implements Game {
    * Makes the current player draw a stone from the bag and finish their turn.
    */
   @Override
-  public void drawStone() {
+  public void draw() {
     currentPlayer().pushStone(bag.removeStone());
     nextTurn();
   }
@@ -498,7 +498,7 @@ public class RummiGame implements Game {
   @Override
   public void timeOut() {
     if (this.getBagSize() > 0) {
-      this.drawStone();
+      this.draw();
     } else {
       this.nextTurn();
     }

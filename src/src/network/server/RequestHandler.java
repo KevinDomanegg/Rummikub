@@ -169,7 +169,7 @@ class RequestHandler {
             return;
           }
           game.reset();
-          game.drawStone();
+          game.draw();
           // send the player new hand with a drawn stone
           sendHandToPlayer(playerID);
           // send the original table to all
