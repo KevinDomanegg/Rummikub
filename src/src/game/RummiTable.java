@@ -109,6 +109,8 @@ public class RummiTable implements Grid {
    */
   private boolean isValidSet(int setSize, Coordinate coordinate) {
     Stone stone = stones.get(coordinate);
+    int countJoker = 0;
+
     // find a non-joker stone
     for (int i = 0; i < MIN_SET_SIZE; i++) {
       // leave the loop as soon as the stone is not a joker
@@ -116,10 +118,11 @@ public class RummiTable implements Grid {
         break;
       }
       stone = stones.get(new Coordinate(coordinate.getCol() + i + 1, coordinate.getRow()));
+      countJoker++;
     }
     // check the consistency with the name and the color of the non-joker stone
     return isValidGroup(setSize, coordinate, stone.getNumber())
-        || isValidRun(setSize, coordinate, stone.getColor(), stone.getNumber());
+        || isValidRun(setSize, coordinate, stone.getColor(), stone.getNumber() - countJoker);
   }
 
   /**
