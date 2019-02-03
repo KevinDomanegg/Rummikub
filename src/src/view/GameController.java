@@ -12,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
@@ -72,6 +73,10 @@ public class GameController {
   private GridPane handGrid;
   @FXML
   private VBox ownBoard;
+
+  @FXML
+  private Button drawButton;
+
   private MainController mainController;
   // TIMER
   private Timer timer_countDown;
@@ -111,7 +116,7 @@ public class GameController {
                   stopTimer();
                   return;
                 }
-                timer.setText("" + interval);
+                timer.setText(Integer.toString(interval));
                 interval--;
               }
             },
@@ -241,7 +246,7 @@ public class GameController {
           dragGraphic = cell.snapshot(snapshotParameters, null);
           cell.getStyleClass().add("cell");
         }
-        dragBoard.setDragView(dragGraphic, dragGraphic.getWidth()*0.5, dragGraphic.getHeight()*0.7);
+        dragBoard.setDragView(dragGraphic, dragGraphic.getWidth() * 0.5, dragGraphic.getHeight() * 0.7);
         ClipboardContent content = new ClipboardContent();
 
         // Put dummy stone on clipboard
@@ -372,7 +377,11 @@ public class GameController {
    * @param bagSize number of stones available
    */
   void setBagSize(int bagSize) {
-    this.bagSize.setText(Integer.toString(bagSize));
+    Platform.runLater(() -> {
+      String drawButtonComplementFront = "Draw (";
+      String drawButtonComplementEnd = " left)";
+      drawButton.setText(drawButtonComplementFront + bagSize + drawButtonComplementEnd);
+    });
   }
 
 
@@ -383,19 +392,19 @@ public class GameController {
    */
   void setHandSizes(List<Integer> sizes) {
     String handComplement = " Stones";
-    ownHand.setText(String.valueOf(sizes.get(0)) + handComplement);
+    ownHand.setText(sizes.get(0) + handComplement);
     switch (sizes.size()) {
       case 4:
-        leftPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
-        midPlayerHand.setText(String.valueOf(sizes.get(2)) + handComplement);
-        rightPlayerHand.setText(String.valueOf(sizes.get(3)) + handComplement);
+        leftPlayerHand.setText(sizes.get(1) + handComplement);
+        midPlayerHand.setText(sizes.get(2) + handComplement);
+        rightPlayerHand.setText(sizes.get(3) + handComplement);
         return;
       case 3:
-        leftPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
-        rightPlayerHand.setText(String.valueOf(sizes.get(2)) + handComplement);
+        leftPlayerHand.setText(sizes.get(1) + handComplement);
+        rightPlayerHand.setText(sizes.get(2) + handComplement);
         return;
       case 2:
-        midPlayerHand.setText(String.valueOf(sizes.get(1)) + handComplement);
+        midPlayerHand.setText(sizes.get(1) + handComplement);
       default:
     }
   }
@@ -469,7 +478,7 @@ public class GameController {
    * @param opponents possibly displayed opponents
    * @return number of currently displayed players
    */
-  private int getNumOfVisibliPlayers(HBox[] opponents) {
+  private int getNumOfVisibliPlayers(HBox[] opponents) { //TODO: Rename this function
     int numOfPlayers = 1;
     for (HBox opponent : opponents) {
       if (opponent.isVisible()) {
