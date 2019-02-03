@@ -30,7 +30,7 @@ public class Music {
         case "game":
           Media sound_pickupStone = new Media(Music.class.getResource("pickupStone.mp3").toURI().toString());
           Media sound_dropStone = new Media(Music.class.getResource("dropStone.mp3").toURI().toString());
-          Media sound_drawStone = new Media(Music.class.getResource("draw.mp3").toURI().toString());
+          Media sound_drawStone = new Media(Music.class.getResource("drawStone.mp3").toURI().toString());
           play_pickupStone = new MediaPlayer(sound_pickupStone);
           play_dropStone = new MediaPlayer(sound_dropStone);
           play_drawStone = new MediaPlayer(sound_drawStone);
