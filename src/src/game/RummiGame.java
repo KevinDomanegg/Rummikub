@@ -191,7 +191,7 @@ public class RummiGame implements Game {
     if (!sourceStones.containsKey(sourcePosition)) {
       return false;
     }
-    Coordinate coordinate = sourceGrid.getFirstCoordOfSetAt(sourcePosition);
+    Coordinate coordinate = sourceGrid.getFirstCoordOfStonesAt(sourcePosition);
     int srcCol = coordinate.getCol();
     int srcRow = coordinate.getRow();
     int trgCol = targetPosition.getCol() - (sourcePosition.getCol() - srcCol);
@@ -460,7 +460,7 @@ public class RummiGame implements Game {
     System.out.println("PointsBeforeTurn " + pointsBeforeTurn);
     System.out.println("Points " + (pointsBeforeTurn - pointsAfterTurn));
     if( (pointsBeforeTurn - pointsAfterTurn) >= Constants.MIN_FIRST_MOVE_POINTS){
-      getCurrentPlayer().playedFirstMove();
+      getCurrentPlayer().setPlayedFirstMove(true);
     } else if((pointsBeforeTurn - pointsAfterTurn) == 0){
       giveStoneToPlayer(currentPlayerID);
     } else {
@@ -492,7 +492,7 @@ public class RummiGame implements Game {
     int pointsPlayed = (pointsBeforeTurn - pointsAfterTurn);
 
     if( pointsPlayed >= Constants.MIN_FIRST_MOVE_POINTS) {
-      getCurrentPlayer().playedFirstMove();
+      getCurrentPlayer().setPlayedFirstMove(true);
       if(hasWinner()){
         isGameOn = false;
       } else {
@@ -619,18 +619,6 @@ public class RummiGame implements Game {
 
   public Player getCurrentPlayer() {
     return players.get(currentPlayerID);
-  }
-
-  /**
-   * Draws a Stone when if there are Stones available.
-   * Switches to the next player if not.
-   */
-  @Override
-  public Map<Integer, Integer> getFinalRank() {
-    List<Entry<Integer, Integer>> rank = players.entrySet().stream()
-            .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
-            .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
-    return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
   }
 
   /**

@@ -13,7 +13,11 @@ class Player {
     this.name = name;
     this.age = age;
     hand = new RummiHand();
-    hasPlayedFirstMove = false;
+    playedFirstMove = false;
+  }
+
+  void setPlayedFirstMove(boolean hasPlayed) {
+    this.playedFirstMove = hasPlayed;
   }
 
   public int points() {

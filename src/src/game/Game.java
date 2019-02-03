@@ -214,9 +214,5 @@ public interface Game {
    */
   boolean isGameOn();
   void confirmMove(int playerID);
-  /**
-   * Draws a Stone when if there are Stones available.
-   * Switches to the next player if not.
-   */
-  void timeOut();
+
 }
