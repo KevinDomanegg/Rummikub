@@ -1,11 +1,11 @@
 package game;
 
 /**
- *  Move Data of a turn of the current Player
- *  which are important for reset to the Game before they played yet.
+ * Class saving the history of moves a player has made during one turn.
+ * Used to reset his moves if needed.
  */
-final class MoveTrace {
-  enum Move { PUT_STONE, TABLE_MOVE }
+class MoveTrace {
+  enum Move {PUT_STONE, TABLE_MOVE}
 
   private Move move;
   private Coordinate sourcePosition;

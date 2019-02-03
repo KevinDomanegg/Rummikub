@@ -3,6 +3,9 @@ package communication.gameinfo;
 import java.io.Serializable;
 import java.util.Map;
 
+/**
+ * GameInfo containing the Information about the final rank of the finished game.
+ */
 public final class RankInfo implements GameInfo, Serializable {
   private final Map<String, Integer> finalRank;
 

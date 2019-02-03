@@ -2,7 +2,9 @@ package game;
 
 import java.util.Map;
 
-/** Grid that contains Stones and their associated Coordinates. */
+/**
+ * Interface for different types of grids of Stones.
+ */
 public interface Grid {
 
   /**
@@ -12,6 +14,12 @@ public interface Grid {
    */
   Map<Coordinate, Stone> getStones();
 
+  /**
+   * Puts a new Stone on the grid.
+   *
+   * @param coordinate the Stone will be put on on grid.
+   * @param stone      to be put on the grid.
+   */
   void setStone(Coordinate coordinate, Stone stone);
 
   /**
@@ -22,10 +30,23 @@ public interface Grid {
    */
   Stone removeStone(Coordinate coordinate);
 
+  /**
+   * Return the width of the Grid.
+   *
+   * @return width of the Grid.
+   */
   int getWidth();
 
+  /**
+   * Return the height of the Grid.
+   *
+   * @return height of the Grid.
+   */
   int getHeight();
 
+  /**
+   * Deletes all Stones on the grid.
+   */
   void clear();
 
   /**

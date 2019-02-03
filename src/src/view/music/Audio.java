@@ -3,9 +3,30 @@ package view.music;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+import view.ViewConstants;
+
 import java.net.URISyntaxException;
 
 public class Audio {
+
+  /**
+   * Enum for the different kinds of music.
+   */
+  public enum Music {
+    START,
+    WAIT,
+    GAME
+  }
+
+  /**
+   * Enum for the different types of sounds.
+   */
+  public enum Sound {
+    PICK_UP_STONE,
+    DROP_STONE,
+    DRAW_STONE
+  }
+
   // GAME VIEW MEDIA PLAYERS
   private static MediaPlayer play_pickupStone;
   private static MediaPlayer play_dropStone;
@@ -20,17 +41,23 @@ public class Audio {
     try {
       switch (music) {
         case START:
-          Media startView_music = new Media(Audio.class.getResource("startMusic.mp3").toURI().toString());
+          Media startView_music = new Media(Audio.class.getResource(ViewConstants.START_MUSIC_MP3).toURI().toString());
           playing_now = new MediaPlayer(startView_music);
           return;
         case WAIT:
-          Media waitView_music = new Media(Audio.class.getResource("waitingMusic.mp3").toURI().toString());
+          Media waitView_music = new Media(Audio.class.getResource(ViewConstants.WAITING_MUSIC_MP3).toURI().toString());
           playing_now = new MediaPlayer(waitView_music);
           return;
         case GAME:
-          Media sound_pickupStone = new Media(Audio.class.getResource("pickupStone.mp3").toURI().toString());
-          Media sound_dropStone = new Media(Audio.class.getResource("dropStone.mp3").toURI().toString());
-          Media sound_drawStone = new Media(Audio.class.getResource("drawStone.mp3").toURI().toString());
+          Media sound_pickupStone = new Media(Audio.class.getResource(
+                  ViewConstants.PICK_UP_STONE_MP3).toURI().toString());
+
+          Media sound_dropStone = new Media(Audio.class.getResource(
+                  ViewConstants.DROP_STONE_MP3).toURI().toString());
+
+          Media sound_drawStone = new Media(Audio.class.getResource(
+                  ViewConstants.DRAW_STONE_MP3).toURI().toString());
+
           play_pickupStone = new MediaPlayer(sound_pickupStone);
           play_dropStone = new MediaPlayer(sound_dropStone);
           play_drawStone = new MediaPlayer(sound_drawStone);
@@ -79,6 +106,5 @@ public class Audio {
   public static void muteSoundOfWait() {
     playing_now.pause();
   }
-
 
 }

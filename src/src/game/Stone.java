@@ -1,6 +1,10 @@
 package game;
 
-/** A Data Structure for a stone in Rummikub. */
+/**
+ * Class representing a stone.
+ * Each Stone has one of four colors and a value between 1 and 13.
+ * There are two special Stones, the jokers.
+ */
 public class Stone {
   public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
 

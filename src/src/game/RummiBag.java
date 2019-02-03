@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-/** the Bag of all stones for the RummiGame. All stones in the RummiGame come from this Bag. */
+/**
+ * Class representing a bag of Stones.
+ * Used to randomly draw Stones from.
+ * Contains a fixed number (106) of Stones.
+ * Each type of Stone (defined by a color and a numerical value)
+ * is present twice.
+ * There are to Jokers in the bag.
+ */
 public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
   private ArrayList<Stone> stones;
@@ -19,16 +26,15 @@ public class RummiBag {
   RummiBag() {
     stones = new ArrayList<>(MAX_BAG_SIZE);
     for (Color color : Color.values()) {
-      if (color == Color.JOKER) {
-        stones.add(new Stone());
-        stones.add(new Stone());
-      } else {
+      if (color != Color.JOKER) {
         for (int i = Stone.MIN_VALUE; i <= Stone.MAX_VALUE; i++) {
           stones.add(new Stone(color, i));
           stones.add(new Stone(color, i));
         }
       }
     }
+    stones.add(new Stone());
+    stones.add(new Stone());
     randomGenerator = new Random();
   }
 

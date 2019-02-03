@@ -3,7 +3,10 @@ package game;
 import java.util.List;
 import java.util.Map;
 
-/** An abstract Game for Rummikub. */
+/**
+ * Interface for the Model (including logic) of a game of Rummikub.
+ * To be accessed by the network.
+ */
 public interface Game {
 
   /**
@@ -58,7 +61,7 @@ public interface Game {
    * the Table of this Game at the given targetPosition.
    *
    * @param sourcePosition the position of a stone before moving it
-   * @param targetPosition  the position of the stone after mvoing it
+   * @param targetPosition  the position of the stone after moving it
    * @return true if the subject stone is moved
    */
   boolean putStone(Coordinate sourcePosition, Coordinate targetPosition);
@@ -84,7 +87,9 @@ public interface Game {
    */
   void moveStoneOnHand(int playerId, Coordinate sourcePosition, Coordinate targetPosition);
 
-  /** Makes the current Player of this Game to draw a stone. */
+  /**
+   * Makes the current Player of this Game to draw a stone.
+   */
   void drawStone();
 
   /**
@@ -94,10 +99,14 @@ public interface Game {
    */
   void removePlayer(int playerId);
 
-  /** Resets all moves of stones that had been done on and to the Table of this Game. */
+  /**
+   * Resets all moves of stones that had been done on and to the Table of this Game.
+   */
   void reset();
 
-  /** Undoes a move of a stone that had been done on and to the Table of this Game. */
+  /**
+   * Undoes a move of a stone that had been done on and to the Table of this Game.
+   */
   void undo();
 
   /**

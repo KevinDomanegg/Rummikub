@@ -61,8 +61,15 @@ public interface Controller {
    */
   void setBagSize(int bagSize);
 
+  /**
+   * Notfies the Controller that the Server has closed.
+   */
   void notifyServerClose();
 
+  /**
+   * Tells the Controller to show an Error-message.
+   * @param errorMessage to be displayed by the Controller.
+   */
   void showError(String errorMessage);
 
   void showRank(Map<String, Integer> finalRank);
