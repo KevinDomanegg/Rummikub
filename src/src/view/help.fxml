@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="879.0" xmlns="http://javafx.com/javafx">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane layoutX="6.0" prefHeight="780.0" prefWidth="870.0">
+      <ScrollPane prefHeight="781.0" prefWidth="879.0">
          <content>
             <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1665.0" prefWidth="880.0">
                <children>
@@ -55,7 +55,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-colored tiles in consecutive number order" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@runExample.png" />
+                              <Image url="@groupExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Group  " wrappingWidth="221.669921875">
@@ -66,7 +66,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-value tiles in distinct colors" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@groupExample.png" />
+                              <Image url="@runExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manipulating existing tiles" wrappingWidth="221.669921875">
@@ -89,19 +89,19 @@
                         <HBox spacing="20.0">
                            <children>
                               <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="ctrl" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="press 'ctrl' to move a whole set" wrappingWidth="327.2060546875" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="press strg to move a whole set" wrappingWidth="327.2060546875" />
                            </children>
                         </HBox>
                         <HBox spacing="20.0">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="check" />
+                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="Check" />
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="checks if all sets on the table are valid" />
                            </children>
                         </HBox>
                         <HBox spacing="20.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Draw stone" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="draws a tile from the bag and finishes your turn" />
+                              <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="87.0" text="Draw" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="draws a tile from the bag and finishes your turn" wrappingWidth="302.71337890625" />
                            </children>
                         </HBox>
                         <HBox spacing="20.0">
@@ -125,7 +125,7 @@
                         <HBox spacing="20.0">
                            <children>
                               <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="88.0" text="Group" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="sorts tiles in of the same value and different colors" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="sorts tiles of the same value and different colors" />
                            </children>
                         </HBox>
                         <HBox spacing="20.0">
