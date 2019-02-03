@@ -89,7 +89,7 @@
                         <HBox spacing="20.0">
                            <children>
                               <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="85.0" text="ctrl" />
-                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="press strg to move a whole set" wrappingWidth="327.2060546875" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="press 'ctrl' to move a whole set" wrappingWidth="327.2060546875" />
                            </children>
                         </HBox>
                         <HBox spacing="20.0">
