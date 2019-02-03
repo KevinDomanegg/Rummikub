@@ -34,7 +34,7 @@
     </StackPane>
 
     <!-- Opponent list-->
-    <VBox fx:id="content" alignment="TOP_CENTER" styleClass="shadow">
+    <VBox fx:id="content" alignment="CENTER_LEFT" styleClass="shadow">
       <Text fx:id="waitingState" text="Waiting for opponents..."
             styleClass="whiteText"/>
       <VBox fx:id="opponentList" spacing="5">

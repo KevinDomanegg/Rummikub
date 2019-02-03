@@ -1,15 +1,5 @@
 /* Class selectors */
 
-.activeOpponent {
-    -fx-background-color: white;
-    -fx-text-fill: black;
-}
-
-.activeOwnHand {
-    -fx-border-color: white;
-    -fx-border-width: 2 2 0 2;
-}
-
 .cell {
     -fx-border-color: white;
     -fx-fill: none;
@@ -21,10 +11,6 @@
     -fx-pref-width: 40;
     -fx-min-width: 40;
     }
-
-.cell.hover {
-    -fx-fill: #FFFFFF22;
-}
 
 .centered {
     -fx-alignment: CENTER;
@@ -107,7 +93,7 @@
 /* ID selectors */
 
 #bottom {
-    -fx-translate-y: -12;
+    -fx-translate-y: -15;
 }
 
 #errorPane {
@@ -138,7 +124,7 @@
     -fx-border-radius: 10 10 0 0;
     -fx-background-radius: 10 10 0 0;
     -fx-border-color: black;
-    -fx-border-width: 2 2 0 2;
+    -fx-border-width: 10 10 0 10;
 }
 
 #ownName, #ownHand {

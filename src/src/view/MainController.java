@@ -3,7 +3,7 @@ package view;
 import communication.gameinfo.StoneInfo;
 import communication.request.ConcreteMove;
 import communication.request.RequestID;
-
+import communication.request.SimpleRequest;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -84,6 +84,11 @@ public class MainController implements Controller {
         gameController = loader.getController();
         gameController.setMainController(this);
         break;
+      case ViewConstants.WINNER_FXML:
+        winnerController = loader.getController();
+        winnerController.setMainController(this);
+        break;
+      default: //TODO: Throw exception?
     }
     Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
@@ -124,6 +129,11 @@ public class MainController implements Controller {
   private void switchToGameScene() throws IOException{
      switchScene(ViewConstants.GAME_FXML);
 
+  }
+
+
+  private void switchToWinnerScene() throws IOException {
+    switchScene(ViewConstants.WINNER_FXML);
   }
 
   /**
@@ -185,19 +195,10 @@ public class MainController implements Controller {
    */
   @Override public void showRank(Map<String, Integer> finalRank) {
     Platform.runLater(() -> {
-      Stage stage = new Stage();
-      Parent root;
       try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ViewConstants.WINNER_FXML));
-        root = loader.load();
-        winnerController = loader.getController();
-        winnerController.setMainController(this);
-        winnerController.setRank(finalRank);
         gameController.stopTimer();
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(primaryStage);
-        stage.showAndWait();
+        switchToWinnerScene();
+        winnerController.setRank(finalRank);
       } catch (IOException e) {
         e.printStackTrace();
       }

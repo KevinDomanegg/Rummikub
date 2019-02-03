@@ -44,3 +44,12 @@ Text {
   -fx-background-image: url("../images/backgroundTileBlue.png");
   -fx-background-repeat: repeat;
 }
+
+#title {
+  -fx-font-size: 80;
+  -fx-font-weight: 700;
+}
+
+#vContainer {
+  -fx-max-width: 600;
+}

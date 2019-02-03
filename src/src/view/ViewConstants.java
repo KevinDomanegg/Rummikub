@@ -29,9 +29,11 @@ public class ViewConstants {
   static final String ERROR_STYLE = "-fx-border-color: red ; -fx-border-width: 2px ;";
 
   //Styling of the Player
-  static final String CURRENTLY_PLAYING_STYLE = "-fx-border-color: white; -fx-border-width: 4px ;";
-  static final String NOT_CURRENTLY_PLAYING_STYLE = "-fx-border-color: black; -fx-border-width: 4px ;";
+  static final String CURRENTLY_PLAYING_STYLE = "-fx-border-color: #3BBA8F;";
+  static final String NOT_CURRENTLY_PLAYING_STYLE = "-fx-border-color: black;";
   static final String NO_PLAYER_SYMBOL = "?";
+  static final String CURRENTLY_PLAYING_OPPONENT_STYLE = "-fx-background-color: #3BBA8F";
+  static final String NOT_CURRENTLY_PLAYING_OPPONENT_STYLE = "-fx-background-color: black";
 
   //Styling of the Stones
   static final String STONE_FORMAT = "stoneFormat";
