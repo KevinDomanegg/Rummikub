@@ -61,10 +61,21 @@ public interface Controller {
    */
   void setBagSize(int bagSize);
 
+  /**
+   * Notfies the Controller that the Server has closed.
+   */
   void notifyServerClose();
 
+  /**
+   * Tells the Controller to show an Error-message.
+   * @param errorMessage to be displayed by the Controller.
+   */
   void showError(String errorMessage);
 
+  /**
+   * Tells the Controller to display the final rank of the game.
+   * @param finalRank of the game
+   */
   void showRank(Map<Integer, Integer> finalRank);
 
   /**

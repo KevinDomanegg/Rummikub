@@ -3,6 +3,10 @@ package game;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for the Model (including logic) of a game of Rummikub.
+ * To be accessed by the network.
+ */
 public interface Game {
 
   /**
