@@ -204,6 +204,7 @@ class RequestHandler {
       return;
       case TIME_OUT:
           // sends original table
+        if (game.isGameOn()) {
           game.reset();
           sendTableToALl();
           sendHandToPlayer(playerId);
@@ -214,6 +215,7 @@ class RequestHandler {
           sendHandSizesToAll();
           sendBagSizeToAll();
           notifyTurnToPlayer();
+        }
         return;
 
       case SORT_HAND_BY_GROUP:

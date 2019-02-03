@@ -85,8 +85,8 @@ public class MainController implements Controller {
         gameController.setMainController(this);
         break;
     }
-    Scene scene = new Scene(root, 1500, 900);
     Platform.runLater(() -> {
+      Scene scene = new Scene(root, 1500, 900);
       primaryStage.setMinWidth(1500);
       primaryStage.setMinHeight(900);
       primaryStage.setScene(scene);
@@ -184,6 +184,7 @@ public class MainController implements Controller {
    * @param finalRank
    */
   @Override public void showRank(Map<String, Integer> finalRank) {
+    gameController.stopTimer();
     Platform.runLater(() -> {
       Stage stage = new Stage();
       Parent root;
@@ -402,40 +403,85 @@ public class MainController implements Controller {
   }
 
   /**
-   * @ToDo
-   * Why targetColumn/targetRow? Weird names..
+   * Sends a Request that a User moved a stone on their Hand
+   * from the given sourceColumn and the given sourceRow
+   * to the given targetColumn and the given targetRow.
    *
-   * Sends request to move a stone on the hand to the server.
-   *
-   * @param sourceColumn
-   * @param sourceRow
-   * @param targetColumn
-   * @param targetRow
+   * @param sourceColumn the column of the source Coordinate
+   * @param sourceRow the row of the source Coordinate
+   * @param targetColumn the column of the target Coordinate
+   * @param targetRow the row of the target Coordinate
    */
   void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a Request that a User put a stone from their Hand to Table
+   * from the given sourceColumn and the given sourceRow
+   * to the given targetColumn and the given targetRow.
+   *
+   * @param sourceColumn the column of the source Coordinate
+   * @param sourceRow the row of the source Coordinate
+   * @param targetColumn the column of the target Coordinate
+   * @param targetRow the row of the target Coordinate
+   */
   void sendPutStoneRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a Request that a User moved a stone on their Table
+   * from the given sourceColumn and the given sourceRow
+   * to the given targetColumn and the given targetRow.
+   *
+   * @param sourceColumn the column of the source Coordinate
+   * @param sourceRow the row of the source Coordinate
+   * @param targetColumn the column of the target Coordinate
+   * @param targetRow the row of the target Coordinate
+   */
   void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a Request that a User moved stones on their Hand
+   * from the given sourceColumn and the given sourceRow
+   * to the given targetColumn and the given targetRow.
+   *
+   * @param sourceColumn the column of the source Coordinate
+   * @param sourceRow the row of the source Coordinate
+   * @param targetColumn the column of the target Coordinate
+   * @param targetRow the row of the target Coordinate
+   */
   void sendMoveSetOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendMoveSetOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a Request that a User put stones from their Hand to Table
+   * from the given sourceColumn and the given sourceRow
+   * to the given targetColumn and the given targetRow.
+   *
+   * @param sourceColumn the column of the source Coordinate
+   * @param sourceRow the row of the source Coordinate
+   * @param targetColumn the column of the target Coordinate
+   * @param targetRow the row of the target Coordinate
+   */
   void sendPutSetRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendPutSetRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a Request that a User wants to check the validity of their move.
+   */
   void sendConfirmMoveRequest() {
     requestBuilder.sendConfirmMoveRequest();
   }
 
+  /**
+   * Sends
+   */
   void sendSortHandByGroupRequest() {
     requestBuilder.sendSortHandByGroupRequest();
   }
