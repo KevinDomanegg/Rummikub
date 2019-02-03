@@ -1,11 +1,10 @@
 package communication.request;
 
+/**
+ * Enum used to differentiate between the different types of requests.
+ */
 public enum RequestID {
 
-  /**
-   * Identifier for classes implementing the Request-Interface.
-   * Every implementation of Request should have an RequestID associated with it.
-   */
   START,
   SET_PLAYER,
   HAND_MOVE,

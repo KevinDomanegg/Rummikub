@@ -8,7 +8,10 @@ import java.util.Random;
 /**
  * Class representing a bag of Stones.
  * Used to randomly draw Stones from.
- * Contains a fixed number of Stones.
+ * Contains a fixed number (106) of Stones.
+ * Each type of Stone (defined by a color and a numerical value)
+ * is present twice.
+ * There are to Jokers in the bag.
  */
 public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
