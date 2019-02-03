@@ -5,26 +5,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
+/** the Bag of all stones for the RummiGame. All stones in the RummiGame come from this Bag. */
 public class RummiBag {
   private static final int MAX_BAG_SIZE = 106;
   private ArrayList<Stone> stones;
   private Random randomGenerator;
 
 
-  //The bag is initially filled with 13 Numbers of each
-  //color and two Jokers.
+  /**
+   * Initializes all Stones (2 x all different type of stones)
+   * and a randomGenerator in order to remove stones randomly.
+   */
   RummiBag() {
     stones = new ArrayList<>(MAX_BAG_SIZE);
     for (Color color : Color.values()) {
-      if (color != Color.JOKER) {
+      if (color == Color.JOKER) {
+        stones.add(new Stone());
+        stones.add(new Stone());
+      } else {
         for (int i = Stone.MIN_VALUE; i <= Stone.MAX_VALUE; i++) {
           stones.add(new Stone(color, i));
           stones.add(new Stone(color, i));
         }
       }
     }
-    stones.add(new Stone());
-    stones.add(new Stone());
     randomGenerator = new Random();
   }
 
@@ -41,13 +45,22 @@ public class RummiBag {
     return stones.size();
   }
 
-  void addStones(Collection<Stone> extraStones){
+  /**
+   * Adds the given extra stones into this Bag.
+   *
+   * @param extraStones the stones to be put into this Bag
+   */
+  void addStones(Collection<Stone> extraStones) {
     this.stones.addAll(extraStones);
+  }
+
+  ArrayList<Stone> getStones() {
+    return stones;
   }
 
   // for test
   @Override
-  public String toString(){
+  public String toString() {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append("bag size: ").append(size()).append('\n');
     for (Stone stone : stones) {
@@ -55,9 +68,5 @@ public class RummiBag {
           .append(")\n");
     }
     return stringBuilder.toString();
-  }
-
-  ArrayList<Stone> getStones(){
-    return stones;
   }
 }

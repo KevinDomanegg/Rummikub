@@ -6,13 +6,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/** A Grid like Data Structure of the Hand of a Player in RummiGame. */
 public class RummiHand implements Grid {
   private static final int HEIGHT = 3;
   private static final int WIDTH = 18;
 
   private Map<Coordinate, Stone> stones;
 
-  RummiHand(){
+  RummiHand() {
     stones = new HashMap<>();
   }
 
@@ -23,7 +24,7 @@ public class RummiHand implements Grid {
   }
 
   /**
-   * gives the removed stone at the given coordinate on this hand.
+   * Removes a stone (if there is any) at the given coordinate on this Hand and returns it.
    *
    * @param coordinate the coordinate of the removed stone
    * @return the removed stone from the given coordinate
@@ -33,16 +34,16 @@ public class RummiHand implements Grid {
   }
 
   /**
-   * gives pairs out of all stones and their associated coordinate on this hand.
+   * Returns all stones with their associated Coordinates on this Hand.
    *
-   * @return pairs out of all stones and their associated coordinate on this hand
+   * @return all stones with their associated Coordinates on this Hand
    */
-  @Override public Map<Coordinate,Stone> getStones(){
+  @Override public Map<Coordinate,Stone> getStones() {
     return stones;
   }
 
   @Override
-  public void clear(){
+  public void clear() {
     stones.clear();
   }
 
@@ -60,26 +61,28 @@ public class RummiHand implements Grid {
     return WIDTH;
   }
 
-  /** groups stones with the same number and sorts these groups of stones by their color. */
+  /** Groups stones with the same number and sorts these groups of stones by their color. */
   void sortByGroup() {
-    sortStonesWith((s1, s2) -> {
-      int n1 = s1.getNumber();
-      int n2 = s2.getNumber();
-      return (n1 == n2) ? s1.getColor().compareTo(s2.getColor()) : n1 - n2;
+    sortStonesWith((stone1, stone2) -> {
+      int number1 = stone1.getNumber();
+      int number2 = stone2.getNumber();
+      return (number1 == number2) ? stone1.getColor().compareTo(stone2.getColor())
+          : number1 - number2;
     });
   }
 
-  /** groups stones with the same color and sorts these groups of stones by their number. */
+  /** Groups stones with the same color and sorts these groups of stones by their number. */
   void sortByRun() {
-    sortStonesWith((s1, s2) -> {
-      Color c1 = s1.getColor();
-      Color c2 = s2.getColor();
-      return (c1 == c2) ? s1.getNumber() - s2.getNumber() : c1.compareTo(c2);
+    sortStonesWith((stone1, stone2) -> {
+      Color color1 = stone1.getColor();
+      Color color2 = stone2.getColor();
+      return (color1 == color2) ? stone1.getNumber() - stone2.getNumber()
+          : color1.compareTo(color2);
     });
   }
 
   /**
-   * sorts stones on this Hand with the given comparator
+   * Sorts stones on this Hand with the given comparator
    * and replaces(fills) stones on this hand in the sorted order row after row
    * starting from the coordinate (0, 0).
    *

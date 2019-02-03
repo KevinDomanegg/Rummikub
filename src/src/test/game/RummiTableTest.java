@@ -149,4 +149,31 @@ public class RummiTableTest {
     assertTrue(table.isConsistent());
 
   }
+
+  @Test
+  public void consistencyTest3() {
+    RummiTable table = new RummiTable();
+    table.setStone(new Coordinate(17, 7), new Stone(Color.RED, 7));
+    table.setStone(new Coordinate(18, 7), new Stone(Color.RED, 8));
+    table.setStone(new Coordinate(19, 7), new Stone());
+    table.setStone(new Coordinate(20, 7), new Stone(Color.RED, 10 ));
+    assertTrue(table.isConsistent());
+
+//    table.setStone(new Coordinate(8, 6), new Stone(Color.RED, 5 ));
+//    table.setStone(new Coordinate(9, 6), new Stone(Color.RED, 6 ));
+//    table.setStone(new Coordinate(10, 6), new Stone(Color.RED, 7 ));
+//
+//    table.setStone(new Coordinate(14, 4), new Stone(Color.BLACK, 7));
+//    table.setStone(new Coordinate(15, 4), new Stone(Color.BLACK, 8));
+//    table.setStone(new Coordinate(16, 4), new Stone());
+//    assertTrue(table.isConsistent());
+//
+//    table.setStone(new Coordinate(16, 4), null);
+//    table.setStone(new Coordinate(16, 2), new Stone());
+//    table.setStone(new Coordinate(13, 4), new Stone(Color.BLACK, 6));
+//    table.setStone(new Coordinate(17, 2), new Stone(Color.BLUE, 12));
+//    table.setStone(new Coordinate(18, 2), new Stone(Color.BLUE, 13));
+//    assertTrue(table.isConsistent());
+
+  }
 }

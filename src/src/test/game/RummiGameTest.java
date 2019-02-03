@@ -20,7 +20,7 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerNames().get(1) == "Hyunsung");
     assertTrue(game1.getNumberOfPlayers() == 2);
     assertTrue((game1.getBagSize() + game1.getPlayerHandSizes().get(0) + game1.getPlayerHandSizes().get(1)) == 106);
-    assertTrue(game1.getCurrentPlayerID() == 1);
+    assertTrue(game1.getCurrentPlayerId() == 1);
     assertEquals(game1.getTableHeight(), 8);
     assertEquals(game1.getTableWidth(), 26);
     assertEquals(game1.getPlayerHandHeight(1), 3);
@@ -38,16 +38,16 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerStones(1).get(new Coordinate(0, 0)) == null);
 
 
-    assertEquals(game1.getTrace().peek().getCommand(), "MOVESTONEONTABLE");
+    assertEquals(game1.getMoveData().peek().getMove(), "MOVESTONEONTABLE");
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEONTABLE"));
+    assertEquals(game1.getMoveData().peek().getMove(), ("MOVESTONEONTABLE"));
     game1.undo();
     game1.undo();
-    assertEquals(game1.getTrace().peek().getCommand(), ("MOVESTONEFROMHAND"));
+    assertEquals(game1.getMoveData().peek().getMove(), ("MOVESTONEFROMHAND"));
     game1.undo();
     game1.reset();
     game1.undo();
-    assertTrue(game1.getTrace().empty());
+    assertTrue(game1.getMoveData().empty());
 
     assertFalse(game1.hasWinner());
   }
@@ -192,33 +192,33 @@ public class RummiGameTest {
 
     assertFalse(game.hasWinner());
 
-    game.getTrace().clear();
+    game.getMoveData().clear();
 
-    assertTrue(game.getTrace().empty());
+    assertTrue(game.getMoveData().empty());
 
-    String firstTable = game.getTrace().toString();
+    String firstTable = game.getMoveData().toString();
     System.out.println("---first table");
     System.out.println(firstTable);
     game.moveSetOnTable(new Coordinate(6, 2), new Coordinate(0, 0));
     System.out.println("---moving set (6, 2) to (0, 0)");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
     game.moveSetOnTable(new Coordinate(3, 0), new Coordinate(10, 3));
     System.out.println("---moving set (3, 0) to (10, 3)");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
     game.moveSetOnTable(new Coordinate(8, 3), new Coordinate(4, 3));
     System.out.println("---moving set (8, 3) to (4, 3)");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
     game.moveStoneOnTable(new Coordinate(5, 3), new Coordinate(0, 0));
     System.out.println("---moving stone (5, 3) to (0, 0)");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
     game.moveSetOnTable(new Coordinate(3, 3), new Coordinate(20, 1));
     System.out.println("---moving set (3, 3) to (20, 1)");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
 
     game.reset();
     System.out.println("---reset");
-    System.out.println(game.getTrace());
+    System.out.println(game.getMoveData());
     System.out.println("---check if reset worked");
-    System.out.println(game.getTrace().toString().equals(firstTable));
+    System.out.println(game.getMoveData().toString().equals(firstTable));
   }
 }
