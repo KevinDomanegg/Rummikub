@@ -55,7 +55,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-colored tiles in consecutive number order" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@groupExample.png" />
+                              <Image url="@images/groupExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Group  " wrappingWidth="221.669921875">
@@ -66,7 +66,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-value tiles in distinct colors" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@runExample.png" />
+                              <Image url="@images/runExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manipulating existing tiles" wrappingWidth="221.669921875">
