@@ -1,37 +1,30 @@
 package game;
 
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+
+import com.sun.org.apache.bcel.internal.classfile.ConstantNameAndType;
+import globalconstants.Constants;
+import globalconstants.ErrorMessages;
 
 /**
  * Model for the board game Rummikub.
  */
 public class RummiGame implements Game {
-  private static final int MIN_PLAYERS = 2;
-  private static final int MAX_PLAYERS = 4;
-  // the number of stones players receive at the beginning
-  private static final int FIRST_STONES = 14;
-  // the minimal points every player should make for their first move
-  private static final int MIN_FIRST_MOVE_POINTS = 30;
 
-  private RummiTable table; // table of the game
+  private RummiTable table;
   private HashMap<Integer, Player> players;
-  private RummiBag bag; // bag where all stones are filled
-  private Stack<MoveTrace> trace; // history of the current players each move
+  private RummiBag bag;
+  private Stack<MoveTrace> trace;
   private boolean isGameOn;
   private int currentPlayerID;
-  private int currentPoints; // the points of the first move of a current player
+  private int currentPoints;
 
   public RummiGame() {
     table = new RummiTable();
-    players = new HashMap<>(MAX_PLAYERS);
+    players = new HashMap<>(Constants.MAX_PLAYERS);
     trace = new Stack<>();
   }
 
@@ -40,17 +33,53 @@ public class RummiGame implements Game {
     return players.get(currentPlayerID);
   }
 
+
+  /**
+   * Takes a Stone from the Bag and gives it to the current Player.
+   * @throws UnsupportedOperationException If the Bag is empty or the Hand is full.
+   */
+  private void giveStoneToPlayer() throws UnsupportedOperationException {
+    if (getCurrentPlayer().getHandSize() >= Constants.MAX_HAND_SIZE){
+      throw new UnsupportedOperationException(ErrorMessages.HAND_IS_FULL_ERROR);
+    }
+    if (bag.size() < 1){
+      throw new UnsupportedOperationException(ErrorMessages.BAG_IS_EMPTY_ERROR);
+    }
+
+    currentPlayer().pushStone(bag.removeStone());
+
+  }
+
+  public Player getCurrentPlayer() {
+    return players.get(currentPlayerID);
+  }
+
+  /**
+   * Draws a Stone and selects the next player.
+   * @param playerID of the Player who wants to make this move
+   * @throws UnsupportedOperationException if the Hand is full, the bag is empty or its not the players turn.
+   */
+
+  public void draw(int playerID) throws UnsupportedOperationException {
+    if (playerID == currentPlayerID){
+      giveStoneToPlayer();
+      nextTurn();
+    } else {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
+    }
+  }
+
+
   /** Updates the currentPlayerID. */
   private void nextTurn() {
     if (!isGameOn) {
       System.out.println("GAME NOT ON!");
       return;
     }
-    // reset currentPoints
-    currentPoints = 0;
+
     // the ID of the current player will be updated (0 follows after 3)
     do {
-      currentPlayerID = (currentPlayerID + 1) % MAX_PLAYERS;
+      currentPlayerID = (currentPlayerID + 1) % Constants.MAX_PLAYERS;
     } while (!players.containsKey(currentPlayerID));
   }
 
@@ -64,7 +93,7 @@ public class RummiGame implements Game {
    */
   @Override
   public boolean setPlayer(int playerID, String name, int age) {
-    if (players.size() > MAX_PLAYERS || isGameOn) {
+    if (players.size() > Constants.MAX_PLAYERS || isGameOn) {
       return false;
     }
     players.put(playerID, new Player(name, age));
@@ -81,7 +110,7 @@ public class RummiGame implements Game {
     if (isGameOn) {
       return false;
     }
-    if (players.size() >= MIN_PLAYERS) {
+    if (players.size() >= Constants.MIN_PLAYERS) {
       isGameOn = true;
       bag = new RummiBag();
       table.clear();
@@ -98,7 +127,7 @@ public class RummiGame implements Game {
       player.clearHand();
     }
     // hand out stones
-    for (int i = 0; i < FIRST_STONES; i++) {
+    for (int i = 0; i < Constants.FIRST_STONES; i++) {
       for (int j = 0; j < players.size(); j++) {
         drawStone();
       }
@@ -319,7 +348,7 @@ public class RummiGame implements Game {
     }
     // remove the player with the playerID and reset their hand into the bag
     bag.addStones(players.remove(playerID).getStones().values());
-    if (players.size() < MIN_PLAYERS) {
+    if (players.size() < Constants.MIN_PLAYERS) {
       isGameOn = false;
       return;
     }
