@@ -35,6 +35,10 @@ public class RummiGame implements Game {
     trace = new Stack<>();
   }
 
+  public RummiTable getTable() {
+    return table;
+  }
+
   /** Gives a current player. */
   private Player currentPlayer() {
     return players.get(currentPlayerID);
@@ -42,6 +46,7 @@ public class RummiGame implements Game {
 
   /** Updates the currentPlayerID. */
   private void nextTurn() {
+    System.out.println("next-turning");
     if (!isGameOn) {
       System.out.println("GAME NOT ON!");
       return;
@@ -488,5 +493,18 @@ public class RummiGame implements Game {
         .map((entry) -> new SimpleEntry<>(entry.getKey(), entry.getValue().getPoints()))
         .sorted(Comparator.comparing(Entry::getValue)).collect(Collectors.toList());
     return rank.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue));
+  }
+
+  /**
+   * Draws a Stone when if there are Stones available.
+   * Switches to the next player if not.
+   */
+  @Override
+  public void timeOut() {
+    if (this.getBagSize() > 0) {
+      this.drawStone();
+    } else {
+      this.nextTurn();
+    }
   }
 }
