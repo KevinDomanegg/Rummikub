@@ -162,6 +162,11 @@ public interface Game {
   void sortPlayerHandByRun(int playerID);
 
   boolean hasPlayerPlayedFirstMove(int playerID);
-
+  
+  /**
+   * Draws a Stone when if there are Stones available.
+   * Switches to the next player if not.
+   */
+  void timeOut();
   boolean isGameOn();
 }
