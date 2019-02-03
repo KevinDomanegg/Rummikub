@@ -10,13 +10,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="781.0" prefWidth="879.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="685.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane prefHeight="781.0" prefWidth="879.0">
+      <ScrollPane prefHeight="683.0" prefWidth="884.0">
          <content>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1665.0" prefWidth="880.0">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1704.0" prefWidth="881.0">
                <children>
-                  <VBox layoutX="11.0" layoutY="35.0" prefHeight="1654.0" prefWidth="864.0" spacing="20.0">
+                  <VBox layoutX="9.0" layoutY="36.0" prefHeight="1654.0" prefWidth="864.0" spacing="20.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="GAME INSTRUCTION" wrappingWidth="333.669921875">
                            <font>
@@ -40,7 +41,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- the youngest player starts&#10;- at the beginning every player has 14 random tiles at hand&#10;- the remaining tiles are in the bag&#10;- at the beginning you must play a valid set with a value of at least 30 points&#10;- if you cannot place a valid set, you have to pick up a single tile from the bag" wrappingWidth="856.2060546875" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="- the youngest player starts&#10;- at the beginning every player has 14 random tiles at hand&#10;- the remaining tiles are in the bag&#10;- at the beginning you must play a valid set with a value of at least 30 points&#10;- you can place a stone on the table by draging it from the hand and dropping it at the right position&#10;- it's not possible to drag a tile from the table to the hand (use the Undo-Button)&#10;- if you cannot place a valid set, you have to pick up a single tile from the bag&#10;" wrappingWidth="856.2060546875" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Sets" wrappingWidth="221.669921875">
                            <font>
                               <Font size="18.0" />
@@ -55,7 +56,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-colored tiles in consecutive number order" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/groupExample.png" />
+                              <Image url="@images/runExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Group  " wrappingWidth="221.669921875">
@@ -66,7 +67,7 @@
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A set composed of same-value tiles in distinct colors" wrappingWidth="858.2060546875" />
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/runExample.png" />
+                              <Image url="@images/groupExample.png" />
                            </image>
                         </ImageView>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Manipulating existing tiles" wrappingWidth="221.669921875">
