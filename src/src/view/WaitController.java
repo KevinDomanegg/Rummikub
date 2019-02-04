@@ -3,6 +3,7 @@ package view;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,13 +12,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import view.music.Audio;
 
+/**
+ * Controller responsible for the waiting-scene that appears after joining a game.
+ */
 public class WaitController implements Initializable {
 
-//  private RequestBuilder requestBuilder;
-//  private NetworkController networkController;
   private MainController mainController;
-
-//  private ClientModel model;
 
   @FXML
   private Text waitingState;
@@ -120,7 +120,8 @@ public class WaitController implements Initializable {
     muteButton.setVisible(true);
   }
 
-  @FXML private void quitWaiting() {
+  @FXML
+  private void quitWaiting() {
     System.out.println("From QUIT in WaitCtrl.: disconnect client!");
     mainController.handleQuitPressed();
   }

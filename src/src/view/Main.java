@@ -3,6 +3,10 @@ package view;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * Main-class of the application.
+ * Launches the game and starts the GUI.
+ */
 public class Main extends Application {
 
   private static final String GAME_NAME = "Rummikub";
@@ -10,6 +14,7 @@ public class Main extends Application {
   public static void main(String[] args) {
     launch(args);
   }
+
   @Override
   public void start(Stage primaryStage) throws Exception {
     primaryStage.setTitle(GAME_NAME);

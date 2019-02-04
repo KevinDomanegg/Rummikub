@@ -18,7 +18,8 @@ public final class GridInfo implements GameInfo, Serializable {
     return grid;
   }
 
-  @Override public GameInfoID getGameInfoID() {
+  @Override
+  public GameInfoID getGameInfoID() {
     return gameInfoID;
   }
 }

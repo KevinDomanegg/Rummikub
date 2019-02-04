@@ -1,6 +1,7 @@
 package game;
 
 import game.Stone.Color;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -71,7 +72,7 @@ public class RummiBag {
     stringBuilder.append("bag size: ").append(size()).append('\n');
     for (Stone stone : stones) {
       stringBuilder.append('(').append(stone.getColor()).append(", ").append(stone.getNumber())
-          .append(")\n");
+              .append(")\n");
     }
     return stringBuilder.toString();
   }

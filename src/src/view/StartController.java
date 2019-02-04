@@ -14,7 +14,9 @@ public class StartController {
   /**
    * Enum for the different types of Errors that can occur.
    */
-  enum ErrorType {IP, AGE, NAME}
+  enum ErrorType {
+    IP, AGE, NAME
+  }
 
   private MainController mainController;
 
@@ -35,6 +37,7 @@ public class StartController {
 
   /**
    * Connects the StartController to a MainController.
+   *
    * @param mainController to be connected to
    */
   void setMainController(MainController mainController) {

@@ -7,6 +7,9 @@ import view.ViewConstants;
 
 import java.net.URISyntaxException;
 
+/**
+ * Class handling all audio-related capabilities of the application.
+ */
 public class Audio {
 
   /**

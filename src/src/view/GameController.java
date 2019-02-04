@@ -42,22 +42,38 @@ public class GameController {
 
   private boolean isMyTurn = false;
 
-  @FXML private HBox opponentRight;
-  @FXML private HBox opponentMid;
-  @FXML private HBox opponentLeft;
-  @FXML private Text ownName;
-  @FXML private Text ownHand;
-  @FXML private Text leftPlayerName;
-  @FXML private Text midPlayerName;
-  @FXML private Text rightPlayerName;
-  @FXML private Text leftPlayerHand;
-  @FXML private Text midPlayerHand;
-  @FXML private Text rightPlayerHand;
-  @FXML private Text timer;
-  @FXML private GridPane tableGrid;
-  @FXML private GridPane handGrid;
-  @FXML private VBox ownBoard;
-  @FXML private Button drawButton;
+  @FXML
+  private HBox opponentRight;
+  @FXML
+  private HBox opponentMid;
+  @FXML
+  private HBox opponentLeft;
+  @FXML
+  private Text ownName;
+  @FXML
+  private Text ownHand;
+  @FXML
+  private Text leftPlayerName;
+  @FXML
+  private Text midPlayerName;
+  @FXML
+  private Text rightPlayerName;
+  @FXML
+  private Text leftPlayerHand;
+  @FXML
+  private Text midPlayerHand;
+  @FXML
+  private Text rightPlayerHand;
+  @FXML
+  private Text timer;
+  @FXML
+  private GridPane tableGrid;
+  @FXML
+  private GridPane handGrid;
+  @FXML
+  private VBox ownBoard;
+  @FXML
+  private Button drawButton;
 
   private MainController mainController;
   // TIMER
@@ -81,26 +97,26 @@ public class GameController {
     int period = 1000;
     timer_countDown = new Timer();
     timer_countDown.scheduleAtFixedRate(
-      timer_task = new TimerTask() {
-        int remainingTime = 60;
+            timer_task = new TimerTask() {
+              int remainingTime = 60;
 
-        public void run() {
-          if (remainingTime == 0) {
+              public void run() {
+                if (remainingTime == 0) {
 
-            if (isMyTurn) {
-              stopTimer();
-              sendTimeOutRequest();
-              return;
-            }
-            stopTimer();
-            return;
-          }
-          timer.setText(Integer.toString(remainingTime));
-          remainingTime--;
-        }
-      },
-      delay,
-      period);
+                  if (isMyTurn) {
+                    stopTimer();
+                    sendTimeOutRequest();
+                    return;
+                  }
+                  stopTimer();
+                  return;
+                }
+                timer.setText(Integer.toString(remainingTime));
+                remainingTime--;
+              }
+            },
+            delay,
+            period);
   }
 
   /**

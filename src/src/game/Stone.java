@@ -8,7 +8,7 @@ import globalconstants.Constants;
  * There are two special Stones, the jokers.
  */
 public class Stone {
-  public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
+  public enum Color {RED, BLACK, YELLOW, BLUE, JOKER}
 
   public static final int MAX_VALUE = 13;
   public static final int MIN_VALUE = 1;
@@ -19,7 +19,7 @@ public class Stone {
 
   public Stone(Color color, int number) {
     this.color = color;
-    if(color.equals(Color.JOKER)){
+    if (color.equals(Color.JOKER)) {
       this.number = Constants.JOKER_POINTS;
     } else {
       this.number = number;
@@ -42,6 +42,6 @@ public class Stone {
   // Testmethods
   @Override
   public String toString() {
-    return "(Color: " + color + ", " + "Number: " + " " + number +")";
+    return "(Color: " + color + ", " + "Number: " + " " + number + ")";
   }
 }

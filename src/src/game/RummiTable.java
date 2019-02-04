@@ -2,6 +2,7 @@ package game;
 
 
 import game.Stone.Color;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -23,11 +24,13 @@ public class RummiTable implements Grid {
    *
    * @return all stones with their associated Coordinates on this Table
    */
-  @Override public Map<Coordinate, Stone> getStones() {
+  @Override
+  public Map<Coordinate, Stone> getStones() {
     return stones;
   }
 
-  @Override public void setStone(Coordinate coordinate, Stone stone) {
+  @Override
+  public void setStone(Coordinate coordinate, Stone stone) {
     if (stone != null) {
       stones.put(coordinate, stone);
     }
@@ -39,19 +42,23 @@ public class RummiTable implements Grid {
    * @param coordinate the coordinate of the removed stone
    * @return the removed stone from the given coordinate
    */
-  @Override public Stone removeStone(Coordinate coordinate) {
-    return  stones.remove(coordinate);
+  @Override
+  public Stone removeStone(Coordinate coordinate) {
+    return stones.remove(coordinate);
   }
 
-  @Override public int getWidth() {
+  @Override
+  public int getWidth() {
     return WIDTH;
   }
 
-  @Override public int getHeight() {
+  @Override
+  public int getHeight() {
     return HEIGHT;
   }
 
-  @Override public void clear() {
+  @Override
+  public void clear() {
     stones.clear();
   }
 
@@ -78,7 +85,7 @@ public class RummiTable implements Grid {
    */
   boolean isConsistent() {
 
-    if (stones.size() == 0){
+    if (stones.size() == 0) {
       return true;
     }
     // make a copy of all coordinates of stones, in order to remove checked coordinate safely
@@ -114,7 +121,7 @@ public class RummiTable implements Grid {
    * checks the consistency of a potential set on this table
    * starting with the given coordinate until the given setSize.
    *
-   * @param setSize the approved size of a potential set to be used for both group- and run-set
+   * @param setSize    the approved size of a potential set to be used for both group- and run-set
    * @param coordinate the coordinate of the first stone of a potential set
    * @return true if only if a valid group-set or run-set is confirmed
    */
@@ -133,15 +140,15 @@ public class RummiTable implements Grid {
     }
     // check the consistency with the name and the color of the non-joker stone
     return isValidGroup(setSize, coordinate, stone.getNumber())
-        || isValidRun(setSize, coordinate, stone.getColor(), stone.getNumber() - countJoker);
+            || isValidRun(setSize, coordinate, stone.getColor(), stone.getNumber() - countJoker);
   }
 
   /**
    * checks if neighbored stones on this table from the given coordinate for the given setSize
    * are Group (same number and different color) with the given expectedNumber.
    *
-   * @param setSize the number of stones to be check for the validity of a potential Group
-   * @param coordinate the coordinate of the first stone of the potential Group
+   * @param setSize        the number of stones to be check for the validity of a potential Group
+   * @param coordinate     the coordinate of the first stone of the potential Group
    * @param expectedNumber the number, which stones should share in order to be valid
    * @return true if only if stones from the given coordinate are identified as a valid Group
    */
@@ -172,9 +179,9 @@ public class RummiTable implements Grid {
    * are Run (same color and sorted number, hereby 1 should come after 13)
    * with the given expectedColor.
    *
-   * @param setSize the number of stones to be check for the validity of a potential Run
-   * @param coordinate the coordinate of the first stone of this potential Run
-   * @param expectedColor the color, which stones should share in order to be valid
+   * @param setSize        the number of stones to be check for the validity of a potential Run
+   * @param coordinate     the coordinate of the first stone of this potential Run
+   * @param expectedColor  the color, which stones should share in order to be valid
    * @param expectedNumber the number the first non-Joker-stone of this potential Run should have
    * @return true if only if stones from the given coordinate are identified as a valid Run
    */
@@ -213,7 +220,7 @@ public class RummiTable implements Grid {
       for (int col = 0; col < WIDTH; col++) {
         if (stones.containsKey((coordinate = new Coordinate(col, row)))) {
           stringBuilder.append("Coordinate: ").append(coordinate)
-              .append(", Stone: ").append(stones.get(coordinate)).append('\n');
+                  .append(", Stone: ").append(stones.get(coordinate)).append('\n');
         }
       }
     }

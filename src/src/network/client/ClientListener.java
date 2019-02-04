@@ -2,11 +2,13 @@ package network.client;
 
 import communication.Deserializer;
 import communication.gameinfo.GameInfo;
+
 import java.io.InputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/**ClientListener listens to the Server
+/**
+ * ClientListener listens to the Server
  * and when the Server sends an object to the Client
  * the Client Listener receives it, decrypts it and
  * forwards it to RummiClient
@@ -18,10 +20,12 @@ class ClientListener extends Thread {
   private boolean connected;
   private Deserializer deserializer;
 
-  /**Creates a Listener that listens to a certain port
+  /**
+   * Creates a Listener that listens to a certain port
    * and communicates with only one client
+   *
    * @param serverIn the port that listens to
-   * @param client the client that reports the receiving objects to
+   * @param client   the client that reports the receiving objects to
    */
   ClientListener(InputStream serverIn, RummiClient client) {
     this.serverIn = serverIn;
@@ -30,7 +34,8 @@ class ClientListener extends Thread {
     deserializer = new Deserializer();
   }
 
-  /**Main method of ClientListener Class, waits
+  /**
+   * Main method of ClientListener Class, waits
    * until it receives an object from the server
    * and then forward it to RummiClient
    */

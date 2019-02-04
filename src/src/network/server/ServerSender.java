@@ -2,10 +2,14 @@ package network.server;
 
 import communication.Serializer;
 import communication.gameinfo.GameInfo;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Thread sending GameInfos to a certain client.
+ */
 public class ServerSender extends Thread {
   private Socket clientOut;
   private RummiServer server;
@@ -18,8 +22,8 @@ public class ServerSender extends Thread {
    * Constructor setting the necessary instance variables.
    *
    * @param clientOut client the Sender sends to
-   * @param server corresponding to the Sender
-   * @param id fo the Sender, assigned by the server
+   * @param server    corresponding to the Sender
+   * @param id        fo the Sender, assigned by the server
    */
   ServerSender(Socket clientOut, RummiServer server, int id) {
     this.clientOut = clientOut;
@@ -39,9 +43,9 @@ public class ServerSender extends Thread {
    * @param info to be sent
    */
   synchronized void send(GameInfo info) {
-      String json = serializer.serialize(info);
-      out.println(json);
-      out.flush();
+    String json = serializer.serialize(info);
+    out.println(json);
+    out.flush();
   }
 
   /**
@@ -70,12 +74,12 @@ public class ServerSender extends Thread {
     System.out.println("From ServerSender: Sender terminates.. id: " + id);
   }
 
-    /**
-     * Disconnects from the client.
-     */
+  /**
+   * Disconnects from the client.
+   */
   synchronized void disconnect() {
     this.connected = false;
-    try{
+    try {
       this.clientOut.close();
       out.close();
     } catch (IOException e) {

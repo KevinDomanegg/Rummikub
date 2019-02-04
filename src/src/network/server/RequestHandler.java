@@ -92,7 +92,7 @@ class RequestHandler {
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
         try {
           game.join(playerID, setPlayer.getName(), setPlayer.getAge());
-        } catch (UnsupportedOperationException e){
+        } catch (UnsupportedOperationException e) {
           sendErrorToPlayer(playerID, e.getMessage());
         }
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
@@ -139,10 +139,10 @@ class RequestHandler {
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
-          try{
+          try {
             game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
-                          new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
-          } catch (UnsupportedOperationException e){
+                    new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+          } catch (UnsupportedOperationException e) {
             sendErrorToPlayer(playerID, e.getMessage());
           }
           sendHandSizesToAll();
@@ -182,15 +182,15 @@ class RequestHandler {
 
       case CONFIRM_MOVE:
 
-        try{
+        try {
           game.confirmMove(playerID);
-        } catch (UnsupportedOperationException e){
+        } catch (UnsupportedOperationException e) {
           sendErrorToPlayer(playerID, e.getMessage());
         }
         if (!checkWinner()) {
-        sendHandToPlayer(playerID);
-        sendHandSizesToAll();
-        sendBagSizeToAll();
+          sendHandToPlayer(playerID);
+          sendHandSizesToAll();
+          sendBagSizeToAll();
           notifyTurnToPlayer();
         }
         break;
@@ -240,7 +240,7 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-     // sendErrorToPlayer(playID, NOT_YOUR_TURN);
+      // sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;
@@ -272,7 +272,7 @@ class RequestHandler {
   /**
    * Calculates the relative position between the currently playing client
    * and a client who is to receive a GameInfo.
-   *
+   * <p>
    * Used when telling all the clients who - relative to them - is currently
    * playing.
    *

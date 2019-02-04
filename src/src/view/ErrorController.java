@@ -20,6 +20,7 @@ public class ErrorController {
 
   /**
    * Displays an error-message with custom text.
+   *
    * @param message text of the error-message
    */
   @FXML

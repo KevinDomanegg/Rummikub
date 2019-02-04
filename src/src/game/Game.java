@@ -14,8 +14,8 @@ public interface Game {
    * the given playerID.
    *
    * @param playerID the id the new Player associated to
-   * @param name the name of the new Player
-   * @param age the age of the new Player
+   * @param name     the name of the new Player
+   * @param age      the age of the new Player
    * @return true if a new Player is added in this Game
    */
   void join(int playerID, String name, int age);
@@ -61,7 +61,7 @@ public interface Game {
    * the Table of this Game at the given targetPosition.
    *
    * @param sourcePosition the position of a stone before moving it
-   * @param targetPosition  the position of the stone after moving it
+   * @param targetPosition the position of the stone after moving it
    * @return true if the subject stone is moved
    */
   void putStone(Coordinate sourcePosition, Coordinate targetPosition);
@@ -70,7 +70,7 @@ public interface Game {
    * Moves a group of stones on the Hand of a Player with the given playerId
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose Hand stones will be moved
+   * @param playerID       the id of the Player on whose Hand stones will be moved
    * @param sourcePosition the position of a stone of its group before moving them
    * @param targetPosition the position of the stone after moving it with its group
    * @return true if only if the stones are moved
@@ -81,13 +81,15 @@ public interface Game {
    * Moves a stone on the Hand of a Player with the given playerId
    * from the given sourcePosition to the given targetPosition.
    *
-   * @param playerID the id of the Player on whose hand stones will be moved
+   * @param playerID       the id of the Player on whose hand stones will be moved
    * @param sourcePosition the position of a stone before moving it
    * @param targetPosition the position of the stone after moving it
    */
   void moveStoneOnHand(int playerID, Coordinate sourcePosition, Coordinate targetPosition);
 
-  /** Makes the current Player of this Game to draw a stone. */
+  /**
+   * Makes the current Player of this Game to draw a stone.
+   */
   void draw(int playerID);
 
   /**
@@ -97,10 +99,14 @@ public interface Game {
    */
   void removePlayer(int playerID);
 
-  /** Resets all moves of stones that had been done on and to the Table of this Game. */
+  /**
+   * Resets all moves of stones that had been done on and to the Table of this Game.
+   */
   void reset();
 
-  /** Undoes a move of a stone that had been done on and to the Table of this Game. */
+  /**
+   * Undoes a move of a stone that had been done on and to the Table of this Game.
+   */
   void undo();
 
   /**
@@ -131,7 +137,7 @@ public interface Game {
    *
    * @param playerID the id of the subject Player
    * @return all stones and their associated Coordinates
-   *         on the Hand of a Player with the given playerId in this Game
+   * on the Hand of a Player with the given playerId in this Game
    */
   Map<Coordinate, Stone> getPlayerStones(int playerID);
 
@@ -193,12 +199,12 @@ public interface Game {
   void sortPlayerHandByRun(int playerId);
 
 
-
   /**
    * Draws a Stone when if there are Stones available.
    * Switches to the next player if not.
    */
   void timeOut(int playerID);
+
   /**
    * Returns true if only if the Player with the given playerId has played their first move.
    *
@@ -213,6 +219,7 @@ public interface Game {
    * @return true if this Game is on going
    */
   boolean isGameOn();
+
   void confirmMove(int playerID);
 
 }
