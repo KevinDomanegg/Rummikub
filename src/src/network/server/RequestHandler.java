@@ -210,7 +210,7 @@ class RequestHandler {
         // draw stone cause table not consistent and the time is out
         game.timeOut(playerID);
         sendHandToPlayer(playerID);
-        // send changed hand to player
+        sendTableToAll();
         sendHandSizesToAll();
         sendBagSizeToAll();
         notifyTurnToPlayer();
@@ -240,7 +240,6 @@ class RequestHandler {
 
   private boolean isCurrentPlayer(int playID) {
     if (game.getCurrentPlayerID() != playID) {
-      // sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;
