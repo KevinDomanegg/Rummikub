@@ -16,6 +16,7 @@ public class GameModel extends Observable {
 
   /**
    * Add a name to the data.
+   *
    * @param name of one of the players
    */
   public void setName(String name) {
@@ -27,6 +28,7 @@ public class GameModel extends Observable {
 
   /**
    * Add an age to the data.
+   *
    * @param age of one of the players.
    */
   public void setAge(int age) {

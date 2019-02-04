@@ -1,5 +1,6 @@
 package network.server;
 //Might be better to move this class to the game-package
+
 import communication.gameinfo.BagInfo;
 import communication.gameinfo.CurrentPlayerInfo;
 import communication.gameinfo.ErrorInfo;
@@ -17,6 +18,8 @@ import communication.request.Request;
 import game.Coordinate;
 import game.Game;
 import game.Stone;
+import globalconstants.ErrorMessages;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +41,7 @@ class RequestHandler {
    * Constructor establishing the connection server-requesthandler-game.
    *
    * @param server to be connected to
-   * @param game to be connected to
+   * @param game   to be connected to
    */
   RequestHandler(Server server, Game game) {
     this.server = server;
@@ -61,178 +64,173 @@ class RequestHandler {
   /**
    * Applies a Request to the game and generates responses to all clients.
    *
-   * @param request being issued by a client
-   * @param playerId identifier of the specific client issuing the request.
+   * @param request  being issued by a client
+   * @param playerID identifier of the specific client issuing the request.
    */
-  void applyRequest(Object request, int playerId) {
+  void applyRequest(Object request, int playerID) {
     // for test
-    System.out.println("From RequestHandler: applying " +request);
+    System.out.println("From RequestHandler: applying " + request);
     switch (((Request) request).getRequestID()) {
 
       case START:
-        // check if the player is the host (host id is always 0)
-        if (playerId != 0) {
-          sendErrorToPlayer(playerId, "only host can start the game.");
+
+        if (playerID != 0) {
+          sendErrorToPlayer(playerID, ErrorMessages.CLIENT_CANNOT_START_GAME_ERROR);
           return;
         }
-        // check if there are at least 2 players
-        if (game.getNumberOfPlayers() < 2) {
-          sendErrorToPlayer(playerId, "wait for other players to join.");
-          return;
+
+        try {
+          game.start();
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
         }
-        // check if the game is already on
-        if (!game.start()) {
-          sendErrorToPlayer(playerId, "game is already on.");
-          return;
-        }
+
         notifyGameStartToAll();
         return;
-      case SET_PLAYER:
+
+      case JOIN:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
-        if (!game.setPlayer(playerId, setPlayer.getName(), setPlayer.getAge())) {
-          sendErrorToPlayer(playerId, "the game is already full");
-          return;
+        try {
+          game.join(playerID, setPlayer.getName(), setPlayer.getAge());
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
         }
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
         return;
 
       case HAND_MOVE:
         ConcreteMove handMove = (ConcreteMove) request;
-        game.moveStoneOnHand(playerId,
-            new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
-            new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
-        sendHandToPlayer(playerId);
-      return;
+        game.moveStoneOnHand(playerID,
+                new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
+                new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
+        sendHandToPlayer(playerID);
+        return;
 
       case HAND_SET_MOVE:
         ConcreteMove handSetMove = (ConcreteMove) request;
-        if (!game.moveSetOnHand(playerId,
-            new Coordinate(handSetMove.getInitCol(), handSetMove.getInitRow()),
-            new Coordinate(handSetMove.getTargetCol(), handSetMove.getTargetRow()))) {
-          sendErrorToPlayer(playerId, NOT_ALLOWED_MOVE);
+        if (!game.moveSetOnHand(playerID,
+                new Coordinate(handSetMove.getInitCol(), handSetMove.getInitRow()),
+                new Coordinate(handSetMove.getTargetCol(), handSetMove.getTargetRow()))) {
+          sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
         }
-        sendHandToPlayer(playerId);
+        sendHandToPlayer(playerID);
         return;
 
       case TABLE_MOVE:
-        if (isCurrentPlayer(playerId)) {
+        if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
           game.moveStoneOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
-              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
+                  new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
         }
-        sendTableToALl();
+        sendTableToAll();
         return;
 
       case TABLE_SET_MOVE:
-        if (isCurrentPlayer(playerId)) {
+        if (isCurrentPlayer(playerID)) {
           ConcreteMove tableMove = (ConcreteMove) request;
           if (!game.moveSetOnTable(new Coordinate(tableMove.getInitCol(), tableMove.getInitRow()),
-              new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()))) {
-            sendErrorToPlayer(playerId, NOT_ALLOWED_MOVE);
+                  new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()))) {
+            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
           }
         }
-        sendTableToALl();
+        sendTableToAll();
         return;
 
       case PUT_STONE:
-        if (isCurrentPlayer(playerId)) {
+        if (isCurrentPlayer(playerID)) {
           ConcreteMove putStone = (ConcreteMove) request;
-          if (!game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
-              new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()))) {
-            sendErrorToPlayer(playerId, NOT_ALLOWED_MOVE);
+          try {
+            game.putStone(new Coordinate(putStone.getInitCol(), putStone.getInitRow()),
+                    new Coordinate(putStone.getTargetCol(), putStone.getTargetRow()));
+          } catch (UnsupportedOperationException e) {
+            sendErrorToPlayer(playerID, e.getMessage());
           }
           sendHandSizesToAll();
         }
-        sendTableToALl();
-        sendHandToPlayer(playerId);
+        sendTableToAll();
+        sendHandToPlayer(playerID);
         return;
 
       case PUT_SET:
-        if (isCurrentPlayer(playerId)) {
+        if (isCurrentPlayer(playerID)) {
           ConcreteMove putSet = (ConcreteMove) request;
           if (!game.putSet(new Coordinate(putSet.getInitCol(), putSet.getInitRow()),
-              new Coordinate(putSet.getTargetCol(), putSet.getTargetRow()))) {
-            sendErrorToPlayer(playerId, NOT_ALLOWED_MOVE);
+                  new Coordinate(putSet.getTargetCol(), putSet.getTargetRow()))) {
+            sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
           }
           sendHandSizesToAll();
         }
-        sendTableToALl();
-        sendHandToPlayer(playerId);
+        sendTableToAll();
+        sendHandToPlayer(playerID);
         return;
 
       case DRAW:
-        if (isCurrentPlayer(playerId)) {
-          if (game.getBagSize() == 0) {
-            sendErrorToPlayer(playerId, "Bag is empty!");
-            return;
-          }
-          game.reset();
-          game.drawStone();
-          // send the player new hand with a drawn stone
-          sendHandToPlayer(playerId);
-          // send the original table to all
-          sendTableToALl();
-          sendHandSizesToAll();
-          sendBagSizeToAll();
-          notifyTurnToPlayer();
+
+        try {
+          game.draw(playerID);
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
+          break;
         }
-      return;
+
+        sendHandToPlayer(playerID);
+        sendTableToAll();
+        sendHandSizesToAll();
+        sendBagSizeToAll();
+        notifyTurnToPlayer();
+        break;
 
       case CONFIRM_MOVE:
-        if (isCurrentPlayer(playerId)) {
-          if (game.isConsistent()) {
-            checkWinner();
-            notifyTurnToPlayer();
-            sendHandSizesToAll();
-          } else {
-            sendErrorToPlayer(playerId, (game.hasPlayerPlayedFirstMove(playerId))
-                ? "invalid move!"
-                : "sum of stone-values at the first move must be at least 30 points!");
-          }
-        }
-        return;
 
-      case RESET:
-        if (isCurrentPlayer(playerId)) {
-          game.reset();
-//        sendTableToPlayer(playerId);
-          sendTableToALl();
-          sendHandToPlayer(playerId);
-          sendHandSizesToAll();
-//        sendHandSizesToPlayer(playerId);
+        try {
+          game.confirmMove(playerID);
+        } catch (UnsupportedOperationException e) {
+          sendErrorToPlayer(playerID, e.getMessage());
         }
-      return;
-      case TIME_OUT:
-          // sends original table
-        if (game.isGameOn()) {
-          game.reset();
-          sendTableToALl();
-          sendHandToPlayer(playerId);
-          // draw stone cause table not consistent and the time is out
-          game.timeOut();
-          sendHandToPlayer(playerId);
-          // send changed hand to player
+        if (!checkWinner()) {
+          sendHandToPlayer(playerID);
           sendHandSizesToAll();
           sendBagSizeToAll();
           notifyTurnToPlayer();
         }
+        break;
+
+      case RESET:
+        if (isCurrentPlayer(playerID)) {
+          game.reset();
+          sendTableToAll();
+          sendHandToPlayer(playerID);
+          sendHandSizesToAll();
+        }
+        return;
+      case TIME_OUT:
+        // sends original table
+        sendTableToAll();
+        sendHandToPlayer(playerID);
+        // draw stone cause table not consistent and the time is out
+        game.timeOut(playerID);
+        sendHandToPlayer(playerID);
+        // send changed hand to player
+        sendHandSizesToAll();
+        sendBagSizeToAll();
+        notifyTurnToPlayer();
         return;
 
       case SORT_HAND_BY_GROUP:
-        game.sortPlayerHandByGroup(playerId);
-        sendHandToPlayer(playerId);
+        game.sortPlayerHandByGroup(playerID);
+        sendHandToPlayer(playerID);
         return;
 
       case SORT_HAND_BY_RUN:
-        game.sortPlayerHandByRun(playerId);
-        sendHandToPlayer(playerId);
+        game.sortPlayerHandByRun(playerID);
+        sendHandToPlayer(playerID);
         return;
 
       case UNDO:
-        if (isCurrentPlayer(playerId)) {
+        if (isCurrentPlayer(playerID)) {
           game.undo();
-          sendTableToALl();
-          sendHandToPlayer(playerId);
+          sendTableToAll();
+          sendHandToPlayer(playerID);
         }
         return;
 
@@ -241,8 +239,8 @@ class RequestHandler {
   }
 
   private boolean isCurrentPlayer(int playID) {
-    if (game.getCurrentPlayerId() != playID) {
-      sendErrorToPlayer(playID, NOT_YOUR_TURN);
+    if (game.getCurrentPlayerID() != playID) {
+      // sendErrorToPlayer(playID, NOT_YOUR_TURN);
       return false;
     }
     return true;
@@ -257,7 +255,7 @@ class RequestHandler {
    */
   private void notifyTurnToPlayer() {
 
-    int currentPlayerID = game.getCurrentPlayerId();
+    int currentPlayerID = game.getCurrentPlayerID();
 
     for (int i = 0; i < 4; i++) {
       if (i == currentPlayerID) {
@@ -278,10 +276,10 @@ class RequestHandler {
    * Used when telling all the clients who - relative to them - is currently
    * playing.
    *
-   * @param recipientID ID of the player who is supposed to receive the GameInfo
+   * @param recipientID     ID of the player who is supposed to receive the GameInfo
    * @param currentPlayerID ID of the player who is currently playing
    * @return int representing number of steps (clockwise) the recipient has to
-   *          perform in order to find the currently playing opponent
+   * perform in order to find the currently playing opponent
    */
   private int calculateRelativeID(int recipientID, int currentPlayerID) {
 
@@ -302,7 +300,7 @@ class RequestHandler {
   private void notifyGameStartToAll() {
     server.sendToAll(new GameStartInfo(GameInfoID.GAME_START));
     // send table first to all
-    sendTableToALl();
+    sendTableToAll();
     // send to each player their hand
     for (int playerID = 0; playerID < game.getNumberOfPlayers(); playerID++) {
       sendHandToPlayer(playerID);
@@ -320,13 +318,13 @@ class RequestHandler {
     server.sendToAll(new BagInfo(game.getBagSize()));
   }
 
-  private void sendTableToALl() {
+  private void sendTableToAll() {
     server.sendToAll(new GridInfo(GameInfoID.TABLE, parseStoneInfoGrid(game.getTableWidth(), game.getTableHeight(), game.getTableStones())));
   }
 
   private void sendHandToPlayer(int playerID) {
     server.sendToPlayer(playerID, new GridInfo(GameInfoID.HAND, parseStoneInfoGrid(game.getPlayerHandWidth(playerID),
-        game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
+            game.getPlayerHandHeight(playerID), game.getPlayerStones(playerID))));
   }
 
   private void sendHandSizesToAll() {
@@ -353,10 +351,12 @@ class RequestHandler {
     server.sendToPlayer(playerID, new HandSizesInfo(handSizes));
   }
 
-  private void checkWinner() {
+  private boolean checkWinner() {
     if (game.hasWinner()) {
       server.sendToAll(new RankInfo(game.getFinalRank()));
+      return true;
     }
+    return false;
   }
 
   private void sendErrorToPlayer(int playerID, String message) {

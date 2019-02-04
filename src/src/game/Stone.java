@@ -1,28 +1,34 @@
 package game;
 
+import globalconstants.Constants;
+
 /**
  * Class representing a stone.
  * Each Stone has one of four colors and a value between 1 and 13.
  * There are two special Stones, the jokers.
  */
 public class Stone {
-  public enum Color { RED, BLACK, YELLOW, BLUE, JOKER }
+  public enum Color {RED, BLACK, YELLOW, BLUE, JOKER}
 
   public static final int MAX_VALUE = 13;
   public static final int MIN_VALUE = 1;
-  private static final int JOKER_POINTS = 20;
 
+  private final int JOKER_POINTS = 20;
   private final Color color;
   private final int number;
 
   public Stone(Color color, int number) {
     this.color = color;
-    this.number = number;
+    if (color.equals(Color.JOKER)) {
+      this.number = Constants.JOKER_POINTS;
+    } else {
+      this.number = number;
+    }
   }
 
   public Stone() {
     color = Color.JOKER;
-    number = JOKER_POINTS;
+    number = Constants.JOKER_POINTS;
   }
 
   public Color getColor() {
@@ -36,6 +42,6 @@ public class Stone {
   // Testmethods
   @Override
   public String toString() {
-    return "(Color: " + color + ", " + "Number: " + " " + number +")";
+    return "(Color: " + color + ", " + "Number: " + " " + number + ")";
   }
 }

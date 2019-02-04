@@ -1,11 +1,12 @@
 package game;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 import org.junit.Test;
+
+import globalconstants.*;
+
+import static org.junit.Assert.*;
 
 
 public class RummiGameTest {
@@ -13,14 +14,14 @@ public class RummiGameTest {
   @Test
   public void initTestWithoutMoveOnHand() {
     RummiGame game1 = new RummiGame();
-    game1.setPlayer(0, "Cedrik", 25);
-    game1.setPlayer(1, "Hyunsung", 21);
+    game1.join(0, "Cedrik", 25);
+    game1.join(1, "Hyunsung", 21);
     game1.start();
 
     assertTrue(game1.getPlayerNames().get(1) == "Hyunsung");
     assertTrue(game1.getNumberOfPlayers() == 2);
     assertTrue((game1.getBagSize() + game1.getPlayerHandSizes().get(0) + game1.getPlayerHandSizes().get(1)) == 106);
-    assertTrue(game1.getCurrentPlayerId() == 1);
+    assertTrue(game1.getCurrentPlayerID() == 1);
     assertEquals(game1.getTableHeight(), 8);
     assertEquals(game1.getTableWidth(), 26);
     assertEquals(game1.getPlayerHandHeight(1), 3);
@@ -38,12 +39,12 @@ public class RummiGameTest {
     assertTrue(game1.getPlayerStones(1).get(new Coordinate(0, 0)) == null);
 
 
-    assertEquals(game1.getTrace().peek().getMove(), "MOVESTONEONTABLE");
+    assertEquals(game1.getTrace().peek().getCommand(), TraceMove.MOVE_STONE_ON_TABLE);
     game1.undo();
-    assertEquals(game1.getTrace().peek().getMove(), ("MOVESTONEONTABLE"));
+    assertEquals(game1.getTrace().peek().getCommand(), (TraceMove.MOVE_STONE_ON_TABLE));
     game1.undo();
     game1.undo();
-    assertEquals(game1.getTrace().peek().getMove(), ("MOVESTONEFROMHAND"));
+    assertEquals(game1.getTrace().peek().getCommand(), (TraceMove.MOVE_STONE_FROM_HAND));
     game1.undo();
     game1.reset();
     game1.undo();
@@ -55,8 +56,8 @@ public class RummiGameTest {
   @Test
   public void consistencyTest() {
     RummiGame game2 = new RummiGame();
-    game2.setPlayer(0, "Cedrik", 25);
-    game2.setPlayer(1, "Hyunsung", 21);
+    game2.join(0, "Cedrik", 25);
+    game2.join(1, "Hyunsung", 21);
     game2.start();
 
     game2.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
@@ -68,7 +69,8 @@ public class RummiGameTest {
     game2.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
     game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
 
-    assertTrue(game2.getTable().isConsistent());
+
+    assertTrue(game2.isConsistent());
 
     game2.getTableStones().put(new Coordinate(0, 1), new Stone(Stone.Color.BLACK, 7));
     game2.getTableStones().put(new Coordinate(1, 1), new Stone(Stone.Color.BLACK, 2));
@@ -81,9 +83,9 @@ public class RummiGameTest {
   @Test
   public void playerHasLeftTest() {
     RummiGame game3 = new RummiGame();
-    game3.setPlayer(0, "Peter", 25);
-    game3.setPlayer(1, "Helga", 21);
-    game3.setPlayer(2, "Helga2", 20);
+    game3.join(0, "Peter", 25);
+    game3.join(1, "Helga", 21);
+    game3.join(2, "Helga2", 20);
     game3.start();
 
     assertEquals(game3.getBagSize(), (106 - 42));
@@ -97,8 +99,8 @@ public class RummiGameTest {
   @Test
   public void rankingTest() {
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     game4.getPlayerStones(1).clear();
@@ -115,8 +117,8 @@ public class RummiGameTest {
   @Test
   public void sortHandByRunTest() {
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     boolean sortedByRun = true;
@@ -146,8 +148,8 @@ public class RummiGameTest {
   public void sortedHandByGroupTest() {
 
     RummiGame game4 = new RummiGame();
-    game4.setPlayer(0, "Peter", 25);
-    game4.setPlayer(1, "Helga", 21);
+    game4.join(0, "Peter", 25);
+    game4.join(1, "Helga", 21);
     game4.start();
 
     boolean sortedByGroup = true;
@@ -176,8 +178,8 @@ public class RummiGameTest {
   @Test
   public void yetAnotherTest() {
     RummiGame game = new RummiGame();
-    game.setPlayer(0, "player1", 0);
-    game.setPlayer(1, "player2", 3);
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
     game.start();
 
     game.putStone(new Coordinate(4, 0), new Coordinate(3, 2));
@@ -223,36 +225,57 @@ public class RummiGameTest {
   }
 
   @Test
-  public void testingMethod() {
-    RummiGame game2 = new RummiGame();
-    game2.setPlayer(0, "Cedrik", 25);
-    game2.setPlayer(1, "Hyunsung", 21);
-    game2.start();
+  public void drawStonesTest(){
+    RummiGame game = new RummiGame();
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
+    game.start();
 
-    game2.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
-    game2.getTableStones().put(new Coordinate(1, 0), new Stone(Stone.Color.BLACK, 2));
-    game2.getTableStones().put(new Coordinate(2, 0), new Stone(Stone.Color.BLACK, 3));
-    game2.getTableStones().put(new Coordinate(3, 0), new Stone(Stone.Color.JOKER, 0));
-    game2.getTableStones().put(new Coordinate(4, 0), new Stone(Stone.Color.BLACK, 5));
-    game2.getTableStones().put(new Coordinate(5, 0), new Stone(Stone.Color.BLACK, 6));
-    game2.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
-    game2.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
+    System.out.println(game.getPlayerStones(0));
+    System.out.println(game.getCurrentPlayer().getHandSize());
+    System.out.println(game.getPlayerStones(1));
+    System.out.println(game.getPlayerStones(1).size());
 
-    assertTrue(game2.getTable().isConsistent());
+    assertEquals(game.getPlayerStones(0).size(), Constants.FIRST_STONES);
+    assertEquals(game.getPlayerStones(1).size(), Constants.FIRST_STONES);
+    assertEquals(game.getBagSize(), Constants.MAX_BAG_SIZE - 2 * Constants.FIRST_STONES);
+
+    game.draw(0);
+    game.draw(1);
+    assertThrows(UnsupportedOperationException.class, () -> game.draw(1));
   }
 
   @Test
-  public void testRestartGame() {
-    RummiGame game2 = new RummiGame();
-    game2.setPlayer(0, "Cedrik", 25);
-    game2.setPlayer(1, "Hyunsung", 21);
-    game2.start();
+  public void checkTest() {
+    RummiGame game = new RummiGame();
+    game.join(0, "player1", 0);
+    game.join(1, "player2", 3);
+    game.start();
 
-    game2.getPlayerStones(1).clear();
-    assertTrue(game2.hasWinner());
+    game.getTableStones().put(new Coordinate(0, 0), new Stone(Stone.Color.BLACK, 1));
+    game.getTableStones().put(new Coordinate(1, 0), new Stone(Stone.Color.BLACK, 2));
+    game.getTableStones().put(new Coordinate(2, 0), new Stone(Stone.Color.BLACK, 3));
+    game.getTableStones().put(new Coordinate(3, 0), new Stone(Stone.Color.BLACK, 4));
+    game.getTableStones().put(new Coordinate(4, 0), new Stone(Stone.Color.BLACK, 5));
+    game.getTableStones().put(new Coordinate(5, 0), new Stone(Stone.Color.BLACK, 6));
+    game.getTableStones().put(new Coordinate(6, 0), new Stone(Stone.Color.BLACK, 7));
+    game.getTableStones().put(new Coordinate(7, 0), new Stone(Stone.Color.BLACK, 8));
 
-    game2.start();
-    assertEquals(game2.getPlayerStones(0).size(), 14);
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(0,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(1,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(2,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(3,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(4,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(5,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(6,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(7,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(8,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(9,0));
+    game.getCurrentPlayer().getHand().removeStone(new Coordinate(10,0));
+
+    game.confirmMove(game.getCurrentPlayerID());
+
+    game.getCurrentPlayer().hasPlayedFirstMove();
 
   }
 }

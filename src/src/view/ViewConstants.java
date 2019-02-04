@@ -1,5 +1,8 @@
 package view;
 
+/**
+ * Class containing all constants that are relevant in the view-package.
+ */
 public class ViewConstants {
 
   //Error-Messages

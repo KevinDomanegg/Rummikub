@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Thread listening for requests coming from a certain client.
+ * Processes these requests and applies them.
+ */
 public class ServerListener extends Thread {
   private RummiServer server;
   private Socket clientIn;
@@ -45,7 +49,6 @@ public class ServerListener extends Thread {
       connected = processMessages();
     }
     in.close();
-    System.out.println("From ServerListener: Listener terminates.. id: " + id);
   }
 
   /**

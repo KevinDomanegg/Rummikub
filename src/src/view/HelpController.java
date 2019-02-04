@@ -14,6 +14,6 @@ public class HelpController {
 
   @FXML
   private void handleOkButton() {
-      ((Stage) okButton.getScene().getWindow()).close();
+    ((Stage) okButton.getScene().getWindow()).close();
   }
 }

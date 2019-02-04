@@ -6,7 +6,7 @@ package communication.request;
 public enum RequestID {
 
   START,
-  SET_PLAYER,
+  JOIN,
   HAND_MOVE,
   TABLE_MOVE,
   PUT_STONE,

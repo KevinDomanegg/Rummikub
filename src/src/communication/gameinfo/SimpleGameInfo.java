@@ -12,7 +12,8 @@ public final class SimpleGameInfo implements GameInfo, Serializable {
     this.gameInfoID = gameInfoID;
   }
 
-  @Override public GameInfoID getGameInfoID() {
+  @Override
+  public GameInfoID getGameInfoID() {
     return gameInfoID;
   }
 

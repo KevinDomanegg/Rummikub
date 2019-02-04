@@ -16,7 +16,8 @@ public final class CurrentPlayerInfo implements GameInfo, Serializable {
     this.playerID = playerID;
   }
 
-  @Override public GameInfoID getGameInfoID() {
+  @Override
+  public GameInfoID getGameInfoID() {
     return GameInfoID.CURRENT_PLAYER;
   }
 

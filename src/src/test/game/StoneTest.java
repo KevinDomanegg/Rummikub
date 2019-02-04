@@ -2,6 +2,7 @@ package game;
 
 import static org.junit.Assert.*;
 
+import globalconstants.Constants;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
@@ -26,10 +27,10 @@ public class StoneTest {
     assertTrue(stone5.getColor() == Stone.Color.JOKER);
 
     assertEquals(stone1.getNumber(), 1);
-    assertEquals(stone2.getNumber(), 2);
+    assertEquals(stone2.getNumber(), Constants.JOKER_POINTS);
     assertEquals(stone3.getNumber(), 3);
     assertEquals(stone4.getNumber(), 4);
-    assertEquals(stone5.getNumber(), 20);
+    assertEquals(stone5.getNumber(), Constants.JOKER_POINTS);
   }
 
 }

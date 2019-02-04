@@ -2,7 +2,9 @@ package game;
 
 import java.util.Map;
 
-/** Player of RummiGame. They have name, age and their RummiHands.*/
+/**
+ * Player of RummiGame. They have name, age and their RummiHands.
+ */
 class Player {
   private final String name;
   private final int age;
@@ -13,6 +15,15 @@ class Player {
     this.name = name;
     this.age = age;
     hand = new RummiHand();
+    playedFirstMove = false;
+  }
+
+  void setPlayedFirstMove(boolean hasPlayed) {
+    this.playedFirstMove = hasPlayed;
+  }
+
+  public int points() {
+    return hand.points();
   }
 
   int getAge() {
@@ -115,7 +126,9 @@ class Player {
     return hand;
   }
 
-  /** Reminds this Player that they have played the first move. */
+  /**
+   * Reminds this Player that they have played the first move.
+   */
   void notifyEndOfFirstMove() {
     playedFirstMove = true;
   }
@@ -152,7 +165,8 @@ class Player {
   }
 
   // for test
-  @Override public String toString() {
+  @Override
+  public String toString() {
     return "Player(" + age + ")";
   }
 }

@@ -13,7 +13,8 @@ public final class RankInfo implements GameInfo, Serializable {
     this.finalRank = finalRank;
   }
 
-  @Override public GameInfoID getGameInfoID() {
+  @Override
+  public GameInfoID getGameInfoID() {
     return GameInfoID.RANK;
   }
 

@@ -12,6 +12,6 @@ public class ConcreteSetPlayerTest {
 
     assertTrue(player1.getName() == "Peter");
     assertTrue(player1.getAge() == 9);
-    assertTrue(player1.getRequestID() == RequestID.SET_PLAYER);
+    assertTrue(player1.getRequestID() == RequestID.JOIN);
   }
 }

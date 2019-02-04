@@ -24,6 +24,7 @@ public final class ConcreteMove implements Request, Serializable {
   public int getInitCol() {
     return initCol;
   }
+
   public int getInitRow() {
     return initRow;
   }
@@ -32,11 +33,13 @@ public final class ConcreteMove implements Request, Serializable {
   public int getTargetCol() {
     return targetCol;
   }
+
   public int getTargetRow() {
     return targetRow;
   }
 
-  @Override public RequestID getRequestID() {
+  @Override
+  public RequestID getRequestID() {
     return id;
   }
 }

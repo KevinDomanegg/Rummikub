@@ -5,15 +5,22 @@ import communication.gameinfo.GameInfoID;
 import communication.gameinfo.SimpleGameInfo;
 import game.Game;
 import game.RummiGame;
+import globalconstants.Constants;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Class acting as the server in a game of Rummikub.
+ * Can connect to a number of client at the same time and communicate between
+ * the central game-model and the different clients.
+ */
 public class RummiServer extends Thread implements Server {
 
-  private static final int MAX_CLIENTS = 4;
+  private static final int MAX_CLIENTS = Constants.MAX_PLAYERS;
   private static final int PORT = 48410;
   private Socket[] clients = new Socket[MAX_CLIENTS];
   private ServerListener[] listeners = new ServerListener[MAX_CLIENTS];
@@ -47,10 +54,8 @@ public class RummiServer extends Thread implements Server {
         }
       }
     } catch (IOException e) {
-//      System.out.println("From run in RummiServer: ServerSocket");
       running = false;
     }
-    System.out.println("From run in RummiServer: server terminates");
   }
 
   private synchronized void tryToConnect(Socket client) throws IOException {
@@ -70,6 +75,7 @@ public class RummiServer extends Thread implements Server {
 
   /**
    * Notifies a client that it has been rejected.
+   *
    * @param client to be rejected
    */
   private void rejectClient(Socket client) throws IOException {
@@ -105,7 +111,6 @@ public class RummiServer extends Thread implements Server {
     if (id == 0 || game.isGameOn() && numOfClients == 2) {
       //Notify all clients if the host is the one disconnecting.
       suicide();
-      System.out.println("From disconnectClient in RummiServer: suicide");
     } else {
       game.removePlayer(id);
       //Remove player and notify clients about it
@@ -151,7 +156,8 @@ public class RummiServer extends Thread implements Server {
    * @param playerID id of the player (0-n)
    * @param info     GameInfo getting sent to the player
    */
-  @Override public void sendToPlayer(int playerID, GameInfo info) {
+  @Override
+  public void sendToPlayer(int playerID, GameInfo info) {
     if (senders[playerID] != null) {
       senders[playerID].send(info);
     }
