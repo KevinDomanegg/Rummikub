@@ -73,20 +73,17 @@ class RequestHandler {
     switch (((Request) request).getRequestID()) {
 
       case START:
-
         if (playerID != 0) {
           sendErrorToPlayer(playerID, ErrorMessages.CLIENT_CANNOT_START_GAME_ERROR);
-          return;
+          break;
         }
-
         try {
           game.start();
         } catch (UnsupportedOperationException e) {
           sendErrorToPlayer(playerID, e.getMessage());
         }
-
         notifyGameStartToAll();
-        return;
+        break;
 
       case JOIN:
         ConcreteSetPlayer setPlayer = (ConcreteSetPlayer) request;
@@ -96,7 +93,7 @@ class RequestHandler {
           sendErrorToPlayer(playerID, e.getMessage());
         }
         server.sendToAll(new PlayerNamesInfo(game.getPlayerNames()));
-        return;
+        break;
 
       case HAND_MOVE:
         ConcreteMove handMove = (ConcreteMove) request;
@@ -104,7 +101,7 @@ class RequestHandler {
                 new Coordinate(handMove.getInitCol(), handMove.getInitRow()),
                 new Coordinate(handMove.getTargetCol(), handMove.getTargetRow()));
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case HAND_SET_MOVE:
         ConcreteMove handSetMove = (ConcreteMove) request;
@@ -114,7 +111,7 @@ class RequestHandler {
           sendErrorToPlayer(playerID, NOT_ALLOWED_MOVE);
         }
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case TABLE_MOVE:
         if (isCurrentPlayer(playerID)) {
@@ -123,7 +120,7 @@ class RequestHandler {
                   new Coordinate(tableMove.getTargetCol(), tableMove.getTargetRow()));
         }
         sendTableToAll();
-        return;
+        break;
 
       case TABLE_SET_MOVE:
         if (isCurrentPlayer(playerID)) {
@@ -134,7 +131,7 @@ class RequestHandler {
           }
         }
         sendTableToAll();
-        return;
+        break;
 
       case PUT_STONE:
         if (isCurrentPlayer(playerID)) {
@@ -149,7 +146,7 @@ class RequestHandler {
         }
         sendTableToAll();
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case PUT_SET:
         if (isCurrentPlayer(playerID)) {
@@ -162,17 +159,15 @@ class RequestHandler {
         }
         sendTableToAll();
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case DRAW:
-
         try {
           game.draw(playerID);
         } catch (UnsupportedOperationException e) {
           sendErrorToPlayer(playerID, e.getMessage());
           break;
         }
-
         sendHandToPlayer(playerID);
         sendTableToAll();
         sendHandSizesToAll();
@@ -181,7 +176,6 @@ class RequestHandler {
         break;
 
       case CONFIRM_MOVE:
-
         try {
           game.confirmMove(playerID);
         } catch (UnsupportedOperationException e) {
@@ -202,7 +196,8 @@ class RequestHandler {
           sendHandToPlayer(playerID);
           sendHandSizesToAll();
         }
-        return;
+        break;
+
       case TIME_OUT:
         // sends original table
         sendTableToAll();
@@ -214,17 +209,17 @@ class RequestHandler {
         sendHandSizesToAll();
         sendBagSizeToAll();
         notifyTurnToPlayer();
-        return;
+        break;
 
       case SORT_HAND_BY_GROUP:
         game.sortPlayerHandByGroup(playerID);
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case SORT_HAND_BY_RUN:
         game.sortPlayerHandByRun(playerID);
         sendHandToPlayer(playerID);
-        return;
+        break;
 
       case UNDO:
         if (isCurrentPlayer(playerID)) {
@@ -232,7 +227,7 @@ class RequestHandler {
           sendTableToAll();
           sendHandToPlayer(playerID);
         }
-        return;
+        break;
 
       default:
     }
