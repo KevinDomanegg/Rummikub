@@ -66,7 +66,12 @@ public class WaitController implements Initializable {
 
   void setPlayerNames(List<String> names) {
     System.out.println("From WaitCtrl.: setting names.. " + names);
-    switch (names.size()) { //TODO: Make readable
+
+    /*
+    * Switch distinguishing cases based on the number of players
+    * that have already joined the game.
+    */
+    switch (names.size()) {
       case 4:
         player0.setText(names.get(0));
         player1.setText(names.get(1));

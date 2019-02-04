@@ -13,5 +13,6 @@ public class ErrorMessages {
     public static final String CLIENT_CANNOT_START_GAME_ERROR = "Clients cannot start the game. Please wait for the host to start the game.";
     public static final String SPOT_ALREADY_TAKEN_ERROR = "You cannot put down two stones at the same spot.";
     public static final String TABLE_NOT_CONSISTENT_ERROR = "You cannot go on because the table configuration is not valid.";
+    public static final String NO_STONES_PUT_DOWN_ERROR = "Before confirming a move you need to put at least one stone on the table";
 
 }

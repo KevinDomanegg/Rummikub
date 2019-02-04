@@ -486,8 +486,7 @@ public class RummiGame implements Game {
     pointsAfterTurn = getCurrentPlayer().points();
     int pointsPlayed = (pointsBeforeTurn - pointsAfterTurn);
     if (pointsPlayed == 0) {
-      //TODO: make new Exception for 0 points
-      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_PLAYERS_ERROR);
     }
     if (!currentPlayer().hasPlayedFirstMove() && pointsPlayed < Constants.MIN_FIRST_MOVE_POINTS) {
       throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);

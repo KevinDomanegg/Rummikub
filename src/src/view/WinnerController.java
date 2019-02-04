@@ -39,8 +39,9 @@ public class WinnerController {
   }
 
   /**
-   * @ToDo
-   * add javadoc; I don't understand the input, so I can't addd the javadoc
+   * Displays the winner and final ranking of the game.
+   *
+   * @param finalRank map mapping each player to his points
    */
   void setRank(Map<String, Integer> finalRank) {
     rankList.getItems().addAll(finalRank);

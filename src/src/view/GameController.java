@@ -40,6 +40,8 @@ public class GameController {
 
   private static DataFormat stoneFormat = new DataFormat(ViewConstants.STONE_FORMAT);
 
+  private boolean isMyTurn = false;
+
   @FXML private HBox opponentRight;
   @FXML private HBox opponentMid;
   @FXML private HBox opponentLeft;
@@ -74,7 +76,6 @@ public class GameController {
     this.mainController = mainController;
   }
 
-  //TODO: Clean up code
   private void setTimer() {
     int delay = 1000;
     int period = 1000;
@@ -86,10 +87,7 @@ public class GameController {
         public void run() {
           if (remainingTime == 0) {
 
-            //@ToDo
-            // Determining if the player is currently playing via gui-properties is very bad style!
-            // We should consider a global variable boolean currentlyPlaying or similar
-            if (ownBoard.getStyle().equals(ViewConstants.CURRENTLY_PLAYING_STYLE)) {
+            if (isMyTurn) {
               stopTimer();
               sendTimeOutRequest();
               return;
@@ -126,6 +124,7 @@ public class GameController {
    */
   void yourTurn() {
     ownBoard.setStyle(ViewConstants.CURRENTLY_PLAYING_STYLE);
+    isMyTurn = true;
   }
 
   /**
@@ -133,6 +132,7 @@ public class GameController {
    */
   private void endOfYourTurn() {
     ownBoard.setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_STYLE);
+    isMyTurn = false;
   }
 
   /**
@@ -217,7 +217,6 @@ public class GameController {
         if (event.isControlDown()) {
           isMultiMove = true;
           dragGraphic = new Image(getClass().getResource(ViewConstants.MULTIPLE_STONES_IMAGE).toString());
-          System.out.println("----------------------------control pushed"); // TODO: Remove
         } else {
           // Create drag view without cell styling
           SnapshotParameters snapshotParameters = new SnapshotParameters();
@@ -253,7 +252,6 @@ public class GameController {
       event.consume();
     });
 
-    // TODO: In CSS if possible
     cell.setOnDragEntered(event -> {
       cell.setStyle(ViewConstants.STONE_WHILE_DRAGGING_STYLE);
     });
@@ -287,7 +285,7 @@ public class GameController {
           }
         }
       } else {
-        System.out.println("control pressed is: ------- " + isMultiMove); //TODO: Remove
+
         if (isMultiMove) {
           mainController.sendMoveSetOnTableRequest(sourceColumn, sourceRow, thisColumn, thisRow);
         } else {
@@ -397,11 +395,11 @@ public class GameController {
    * @param names of the opponents
    */
   void setPlayerNames(List<String> names) {
-    System.out.println("From GameCtrl.: setting names.. " + names); //TODO: Remove
+
     String nameComplement = ": ";
     switch (names.size()) {
       case 2:
-        opponentMid.setVisible(true); //TODO: Necessary?
+        opponentMid.setVisible(true);
         opponentLeft.setVisible(false);
         opponentRight.setVisible(false);
         midPlayerName.setText(names.get(1) + nameComplement);
@@ -460,7 +458,7 @@ public class GameController {
    * @param opponents possibly displayed opponents
    * @return number of currently displayed players
    */
-  private int getNumOfVisibliPlayers(HBox[] opponents) { //TODO: Rename this function
+  private int getNumOfVisiblePlayers(HBox[] opponents) {
     int numOfPlayers = 1;
     for (HBox opponent : opponents) {
       if (opponent.isVisible()) {
@@ -482,7 +480,7 @@ public class GameController {
    */
   private int toOpponentID(int relativeOpponentPosition, HBox[] opponents) {
 
-    int numOfPlayers = getNumOfVisibliPlayers(opponents);
+    int numOfPlayers = getNumOfVisiblePlayers(opponents);
     System.out.println(numOfPlayers);
 
     int opponentID;
@@ -549,14 +547,6 @@ public class GameController {
   @FXML
   private void sendSortHandByRunRequest() {
     mainController.sendSortHandByRunRequest();
-  }
-
-  public void showRank() {
-    Map<String, Integer> rank = new HashMap<>();
-    //@ToDo Magic numbers!
-    rank.put("name1", 0);
-    rank.put("name2", -30);
-    mainController.showRank(rank);
   }
 
   @FXML

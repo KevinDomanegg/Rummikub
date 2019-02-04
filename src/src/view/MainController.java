@@ -335,15 +335,12 @@ public class MainController implements Controller {
   }
 
   /**
-   * @ToDo
-   * Complete javadoc!!!
-   *
    * Sends a request to move a stone from the hand to the table to the server.
    *
    * @param sourceColumn x-coordinate of the Stone on the hand
    * @param sourceRow y-coordinate of the Stone on the hand
-   * @param targetColumn
-   * @param targetRow
+   * @param targetColumn x-Coordinate on the table
+   * @param targetRow y-Coodinate on the table
    */
   void sendMoveSetOnTableRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     client.sendRequest(new ConcreteMove(RequestID.TABLE_SET_MOVE, sourceColumn, sourceRow, targetColumn, targetRow));
@@ -402,44 +399,82 @@ public class MainController implements Controller {
   }
 
   /**
-   * @ToDo
-   * Why targetColumn/targetRow? Weird names..
-   *
    * Sends request to move a stone on the hand to the server.
    *
-   * @param sourceColumn
-   * @param sourceRow
-   * @param targetColumn
-   * @param targetRow
+   * @param sourceColumn x-Coordinate of the Stone that will be moved
+   * @param sourceRow y-Coordinate of the Stone that will be moved
+   * @param targetColumn x-Coordinate the Stone will be moved to
+   * @param targetRow y-Coordinate the Stone will be moved to
    */
   void sendMoveStoneOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.moveStoneOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends request to move a stone from the hand to the table to the server.
+   *
+   * @param sourceColumn x-Coordinate of the Stone that will be moved
+   * @param sourceRow y-Coordinate of the Stone that will be moved
+   * @param targetColumn x-Coordinate the Stone will be moved to
+   * @param targetRow y-Coordinate the Stone will be moved to
+   */
   void sendPutStoneRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendPutStoneRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends request to move a set of Stones on the table to the server.
+   *
+   * @param sourceColumn x-Coordinate of the Stone that will be moved
+   * @param sourceRow y-Coordinate of the Stone that will be moved
+   * @param targetColumn x-Coordinate the Stone will be moved to
+   * @param targetRow y-Coordinate the Stone will be moved to
+   */
   void sendMoveStoneOnTable(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendMoveStoneOnTable(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends request to move a set of Stones on the hand to the server.
+   *
+   * @param sourceColumn x-Coordinate of the Stone that will be moved
+   * @param sourceRow y-Coordinate of the Stone that will be moved
+   * @param targetColumn x-Coordinate the Stone will be moved to
+   * @param targetRow y-Coordinate the Stone will be moved to
+   */
   void sendMoveSetOnHand(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendMoveSetOnHand(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends request to move a stone on the hand to the server.
+   *
+   * @param sourceColumn x-Coordinate of the Stone that will be moved
+   * @param sourceRow y-Coordinate of the Stone that will be moved
+   * @param targetColumn x-Coordinate the Stone will be moved to
+   * @param targetRow y-Coordinate the Stone will be moved to
+   */
   void sendPutSetRequest(int sourceColumn, int sourceRow, int targetColumn, int targetRow) {
     requestBuilder.sendPutSetRequest(sourceColumn, sourceRow, targetColumn, targetRow);
   }
 
+  /**
+   * Sends a request to the server to confirm a move.
+   */
   void sendConfirmMoveRequest() {
     requestBuilder.sendConfirmMoveRequest();
   }
 
+  /**
+   * Sends a request to the server to sort the Stones on the hand by color.
+   */
   void sendSortHandByGroupRequest() {
     requestBuilder.sendSortHandByGroupRequest();
   }
 
+  /**
+   * Sends a request to the server to sort the Stones on the hand by numerical value.
+   */
   void sendSortHandByRunRequest() {
     requestBuilder.sendSortHandByRunRequest();
   }
@@ -467,10 +502,17 @@ public class MainController implements Controller {
     client = null;
   }
 
+  /**
+   * Sends request to the server to reset table and hand
+   * to the state they had before making any moves.
+   */
   void sendResetRequest() {
     requestBuilder.sendResetRequest();
   }
 
+  /**
+   * Sends a request to the server to undo the last move.
+   */
   void sendUndoRequest() {
     requestBuilder.sendUndoRequest();
   }
