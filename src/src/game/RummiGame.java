@@ -3,6 +3,7 @@ package game;
 import game.MoveTrace.Move;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -408,12 +409,12 @@ public class RummiGame implements Game {
     if (currentPoints == 0) {
       return false;
     }
-    // check if the current player has played their (first) turn in this game
-    if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */
-        // and the consistency of the Table
-        !table.isConsistent()) {
-      return false;
-    }
+//    // check if the current player has played their (first) turn in this game
+//    if (/*!currentPlayer().hasPlayedFirstMove() && currentPoints < MIN_FIRST_MOVE_POINTS || */
+//        // and the consistency of the Table
+//        !table.isConsistent()) {
+//      return false;
+//    }
     currentPlayer().notifyEndOfFirstMove();
     // clear the moveData for the next turn
     trace.clear();
@@ -501,7 +502,7 @@ public class RummiGame implements Game {
    * @return the sorted Players' names with their points.
    */
   @Override public Map<String, Integer> getFinalRank() {
-    Map<String, Integer> rank = new HashMap<>(players.size());
+    LinkedHashMap<String, Integer> rank = new LinkedHashMap<>(players.size());
     players.values().stream()
         .sorted(Comparator.comparingInt(Player::getPoints).reversed())
         .forEach((player) -> rank.put(player.getName(), player.getPoints()));

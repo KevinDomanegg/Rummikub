@@ -3,7 +3,6 @@ package view;
 import communication.gameinfo.StoneInfo;
 import communication.request.ConcreteMove;
 import communication.request.RequestID;
-import communication.request.SimpleRequest;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -105,7 +104,7 @@ public class MainController implements Controller {
    *
    * @throws IOException if scene cant' be loaded
    */
-  private void switchToWaitScene() throws IOException {
+  void switchToWaitScene() throws IOException {
     switchScene(ViewConstants.WAIT_FXML);
     waitController.setServerIP(serverIP);
   }

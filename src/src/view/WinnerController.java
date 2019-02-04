@@ -2,12 +2,9 @@ package view;
 
 import java.io.IOException;
 import java.util.Map;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 /**
  * Controller responsible for the Winner-View.
@@ -31,8 +28,8 @@ public class WinnerController {
   }
 
   @FXML
-  private void restartGame() {
-    mainController.sendStartRequest();
+  private void restartGame() throws IOException {
+    mainController.switchToWaitScene();
   }
 
   @FXML

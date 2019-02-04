@@ -418,8 +418,7 @@ public class GameController {
   @FXML
   void notifyCurrentPlayer(int relativeOpponentPosition) {
     if (timer_countDown != null) {
-      timer_countDown.cancel();
-      timer_task.cancel();
+      stopTimer();
     }
     endOfYourTurn();
     setTimer();

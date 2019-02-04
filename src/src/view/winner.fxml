@@ -10,7 +10,7 @@
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.WinnerController"
-           stylesheets="@/view/style.css, @/view/winnerStyle.css">
+           stylesheets="@/view/styling/style.css, @/view/styling/winnerStyle.css">
 
   <!-- Content in center -->
   <StackPane fx:id="vContainer">
