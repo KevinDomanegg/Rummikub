@@ -232,11 +232,12 @@ public class MainController implements Controller {
    */
   @Override
   public void setPlayerNames(List<String> names) {
-    if (gameController == null) {
+    if (startController != null) {
       waitController.setPlayerNames(names);
-      return;
     }
-    gameController.setPlayerNames(names);
+    if (gameController != null) {
+      gameController.setPlayerNames(names);
+    }
   }
 
   /**

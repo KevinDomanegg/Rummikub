@@ -90,6 +90,7 @@ public class RummiGame implements Game {
    */
 
   public void draw(int playerID) throws UnsupportedOperationException {
+    reset();
     if (playerID != currentPlayerID) {
       throw new UnsupportedOperationException(ErrorMessages.NOT_YOUR_TURN_ERROR);
     }
