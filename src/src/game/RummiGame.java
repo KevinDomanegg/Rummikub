@@ -489,12 +489,12 @@ public class RummiGame implements Game {
       //TODO: make new Exception for 0 points
       throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
     }
-//    if (!currentPlayer().hasPlayedFirstMove() && pointsPlayed < Constants.MIN_FIRST_MOVE_POINTS) {
-//      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
-//    }
-//    if(table.isConsistent() == false) {
-//      throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
-//    }
+    if (!currentPlayer().hasPlayedFirstMove() && pointsPlayed < Constants.MIN_FIRST_MOVE_POINTS) {
+      throw new UnsupportedOperationException(ErrorMessages.NOT_ENOUGH_POINTS_ERROR);
+    }
+    if(table.isConsistent() == false) {
+      throw new UnsupportedOperationException(ErrorMessages.TABLE_NOT_CONSISTENT_ERROR);
+    }
     currentPlayer().setPlayedFirstMove(true);
     if(hasWinner()){
       isGameOn = false;
