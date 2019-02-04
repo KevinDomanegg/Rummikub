@@ -137,7 +137,9 @@ public class GameController {
    */
   void yourTurn() {
     myTurn = true;
-    ownBoard.setStyle(ViewConstants.CURRENTLY_PLAYING_STYLE);
+    Platform.runLater(() -> {
+      ownBoard.setStyle(ViewConstants.CURRENTLY_PLAYING_STYLE);
+    });
     isMyTurn = true;
   }
 
@@ -145,8 +147,10 @@ public class GameController {
    * Signals that the player can't play anymore until it's his turn again.
    */
   private void endOfYourTurn() {
+    Platform.runLater(() -> {
+      ownBoard.setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_STYLE);
+    });
     myTurn = false;
-    ownBoard.setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_STYLE);
     isMyTurn = false;
   }
 
