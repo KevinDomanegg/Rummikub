@@ -127,7 +127,6 @@ public class WaitController implements Initializable {
   }
 
   void setServerIP(String serverIP) {
-    ipArea.setVisible(true);
     ipAddress.setText(serverIP);
   }
 

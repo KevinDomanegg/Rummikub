@@ -8,7 +8,6 @@ import java.util.*;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.SnapshotParameters;
@@ -19,9 +18,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -79,6 +75,7 @@ public class GameController {
   // TIMER
   private Timer timer_countDown;
   private TimerTask timer_task;
+  private boolean myTurn;
 
   // Ctrl + Drag and Drop
   private boolean isMultiMove;
@@ -139,6 +136,7 @@ public class GameController {
    * Signals that the player can now play.
    */
   void yourTurn() {
+    myTurn = true;
     ownBoard.setStyle(ViewConstants.CURRENTLY_PLAYING_STYLE);
     isMyTurn = true;
   }
@@ -147,6 +145,7 @@ public class GameController {
    * Signals that the player can't play anymore until it's his turn again.
    */
   private void endOfYourTurn() {
+    myTurn = false;
     ownBoard.setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_STYLE);
     isMyTurn = false;
   }
@@ -204,8 +203,6 @@ public class GameController {
             if (stoneGrid[x][y] != null) {
               StoneInfo stoneInfo = stoneGrid[x][y];
               putStoneInCell((Pane) cell, stoneInfo);
-            } else {
-              ((Pane) cell).getChildren().clear();
             }
           }
         }
@@ -363,7 +360,7 @@ public class GameController {
   }
 
   void notifyInvalidMove() {
-
+    //TODO: What's this?
   }
 
   /**
@@ -442,8 +439,7 @@ public class GameController {
   @FXML
   void notifyCurrentPlayer(int relativeOpponentPosition) {
     if (timer_countDown != null) {
-      timer_countDown.cancel();
-      timer_task.cancel();
+      stopTimer();
     }
     endOfYourTurn();
     setTimer();
@@ -457,12 +453,10 @@ public class GameController {
     for (int i = 1; i < opponents.length + 1; i++) {
       if (i != opponentID) {
         //styling non-playing opponents
-        opponents[i - 1].setBackground(new Background(new BackgroundFill(
-                Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+        opponents[i - 1].setStyle(ViewConstants.NOT_CURRENTLY_PLAYING_OPPONENT_STYLE);
       } else {
         //styling currently playing opponent
-        opponents[i - 1].setBackground(new Background((new BackgroundFill(
-                Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY))));
+        opponents[i - 1].setStyle(ViewConstants.CURRENTLY_PLAYING_OPPONENT_STYLE);
       }
     }
   }

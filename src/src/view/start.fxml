@@ -11,7 +11,7 @@
            xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="view.StartController"
-           stylesheets="@/view/style.css, @/view/startStyle.css">
+           stylesheets="@/view/styling/style.css, @/view/styling/startStyle.css">
   <StackPane>
     <HBox alignment="TOP_RIGHT" styleClass="onEdge">
       <Button fx:id="helpButton" onMouseClicked="#showHelpScene" text="?"/>

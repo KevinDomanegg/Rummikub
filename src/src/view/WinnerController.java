@@ -1,11 +1,10 @@
 package view;
 
+import java.io.IOException;
 import java.util.Map;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 /**
  * Controller responsible for the Winner-View.
@@ -14,7 +13,7 @@ import javafx.stage.Stage;
 public class WinnerController {
 
   @FXML
-  private ListView rankList;
+  private Text rankList;
   @FXML
   private Button quitButton;
   private MainController mainController;
@@ -29,13 +28,15 @@ public class WinnerController {
   }
 
   @FXML
-  private void restartGame() {
-    mainController.sendStartRequest();
+  private void restartGame() throws IOException {
+    mainController.switchToWaitScene();
   }
 
   @FXML
-  private void quitGame() {
-    ((Stage) quitButton.getScene().getWindow()).close();
+  private void goBackToLobby() throws IOException {
+    mainController.switchToStartScene();
+    mainController.handleQuitPressed();
+    //TODO: Handle IOException
   }
 
   /**
@@ -44,6 +45,20 @@ public class WinnerController {
    * @param finalRank map mapping each player to his points
    */
   void setRank(Map<String, Integer> finalRank) {
-    rankList.getItems().addAll(finalRank);
+    StringBuilder stringBuilder = new StringBuilder();
+    int place = 1;
+    for (Map.Entry<String, Integer> player : finalRank.entrySet()) {
+      stringBuilder.append(place).append(". ");
+
+      String playerName = player.getKey();
+      stringBuilder.append(playerName).append(": ");
+
+      Integer playerPoints = player.getValue();
+      stringBuilder.append(playerPoints).append(" stone points\n");
+
+      place++;
+    }
+
+    rankList.setText(stringBuilder.toString());
   }
 }
